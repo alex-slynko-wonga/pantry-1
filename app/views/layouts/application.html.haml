@@ -1,0 +1,14 @@
+!!!
+%html
+  %head
+    %title= content_for?(:title) ? yield(:title) : Pantry
+    = stylesheet_link_tag    "bootstrap", media: "all"
+    = csrf_meta_tags
+
+  .navbar
+    .navbar-inner
+      %ul.nav
+        %li{class: (current_page?(packages_url) ? 'active' : '')}
+          = link_to "Packages", packages_url
+  = yield
+
