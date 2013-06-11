@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130610173416) do
+ActiveRecord::Schema.define(:version => 20130612114621) do
 
   create_table "job_logs", :force => true do |t|
     t.integer  "job_id"
@@ -34,8 +34,11 @@ ActiveRecord::Schema.define(:version => 20130610173416) do
     t.string   "name"
     t.string   "version"
     t.string   "url"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.string   "bag_title"
+    t.string   "item_title"
+    t.datetime "data_bag_updated_at"
   end
 
 end

@@ -4,7 +4,7 @@ describe PackagesController do
   describe 'POST #create' do
     it "creates a package" do
       expect{ post :create, {
-        name: 'Name', version: 'Version', url: 'url' }
+        name: 'Name', version: 'Version', url: 'url', bag_title: 'DataBag', item_title: 'DataItem' }
       }.to change(Package, :count).by(1)
       package = Package.last
       package.should be_present
