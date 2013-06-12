@@ -5,5 +5,7 @@ FactoryGirl.define do
     name "MyString"
     version "MyString"
     url "MyString"
+    bag_title "MyString"
+    item_title "MyString"
   end
 end
