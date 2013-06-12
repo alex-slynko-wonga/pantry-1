@@ -1,0 +1,17 @@
+%table.table
+  %thead
+    %tr
+      %th #
+      %th Name
+      %th Description
+      %th Status
+      %th StartTime
+      %th EndTime
+    - @jobs.each_with_index do |name, description, status, start_time, end_time|
+      %tr
+        %td= index + 1
+        %td= job_log.name
+        %td= job_log.description
+        %td= job_log.status
+        %td= job_log.start_time
+        %td= job_log.end_time
