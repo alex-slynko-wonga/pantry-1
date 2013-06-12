@@ -1,0 +1,11 @@
+%table.table
+  %thead
+    %tr
+      %th #
+      %th JobID
+      %th LogText
+    - @job_logs.each_with_index do |job_log, index|
+      %tr
+        %td= index + 1
+        %td= job_log.job_id
+        %td= job_log.log_text
