@@ -35,7 +35,7 @@ production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: pantry	_production
+  database: pantry
   pool: 5
   username: pantry
   password: pantry
