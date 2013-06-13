@@ -14,19 +14,19 @@ describe Wonga::Pantry::Ec2Resource do
 
     it "sends a stop message via sns publisher" do
       stop_sns.stub(:publish_message)
-      subject.stop
+      expect(subject.stop).to be_true
       expect(ec2_instance.state).to eq("shutting_down")
     end
   end
 
   context "#start" do
-    before(:each) do 
-      ec2_instance.state = "shutdown"      
+    before(:each) do
+      ec2_instance.state = "shutdown"
     end
 
     it "sends a start message via sns publisher" do
-      start_sns.stub(:publish_message)      
-      subject.start
+      start_sns.stub(:publish_message)
+      expect(subject.start).to be_true
       expect(ec2_instance.state).to eq("starting")
     end
   end

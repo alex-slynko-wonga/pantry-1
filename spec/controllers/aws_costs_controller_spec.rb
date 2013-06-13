@@ -21,7 +21,7 @@ describe AwsCostsController do
     end
   end
 
-  describe 'GET #show' do 
+  describe 'GET #show' do
     before(:each) do
       client = AWS::S3::Client.new
       resp = client.stub_for(:get_object)

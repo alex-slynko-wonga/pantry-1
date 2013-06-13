@@ -10,7 +10,10 @@ FactoryGirl.define do
     end
 
     trait :running do
-      bootstrapped
+      bootstrapped true
+      booted true
+      joined true
+      state 'ready'
     end
 
     trait :terminated do

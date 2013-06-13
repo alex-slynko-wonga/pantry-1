@@ -6,11 +6,11 @@ describe Api::CostsController do
 
   describe "#create" do
     before(:each) do
-      request.env['X-Auth-Token'] = CONFIG['pantry']['api_key']
+      request.headers['X-Auth-Token'] = CONFIG['pantry']['api_key']
     end
 
     it "should add the total cost" do
-      params = {ec2_total: [], bill_date: bill_date, total_cost: "1500" }
+      params = {ec2_total: [], bill_date: bill_date, total_cost: "1500", format: :json }
       expect {
         post :create, params
       }.to change(TotalCost, :count).by(1)
@@ -18,7 +18,7 @@ describe Api::CostsController do
 
     it "changes existsing cost" do
       total_cost = FactoryGirl.create(:total_cost, bill_date: bill_date, cost: 50)
-      params = {ec2_total: [], bill_date: bill_date, total_cost: "1500" }
+      params = {ec2_total: [], bill_date: bill_date, total_cost: "1500", format: :json }
       expect {
         post :create, params
       }.to_not change(TotalCost, :count)
@@ -28,7 +28,8 @@ describe Api::CostsController do
     it "should add the cost" do
       params = {ec2_total: [
           {:estimated => false, :instance_id => ec2_instance.id, :cost => "23.33"}
-        ], bill_date: bill_date, total_cost: "1500" }
+        ], bill_date: bill_date, total_cost: "1500", format: :json }
+
       expect {
         post :create, params
       }.to change(Ec2InstanceCost, :count).by(1)
@@ -39,7 +40,7 @@ describe Api::CostsController do
 
       params = {ec2_total: [
           {:estimated => true, :instance_id => cost.ec2_instance_id, :cost => "53.33"}
-        ], bill_date: bill_date, total_cost: "1500" }
+        ], bill_date: bill_date, total_cost: "1500", format: :json }
 
       expect {
         post :create, params

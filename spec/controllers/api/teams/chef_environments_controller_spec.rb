@@ -9,7 +9,7 @@ describe Api::Teams::ChefEnvironmentsController do
 
     context "with valid token" do
       before(:each) do
-        request.env['X-Auth-Token'] = CONFIG['pantry']['api_key']
+        request.headers['X-Auth-Token'] = CONFIG['pantry']['api_key']
       end
 
       it "saves chef_environment" do
@@ -18,7 +18,6 @@ describe Api::Teams::ChefEnvironmentsController do
       end
 
       it "returns http success" do
-        team.stub(:update_attributes).with(chef_environment: 'env_name')
         post 'create', params
         expect(response.status).to eq 201
       end
@@ -31,5 +30,4 @@ describe Api::Teams::ChefEnvironmentsController do
       end
     end
   end
-
 end

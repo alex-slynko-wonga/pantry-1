@@ -43,7 +43,7 @@ describe Ec2Instance do
         expect(subject.human_status).to eq(human_name)
       end
     end
-    
+
     it "returns a default value if the state is nil" do
       instance = FactoryGirl.build(:ec2_instance, state: nil)
       instance.save(validate: false) # say we have a dodgy state, i.e. nil
@@ -61,14 +61,12 @@ describe Ec2Instance do
     expect(subject).to be_invalid
   end
 
-  it "raises a validation error if the user does not belogs to the current team" do
-    user = FactoryGirl.create(:user)
-    team = FactoryGirl.create(:team)
-    instance = FactoryGirl.build(:ec2_instance, user: user, team: FactoryGirl.create(:team))
-    team.should_not == instance.team
-    expect {instance.save!}.to raise_error(ActiveRecord::RecordInvalid)
+  it "is invalid if the user does not belogs to the current team" do
+    user = FactoryGirl.build(:user)
+    instance = FactoryGirl.build(:ec2_instance, user: user, team: FactoryGirl.build(:team))
+    expect(instance).to be_invalid
   end
-  
+
   describe "intial state" do
     it "sets the state to initial_state" do
       params = {

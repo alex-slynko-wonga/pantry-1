@@ -48,7 +48,7 @@ describe Wonga::Pantry::Costs do
 
       it "is end of current month" do
         bill_date = Date.today.end_of_month
-        Date.stub(:today).and_return(mock(end_of_month: bill_date))
+        Date.stub(:today).and_return(double(end_of_month: bill_date))
         expect(subject.bill_date).to eq(bill_date)
       end
     end
