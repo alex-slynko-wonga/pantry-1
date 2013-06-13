@@ -1,7 +1,7 @@
 
 
 When(/^an agent posts all the required job details$/) do
-  @response = page.driver.post "/jobs", {name: 'name', description: 'description', status: 'status'}
+  @response = page.driver.post "/jobs", {name: 'name', description: 'description', status: 'pending'}
 end
 
 Then(/^it should receive a response containing a uri to the job$/) do

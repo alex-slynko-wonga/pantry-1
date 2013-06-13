@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :job do
     name "MyString"
     description "MyText"
-    status "MyString"
+    status "pending"
     start_time "2013-06-10 18:34:17"
     end_time "2013-06-10 18:34:17"
   end
