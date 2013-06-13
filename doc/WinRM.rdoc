@@ -1,0 +1,11 @@
+== WinRM config
+
+{em-winrm gem}[https://github.com/schisamo/em-winrm] is used to use win_rm.
+You can check its documentation.
+
+To connect it to server:
+```ruby
+session = EventMachine::WinRM::Session.new
+
+session.use host, {:user => 'Administrator', :password => password, :basic_auth_only => true }
+```
