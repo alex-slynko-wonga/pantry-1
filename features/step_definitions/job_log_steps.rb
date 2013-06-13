@@ -1,24 +1,20 @@
-Given(/^a job log exists on Pantry for JobID "(.*?)" with LogText "(.*?)"$/) do |job_id, log_text|
-  page.driver.post "/job_logs", {job_id: job_id, log_text: log_text}
+When(/^an agent creates a job log for the job with LogText "(.*?)"$/) do |message|
+  page.driver.post "/jobs/#{@job.id}/job_log", {job_id: @job.id, log_text: message}
 end
 
-When(/^I am on job_logs page$/) do
-  visit "/job_logs"
+When(/^I am on the job log page for the job$/) do
+  visit "/jobs/#{@job.id}/job_log/#{@job_log.id}"
 end
 
-
-Given(/^an agent has registered a job log on Pantry for JobID "(.*?)" with LogText "(.*?)"$/) do |this_job_id, this_log_text|
-  @job_log = FactoryGirl.create(:job_log)
-  @job_log.job_id = this_job_id
-  @job_log.log_text = this_log_text
+Given(/^an agent has registered a job log for the job with LogText "(.*?)"/) do |message|
+  @job_log = FactoryGirl.build(:job_log, job_id: @job.id, log_text: message)
   @job_log.save
 end
 
-When(/^I update the job log with LogText "(.*?)"$/) do |log_text|
-  page.driver.put "/job_logs/#{@job_log.id}", {log_text: log_text}
+When(/^I update the job log for the job with LogText "(.*?)"$/) do |update_message|
+  page.driver.put "/jobs/#{@job.id}/job_log/#{@job_log.id}", {log_text: update_message}
 end
 
-When(/^I am on the job log's page$/) do
-  visit "/job_logs/#{@job_log.id}"
+Then(/^I should see the job id$/) do
+  page.text.should include(@job.id.to_s)
 end
-

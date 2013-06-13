@@ -10,8 +10,6 @@
       %ul.nav
         %li{class: (current_page?(jobs_url) ? 'active' : '')}
           = link_to "Jobs", jobs_url
-        %li{class: (current_page?(job_logs_url) ? 'active' : '')}
-          = link_to "JobLogs", job_logs_url
         %li{class: (current_page?(packages_url) ? 'active' : '')}
           = link_to "Packages", packages_url
   = yield
