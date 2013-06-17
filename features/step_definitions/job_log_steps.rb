@@ -14,16 +14,14 @@ end
 
 Given(/^an agent has registered a new job on Pantry$/) do
   @job = FactoryGirl.create(:job)
-  @job.save
 end
 
 Given(/^an agent has registered a job log for the job with LogText "(.*?)"/) do |message|
-  @job_log = FactoryGirl.create(:job_log, job_id: @job.id, log_text: message)
-  @job_log.save
+  @job_log = FactoryGirl.create(:job_log, job: @job, log_text: message)
 end
 
 When(/^I update the job log for the job with LogText "(.*?)"$/) do |update_message|
-  @job_log_update = page.driver.put "/jobs/#{@job.id}/job_logs/#{@job_log.id}", {log_text: update_message}
+  @job_log_update = page.driver.put "/jobs/#{@job_log.job_id}/job_logs/#{@job_log.id}", {log_text: update_message}
 end
 
 Then(/^I should see the job id$/) do
