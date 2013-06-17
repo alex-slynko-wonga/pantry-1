@@ -11,7 +11,7 @@
     - @jobs.each_with_index do |job, index|
       %tr
         %td= index + 1
-        %td= job.name
+        %td= link_to job.name, job_url(job.id)
         %td= job.description
         %td= job.status
         %td= job.created_at
