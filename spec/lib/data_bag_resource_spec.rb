@@ -2,43 +2,44 @@ require 'spec_helper'
 
 describe DataBagResource do
   let(:data_bag_title) { 'DataBag' }
-  let(:data_bag) { {'DataBagItem' => 'path' } }
   let(:item_title) { 'DataBagItem' }
-  let(:value) { { version: 'test', name: 'test' } }
-  let(:item) { {id: 'DataBagItem' } }
+  let(:value) { { 'version' => 'test', 'name' => 'test' } }
 
   describe "#create_or_update_item" do
+    let!(:data_bag) do
+      bag = Chef::DataBag.new
+      bag.name(data_bag_title)
+      bag.create
+    end
+
+    let(:data_item) { Chef::DataBagItem.load(data_bag_title, item_title) }
+
+    after(:each) { data_bag.destroy }
+
     context "if data bag exist" do
       before(:each) {
-        Chef::DataBag.stub(:load).and_return(data_bag)
-        Chef::DataBagItem.stub(:load).and_return(item)
-        item.stub(:save)
+        item = Chef::DataBagItem.new
+        item['id'] = item_title
+        item.data_bag(data_bag_title)
+        item.create
       }
 
-      it "loads data bag item from Chef" do
-        Chef::DataBag.should_receive(:load).with(data_bag_title).and_return(data_bag)
-        Chef::DataBagItem.should_receive(:load).with(data_bag_title, item_title).and_return(item)
-        subject.create_or_update_item(data_bag_title, item_title, value)
-      end
-
       it "saves data bag item" do
-        item.should_receive(:save)
         subject.create_or_update_item(data_bag_title, item_title, value)
+        value.each do |key, value|
+          expect(data_item[key]).to be_eql value
+        end
       end
     end
 
     context "if data bag item doesn't exist" do
-      before(:each) {
-        Chef::DataBag.stub(:load).and_return({})
-      }
-
       it "creates new data bag item" do
-        object = Chef::DataBagItem.new
-        Chef::DataBagItem.stub(:new).and_return(object)
-        object.should_receive(:save)
         subject.create_or_update_item(data_bag_title, item_title, value)
-        expect(object['id']).to be_eql item_title
-        expect(value.reject { |k,v| object[k] == v }).to be_empty
+        expect(data_item).to be_present
+        expect(data_item['id']).to be_eql item_title
+        value.each do |key, value|
+          expect(data_item[key]).to be_eql value
+        end
       end
     end
   end
