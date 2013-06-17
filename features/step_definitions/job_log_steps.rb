@@ -5,10 +5,6 @@ When(/^an agent creates a job log for the job with LogText "(.*?)"$/) do |messag
   @job_log_create_response.body.should include("#{host}/jobs/#{@job_log.job_id}/job_logs/#{@job_log.id}")
 end
 
-When(/^I am on the job logs page for the job$/) do
-  visit "/jobs/#{@job.id}/job_logs"
-end
-
 When(/^I am on the job log page for the job$/) do
   @job_log ||= JobLog.last
   visit "/jobs/#{@job_log.job_id}/job_logs/#{@job_log.id}"
