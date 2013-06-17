@@ -9,7 +9,7 @@ When(/^I am on the job logs page for the job$/) do
 end
 
 When(/^I am on the job log page for the job$/) do
-  visit "/jobs/#{@job.id}/job_logs/#{@job_log.id}"
+  visit "/jobs/#{@job_log.job_id}/job_logs/#{@job_log.id}"
 end
 
 Given(/^an agent has registered a new job on Pantry$/) do
