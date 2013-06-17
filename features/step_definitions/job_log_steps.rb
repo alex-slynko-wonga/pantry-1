@@ -1,7 +1,19 @@
-When(/^the agent adds a new log entry$/) do
-  pending # express the regexp above with the code you wish you had
+When(/^an agent creates a job log for the job with LogText "(.*?)"$/) do |message|
+  @job_log_create_response = page.driver.post "/jobs/#{@job.id}/job_logs", {job_id: @job.id, log_text: message}
+  @job_log_create_response.status.should == 201
+  @job_log ||= JobLog.last
+  @job_log_create_response.body.should include("#{host}/jobs/#{@job_log.job_id}/job_logs/#{@job_log.id}")
 end
 
-Then(/^I should be able to view the log entry for the job$/) do
-  pending # express the regexp above with the code you wish you had
+When(/^I am on the job log page for the job$/) do
+  visit "/jobs/#{@job_log.job_id}/job_logs/#{@job_log.id}"
+end
+
+When(/^I update the job log for the job with LogText "(.*?)"$/) do |update_message|
+  @job_log_update_response = page.driver.put "/jobs/#{@job_log.job_id}/job_logs/#{@job_log.id}", {log_text: update_message}
+  @job_log_update_response.status.should == 200
+end
+
+Then(/^I should see the job id$/) do
+  page.text.should include(@job.id.to_s)
 end
