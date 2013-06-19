@@ -13,4 +13,13 @@ describe ChefNodeResource do
       end
     end
   end
+  describe "#get_single_node" do
+    context "if node matches the name param" do
+      it "should return a single node that matchs the query" do
+        nodes = [Chef::Node.stub(:name).with(node_name)]
+        ChefNodeResource.stub(:findByName).with(node_name).and_return(nodes)
+        expect(nodes.length).to be_eql 1
+      end
+    end    
+  end
 end
