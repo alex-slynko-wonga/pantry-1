@@ -7,11 +7,11 @@ class WinRMRunner
   def run_commands(*commands, &block)
     session.on_error do |host, data|
       block.call(host, data)
-    end
+    end if block
 
     session.on_output do |host, data|
       block.call(host, data)
-    end
+    end if block
 
     commands.each do |command|
       session.relay_command command

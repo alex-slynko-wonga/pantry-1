@@ -8,24 +8,19 @@ describe WinRMRunner do
     let(:host) { "some.host" }
 
     it "adds host with default user name and key" do
-      expect(server).to receive(:use).with("ubuntu@#{host}", { keys: File.expand_path('~/.chef/aws-ssh-keypair.pem'), keys_only: true})
+      expect(server).to receive(:use).with(host, { user: 'Administrator', password: 'LocalAdminPassword', basic_auth_only: true })
       subject.add_host(host)
     end
 
     it "adds host with set params" do
-      expect(server).to receive(:use).with("user@host", { keys: 'key', keys_only: true })
-      subject.add_host("host", "user", "key")
+      expect(server).to receive(:use).with("host", { user: 'user', basic_auth_only: true, password: 'pass' })
+      subject.add_host("host", "user", "pass")
     end
   end
 
   context "#run_commands" do
-    before(:each) do
-      server.stub(:loop)
-      server.stub(:close)
-    end
-
     it "exec each command separately" do
-      expect(server).to receive(:exec).twice
+      expect(server).to receive(:relay_command).twice
       subject.run_commands("test", "test")
     end
   end
