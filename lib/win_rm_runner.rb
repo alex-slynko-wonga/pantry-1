@@ -5,6 +5,10 @@ class WinRMRunner
   end
 
   def run_commands(*commands, &block)
+    session.on_error do |host, data|
+      block.call(host, data)
+    end
+
     session.on_output do |host, data|
       block.call(host, data)
     end
