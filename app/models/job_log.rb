@@ -1,4 +1,8 @@
 class JobLog < ActiveRecord::Base
-  attr_accessible :job_id, :log_text
   belongs_to :job
+
+  def update_log(text)
+    text += "\n" unless text["\n"]
+    update_attribute(:log_text, log_text + text)
+  end
 end

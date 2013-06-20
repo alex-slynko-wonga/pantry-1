@@ -1,20 +1,21 @@
+require 'em-winrm'
 class WinRMRunner
   def add_host(host, user="Administrator", password="LocalAdminPassword")
-    session.use("#{user}@#{host}", {keys: key, keys_only: true })
+    session.use(host, {user: user, password: password, basic_auth_only: true})
   end
 
   def run_commands(*commands, &block)
-    commands.each do |command|
-      session.exec command do |ch, stream, data|
-        block.call(ch[:host], data) if block
-      end
+    session.on_output do |host, data|
+      block.call(host, data)
     end
-    session.loop
-    session.close
+
+    commands.each do |command|
+      session.relay_command command
+    end
   end
 
   private
   def session
-    @session ||= Net::SSH::Multi.start
+    @session ||= EventMachine::WinRM::Session.new
   end
 end

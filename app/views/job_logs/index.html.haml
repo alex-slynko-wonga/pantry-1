@@ -2,12 +2,10 @@
   %thead
     %tr
       %th #
-      %th JobLogID
-      %th JobID
+      %th Machine
       %th LogText
     - @job_logs.each_with_index do |job_log, index|
       %tr
         %td= index + 1
-        %td= link_to job_log.id, job_job_log_url(job_log.job_id,job_log.id)
-        %td= link_to job_log.job_id, job_url(job_log.job_id)
-        %td= job_log.log_text
+        %td= link_to job_log.machine, job_job_log_url(job_log.job_id,job_log.id)
+        %td= truncate(job_log.log_text, length: 100)
