@@ -10,4 +10,4 @@ Scenario: An agent updates an existing job status
 	Given an agent has registered a job on Pantry
 	When the agent updates the status of the job to "started" 
 	And I am on the Jobs page 
-	Then I should see the status "Started"
+	Then I should see the status "started"

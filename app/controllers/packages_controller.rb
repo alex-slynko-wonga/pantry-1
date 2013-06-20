@@ -5,11 +5,6 @@ class PackagesController < ApplicationController
   end
 
   def index
-    @packages = Package.includes(:job).all
-  end
-
-  def deploy
-    job = Job.where(package_id: params[:id]).first_or_create
-    redirect_to job
+    @packages = Package.all
   end
 end

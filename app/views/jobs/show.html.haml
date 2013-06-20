@@ -1,13 +1,6 @@
 %h1= @job.name
-%h5= @job.job_status
+%h5= @job.status
 %p= @job.description
-%p
-  Created:
-  = @job.created_at
-%p
-  Started:
-  = @job.start_time
-%p
-  Completed:
-  = @job.end_time
-%p= link_to 'Logs', job_job_logs_url(@job)
+%p= @job.created_at
+%p= @job.start_time
+%p= @job.end_time

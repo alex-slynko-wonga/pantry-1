@@ -16,6 +16,6 @@ class JobLogsController < ApplicationController
   end
 
   def index
-    @job_logs = JobLog.where(job_id: params[:job_id]).all
+    @job_logs = JobLog.all
   end
 end

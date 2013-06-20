@@ -6,7 +6,6 @@
       %th Version
       %th Url
       %th Date added
-      %th Deploy
   - @packages.each_with_index do |package, index|
     %tr
       %td= index + 1
@@ -14,8 +13,3 @@
       %td= package.version
       %td= link_to package.url, package.url
       %td= l package.created_at, format: :long
-      %td
-        - if package.job
-          = package.job.job_status
-        - else
-          = button_to "Deploy", deploy_package_url(package)
