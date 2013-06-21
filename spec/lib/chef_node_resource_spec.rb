@@ -18,4 +18,20 @@ describe ChefNodeResource do
       end
     end
   end
+
+  describe "#get_single_node" do
+    context "if node matches the name param" do
+      it "should return a single node that matchs the query" do
+        search = mock
+        Chef::Search::Query.stub(:new).and_return(search)
+        search.stub(:search).with("node", "name:name").and_return([['node']])
+
+        nodes = ChefNodeResource.find_by_name('name')
+
+        expect(nodes.length).to be_eql 1
+        expect(nodes[0]).to be_eql 'node'
+      end
+    end    
+  end
 end
+
