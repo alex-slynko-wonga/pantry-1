@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 require 'chef_zero'
 require 'chef_zero/server'
 
