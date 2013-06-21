@@ -7,21 +7,14 @@ describe DataBagResource do
 
   describe "#create_or_update_item" do
     let!(:data_bag) do
-      bag = Chef::DataBag.new
-      bag.name(data_bag_title)
-      bag.create
+      build_chef_data_bag(data_bag_title)
     end
 
     let(:data_item) { Chef::DataBagItem.load(data_bag_title, item_title) }
 
-    after(:each) { data_bag.destroy }
-
     context "if data bag exist" do
       before(:each) {
-        item = Chef::DataBagItem.new
-        item['id'] = item_title
-        item.data_bag(data_bag_title)
-        item.create
+        build_chef_data_bag_item(item_title, data_bag_title)
       }
 
       it "saves data bag item" do
