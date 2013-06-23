@@ -1,7 +1,7 @@
 = form_for :search, url: search_chef_nodes_url, method: :get do |f|
-  = label_tag("Environment") 
+  = f.label :environment, "Environment"
   = f.search_field :environment
-  = label_tag("Role") 
+  = f.label :role, "Role"
   = f.search_field :role
   = f.submit "Search"
 %h3 Nodes

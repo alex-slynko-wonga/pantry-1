@@ -11,7 +11,6 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'chef_zero/server'
-@@server = ChefZero::Server.new
 AWS.stub!
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -35,9 +34,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
-  config.before(:suite) do
-    @chef_server = ChefZero::Server.new
-    @chef_server.start_background
+  config.before(:each) do
+    ChefZero::SingleServer.instance.clean
   end
   
   config.before(:each, type: :controller) do
