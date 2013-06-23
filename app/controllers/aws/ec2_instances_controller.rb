@@ -48,7 +48,7 @@ class Aws::Ec2InstancesController < ApplicationController
       queue_url = sqs.get_queue_url(queue_name: "pantry_wonga_aws-ec2_boot_command")[:queue_url]
       puts "QUEUE #{queue_url}"
       if !queue_url.nil?
-        #sqs.send_message(queue_url: queue_url, message_body: msg.to_json )
+        sqs.send_message(queue_url: queue_url, message_body: msg.to_json )
       end
       redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
     else

@@ -6,23 +6,25 @@ class JenkinsServersController < ApplicationController
   end
 
   def create
-    sqs = AWS::SQS::Client.new()
-    aws_utility = Wonga::AWSUtility.new(sqs)
-  	@jenkins_server = aws_utility.request_jenkins_server(
-      jenkins_attributes.merge({user_id: current_user.id})
+    aws_utility = Wonga::Pantry::AWSUtility.new
+    name = Team.find(jenkins_attributes[:team_id]).name
+    attributes = jenkins_attributes.merge(
+      {user_id: current_user.id, name: name}
     )
-    if @jenkins_server.save 
-      redirect_to @jenkins_server 
+    @jenkins_server = JenkinsServer.new(team_id: attributes[:team_id])
+    aws_utility.request_jenkins_instance(attributes, @jenkins_server)
+    if @jenkins_server.persisted?
+      redirect_to @jenkins_server
     else
+      @user_teams = current_user.teams
       render :new
     end
   end
 
   def show
   	@jenkins_server = JenkinsServer.find(params[:id])
-    @team = Team.find(@jenkins_server.team_id)
-    @ec2_instance = Ec2Instance.find(@jenkins_server.ec2_instance_id)
-    @user = User.find(@ec2_instance.user_id)    
+    @team = @jenkins_server.team
+    @ec2_instance = @jenkins_server.ec2_instance
   end
 
   private 
