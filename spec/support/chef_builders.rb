@@ -1,12 +1,7 @@
-module ChefBuilders
-  def self.included(klass)
-    if klass.respond_to?(:after)
-      klass.after(:each) do
-        delete_chef_stuff
-      end
-    end
-  end
+require 'chef_zero'
+require 'chef_zero/server'
 
+module ChefBuilders
   def build_chef_node(name, environment=nil, role=nil, os='linux')
     node = Chef::Node.new
     node.name(name)
@@ -16,14 +11,12 @@ module ChefBuilders
       role = build_chef_role(role) if role.is_a? String
       node.run_list << role.to_s
     end
-    store_chef_stuff(node)
     node.save
   end
 
   def build_chef_data_bag(name)
     bag = Chef::DataBag.new
     bag.name(name)
-    store_chef_stuff(bag)
     bag.create
   end
 
@@ -45,24 +38,19 @@ module ChefBuilders
     else
       role = Chef::Role.new
       role.name(name)
-      store_chef_stuff(role)
       role.create
     end
   end
+end
 
-  private
-  def store_chef_stuff(chef_object)
-    chef_stuff << chef_object
+class ChefZero::SingleServer
+  def initialize
+    @server = ChefZero::Server.new
+    @server.start_background
   end
+  include Singleton
 
-  def delete_chef_stuff
-    chef_stuff.reverse.each do |chef_object|
-      chef_object.destroy rescue nil
-    end
-    chef_stuff.clear
-  end
-
-  def chef_stuff
-    @chef_stuff ||= []
+  def clean
+    @server.clear_data
   end
 end
