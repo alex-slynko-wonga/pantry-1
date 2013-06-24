@@ -1,7 +1,7 @@
 Pantry::Application.routes.draw do
   match '/login' => redirect("/auth/ldap")
   match '/auth/:provide/callback' => redirect("/")
-  match '/auth/failure' => redirect("/login")
+  match '/auth/failure' => redirect("/auth/ldap")
 
   resources :chef_nodes do
     get :search, on: :collection
