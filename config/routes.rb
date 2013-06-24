@@ -1,7 +1,7 @@
 Pantry::Application.routes.draw do
-  #fix and uncomment depending on user controller layout
-  #match '/auth/:provide/callback' => "userOrSession#create"
-  #match '/auth/failure' => "some broken login"
+  match '/login' => redirect("/auth/ldap")
+  match '/auth/:provide/callback' => redirect("/")
+  match '/auth/failure' => redirect("/auth/ldap")
 
   resources :chef_nodes do
     get :search, on: :collection
@@ -13,5 +13,6 @@ Pantry::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   resources :packages, only: [:create, :index]
+  resources :users, except: [:create, :destroy]
   root to: 'home#index'
 end
