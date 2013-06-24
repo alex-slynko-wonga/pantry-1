@@ -1,7 +1,7 @@
 Pantry::Application.routes.draw do
-  #fix and uncomment depending on user controller layout
-  #match '/auth/:provide/callback' => "userOrSession#create"
-  #match '/auth/failure' => "some broken login"
+  match '/login' => redirect("/auth/ldap")
+  match '/auth/:provide/callback' => redirect("/")
+  match '/auth/failure' => redirect("/login")
 
   resources :chef_nodes do
     get :search, on: :collection
