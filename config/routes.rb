@@ -1,4 +1,12 @@
 Pantry::Application.routes.draw do
+  get "teams/create"
+
+  get "teams/index"
+
+  get "teams/show"
+
+  get "teams/update"
+
   match '/login' => redirect("/auth/ldap")
   match '/auth/:provide/callback' => redirect("/")
   match '/auth/failure' => redirect("/auth/ldap")
