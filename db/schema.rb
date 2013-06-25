@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(:version => 20130625112723) do
     t.datetime "data_bag_updated_at"
   end
 
+<<<<<<< HEAD
   create_table "team_members", :force => true do |t|
     t.integer  "team_id"
     t.integer  "user_id"
@@ -66,6 +67,8 @@ ActiveRecord::Schema.define(:version => 20130625112723) do
 
   add_index "team_members", ["team_id", "user_id"], :name => "index_team_members_on_team_id_and_user_id", :unique => true
 
+=======
+>>>>>>> TD-910: db schema
   create_table "teams", :force => true do |t|
     t.string   "name"
     t.string   "description"
