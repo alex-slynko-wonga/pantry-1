@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(:version => 20130625112723) do
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> small fixes
   create_table "team_members", :force => true do |t|
@@ -75,6 +76,8 @@ ActiveRecord::Schema.define(:version => 20130625112723) do
 >>>>>>> TD-910: db schema
 =======
 >>>>>>> small fixes
+=======
+>>>>>>> fd4e09f... TD-910: db schema
   create_table "teams", :force => true do |t|
     t.string   "name"
     t.string   "description"
