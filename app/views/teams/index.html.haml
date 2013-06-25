@@ -1,2 +1,13 @@
-%h1 Teams#index
-%p Find me in app/views/teams/index.html.haml
+%table.table
+	%thead
+		%tr
+			%th #
+			%th Name
+			%th Description
+			%th Date Added
+		- @teams.each_with_index do |team, index|
+			%tr
+				%td= Index + 1
+				%td= link_to team.name, team.url(team.id)
+				%td= team.description
+				%td= team.created_at
