@@ -1,2 +1,11 @@
-%h1 Teams#show
-%p Find me in app/views/teams/show.html.haml
+%h1= "TEAM" @team.name
+%p= "Description: " @team.description
+%p= "Created: " @team.created_at
+%p= "Updated: " @team.updated_at
+%table.table
+  %thead
+    %tr
+      %th Username
+      - @members.each_with_index do |member, index|
+        %tr
+          %td= link_to member.user.username, user_url(member.user.id)
