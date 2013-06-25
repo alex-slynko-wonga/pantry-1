@@ -14,6 +14,8 @@
           = link_to "Jobs", jobs_url
         %li{class: (current_page?(packages_url) ? 'active' : '')}
           = link_to "Packages", packages_url
+        %li{class: (current_page?(teams_url) ? 'active' : '')}
+          = link_to "Teams", teams_url
         %li{class: (current_page?(search_chef_nodes_url) ? 'active' : '')}
           = link_to "Search Chef Nodes", search_chef_nodes_url
   = yield
