@@ -57,15 +57,6 @@ ActiveRecord::Schema.define(:version => 20130625112723) do
     t.datetime "data_bag_updated_at"
   end
 
-<<<<<<< HEAD
-  create_table "teams", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-=======
   create_table "team_members", :force => true do |t|
     t.integer  "team_id"
     t.integer  "user_id"
@@ -75,9 +66,6 @@ ActiveRecord::Schema.define(:version => 20130625112723) do
 
   add_index "team_members", ["team_id", "user_id"], :name => "index_team_members_on_team_id_and_user_id", :unique => true
 
-<<<<<<< HEAD
->>>>>>> master
-=======
   create_table "teams", :force => true do |t|
     t.string   "name"
     t.string   "description"
@@ -85,7 +73,6 @@ ActiveRecord::Schema.define(:version => 20130625112723) do
     t.datetime "updated_at",  :null => false
   end
 
->>>>>>> 8018c32361d994699dc7ddda4a4f00c7a98c3603
   create_table "users", :force => true do |t|
     t.string   "username"
     t.string   "email"
