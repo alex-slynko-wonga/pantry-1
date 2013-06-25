@@ -7,5 +7,6 @@ When(/^An agent creates a new team named "(.*?)"$/) do |name|
 end
 
 Then(/^I expect to see "(.*?)"$/) do |name|
-  page.should have_content "Name"
+  pending #flesh out with team create story
+  #page.should have_content "Name"
 end
