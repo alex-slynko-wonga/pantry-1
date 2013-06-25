@@ -1,9 +1,9 @@
 Pantry::Application.routes.draw do
   resources :teams, except: [:destroy]
 
-  match '/login' => redirect("/auth/ldap")
-  match '/auth/:provide/callback' => redirect("/")
-  match '/auth/failure' => redirect("/auth/ldap")
+  get   '/login', :to => 'sessions#new', :as => :login
+  match '/auth/failure', :to => 'sessions#failure'
+  get   '/logout', :to => 'sessions#destroy'
 
   resources :chef_nodes do
     get :search, on: :collection
