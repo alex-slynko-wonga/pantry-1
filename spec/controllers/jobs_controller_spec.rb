@@ -1,11 +1,7 @@
 require 'spec_helper'
 
 describe JobsController do
-  let (:user) { FactoryGirl.create(:user) }
-
-  before :each do
-    session[:user_id] = user.id
-  end
+  
   describe 'POST #create' do
     it "creates a job" do
       expect{ post :create, {

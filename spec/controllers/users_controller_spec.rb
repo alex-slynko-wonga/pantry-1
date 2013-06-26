@@ -3,10 +3,6 @@ require 'spec_helper'
 describe UsersController do
   let (:user) { FactoryGirl.create(:user) }
 
-  before :each do
-    session[:user_id] = user.id
-  end
-
   describe "GET #index" do
     it "returns http success" do
       get 'index'

@@ -2,12 +2,7 @@ require 'spec_helper'
 
 describe TeamsController do
   let (:team) { FactoryGirl.create(:team) }
-  let (:user) { FactoryGirl.create(:user) }
-
-  before :each do
-    session[:user_id] = user.id
-  end
-
+  
   describe "POST 'create'" do
     it "returns http success" do
       get 'create'
