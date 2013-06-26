@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe PackagesController do
+  let (:user) { FactoryGirl.create(:user) }
+
+  before :each do
+    session[:user_id] = user.id
+  end
+  
   describe 'POST #create' do
     it "creates a package" do
       expect{ post :create, {

@@ -1,5 +1,6 @@
 class TeamsController < ApplicationController
   def create
+    Team.create(params.permit(:name,:description))
   end
 
   def index

@@ -2,15 +2,27 @@ require 'spec_helper'
 
 describe TeamsController do
   let (:team) { FactoryGirl.create(:team) }
+  let (:user) { FactoryGirl.create(:user) }
 
-=begin
+  before :each do
+    session[:user_id] = user.id
+  end
+
   describe "POST 'create'" do
     it "returns http success" do
       get 'create'
       response.should be_success
     end
+    it "creates a team" do
+      expect{ post :create, {
+        name: 'Name', description: 'Description'}
+      }.to change(Team, :count).by(1)
+      team = Team.last
+      team.should be_present
+      team.name.should == 'Name'
+      team.description.should == 'Description'
+    end
   end
-=end
 
   describe "GET 'index'" do
     it "returns http success" do
