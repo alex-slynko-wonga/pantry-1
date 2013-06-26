@@ -4,14 +4,13 @@ class User < ActiveRecord::Base
   has_many :teams, through: :team_members
   
   def self.from_omniauth(auth)
-    find_by_provider_and_uid(auth["provider"], auth["uid"]) || create_with_omniauth(auth)
+    find_by_username(auth["extra"]["raw_info"].samaccountname[0]) || create_with_omniauth(auth)
   end
 
   def self.create_with_omniauth(auth)
     create! do |user|
-      user.provider = auth["provider"]
-      user.uid = auth["uid"]
-      user.name = auth["info"]["name"]
+      user.username = auth["extra"]["raw_info"].samaccountname[0]
+      user.email = auth["info"]["email"]
     end
   end
 end
