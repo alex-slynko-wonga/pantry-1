@@ -5,7 +5,9 @@
 %table.table
   %thead
     %tr
+      %th #
       %th Username
-      - @members.each_with_index do |member, index|
+      - @team.users.each_with_index do |user, index|
         %tr
-          %td= link_to member.user.username, user_url(member.user.id)
+          %td= index
+          %td= link_to user.username, user_url(user.id)
