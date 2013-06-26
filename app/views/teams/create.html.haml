@@ -1,7 +1,7 @@
 %h1 Create a new Team
-= form_for :team, url: new_team, method: :get do |f|
-  = f.label :name 
+= form_for :team, url: new_team_url, method: :get do |f|
+  = label_tag("Team Name") 
   = f.text_field :name
-  = f.label :description
+  = label_tag("Description") 
   = f.text_area :description
-  = f.submit "Create Team" 
+  = f.submit "Create Team"

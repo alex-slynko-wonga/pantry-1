@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_filter :verify_authenticity_token, only: :create
+  skip_before_filter :signed_in_user, only: :create
   def new
     redirect_to '/auth/ldap'
   end
