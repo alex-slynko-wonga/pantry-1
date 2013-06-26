@@ -3,6 +3,7 @@ Pantry::Application.routes.draw do
 
   get   '/login', :to => 'sessions#new', :as => :login
   match '/auth/failure', :to => 'sessions#failure'
+  match '/auth/:provider/callback', :to => 'sessions#create'
   get   '/logout', :to => 'sessions#destroy'
 
   resources :chef_nodes do
