@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20130625112723) do
     t.text     "log_text"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "machine"
   end
 
   create_table "jobs", :force => true do |t|
@@ -44,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20130625112723) do
     t.datetime "end_time"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.integer  "package_id"
   end
 
   create_table "packages", :force => true do |t|
