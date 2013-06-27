@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe JobsController do
+  
   describe 'POST #create' do
     it "creates a job" do
       expect{ post :create, {

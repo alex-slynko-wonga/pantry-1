@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe PackagesController do
+    
   describe 'POST #create' do
     it "creates a package" do
       expect{ post :create, {
