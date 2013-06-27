@@ -1,6 +1,15 @@
 class TeamsController < ApplicationController
+  def team_params
+    params.require(:team).permit(:name, :description)
+  end
+
   def create
-    Team.create(params.permit(:name,:description))
+    @team = Team.new(team_params)
+    if @team.save
+      redirect_to :index
+      else
+        render :new
+    end
   end
 
   def index
