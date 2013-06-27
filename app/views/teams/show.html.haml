@@ -1,7 +1,9 @@
-%h1= "TEAM" @team.name
-%p= "Description: " @team.description
-%p= "Created: " @team.created_at
-%p= "Updated: " @team.updated_at
+%h1
+  TEAM
+  = @team.name
+%p= "Description: #{@team.description}"
+%p= "Created: #{@team.created_at}"
+%p= "Updated: #{@team.updated_at}"
 %table.table
   %thead
     %tr

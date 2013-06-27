@@ -1,5 +1,5 @@
 %h1 Create a new Team
-= form_for :team, url: new_team_url, method: :get do |f|
+= form_for @team do |f|
   = label_tag("Team Name") 
   = f.text_field :name
   = label_tag("Description") 
