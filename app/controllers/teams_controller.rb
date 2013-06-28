@@ -21,6 +21,7 @@ class TeamsController < ApplicationController
   end
 
   def update
+    @team = Team.find(params[:id])
   end
 
   private
