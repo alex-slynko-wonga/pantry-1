@@ -1,0 +1,15 @@
+%table.table
+	%thead
+		%tr
+			%th #
+			%th Name
+			%th Description
+			%th Date Added
+		- @teams.each_with_index do |team, index|
+			%tr
+				%td= index + 1
+				%td= link_to team.name, team_url(team.id)
+				%td= team.description
+				%td= team.created_at
+%a= link_to "New Team", new_team_url
+ 

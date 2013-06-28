@@ -1,7 +1,8 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :user do
-    username "MyString"
+  factory :team_member do
+    team
+    user
   end
 end
