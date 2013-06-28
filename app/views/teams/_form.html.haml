@@ -1,6 +1,23 @@
 = form_for @team do |f|
-  = f.label :name
-  = f.text_field :name
-  = f.label("Description") 
-  = f.text_area :description
-  = f.submit "Submit"
+  %fieldset
+    .control-group
+      = f.label :name
+      = f.text_field :name
+    .control-group
+      = f.label :description
+      = f.text_area :description, { size: "50x5" }
+  %fieldset
+    %legend Users
+    .control-group
+      = label_tag 'ldap_users_search', 'Add user'
+      = search_field_tag 'ldap_users_search'
+    .control-group
+      = text_area_tag 'users_list', @team.users.map(&:name).join('/n'), disabled: true, rows: 10
+      #users
+        - @team.users.each do |user|
+          = hidden_field_tag "users[]", user.username
+          = hidden_field_tag "users[]", user.name
+    = f.submit "Submit", { class: 'btn' }
+#user_template
+  = hidden_field_tag "users[]", "%%username%%"
+  = hidden_field_tag "users[]", "%%name%%"

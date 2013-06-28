@@ -1,6 +1,8 @@
 Pantry::Application.routes.draw do
   resources :teams, except: [:destroy]
 
+  resources :ldap_users, only: [:index]
+
   get  '/login', :to => 'sessions#new', :as => :login
   post '/auth/ldap/callback', :to => 'sessions#create'
   get  '/auth/ldap/callback', :to => 'sessions#create'

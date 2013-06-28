@@ -1,5 +1,3 @@
-
-
 When(/^an agent posts all the required job details$/) do
   @response = page.driver.post "/jobs", {name: 'name', description: 'description', status: 'pending'}
 end

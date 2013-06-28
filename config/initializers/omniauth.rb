@@ -13,4 +13,5 @@ OmniAuth.config.on_failure = Proc.new { |env|
   OmniAuth::FailureEndpoint.new(env).redirect_to_failure
 }
 
-
+LDAP_CONFIG = { host: "ldap.example.com", port: 3268, base: "dc=example,dc=com",
+                auth: { method: :simple, username: "ProvisionerUsername@example.com", password:  "ProvisionerPassword" } }

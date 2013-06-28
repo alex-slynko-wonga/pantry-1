@@ -8,7 +8,7 @@ describe SessionsController do
 
     let(:user_id) { 2 }
     let(:user) { double(id: user_id) }
-    let(:auth) { 'test' }
+    let(:auth) { double.as_null_object }
 
     it "creates user record" do
       expect(User).to receive(:from_omniauth).and_return(user)

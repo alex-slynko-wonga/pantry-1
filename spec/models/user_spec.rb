@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
   let(:user_id) { 'some_user_id' }
   let(:user_email) { 'test@example.com' }
-  let(:omniauth_params) { {'extra' => { 'raw_info' => OpenStruct.new(samaccountname: [user_id])}, 'info' => {'email' => user_email}} }
+  let(:omniauth_params) { {'samaccountname' => [user_id], 'email' => [user_email], 'displayname' => ['name']} }
 
   describe ".from_omniauth" do
     context "if user doesn't exist" do
