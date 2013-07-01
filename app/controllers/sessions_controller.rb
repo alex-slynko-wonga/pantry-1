@@ -1,18 +1,4 @@
 class SessionsController < ApplicationController
-<<<<<<< HEAD
-  def new
-     
-  end
-
-  def create
-     auth_hash = request.env['omniauth.auth']   
-     render :text => auth_hash.inspect
-  end
-
-  def failure
-    
-   end
-=======
   skip_before_filter :signed_in_user, only: :create
   def new
     redirect_to '/auth/ldap'
@@ -33,5 +19,4 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     redirect_to '/auth/ldap', notice: "Signed out!"
   end
->>>>>>> c205508d1f8a484555f20e06c9af0b631d54145a
 end
