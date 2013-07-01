@@ -3,7 +3,6 @@ require 'spec_helper'
 describe TeamsController do
   let (:team) { FactoryGirl.create(:team) }
   let(:team_params) { {team: FactoryGirl.attributes_for(:team, name: 'TeamName', description: 'TeamDescription')} }
-  let(:update_params) { {team: FactoryGirl.attributes_for(:team, name: 'NewName', description: 'NewDesc')} }
     
   describe "POST 'create'" do
     it "returns http success" do
@@ -21,20 +20,14 @@ describe TeamsController do
 
   describe "PUT 'update'" do 
     it "returns http success" do 
-      expect{ post :create, team_params}.to change(Team, :count).by(1)
-      team = Team.last
-      update_params[:id] = team.id
-      post 'update', update_params
+      put 'update', team_params.merge({id: team.id})
       response.should be_redirect
     end
 
     it "should update a team" do 
-      post 'create', team_params
+      put 'update', team_params.merge({id: team.id})
       team = Team.last
-      update_params[:id] = team.id
-      post 'update', update_params
-      team = Team.last
-      team.name.should == 'NewName'
+      team.name.should == 'TeamName'
     end
   end
 

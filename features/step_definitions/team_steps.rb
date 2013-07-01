@@ -10,7 +10,7 @@ When(/^An agent creates a new team named "(.*?)"$/) do |name|
 end
 
 Then(/^I should be on team page$/) do
-  page.should have_content "Team"
+  current_url.should =~ /teams/
 end
 
 When(/^I click "(.*?)"$/) do |arg1|

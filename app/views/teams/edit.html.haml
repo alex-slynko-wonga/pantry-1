@@ -1,6 +1,6 @@
 %h1 Edit existing team
 = form_for @team do |f|
-  = label_tag("Team Name") 
+  = f.label :name 
   = f.text_field :name
   = label_tag("Description") 
   = f.text_area :description

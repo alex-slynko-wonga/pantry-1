@@ -1,4 +1,10 @@
 class TeamsController < ApplicationController
+  before_filter :get_team, :only => [:show, :edit, :update]
+
+  def get_team
+    @team = Team.find(params[:id])
+  end
+
   def new
     @team = Team.new
   end
@@ -17,18 +23,17 @@ class TeamsController < ApplicationController
   end
 
   def show
-    @team = Team.find(params[:id])
   end
 
   def edit
-    @team = Team.find(params[:id])
   end
 
   def update
-    @team = Team.find(params[:id])
-    @team.update_attributes(:name => params[:team][:name],
-                            :description => params[:team][:description])
-    redirect_to :action => 'show', :id => @team
+    if @team.update_attributes(team_params)
+      redirect_to @team
+    else
+      render :edit
+    end
   end
 
   private
