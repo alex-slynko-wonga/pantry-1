@@ -10,7 +10,7 @@ When(/^An agent creates a new team named "(.*?)"$/) do |name|
 end
 
 Then(/^I should be on team page$/) do
-  page.should have_content "TEAM"
+  page.should have_content "Team"
 end
 
 When(/^I click "(.*?)"$/) do |arg1|

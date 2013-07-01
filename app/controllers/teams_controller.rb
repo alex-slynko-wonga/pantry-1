@@ -20,8 +20,15 @@ class TeamsController < ApplicationController
     @team = Team.find(params[:id])
   end
 
+  def edit
+    @team = Team.find(params[:id])
+  end
+
   def update
     @team = Team.find(params[:id])
+    @team.update_attributes(:name => params[:team][:name],
+                            :description => params[:team][:description])
+    redirect_to :action => 'show', :id => @team
   end
 
   private

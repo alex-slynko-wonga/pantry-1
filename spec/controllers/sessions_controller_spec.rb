@@ -1,30 +1,6 @@
 require 'spec_helper'
 
 describe SessionsController do
-
-<<<<<<< HEAD
-  describe "GET 'new'" do
-    it "returns http success" do
-      get 'new'
-      response.should be_success
-    end
-  end
-
-  describe "GET 'create'" do
-    it "returns http success" do
-      get 'create'
-      response.should be_success
-    end
-  end
-
-  describe "GET 'failure'" do
-    it "returns http success" do
-      get 'failure'
-      response.should be_success
-    end
-  end
-
-=======
   describe "#create" do
     before(:each) do
       session[:user_id] = nil
@@ -55,5 +31,4 @@ describe SessionsController do
       expect(session[:user_id]).to be_nil
     end
   end
->>>>>>> c205508d1f8a484555f20e06c9af0b631d54145a
 end
