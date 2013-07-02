@@ -16,3 +16,21 @@ end
 When(/^I click "(.*?)"$/) do |arg1|
   page.should have_content "TeamName"
 end
+
+Given(/^there exists a team named "(.*?)"$/) do |arg1|
+  visit '/teams'
+  click_on 'New Team'
+  fill_in('team_name', :with => "TeamName")
+  fill_in('team_description', :with => "TeamDescription")
+  click_button("Create Team")
+end
+
+Given(/^I click on "(.*?)"$/) do |arg1|
+  click_on arg1
+end
+
+Given(/^I update team "(.*?)" with name "(.*?)"$/) do |arg1, arg2|
+  fill_in('team_name', :with => "NewName")
+  click_button("Save changes")
+end
+

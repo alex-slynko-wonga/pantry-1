@@ -1,10 +1,6 @@
 class TeamsController < ApplicationController
   before_filter :get_team, :only => [:show, :edit, :update]
 
-  def get_team
-    @team = Team.find(params[:id])
-  end
-
   def new
     @team = Team.new
   end
@@ -37,6 +33,10 @@ class TeamsController < ApplicationController
   end
 
   private
+
+  def get_team
+    @team = Team.find(params[:id])
+  end
 
   def team_params
     params.require(:team).permit(:name, :description)
