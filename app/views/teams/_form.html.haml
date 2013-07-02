@@ -1,0 +1,6 @@
+= form_for @team do |f|
+  = f.label :name
+  = f.text_field :name
+  = f.label("Description") 
+  = f.text_area :description
+  = f.submit "Save changes"
