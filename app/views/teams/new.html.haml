@@ -1,7 +1,3 @@
 %h1 Create a new Team
-= form_for @team do |f|
-  = f.label("Team Name") 
-  = f.text_field :name
-  = f.label("Description") 
-  = f.text_area :description
-  = f.submit "Create Team"
+
+= render :partial => "form"

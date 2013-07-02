@@ -6,7 +6,7 @@ When(/^An agent creates a new team named "(.*?)"$/) do |name|
   click_on 'New Team'
   fill_in('team_name', :with => "TeamName")
   fill_in('team_description', :with => "TeamDescription")
-  click_button("Create Team")
+  click_button("Submit")
 end
 
 Then(/^I should be on team page$/) do
@@ -22,7 +22,7 @@ Given(/^there exists a team named "(.*?)"$/) do |arg1|
   click_on 'New Team'
   fill_in('team_name', :with => "TeamName")
   fill_in('team_description', :with => "TeamDescription")
-  click_button("Create Team")
+  click_button("Submit")
 end
 
 Given(/^I click on "(.*?)"$/) do |arg1|
@@ -31,6 +31,6 @@ end
 
 Given(/^I update team "(.*?)" with name "(.*?)"$/) do |arg1, arg2|
   fill_in('team_name', :with => "NewName")
-  click_button("Save changes")
+  click_button("Submit")
 end
 
