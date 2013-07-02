@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe SessionsController do
-
   describe "#create" do
     before(:each) do
       session[:user_id] = nil

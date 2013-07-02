@@ -18,6 +18,19 @@ describe TeamsController do
     end
   end
 
+  describe "PUT 'update'" do 
+    it "returns http success" do 
+      put 'update', team_params.merge({id: team.id})
+      response.should be_redirect
+    end
+
+    it "should update a team" do 
+      put 'update', team_params.merge({id: team.id})
+      team.reload.name
+      team.name.should == 'TeamName'
+    end
+  end
+
   describe "GET 'index'" do
     it "returns http success" do
       get 'index'

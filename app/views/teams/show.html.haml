@@ -1,9 +1,10 @@
-%h1
-  TEAM
+%h1 
+  Team 
   = @team.name
-%p= "Description: #{@team.description}"
+%p= "Description: #{@team.description}" 
 %p= "Created: #{@team.created_at}"
 %p= "Updated: #{@team.updated_at}"
+%p= link_to "edit", {:action => "edit", :id => @team.id}
 %table.table
   %thead
     %tr

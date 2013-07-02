@@ -1,4 +1,6 @@
 class TeamsController < ApplicationController
+  before_filter :get_team, :only => [:show, :edit, :update]
+
   def new
     @team = Team.new
   end
@@ -17,13 +19,24 @@ class TeamsController < ApplicationController
   end
 
   def show
-    @team = Team.find(params[:id])
+  end
+
+  def edit
   end
 
   def update
+    if @team.update_attributes(team_params)
+      redirect_to @team
+    else
+      render :edit
+    end
   end
 
   private
+
+  def get_team
+    @team = Team.find(params[:id])
+  end
 
   def team_params
     params.require(:team).permit(:name, :description)
