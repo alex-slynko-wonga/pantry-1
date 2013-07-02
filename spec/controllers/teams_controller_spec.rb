@@ -26,7 +26,7 @@ describe TeamsController do
 
     it "should update a team" do 
       put 'update', team_params.merge({id: team.id})
-      team = Team.last
+      team.reload.name
       team.name.should == 'TeamName'
     end
   end
