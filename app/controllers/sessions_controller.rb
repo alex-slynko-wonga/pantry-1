@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+
   skip_before_filter :signed_in_user, only: :create
   def new
     redirect_to '/auth/ldap'
@@ -19,4 +20,5 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     redirect_to '/auth/ldap', notice: "Signed out!"
   end
+
 end

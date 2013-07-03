@@ -1,4 +1,9 @@
 Pantry::Application.routes.draw do
+  get "aws/ec2s"
+  get "aws/amis"
+  get "aws/vpcs"
+  get "aws/security_groups"
+
   resources :teams, except: [:destroy]
 
   resources :ldap_users, only: [:index]
