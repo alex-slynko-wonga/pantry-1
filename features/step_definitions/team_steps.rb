@@ -30,7 +30,7 @@ When(/^I search for "(.*?)"$/) do |search_term|
 end
 
 Then(/^I should see dropdown with "(.*?)"$/) do |text|
-  expect(page).to have_xpath("//a[contains(text(),'#{text}')]")
+  wait_until(5) { page.has_xpath?("//a[contains(text(),'#{text}')]") }
 end
 
 When(/^I select "(.*?)" from dropdown$/) do |text|
