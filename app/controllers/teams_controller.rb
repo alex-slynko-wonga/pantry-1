@@ -7,6 +7,7 @@ class TeamsController < ApplicationController
 
   def create
     @team = Team.new(team_params)
+    @team.users = users
     if @team.save
       redirect_to @team
     else
@@ -25,6 +26,7 @@ class TeamsController < ApplicationController
   end
 
   def update
+    @team.users = users
     if @team.update_attributes(team_params)
       redirect_to @team
     else
@@ -36,6 +38,18 @@ class TeamsController < ApplicationController
 
   def get_team
     @team = Team.find(params[:id])
+  end
+
+  def users
+    return [] if params[:users].blank?
+    @users ||= params[:users].each_slice(2).with_object([]) do |(username, name), user_array|
+      user = User.where(username: username).first
+      if user.nil?
+        user = User.new(name: name, username: username)
+        user.save
+      end
+      user_array << user
+    end
   end
 
   def team_params

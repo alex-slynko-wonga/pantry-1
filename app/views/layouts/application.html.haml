@@ -2,7 +2,8 @@
 %html
   %head
     %title= content_for?(:title) ? yield(:title) : Pantry
-    = stylesheet_link_tag    "bootstrap", media: "all"
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
     = csrf_meta_tags
 
   .navbar
@@ -25,5 +26,6 @@
               %img{src: current_user.image_url, alt: 'Gravatar'}
           %li
             = link_to 'Log out', logout_url
-  = yield
+  .container
+    = yield
 

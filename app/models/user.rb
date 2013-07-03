@@ -1,16 +1,17 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :username
   has_many :team_members
   has_many :teams, through: :team_members
 
   def self.from_omniauth(auth)
-    find_by_username(auth["extra"]["raw_info"].samaccountname[0]) || create_with_omniauth(auth)
+    find_by_username(auth['samaccountname'][0]) ||
+      create_with_ldap(auth)
   end
 
-  def self.create_with_omniauth(auth)
+  def self.create_with_ldap(auth)
     create! do |user|
-      user.username = auth["extra"]["raw_info"].samaccountname[0]
-      user.email = auth["info"]["email"]
+      user.username = auth['samaccountname'][0]
+      user.name = auth['displayname'][0]
+      user.email = auth['email'][0] if auth['email']
     end
   end
 

@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 
   def create
     redirect_to 'auth/ldap' and return unless env && env['omniauth.auth']
-    user = User.from_omniauth(env['omniauth.auth'])
+    user = User.from_omniauth(env['omniauth.auth']['extra']['raw_info'])
     session[:user_id]= user.id
     redirect_to root_url, notice: "Signed in!"
   end
