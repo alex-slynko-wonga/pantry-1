@@ -17,4 +17,3 @@ $ ->
   $("i.icon-remove").on "click", (event) ->
     event.preventDefault()
     $(this).parents('.user').remove()
-

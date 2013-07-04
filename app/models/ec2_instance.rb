@@ -45,6 +45,19 @@ class Ec2Instance < ActiveRecord::Base
       "Booting"
     end
   end
+  
+  def progress
+    return 100 if bootstrapped && joined
+    if bootstrapped
+      40
+    elsif joined
+      60
+    elsif booted
+      20
+    else
+      0
+    end
+  end
 
   private
     def init
