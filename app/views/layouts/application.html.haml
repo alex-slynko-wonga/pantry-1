@@ -21,7 +21,9 @@
           = link_to "Search Chef Nodes", search_chef_nodes_url
         %li.divider-vertical
         %li.dropdown
-          %a.dropdown-toggle{href: "#", "data-toggle"=>"dropdown"}AWS <b class="caret"></b>
+          %a.dropdown-toggle{href: "#", "data-toggle"=>"dropdown"}
+            AWS
+            %b.caret
           %ul.dropdown-menu
             %li{class: (current_page?(ec2_url) ? 'active' : '')}
               = link_to "EC2", ec2_url
