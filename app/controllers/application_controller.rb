@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
- helper_method :current_user
+  helper_method :current_user
   protect_from_forgery
-  before_filter :signed_in_user
+  #before_filter :signed_in_user
 
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
