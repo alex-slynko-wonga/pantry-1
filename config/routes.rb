@@ -1,8 +1,8 @@
 Pantry::Application.routes.draw do
-  get "aws/ec2s"
-  get "aws/amis"
-  get "aws/vpcs"
-  get "aws/security_groups"
+  get "aws/ec2s", as: "ec2"
+  get "aws/amis", as: "ami"
+  get "aws/vpcs", as: "vpc"
+  get "aws/security_groups", as: "secgroups"
 
   resources :teams, except: [:destroy]
 
