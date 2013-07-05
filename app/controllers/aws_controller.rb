@@ -1,21 +1,5 @@
 class AwsController < ApplicationController
 
-  def create
-  end
-
-  def save
-    server = aws.servers.create({
-      flavor_id: "t1.micro",
-      image_id: "ami-fedfd48a"
-    }) 
-    aws.tags.create(
-      :resource_id => server.identity,
-      :key => 'Name',
-      :value => params["instance"]["name"]
-    )
-    redirect_to ec2_url
-  end
-
   def aws
      Fog::Compute.new(:provider=>'AWS')
   end

@@ -5,8 +5,6 @@
 %p= "Created: #{@team.created_at}"
 %p= "Updated: #{@team.updated_at}"
 %p= link_to "edit", {:action => "edit", :id => @team.id}
-%h4 
-  Team Members
 %table.table
   %thead
     %tr
@@ -16,6 +14,3 @@
         %tr
           %td= index
           %td= link_to user.username, user_url(user.id)
-%h4
-  EC2 Resources
-%p= link_to "Add", ec2_create_url
