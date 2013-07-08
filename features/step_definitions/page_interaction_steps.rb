@@ -5,3 +5,7 @@ end
 When(/^I click (?:on )?"(.*?)"$/) do |text|
   click_on text
 end
+
+When(/^click on remove cross$/) do
+  find('i.icon-remove').click
+end
