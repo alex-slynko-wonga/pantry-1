@@ -2,6 +2,13 @@
 
 FactoryGirl.define do
   factory :user do
+    ignore do
+      team nil
+    end
     username "MyString"
+
+    after(:build) do |user, evaluator|
+      user.teams << evaluator.team if evaluator.team
+    end
   end
 end
