@@ -4,6 +4,10 @@ Pantry::Application.routes.draw do
   get "aws/vpcs", as: "vpc"
   get "aws/security_groups", as: "secgroups"
 
+  namespace :aws do 
+    resources :ec2_instance, only:[:new, :create]
+  end
+
   resources :teams, except: [:destroy]
 
   resources :ldap_users, only: [:index]

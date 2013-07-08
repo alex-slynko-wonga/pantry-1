@@ -46,3 +46,8 @@ Then(/^team should contain "(.*?)"$/) do |name|
   user = User.where(name: name).first
   expect(user.teams).to include(Team.last)
 end
+
+Given(/^(?:the|a)? "(.*?)" team $/) do |name|
+  FactoryGirl.create(:team, name: name)
+end
+
