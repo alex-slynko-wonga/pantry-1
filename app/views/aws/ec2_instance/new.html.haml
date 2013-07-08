@@ -1,6 +1,6 @@
 %h1 Create EC2 Instance
 
-= form_for @ec2_instance do |f|
+= form_for @ec2_instance, as: :ec2_instance, url: aws_ec2_instance_index_url do |f|
 	= f.label :name
 	= f.text_field :name
 
