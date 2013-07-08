@@ -6,14 +6,14 @@ Feature: Managing Teams
     And I should see "TeamName"
 
   Scenario: Updating existing team
-    Given there exists a team named "TeamName"
+    Given the "TeamName" team
     And I am on the teams page
     When I update team "TeamName" with name "NewName"
     And I click "Teams"
     Then I should see "NewName"
 
   @javascript
-  Scenario: Adding user a to team
+  Scenario: Adding an user to the team
     Given the "TeamName" team
     And a LDAP user "Test Ldap User"
     And I am on the teams page
@@ -25,3 +25,11 @@ Feature: Managing Teams
     And save team
     Then team should contain "Test Ldap User"
 
+  @javascript
+  Scenario: Removing an user from the team
+    Given the "TeamName" team with "Test User" user
+    And I am on the teams page
+    When I click on "Edit"
+    And click on remove cross
+    And save team
+    Then team should not contain "Test User"
