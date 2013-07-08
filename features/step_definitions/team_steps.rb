@@ -12,9 +12,9 @@ Given(/^I update team "(.*?)" with name "(.*?)"$/) do |oldname, newname|
   click_button("Submit")
 end
 
-Given(/^the "(.*?)" team(?: with "(.*?)" user)?$/) do |name, username|
-  @team = FactoryGirl.create(:team, name: name)
-  user = FactoryGirl.create(:user, username: username, team: @team) if username
+Given(/^the "(.*?)" team(?: with "(.*?)" user)?$/) do |team_name, user_name|
+  @team = FactoryGirl.create(:team, name: team_name)
+  user = FactoryGirl.create(:user, name: user_name, team: @team) if user_name
 end
 
 Given(/^a LDAP user "(.*?)"$/) do |name|

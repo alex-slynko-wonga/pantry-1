@@ -8,9 +8,7 @@ FactoryGirl.define do
     username "MyString"
 
     after(:build) do |user, evaluator|
-      if evaluator.team
-        user.teams << evaluator.team
-      end
+      user.teams << evaluator.team if evaluator.team
     end
   end
 end

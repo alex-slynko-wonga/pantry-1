@@ -8,9 +8,13 @@ $ ->
     select: ( event, ui ) ->
       if ui.item
         template = document.getElementById('user_template').innerHTML.
-          replace('%%name%%', ui.item.label).
+          replace(/%%name%%/g, ui.item.label).
           replace('%%username%%', ui.item.value)
         document.getElementById('users').innerHTML += template
         document.getElementById('users_list').value += ui.item.label + '\n'
         false
+
+  $("i.icon-remove").on "click", (event) ->
+    event.preventDefault()
+    $(this).parents('.user').remove()
 
