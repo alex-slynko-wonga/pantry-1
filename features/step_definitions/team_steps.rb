@@ -5,6 +5,10 @@ When(/^An agent creates a new team named "(.*?)"$/) do |name|
   click_button("Submit")
 end
 
+Given(/^there exists a team named "(.*?)"$/) do |tname|
+  @team = FactoryGirl.create(:team)
+end
+
 Given(/^I update team "(.*?)" with name "(.*?)"$/) do |oldname, newname|
   visit '/teams'
   click_on 'Edit'
@@ -12,9 +16,8 @@ Given(/^I update team "(.*?)" with name "(.*?)"$/) do |oldname, newname|
   click_button("Submit")
 end
 
-Given(/^the "(.*?)" team(?: with "(.*?)" user)?$/) do |name, username|
-  @team = FactoryGirl.create(:team, name: name)
-  user = FactoryGirl.create(:user, username: username, team: @team) if username
+Given(/^the "(.*?)" team$/) do |name|
+  FactoryGirl.create(:team, name: name)
 end
 
 Given(/^a LDAP user "(.*?)"$/) do |name|
@@ -39,11 +42,7 @@ When(/^save team$/) do
   page.has_no_button? 'Submit'
 end
 
-Then(/^team should (not )?contain "(.*?)"$/) do |not_contains, name|
+Then(/^team should contain "(.*?)"$/) do |name|
   user = User.where(name: name).first
-  if not_contains
-    expect(user.teams).to_not include(Team.last)
-  else
-    expect(user.teams).to include(Team.last)
-  end
+  expect(user.teams).to include(Team.last)
 end
