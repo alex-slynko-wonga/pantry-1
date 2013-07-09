@@ -1,10 +1,12 @@
 Pantry::Application.routes.draw do
-  post "aws/create", to: "aws#save"
-  get "aws/create", as: "ec2_create"
   get "aws/ec2s", as: "ec2"
   get "aws/amis", as: "ami"
   get "aws/vpcs", as: "vpc"
   get "aws/security_groups", as: "secgroups"
+
+  namespace :aws do 
+    resources :ec2_instances, only:[:new, :create]
+  end
 
   resources :teams, except: [:destroy]
 

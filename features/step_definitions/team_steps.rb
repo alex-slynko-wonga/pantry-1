@@ -47,3 +47,8 @@ Then(/^team should (not )?contain "(.*?)"$/) do |not_contains, name|
     expect(user.teams).to include(Team.last)
   end
 end
+
+Given(/^(?:the|a)? "(.*?)" team $/) do |name|
+  FactoryGirl.create(:team, name: name)
+end
+

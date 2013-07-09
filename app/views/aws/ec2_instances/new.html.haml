@@ -1,0 +1,7 @@
+%h1 Create EC2 Instance
+
+= form_for [:aws, @ec2_instance] do |f|
+	= f.label :name
+	= f.text_field :name
+
+	= f.submit "Create" 
