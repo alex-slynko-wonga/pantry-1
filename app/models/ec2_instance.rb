@@ -1,14 +1,9 @@
 class Ec2Instance < ActiveRecord::Base
   attr_accessible :instance_id, :name, :status
+  attr_accessible :start_time, :end_time
+  #instance_id returned from fog, name from form
 
   has_many :job_logs
-
-  before_validation do 
-  	self.status ||= 'pending'
-  end
-
-  after_create do 
-  end
 
   def start!
   	self.status = 'started'

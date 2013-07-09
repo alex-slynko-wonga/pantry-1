@@ -1,17 +1,24 @@
 require 'spec_helper'
 
 describe Aws::Ec2InstancesController do
-  context "#new" do
-    it "Should be success" do
-      get :new
-      expect(response).to be_success
+  let(:instance) { FactoryGirl.create(:ec2_instance)}
+  let(:instance_params) { {team: FactoryGirl.attributes_for(:ec2_instance, 
+    name: 'InstanceName', 
+    instance_id: 'Pending',
+    status: "Pending"
+  )} }
+
+  describe "#new" do
+    it "returns http success" do
+      get "new"
+      response.should be_success
     end
   end
 
-  context "#create" do
-    it "Should redirect" do
-      post :create
-      expect(response).to be_redirect
+  describe  "POST 'create'" do
+    it "creates a team" do
+      expect{ post :create, instance_params}.to change(Ec2Instance, :count).by(1)
+      instance.name.should == 'TeamName'
     end
   end
 end

@@ -1,7 +1,17 @@
 %h1 Create EC2 Instance
 
 = form_for [:aws, @ec2_instance] do |f|
-	= f.label :name
-	= f.text_field :name
+  = f.label :name
+  = f.text_field :name
 
-	= f.submit "Create" 
+  = label_tag "AMI"
+  = select_tag "AMI", options_for_select(@ami_options)
+
+  = label_tag "Flavor"
+  = select_tag "Flavor", options_for_select(@flavor_options)
+
+  = label_tag "Team"
+  = select_tag "Team", options_for_select(@team_options)
+
+  %br
+  = f.submit "Create", {class: "btn"}
