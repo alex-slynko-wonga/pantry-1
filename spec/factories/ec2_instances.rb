@@ -2,9 +2,8 @@
 
 FactoryGirl.define do
   factory :ec2_instance do
-    name ""
-    status ""
+    name "MyString"
+    status "Pending"
     instance_id "MyString"
-    string "MyString"
   end
 end
