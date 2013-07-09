@@ -4,7 +4,6 @@ class Aws::Ec2InstancesController < ApplicationController
   end
 
   def create
-  	puts params
   	redirect_to "/aws/ec2_instances/new"
   end
 end
