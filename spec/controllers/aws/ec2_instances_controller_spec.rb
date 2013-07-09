@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Aws::Ec2InstanceController do
+describe Aws::Ec2InstancesController do
   context "#new" do
     it "Should be success" do
       get :new

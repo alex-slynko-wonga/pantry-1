@@ -1,7 +1,7 @@
 class Ec2Instance < ActiveRecord::Base
   attr_accessible :instance_id, :name, :status
 
-  has_many :job_log
+  has_many :job_logs
 
   before_validation do 
   	self.status ||= 'pending'

@@ -5,6 +5,8 @@
 %p= "Created: #{@team.created_at}"
 %p= "Updated: #{@team.updated_at}"
 %p= link_to "edit", {:action => "edit", :id => @team.id}
+%h4
+  Team Members
 %table.table
   %thead
     %tr
