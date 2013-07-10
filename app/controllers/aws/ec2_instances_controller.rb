@@ -25,16 +25,20 @@ class Aws::Ec2InstancesController < ApplicationController
     }
     ec2_instance = Ec2Instance.new(ec2_params)
     if ec2_instance.save
-      Delayed::Job.enqueue RunChefClientJob.new(
-        ec2_instance.id,
-        params["ec2_instance"][:name],
-        params["ec2_instance"][:flavor],
-        params["ec2_instance"][:ami],
-        params["ec2_instance"][:team]
-      ) 
+      #
+      #  Call delayed_job method from here
+      #  when complete.
+      #
+      #  Delayed::Job.enqueue NAMEOFEC2JOB.new(
+      #    ec2_instance.id,
+      #    params["ec2_instance"][:name],
+      #    params["ec2_instance"][:flavor],
+      #    params["ec2_instance"][:ami],
+      #    params["ec2_instance"][:team]
+      #  )
+      redirect_to "/aws/ec2s/"
     else
       render :new
     end
-    redirect_to "/aws/ec2s/"
   end
 end

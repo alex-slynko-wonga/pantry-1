@@ -1,6 +1,6 @@
 Given(/^I request an instance named "(.*?)"$/) do |name|
   visit "aws/ec2_instances/new"
-  fill_in "Name", with: name
+  fill_in "ec2_instance_name", with: name
   click_on "Create"
 end
 
