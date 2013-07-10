@@ -1,6 +1,6 @@
 class Ec2Instance < ActiveRecord::Base
-  attr_accessible :instance_id, :name, :status
-  attr_accessible :start_time, :end_time
+  #attr_accessible :instance_id, :name, :status
+  #attr_accessible :start_time, :end_time, :team_id
   #instance_id returned from fog, name from form
 
   has_many :job_logs

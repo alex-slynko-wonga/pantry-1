@@ -1,6 +1,6 @@
 class Aws::Ec2InstancesController < ApplicationController
   def new
-  @ec2_instance = Ec2Instance.new
+    @ec2_instance = Ec2Instance.new
     fog = Fog::Compute.new(provider: 'AWS')
     amis = fog.describe_images("Owner" => "self").body["imagesSet"]
     @ami_options = {}
@@ -20,6 +20,7 @@ class Aws::Ec2InstancesController < ApplicationController
   def create
     ec2_params = {
       name: params["ec2_instance"][:name],
+      team_id: params["ec2_instance"][:team_id],
       instance_id: "pending",
       status: "pending"
     }
@@ -41,4 +42,11 @@ class Aws::Ec2InstancesController < ApplicationController
       render :new
     end
   end
+
+  private
+
+  def ec2_instance_params
+    params.require(:name, :team_id).permit(:instance_id, :status)
+  end
+
 end
