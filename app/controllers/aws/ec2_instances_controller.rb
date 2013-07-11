@@ -21,10 +21,10 @@ class Aws::Ec2InstancesController < ApplicationController
     ec2_params = {
       name: params["ec2_instance"][:name],
       team_id: params["ec2_instance"][:team_id],
-      user_id: current_user.id
+      user_id: params["ec2_instance"][:user_id]
     }
     ec2_instance = Ec2Instance.new(ec2_params)
-    #if ec2_instance.save
+    if ec2_instance.save
       #
       #  Call delayed_job method from here
       #  when complete.
@@ -36,6 +36,7 @@ class Aws::Ec2InstancesController < ApplicationController
       #    params["ec2_instance"][:ami],
       #    params["ec2_instance"][:team]
       #  )
+      #  ec2_instance.start!(instance_id)
       redirect_to "/aws/ec2s/"
     else
       render :new
@@ -45,7 +46,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:name, :team_id, :user_id).permit(:instance_id)
+    params.require(:name, :team_id, :user_id).permit(:instance_id, :team_id, :user_id)
   end
 
 end

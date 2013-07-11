@@ -1,11 +1,8 @@
-class Ec2Instance < ActiveRecord::Base
-  #attr_accessible :instance_id, :name, :status
-  #attr_accessible :start_time, :end_time, :team_id
-  #instance_id returned from fog, name from form
-  after_create :init
+class Ec2Instance < ActiveRecord::Base  
+  before_save :init!
   has_many :job_logs
 
-  def init
+  def init!
     self.start_time = Time.current
     self.booted = 'pending'
     self.bootstrapped = 'pending'
@@ -13,10 +10,11 @@ class Ec2Instance < ActiveRecord::Base
     self.instance_id = 'pending'
   end
 
-  def start!(status)
+  def start!(status, *instance_id)
     case status 
     when :booted
       self.booted = 'started'
+      self.instance_id = instance_id
     when :bootstrapped
       self.bootstrapped = 'started'
     when :joined
@@ -34,5 +32,13 @@ class Ec2Instance < ActiveRecord::Base
       self.joined = 'completed'
       self.end_time = Time.current
     end
+  end
+
+  def get_status
+    return {
+      booted: self.booted,
+      bootstrapped: self.bootstrapped,
+      joined: self.joined
+    }
   end
 end
