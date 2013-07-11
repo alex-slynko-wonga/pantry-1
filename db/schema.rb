@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130710085734) do
+ActiveRecord::Schema.define(:version => 20130711130525) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -25,19 +25,23 @@ ActiveRecord::Schema.define(:version => 20130710085734) do
     t.string   "queue"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
+    t.integer  "team_id"
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "ec2_instances", :force => true do |t|
     t.string   "name"
-    t.string   "status"
     t.string   "instance_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer  "team_id"
+    t.boolean  "booted"
+    t.boolean  "bootstrapped"
+    t.boolean  "joined"
+    t.integer  "user_id"
   end
 
   create_table "job_logs", :force => true do |t|
@@ -45,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20130710085734) do
     t.text     "log_text"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "machine"
   end
 
   create_table "jobs", :force => true do |t|
@@ -55,6 +60,7 @@ ActiveRecord::Schema.define(:version => 20130710085734) do
     t.datetime "end_time"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.integer  "machine"
   end
 
   create_table "packages", :force => true do |t|
