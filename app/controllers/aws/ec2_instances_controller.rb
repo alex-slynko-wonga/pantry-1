@@ -3,17 +3,11 @@ class Aws::Ec2InstancesController < ApplicationController
     @ec2_instance = Ec2Instance.new
     fog = Fog::Compute.new(provider: 'AWS')
     amis = fog.describe_images("Owner" => "self").body["imagesSet"]
-    @ami_options = {}
-    amis.each{|ami|
-      @ami_options[ami["name"]] = ami["imageId"]
-    }
+    @ami_options = amis.each_with_object({}) do |ami, ami_options|
+      ami_options[ami["name"]] = ami["imageId"]
+    end
     @flavor_options = {
       't1.micro' => 't1.micro'
-    }
-    teams = Team.all
-    @team_options = {}
-    teams.each{|team|
-      @team_options[team[:name]] = team[:name]
     }
   end
 
