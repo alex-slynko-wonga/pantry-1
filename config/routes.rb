@@ -5,7 +5,7 @@ Pantry::Application.routes.draw do
   get "aws/security_groups", as: "secgroups"
 
   namespace :aws do 
-    resources :ec2_instances, only:[:new, :create]
+    resources :ec2_instances, only: [:new, :create, :show]
   end
 
   resources :teams, except: [:destroy]

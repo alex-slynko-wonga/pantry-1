@@ -1,18 +1,33 @@
-%h1 
-  Team 
+%h1
+  Team
   = @team.name
 %p= "Description: #{@team.description}" 
 %p= "Created: #{@team.created_at}"
 %p= "Updated: #{@team.updated_at}"
 %p= link_to "edit", {:action => "edit", :id => @team.id}
-%h4
-  Team Members
-%table.table
-  %thead
-    %tr
-      %th #
-      %th Username
-      - @team.users.each_with_index do |user, index|
+.row-fluid
+  .span6
+    %h4
+      Team Members
+    %table.table
+      %thead
         %tr
-          %td= index
-          %td= link_to user.username, user_url(user.id)
+          %th #
+          %th Username
+          - @team.users.each_with_index do |user, index|
+            %tr
+              %td= index + 1
+              %td= link_to user.username, user_url(user.id)
+  .span6
+    %h4
+      Instances
+    %table.table
+      %thead
+        %tr
+          %th #
+          %th Address
+          - @team.ec2_instances.each_with_index do |instance, index|
+            %tr
+              %td= index + 1
+              %td= link_to instance.name, url_for([:aws, instance])
+
