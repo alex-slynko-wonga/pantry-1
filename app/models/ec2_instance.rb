@@ -2,29 +2,37 @@ class Ec2Instance < ActiveRecord::Base
   #attr_accessible :instance_id, :name, :status
   #attr_accessible :start_time, :end_time, :team_id
   #instance_id returned from fog, name from form
-
+  after_create :init
   has_many :job_logs
 
-  def start!
-  	self.status = 'started'
-  	self.start_time = Time.current
-  	self.save!
+  def init
+    self.start_time = Time.current
+    self.booted = 'pending'
+    self.bootstrapped = 'pending'
+    self.joined = 'pending'
+    self.instance_id = 'pending'
   end
 
-  def complete!
-  	self.status = 'completed'
-  	self.end_time = Time.current
-  	self.save!
+  def start!(status)
+    case status 
+    when :booted
+      self.booted = 'started'
+    when :bootstrapped
+      self.bootstrapped = 'started'
+    when :joined
+      self.joined = 'started'
+    end
   end
 
-  def job_status
-  	case status
-  	when 'started'
-  		"Started at #{start_time}"
-  	when 'completed'
-  		"Completed at #{end_time}"
-  	else
-  		"In progress since #{start_time}"
-  	end
+  def complete!(status)
+    case status 
+    when :booted
+      self.booted = 'completed'
+    when :bootstrapped
+      self.bootstrapped = 'completed'
+    when :joined
+      self.joined = 'completed'
+      self.end_time = Time.current
+    end
   end
 end
