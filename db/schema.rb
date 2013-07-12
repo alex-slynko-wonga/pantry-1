@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130711140316) do
+ActiveRecord::Schema.define(:version => 20130712100511) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(:version => 20130711140316) do
     t.string   "queue"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
-    t.integer  "team_id"
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
@@ -39,9 +38,11 @@ ActiveRecord::Schema.define(:version => 20130711140316) do
     t.datetime "end_time"
     t.integer  "team_id"
     t.integer  "user_id"
-    t.string   "booted"
-    t.string   "bootstrapped"
-    t.string   "joined"
+    t.boolean  "booted"
+    t.boolean  "bootstrapped"
+    t.boolean  "joined"
+    t.string   "ami"
+    t.string   "flavor"
   end
 
   create_table "job_logs", :force => true do |t|
@@ -49,7 +50,6 @@ ActiveRecord::Schema.define(:version => 20130711140316) do
     t.text     "log_text"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "machine"
   end
 
   create_table "jobs", :force => true do |t|
@@ -60,7 +60,6 @@ ActiveRecord::Schema.define(:version => 20130711140316) do
     t.datetime "end_time"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.integer  "package_id"
   end
 
   create_table "packages", :force => true do |t|

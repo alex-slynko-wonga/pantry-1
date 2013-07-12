@@ -15,7 +15,9 @@ class Aws::Ec2InstancesController < ApplicationController
     ec2_params = {
       name: params["ec2_instance"][:name],
       team_id: params["ec2_instance"][:team_id],
-      user_id: params["ec2_instance"][:user_id]
+      user_id: current_user.id,
+      ami: params["ec2_instance"][:ami],
+      flavor: params["ec2_instance"][:flavor]
     }
     ec2_instance = Ec2Instance.new(ec2_params)
     if ec2_instance.save
@@ -40,7 +42,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:name, :team_id, :user_id).permit(:instance_id, :team_id, :user_id)
+    params.require(:name, :team_id, :user_id).permit(:instance_id, :team_id, :user_id, :ami, :flavor)
   end
 
 end
