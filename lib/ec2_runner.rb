@@ -27,6 +27,8 @@ class EC2Runner < Struct.new(:pantry_request_id,:instance_name,:flavor,:ami,:tea
   
       ec2_inst .wait_for { print "#{ec2_inst.state}#."; ready? }
       print ec2_inst.id
+      instance_request = Ec2Instance.find(pantry_request_id)
+      instance_request.exists!(ec2_inst.id)
       status = Timeout::timeout(300){
         while true do 
           # Valid values: ok | impaired | initializing | insufficient-data | not-applicable
@@ -36,8 +38,6 @@ class EC2Runner < Struct.new(:pantry_request_id,:instance_name,:flavor,:ami,:tea
   
           case instance_status
             when "ok"
-              #ec2_instance.start!(:boot, ec2_inst.id)
-              return  ec2_inst.id
             when "impaired"
               raise "impaired"
             when "insufficient-data"
@@ -48,7 +48,7 @@ class EC2Runner < Struct.new(:pantry_request_id,:instance_name,:flavor,:ami,:tea
         end
       }
       rescue
-        #ec2_instance.start!(:boot, nil)
+        instance_request.complete!(:booted)
         return  nil
     end
   end

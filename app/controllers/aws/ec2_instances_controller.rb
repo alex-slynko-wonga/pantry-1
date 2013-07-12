@@ -16,18 +16,13 @@ class Aws::Ec2InstancesController < ApplicationController
       ec2_instance_params.merge({user_id: current_user.id})
     )
     if ec2_instance.save
-      #
-      #  Call delayed_job method from here
-      #  when complete.
-      #
-      #  Delayed::Job.enqueue NAMEOFEC2JOB.new(
-      #    ec2_instance.id,
-      #    params["ec2_instance"][:name],
-      #    params["ec2_instance"][:flavor],
-      #    params["ec2_instance"][:ami],
-      #    params["ec2_instance"][:team]
-      #  )
-      #  ec2_instance.start!(instance_id)
+      Delayed::Job.enqueue EC2Runner.new(
+        ec2_instance.id,
+        params["ec2_instance"][:name],
+        params["ec2_instance"][:flavor],
+        params["ec2_instance"][:ami],
+        params["ec2_instance"][:team]
+      )
       redirect_to "/aws/ec2s/"
     else
       render :new
