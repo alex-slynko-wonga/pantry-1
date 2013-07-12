@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Aws::Ec2InstancesController do
-  before(:each) do 
-    session[:user_id] = FactoryGirl.create(:user).id 
-  end
   let(:user) { FactoryGirl.create(:user) }
+  before(:each) do 
+    session[:user_id] = user.id
+  end
   let(:team) { FactoryGirl.create(:team) }
   let(:ec2_instance_params) { 
     {ec2_instance: FactoryGirl.attributes_for(:ec2_instance, 
