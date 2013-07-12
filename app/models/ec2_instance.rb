@@ -2,6 +2,7 @@ class Ec2Instance < ActiveRecord::Base
   validates :name, presence: true
   validates :team_id, presence: true 
   validates :user_id, presence: true
+  attr_accessible :instance_id, :name, :team_id, :ami, :flavor, :user_id
   before_save :init!
 
   def init!
@@ -9,11 +10,12 @@ class Ec2Instance < ActiveRecord::Base
     self.booted ||= false
     self.bootstrapped ||= false
     self.joined ||= false
-    self.instance_id = 'pending'
+    self.instance_id ||= 'pending'
   end
 
   def exists!(instance_id)
-    self.instance_id
+    self.instance_id = instance_id
+    self.save!
   end
 
   def complete!(status)
@@ -26,6 +28,7 @@ class Ec2Instance < ActiveRecord::Base
       self.joined = true
       self.end_time = Time.current
     end
+    self.save!
   end
 
   def get_status
