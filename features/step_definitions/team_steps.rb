@@ -12,8 +12,9 @@ Given(/^I update team "(.*?)" with name "(.*?)"$/) do |oldname, newname|
   click_button("Submit")
 end
 
-Given(/^the "(.*?)" team(?: with "(.*?)" user)?$/) do |team_name, user_name|
+Given(/^(I am in )?the "(.*?)" team(?: with "(.*?)" user)?$/) do |include_logged_user, team_name, user_name|
   @team = FactoryGirl.create(:team, name: team_name)
+  @team.users << User.first if include_logged_user
   user = FactoryGirl.create(:user, name: user_name, team: @team) if user_name
 end
 
