@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Ec2InstanceStatusController do
+describe Ec2InstanceStatusesController do
   let(:instance) { FactoryGirl.create(:ec2_instance) }
   describe "GET 'show'" do
     it "returns http success" do
