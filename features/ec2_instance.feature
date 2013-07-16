@@ -3,6 +3,7 @@ Feature: EC2 Instance
   As a team member
   I want to manage my EC2 instances
 
+  @javascript
   Scenario: Creating a new instance
     Given I am in the "teamname" team
     And I request an instance named "instanceName"
