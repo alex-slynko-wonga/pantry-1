@@ -1,0 +1,2 @@
+module UserEc2InstanceRequestStatusHelper
+end

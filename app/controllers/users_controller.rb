@@ -10,6 +10,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @ec2_instances = Ec2Instance.where(user_id:params[:id])
   end
 
   def update

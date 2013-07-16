@@ -1,17 +1,13 @@
 class Ec2Instance < ActiveRecord::Base  
+  belongs_to :team
+  belongs_to :user
+
   validates :name, presence: true
   validates :team_id, presence: true 
   validates :user_id, presence: true
-  attr_accessible :instance_id, :name, :team_id, :ami, :flavor, :user_id
-  before_save :init!
 
-  def init!
-    self.start_time = Time.current
-    self.booted ||= false
-    self.bootstrapped ||= false
-    self.joined ||= false
-    self.instance_id ||= 'pending'
-  end
+  before_validation :init, on: :create
+  before_create :set_start_time
 
   def exists!(instance_id)
     self.instance_id = instance_id
@@ -38,4 +34,42 @@ class Ec2Instance < ActiveRecord::Base
       joined: self.joined
     }
   end
+
+  def human_status
+    return "Ready" if bootstrapped && joined
+    if bootstrapped
+      "Bootstrapped"
+    elsif joined
+      "Joined to domain"
+    elsif booted
+      "Booted"
+    else
+      "Booting"
+    end
+  end
+  
+  def progress
+    return 100 if bootstrapped && joined
+    if bootstrapped
+      40
+    elsif joined
+      60
+    elsif booted
+      20
+    else
+      0
+    end
+  end
+
+  private
+    def init
+      self.booted ||= false
+      self.bootstrapped ||= false
+      self.joined ||= false
+      self.instance_id = 'pending'
+    end
+
+    def set_start_time
+      self.start_time = Time.current
+    end
 end

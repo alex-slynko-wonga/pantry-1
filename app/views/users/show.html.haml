@@ -3,3 +3,16 @@
 %p= @user.username
 %strong Email:
 %p= @user.email
+%h4
+  Instances
+%table.table
+  %thead
+    %tr
+      %th #
+      %th Address
+      %th AMI
+      - @ec2_instances.each_with_index do |instance, index|
+        %tr
+          %td= index + 1
+          %td= link_to instance.name, url_for([:aws, instance])
+          %td= instance.ami

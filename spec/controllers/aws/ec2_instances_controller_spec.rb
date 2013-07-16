@@ -29,4 +29,11 @@ describe Aws::Ec2InstancesController do
       ec2_instance.booted.should == false
     end
   end
+
+  context "#show" do
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance) }
+    it "should be success" do
+      get :show, id: ec2_instance.id
+    end
+  end
 end

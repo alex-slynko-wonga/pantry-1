@@ -29,10 +29,13 @@ class Aws::Ec2InstancesController < ApplicationController
     end
   end
 
+  def show
+    @ec2_instance = Ec2Instance.find params[:id]
+  end
+
   private
 
   def ec2_instance_params
     params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor)
   end
-
 end

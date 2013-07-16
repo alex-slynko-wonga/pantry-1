@@ -1,14 +1,20 @@
 Pantry::Application.routes.draw do
+  get "ec2_instances/index"
+
   get "aws/ec2s", as: "ec2"
   get "aws/amis", as: "ami"
   get "aws/vpcs", as: "vpc"
   get "aws/security_groups", as: "secgroups"
 
+  resources :ec2_instance_statuses, only: [:show]
+  
   namespace :aws do 
-    resources :ec2_instances, only:[:new, :create]
+    resources :ec2_instances, only: [:new, :create, :show] 
   end
 
-  resources :teams, except: [:destroy]
+  resources :teams, except: [:destroy] do
+    resources :ec2_instances, controller: "teams/ec2_instances", only: [:index]
+  end
 
   resources :ldap_users, only: [:index]
 
