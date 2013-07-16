@@ -1,2 +1,0 @@
-module TeamEc2InstanceRequestStatusHelper
-end

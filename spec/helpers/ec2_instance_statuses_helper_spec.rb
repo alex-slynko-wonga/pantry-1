@@ -10,6 +10,6 @@ require 'spec_helper'
 #     end
 #   end
 # end
-describe Ec2InstanceStatusHelper do
+describe Ec2InstanceStatusesHelper do
   pending "add some examples to (or delete) #{__FILE__}"
 end

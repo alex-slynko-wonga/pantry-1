@@ -1,2 +1,0 @@
-module Ec2InstanceStatusHelper
-end
