@@ -1,4 +1,7 @@
 class Aws::Ec2InstancesController < ApplicationController
+  
+  respond_to :html, :json, :xml
+  
   def new
     @ec2_instance = Ec2Instance.new
     fog = Fog::Compute.new(provider: 'AWS')
@@ -36,6 +39,28 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def show
     @ec2_instance = Ec2Instance.find params[:id]
+    respond_to do |format|
+      format.html
+      format.json { render json: @ec2_instance }
+    end
+  end
+  
+  def update
+    @ec2_instance = Ec2Instance.find params[:id]
+    if params[:booted]
+      @ec2_instance.complete! :booted
+    end
+    if params[:bootstrapped]
+      @ec2_instance.complete! :bootstrapped
+    end
+    if params[:joined]
+      @ec2_instance.complete! :joined
+    end
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: @ec2_instance }
+    end
   end
 
   private

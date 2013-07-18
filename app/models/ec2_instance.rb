@@ -23,6 +23,7 @@ class Ec2Instance < ActiveRecord::Base
       self.joined = true
       self.end_time = Time.current
     end
+    save!
   end
 
   def get_status
