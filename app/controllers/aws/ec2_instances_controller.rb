@@ -1,7 +1,5 @@
 class Aws::Ec2InstancesController < ApplicationController
   
-  respond_to :html, :json, :xml
-  
   def new
     @ec2_instance = Ec2Instance.new
     fog = Fog::Compute.new(provider: 'AWS')

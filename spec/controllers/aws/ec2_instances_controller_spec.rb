@@ -32,32 +32,30 @@ describe Aws::Ec2InstancesController do
   end
   
   describe "PUT 'update'" do
-    before :each do
-      @ec2_instance = FactoryGirl.create(:ec2_instance)
-    end
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance) }
   
     it "updates booted field" do
-      @incoming_params = { id: @ec2_instance.id, booted: true, format: :json }
-      put :update, @incoming_params
+      incoming_params = { id: ec2_instance.id, booted: true, format: :json }
+      put :update, incoming_params
       response.should be_success
-      @ec2_instance.reload
-      @ec2_instance.booted.should be_true
+      ec2_instance.reload
+      ec2_instance.booted.should be_true
     end
     
     it "updates bootstrapped field" do
-      @incoming_params = { id: @ec2_instance.id, bootstrapped: true, format: :json }
-      put :update, @incoming_params
+      incoming_params = { id: ec2_instance.id, bootstrapped: true, format: :json }
+      put :update, incoming_params
       response.should be_success
-      @ec2_instance.reload
-      @ec2_instance.bootstrapped.should be_true
+      ec2_instance.reload
+      ec2_instance.bootstrapped.should be_true
     end
     
     it "updates joined field" do
-      @incoming_params = { id: @ec2_instance.id, joined: true, format: :json }
-      put :update, @incoming_params
+      incoming_params = { id: ec2_instance.id, joined: true, format: :json }
+      put :update, incoming_params
       response.should be_success
-      @ec2_instance.reload
-      @ec2_instance.joined.should be_true
+      ec2_instance.reload
+      ec2_instance.joined.should be_true
     end
     
   end
