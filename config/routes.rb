@@ -9,7 +9,7 @@ Pantry::Application.routes.draw do
   resources :ec2_instance_statuses, only: [:show]
   
   namespace :aws do 
-    resources :ec2_instances, only: [:new, :create, :show] 
+    resources :ec2_instances, only: [:new, :create, :show, :update] 
   end
 
   resources :teams, except: [:destroy] do
