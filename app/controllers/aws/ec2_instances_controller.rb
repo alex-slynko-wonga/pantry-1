@@ -41,7 +41,7 @@ class Aws::Ec2InstancesController < ApplicationController
       if !queue_url.nil?
         sqs.send_message(queue_url: queue_url, message_body: msg)
       end
-      redirect_to "/aws/ec2s/"
+      redirect_to "/aws/ec2_instances/#{ec2_instance.id}"
     else
       render :new
     end
