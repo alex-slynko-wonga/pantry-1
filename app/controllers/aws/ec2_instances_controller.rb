@@ -6,9 +6,18 @@ class Aws::Ec2InstancesController < ApplicationController
     @ami_options = amis.each_with_object({}) do |ami, ami_options|
       ami_options[ami["name"]] = ami["imageId"]
     end
-    @flavor_options = {
-      't1.micro' => 't1.micro'
-    }
+    subnets = fog.subnets
+    @subnet_options = subnets.each_with_object({}) do |subnet, subnet_options|
+      subnet_options[subnet.subnet_id] = subnet.subnet_id
+    end
+    secgroups = fog.security_groups
+    @secgroup_options = secgroups.each_with_object({}) do |secgroup, secgroup_options|
+      secgroup_options[secgroup.name] = secgroup.group_id
+    end
+    flavors = fog.flavors
+    @flavor_options = flavors.each_with_object({}) do |flavor, flavor_options|
+      flavor_options[flavor.id] = flavor.id
+    end
   end
 
   def create
@@ -21,7 +30,7 @@ class Aws::Ec2InstancesController < ApplicationController
           instance_name:      params["ec2_instance"][:name],
           flavor:             params["ec2_instance"][:flavor],
           ami:                params["ec2_instance"][:ami],
-          team:               params["ec2_instance"][:team],
+          team_id:            params["ec2_instance"][:team_id],
           subnet_id:          params["ec2_instance"][:subnet_id],
           security_group_ids: params["ec2_instance"][:security_group_ids]
       }.to_json
@@ -31,16 +40,6 @@ class Aws::Ec2InstancesController < ApplicationController
       if !queue_url.nil?
         sqs.send_message(queue_url: queue_url, message_body: msg)
       end
-
-      #Delayed::Job.enqueue EC2Runner.new(
-      #  ec2_instance.id,
-      #  params["ec2_instance"][:name],
-      #  params["ec2_instance"][:flavor],
-      #  params["ec2_instance"][:ami],
-      #  params["ec2_instance"][:team],
-      #  params["ec2_instance"][:subnet_id],
-      #  params["ec2_instance"][:security_group_ids]
-      #)
       redirect_to "/aws/ec2s/"
     else
       render :new
