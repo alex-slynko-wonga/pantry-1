@@ -53,7 +53,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor)
+    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :security_group_ids)
   end
 end
 
