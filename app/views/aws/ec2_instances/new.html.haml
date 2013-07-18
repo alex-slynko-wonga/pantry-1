@@ -10,6 +10,12 @@
   = f.label :flavor
   = f.select :flavor, options_for_select(@flavor_options)
 
+  = f.label :subnet_id
+  = f.select :subnet_id, options_for_select(@subnet_options)
+
+  = f.label :security_group_ids
+  = f.select :security_group_ids, options_for_select(@secgroup_options)
+
   - if current_user.teams.size == 1
     = f.hidden_field :team_id, value: current_user.teams.first.id
   - else

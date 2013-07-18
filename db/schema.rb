@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130712132024) do
+ActiveRecord::Schema.define(:version => 20130718102725) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -32,8 +32,8 @@ ActiveRecord::Schema.define(:version => 20130712132024) do
   create_table "ec2_instances", :force => true do |t|
     t.string   "name"
     t.string   "instance_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer  "team_id"
@@ -43,6 +43,8 @@ ActiveRecord::Schema.define(:version => 20130712132024) do
     t.boolean  "booted"
     t.boolean  "bootstrapped"
     t.boolean  "joined"
+    t.string   "subnet_id"
+    t.string   "security_group_ids"
   end
 
   create_table "job_logs", :force => true do |t|

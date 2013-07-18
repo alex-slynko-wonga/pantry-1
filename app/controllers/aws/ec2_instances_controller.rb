@@ -7,9 +7,18 @@ class Aws::Ec2InstancesController < ApplicationController
     @ami_options = amis.each_with_object({}) do |ami, ami_options|
       ami_options[ami["name"]] = ami["imageId"]
     end
-    @flavor_options = {
-      't1.micro' => 't1.micro'
-    }
+    subnets = fog.subnets
+    @subnet_options = subnets.each_with_object({}) do |subnet, subnet_options|
+      subnet_options[subnet.subnet_id] = subnet.subnet_id
+    end
+    secgroups = fog.security_groups
+    @secgroup_options = secgroups.each_with_object({}) do |secgroup, secgroup_options|
+      secgroup_options[secgroup.name] = secgroup.group_id
+    end
+    flavors = fog.flavors
+    @flavor_options = flavors.each_with_object({}) do |flavor, flavor_options|
+      flavor_options[flavor.id] = flavor.id
+    end
   end
 
   def create
@@ -17,18 +26,21 @@ class Aws::Ec2InstancesController < ApplicationController
       ec2_instance_params.merge({user_id: current_user.id})
     )
     if ec2_instance.save
-      #
-      #  Call delayed_job method from here
-      #  when complete.
-      #
-      #  Delayed::Job.enqueue NAMEOFEC2JOB.new(
-      #    ec2_instance.id,
-      #    params["ec2_instance"][:name],
-      #    params["ec2_instance"][:flavor],
-      #    params["ec2_instance"][:ami],
-      #    params["ec2_instance"][:team]
-      #  )
-      #  ec2_instance.start!(instance_id)
+      msg = {
+          pantry_request_id:  ec2_instance.id,
+          instance_name:      params["ec2_instance"][:name],
+          flavor:             params["ec2_instance"][:flavor],
+          ami:                params["ec2_instance"][:ami],
+          team_id:            params["ec2_instance"][:team_id],
+          subnet_id:          params["ec2_instance"][:subnet_id],
+          security_group_ids: params["ec2_instance"][:security_group_ids]
+      }.to_json
+      sqs = AWS::SQS::Client.new()
+      queue_url = sqs.get_queue_url(queue_name: "boot_ec2_instance")[:queue_url]
+      puts "QUEUE #{queue_url}"
+      if !queue_url.nil?
+        sqs.send_message(queue_url: queue_url, message_body: msg)
+      end
       redirect_to "/aws/ec2s/"
     else
       render :new
@@ -64,6 +76,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor)
+    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :security_group_ids)
   end
 end
+

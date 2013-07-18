@@ -10,7 +10,8 @@ class Ec2Instance < ActiveRecord::Base
   before_create :set_start_time
 
   def exists!(instance_id)
-    self.instance_id
+    self.instance_id = instance_id
+    self.save!
   end
 
   def complete!(status)
