@@ -34,11 +34,17 @@ class Aws::Ec2InstancesController < ApplicationController
           subnet_id:          params["ec2_instance"][:subnet_id],
           security_group_ids: params["ec2_instance"][:security_group_ids]
       }.to_json
-      sqs = AWS::SQS::Client.new()
-      queue_url = sqs.get_queue_url(queue_name: "boot_ec2_instance")[:queue_url]
-      puts "QUEUE #{queue_url}"
-      if !queue_url.nil?
-        sqs.send_message(queue_url: queue_url, message_body: msg)
+      begin
+        sqs = AWS::SQS::Client.new()
+        queue_url = sqs.get_queue_url(queue_name: "boot_ec2_instance")[:queue_url]
+        puts "QUEUE #{queue_url}"
+        if !queue_url.nil?
+          sqs.send_message(queue_url: queue_url, message_body: msg)
+        end
+      rescue Exception => e 
+        if Rails.env != "test"
+          raise e 
+        end
       end
       redirect_to "/aws/ec2s/"
     else
