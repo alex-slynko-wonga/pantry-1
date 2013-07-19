@@ -1,4 +1,5 @@
 require 'em-winrm'
+
 class WinRMRunner
   def add_host(host, user="Administrator", password="LocalAdminPassword")
     session.use(host, {user: user, password: password, basic_auth_only: true})

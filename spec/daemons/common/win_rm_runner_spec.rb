@@ -1,4 +1,5 @@
 require 'spec_helper'
+require "#{Rails.root}/daemons/common/win_rm_runner"
 
 describe WinRMRunner do
   let(:server) { double }

@@ -1,3 +1,6 @@
+require 'fog'
+require_relative 'config'
+
 class AWSResource
   def find_server_by_id(id)
     aws.servers.detect { |server| server.id == id }
@@ -5,6 +8,6 @@ class AWSResource
 
   private
   def aws
-    @aws ||= Fog::Compute.new(provider: 'AWS')
+    @aws ||= Fog::Compute.new(Daemons.config.config_for_fog)
   end
 end
