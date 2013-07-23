@@ -60,6 +60,9 @@ class Aws::Ec2InstancesController < ApplicationController
     if params[:booted]
       @ec2_instance.complete! :booted
     end
+    if params[:instance_id]
+      @ec2_instance.exists! params[:instance_id]
+    end
     if params[:bootstrapped]
       @ec2_instance.complete! :bootstrapped
     end

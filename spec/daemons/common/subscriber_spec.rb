@@ -1,7 +1,7 @@
 require "spec_helper"
 require "#{Rails.root}/daemons/common/subscriber"
 
-describe Subscriber do
+describe Daemons::Subscriber do
   let(:processor) { double }
   let(:queue_name) { "test_queue" }
 
