@@ -3,10 +3,6 @@ require_relative 'config'
 
 module Daemons
   class Subscriber
-    def initialize
-      Daemons::Config.instance.configure_aws
-    end
-
     def subscribe(queue_name, processor)
       AWS::SQS.new.queues.named(queue_name).poll do |msg|
         begin
