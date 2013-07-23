@@ -1,4 +1,5 @@
 require 'spec_helper'
+require "#{Rails.root}/daemons/common/ssh_runner"
 
 describe SshRunner do
   let(:server) { double }
