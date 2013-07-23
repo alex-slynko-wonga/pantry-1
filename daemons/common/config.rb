@@ -23,7 +23,7 @@ module Daemons
     private
     def read_config
       env = ENV['environment'] || 'development'
-      @config = YAML.load_file("daemon.yml")[env]
+      @config = YAML.load_file(File.join(File.dirname($0),"daemon.yml"))[env]
     end
   end
 
