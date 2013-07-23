@@ -1,13 +1,12 @@
-require 'fog'
-require_relative 'config'
+require 'aws-sdk'
 
 class AWSResource
   def find_server_by_id(id)
-    aws.servers.detect { |server| server.id == id }
+    aws.instances[id]
   end
 
   private
   def aws
-    @aws ||= Fog::Compute.new(Daemons.config.config_for_fog)
+    @aws ||= AWS::EC2.new
   end
 end
