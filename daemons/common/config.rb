@@ -6,10 +6,7 @@ module Daemons
     include Singleton
     def initialize
       read_config
-    end
-
-    def configure_aws
-      AWS.config(@config["aws"])
+      configure_aws
     end
 
     def config_for_fog
@@ -23,7 +20,11 @@ module Daemons
     private
     def read_config
       env = ENV['environment'] || 'development'
-      @config = YAML.load_file("daemon.yml")[env]
+      @config = YAML.load_file(File.join(File.dirname($0),"daemon.yml"))[env]
+    end
+
+    def configure_aws
+      AWS.config(@config["aws"])
     end
   end
 
@@ -32,4 +33,3 @@ module Daemons
   end
 end
 
-Daemons.config

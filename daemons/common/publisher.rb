@@ -1,14 +1,13 @@
-require_relative 'config'
+require 'aws-sdk'
 
 class Publisher
-  def publish(topic, message)
+  def initialize(topic)
     sns = AWS::SNS.new
-    sns.topics[topic].publish message.to_json
+    @topic = sns.topics[topic]
   end
 
-  def publish_error(error_text)
-    sns = AWS::SNS.new
-    sns.topics[Daemons.config['sns']['error_arn']].publish error_text
+  def publish(message)
+    @topic.publish message.to_json
   end
 end
 
