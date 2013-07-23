@@ -12,5 +12,18 @@ describe Publisher do
       subject.publish(topic_name, message)
     end
   end
+
+  context "#publish_error" do
+    let(:text) { "error" }
+    let(:topic_name) { "error_test" }
+
+    it "publishes error text on separate channel" do
+      Daemons.stub(:config).and_return({ 'sns' => { 'error_arn' => topic_name }})
+      topic = AWS::SNS::Topic.new(topic_name)
+      expect(topic).to receive(:publish).with(text)
+      AWS::SNS.stub_chain(:new, :topics).and_return(topic_name => topic)
+      subject.publish_error(text)
+    end
+  end
 end
 

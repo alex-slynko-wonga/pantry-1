@@ -6,9 +6,6 @@ module Daemons
     include Singleton
     def initialize
       read_config
-    end
-
-    def configure_aws
       AWS.config(@config["aws"])
     end
 
@@ -31,3 +28,5 @@ module Daemons
     Config.instance
   end
 end
+
+Daemons.config
