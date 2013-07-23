@@ -6,7 +6,7 @@ class Ec2Instance < ActiveRecord::Base
   validates :team_id, presence: true 
   validates :user_id, presence: true
 
-  before_validation :init, on: :create
+  after_initialize :init, on: :create
   before_create :set_start_time
 
   def exists!(instance_id)
@@ -66,7 +66,6 @@ class Ec2Instance < ActiveRecord::Base
       self.booted ||= false
       self.bootstrapped ||= false
       self.joined ||= false
-      self.instance_id = 'pending'
     end
 
     def set_start_time
