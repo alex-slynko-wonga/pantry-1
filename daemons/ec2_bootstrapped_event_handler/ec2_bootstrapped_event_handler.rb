@@ -5,7 +5,7 @@ require 'timeout'
 require 'rest_client'
 require_relative '../common/config'
 module Daemons
-  class EC2Bootstrapped
+  class EC2BootstrappedEventHandler
 
     def initialize(config)
       @config = config
@@ -20,7 +20,14 @@ module Daemons
       puts "#{update}"
       puts request_url
       Timeout::timeout(@config['pantry']['timeout']){
-        RestClient.put request_url, update, {:content_type => :json, :'x-auth-token' => "2" }
+        RestClient.put(
+          request_url, 
+          update, 
+          {
+            :content_type => :json, 
+            :'x-auth-token' => "2" 
+          }
+        )
       }
     end
 
