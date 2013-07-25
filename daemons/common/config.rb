@@ -3,14 +3,10 @@ require 'singleton'
 
 module Daemons
   class Config
-    include Singleton
-    def initialize
-      read_config
+    #include Singleton
+    def initialize(config_file)
+      read_config(config_file)
       configure_aws
-    end
-
-    def config_for_fog
-      @config['fog'].merge(provider: 'AWS')
     end
 
     def [](value)
@@ -18,9 +14,9 @@ module Daemons
     end
 
     private
-    def read_config
+    def read_config(config_file)
       env = ENV['environment'] || 'development'
-      @config = YAML.load_file(File.join(File.dirname($0),"daemon.yml"))[env]
+      @config = YAML.load_file(config_file)[env]
     end
 
     def configure_aws
@@ -28,8 +24,8 @@ module Daemons
     end
   end
 
-  def self.config
-    Config.instance
-  end
+  #def self.config(config_file)
+  #  Config.instance(config_file)
+  #end
 end
 
