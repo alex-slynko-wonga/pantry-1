@@ -1,21 +1,33 @@
 #!/usr/bin/env ruby
+require 'rubygems'
+require 'daemons'
 require_relative '../common/subscriber'
 require_relative '../common/config'
 require_relative 'ec2_bootstrapped_event_handler'
 
-config = Daemons.config
-sqs_poller = Daemons::Subscriber.new()
+THIS_FILE = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
+config = Daemons::Config.new(
+  File.expand_path(
+    File.join(File.dirname(THIS_FILE),"daemon.yml")
+  )
+)
 
-case ARGV[0]
-when "run"
+daemon_config = {
+  :backtrace => config['daemon']['backtrace'],
+  :dir_mode => config['daemon']['dir_mode'].to_sym,
+  :dir => "#{File.expand_path(config['daemon']['dir'])}",
+  :monitor => config['daemon']['monitor']
+}
+
+Daemons.run_proc(config['daemon']['monitor'], daemon_config) {
   begin
-    sqs_poller.subscribe(
+    Daemons::Subscriber.new.subscribe(
       config['sqs']['queue_name'],
       Daemons::EC2BootstrappedEventHandler.new(config)
     )
   rescue => e
-  	sleep(1)
     puts "#{e}"
     retry
   end
-end
+}
+
