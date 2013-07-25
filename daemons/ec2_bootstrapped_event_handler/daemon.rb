@@ -10,7 +10,7 @@ case ARGV[0]
 when "run"
   begin
     sqs_poller.subscribe(
-      "bootstrap_ec2_instance",
+      config['sqs']['queue_name'],
       Daemons::EC2BootstrappedEventHandler.new(config)
     )
   rescue => e

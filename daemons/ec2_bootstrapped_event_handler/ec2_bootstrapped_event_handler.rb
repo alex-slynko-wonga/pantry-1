@@ -12,9 +12,9 @@ module Daemons
     end
 
     def handle_message(message)
-      puts message
       url = @config["pantry"]["url"]
-      request_id = message["request_id"]
+      msg_json = JSON.parse(message["Message"])
+      request_id = msg_json['request_id']
       request_url = "#{url}/aws/ec2_instances/#{request_id}"
       update = ({:bootstrapped => true}).to_json
       puts "#{update}"
@@ -25,12 +25,11 @@ module Daemons
           update, 
           {
             :content_type => :json, 
-            :'x-auth-token' => "2" 
+            :'x-auth-token' => @config['pantry']['api_key']
           }
         )
       }
     end
-
   end
 end
 
