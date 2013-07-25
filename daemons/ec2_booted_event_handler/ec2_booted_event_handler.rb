@@ -1,11 +1,8 @@
-require 'aws-sdk'
-require 'yaml'
 require 'json'
 require 'timeout'
 require 'rest_client'
-require_relative '../common/config'
 module Daemons
-  class EC2Booted
+  class EC2BootedEventHandler
 
     def initialize(config)
       @config = config
