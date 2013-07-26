@@ -5,7 +5,7 @@ require 'daemons'
 
 require_relative '../common/subscriber'
 require_relative '../common/config'
-require_relative 'ec2_runner'
+require_relative 'ec2_boot_command_handler'
 
 THIS_FILE = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
 config = Daemons::Config.new(
@@ -28,7 +28,7 @@ Daemons.run_proc(config['daemon']['monitor'], daemon_config) {
   begin
     Daemons::Subscriber.new.subscribe(
       config['sqs']['queue_name'],
-      Daemons::EC2Runner.new(ec2, publisher)
+      Daemons::EC2BootCommandHandler.new(ec2, publisher)
     )
   rescue => e
     puts "#{e}"

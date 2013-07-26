@@ -1,11 +1,11 @@
 require 'spec_helper'
-require "#{Rails.root}/daemons/ec2_runner/ec2_runner"
+require "#{Rails.root}/daemons/ec2_boot_command_handler/ec2_boot_command_handler"
 
-describe Daemons::EC2Runner do
+describe Daemons::EC2BootCommandHandler do
   let(:ec2) { AWS::EC2.new }
   let(:publisher) { instance_double('Publisher').as_null_object }
   let(:raise_msg) { {request_id: 1, instance_id: 2} }
-  subject { Daemons::EC2Runner.new(ec2, publisher) }
+  subject { Daemons::EC2BootCommandHandler.new(ec2, publisher) }
   let(:test_hash){ 
     {
       pantry_request_id: "",

@@ -6,7 +6,7 @@ require 'timeout'
 require_relative '../common/publisher'
 
 module Daemons
-  class EC2Runner
+  class EC2BootCommandHandler
     def initialize(ec2, publisher)
       @ec2 = ec2
       @publisher = publisher
