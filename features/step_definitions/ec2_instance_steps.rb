@@ -1,6 +1,7 @@
-Given(/^I request an instance named "(.*?)"$/) do |name|
+Given(/^I request an instance named "(.*?)" on domain "(.*?)"$/) do |name, domain|
   visit '/aws/ec2_instances/new'
   fill_in "Name", with: name
+  fill_in "Domain", with: domain
   click_on 'Create'
 end
 

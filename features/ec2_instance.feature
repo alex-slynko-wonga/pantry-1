@@ -6,7 +6,7 @@ Feature: EC2 Instance
   @javascript
   Scenario: Creating a new instance
     Given I am in the "teamname" team
-    And I request an instance named "instanceName"
+    And I request an instance named "instanceName" on domain "domainName"
     Then an instance build should be started
 
     When I am on the teams page
