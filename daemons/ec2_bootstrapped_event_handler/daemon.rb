@@ -19,7 +19,7 @@ daemon_config = {
   :monitor => config['daemon']['monitor']
 }
 
-Daemons.run_proc(config['daemon']['monitor'], daemon_config) {
+Daemons.run_proc(config['daemon']['app_name'], daemon_config) {
   begin
     Daemons::Subscriber.new.subscribe(
       config['sqs']['queue_name'],
