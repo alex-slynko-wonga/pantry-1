@@ -15,7 +15,7 @@ module Daemons
 
     private
     def read_config(config_file)
-      env = ENV['environment'] || 'development'
+      env = ENV['ENVIRONMENT'] || 'development'
       @config = YAML.load_file(config_file)[env]
     end
 

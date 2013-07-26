@@ -1,11 +1,11 @@
 require 'spec_helper'
-require "#{Rails.root}/daemons/ec2_runner/ec2_runner"
+require "#{Rails.root}/daemons/ec2_boot_command_handler/ec2_boot_command_handler"
 
-describe Daemons::EC2Runner do
+describe Daemons::EC2BootCommandHandler do
   let(:ec2) { AWS::EC2.new }
   let(:publisher) { instance_double('Publisher').as_null_object }
   let(:raise_msg) { {request_id: 1, instance_id: 2} }
-  subject { Daemons::EC2Runner.new(ec2, publisher) }
+  subject { Daemons::EC2BootCommandHandler.new(ec2, publisher) }
   let(:test_hash){ 
     {
       pantry_request_id: "",
@@ -33,25 +33,14 @@ describe Daemons::EC2Runner do
     end
   end
 
-  describe "#boot_machine" do 
+  describe "#tag_and_wait_instance" do 
     it "Takes machine details and boots an ec2 instance" do 
-      expect{subject.boot_machine(
-        1,
-        "test_name",
-        "t1.micro",
-        "ami-fedfd48a",
-        "test_team",
-        "subnet-f3c63a98",
-        "sg-f94dc88e" ); sleep(10)
-      }.not_to be false
+      resp = ec2.client.stub_for(:describe_instance_status)
+      resp.data[:instance_status_set] = [ {instance_status: {status: "ok"} } ]
+      instance = double("instance", id: "i-1337")
+      expect(
+        subject.tag_and_wait_instance(instance, 1, "test_name", "test_team")
+      ).not_to be_false
     end
   end
-
-  describe "#handle_message" do 
-    it "Receives a correct SQS message and boots a machine" do
-      subject.handle_message(good_msg)
-      expect(publisher).to have_received(:publish)
-    end
-  end
-
 end
