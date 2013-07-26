@@ -40,6 +40,7 @@ class Aws::Ec2InstancesController < ApplicationController
       msg = {
           pantry_request_id:  ec2_instance.id,
           instance_name:      params["ec2_instance"][:name],
+          domain:             params["ec2_instance"][:domain],
           flavor:             params["ec2_instance"][:flavor],
           ami:                params["ec2_instance"][:ami],
           team_id:            params["ec2_instance"][:team_id],
@@ -90,7 +91,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :security_group_ids)
+    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :security_group_ids, :domain)
   end
 end
 

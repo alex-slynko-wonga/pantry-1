@@ -3,6 +3,9 @@
 = form_for [:aws, @ec2_instance] do |f|
   = f.label :name
   = f.text_field :name
+  
+  = f.label :domain
+  = f.text_field :domain
 
   = f.label :ami
   = f.select :ami, options_for_select(@ami_options)
