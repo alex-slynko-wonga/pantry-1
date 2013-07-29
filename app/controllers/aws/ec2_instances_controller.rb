@@ -3,16 +3,16 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def initialize_ec2_instance
     ec2 = AWS::EC2::Client.new()
-    @amis = ec2.describe_images({owners: ['self']})[:images_set]
-    @ami_options = @amis.each_with_object({}) do |ami, ami_options|
+    amis = ec2.describe_images({owners: ['self']})[:images_set]
+    @ami_options = amis.each_with_object({}) do |ami, ami_options|
       ami_options[ami[:name]] = ami[:image_id]
     end
-    @subnets = ec2.describe_subnets()[:subnet_set]
-    @subnet_options = @subnets.each_with_object({}) do |subnet, subnet_options|
+    subnets = ec2.describe_subnets()[:subnet_set]
+    @subnet_options = subnets.each_with_object({}) do |subnet, subnet_options|
       subnet_options[subnet[:subnet_id]] = subnet[:subnet_id]
     end
-    @secgroups = ec2.describe_security_groups[:security_group_info]
-    @secgroup_options = @secgroups.each_with_object({}) do |secgroup, secgroup_options|
+    secgroups = ec2.describe_security_groups[:security_group_info]
+    @secgroup_options = secgroups.each_with_object({}) do |secgroup, secgroup_options|
       secgroup_options[secgroup[:group_name]] = secgroup[:group_id]
     end
     flavors = [
