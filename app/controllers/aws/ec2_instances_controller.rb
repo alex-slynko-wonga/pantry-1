@@ -28,17 +28,14 @@ class Aws::Ec2InstancesController < ApplicationController
     end
   end
   
-  def new
-    ec2_query_url = "https://ec2.amazonaws.com/"
-  end
-
+  
   def create
-    ec2_instance = Ec2Instance.new(
+    @ec2_instance = Ec2Instance.new(
       ec2_instance_params.merge({user_id: current_user.id})
     )
-    if ec2_instance.save
+    if @ec2_instance.save
       msg = {
-          pantry_request_id:  ec2_instance.id,
+          pantry_request_id:  @ec2_instance.id,
           instance_name:      params["ec2_instance"][:name],
           domain:             params["ec2_instance"][:domain],
           flavor:             params["ec2_instance"][:flavor],
@@ -53,9 +50,9 @@ class Aws::Ec2InstancesController < ApplicationController
       if !queue_url.nil?
         sqs.send_message(queue_url: queue_url, message_body: msg)
       end
-      redirect_to "/aws/ec2_instances/#{ec2_instance.id}"
+      redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
     else
-      render :new
+       render :action => "new"
     end
   end
 
