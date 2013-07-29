@@ -3,6 +3,7 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def initialize_ec2_instance
     ec2 = AWS::EC2::Client.new()
+    @ec2_instance = Ec2Instance.new
     amis = ec2.describe_images({owners: ['self']})[:images_set]
     @ami_options = amis.each_with_object({}) do |ami, ami_options|
       ami_options[ami[:name]] = ami[:image_id]
