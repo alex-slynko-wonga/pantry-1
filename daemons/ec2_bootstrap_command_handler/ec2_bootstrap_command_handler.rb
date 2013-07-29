@@ -4,7 +4,7 @@ require_relative '../common/aws_resource'
 require_relative '../common/publisher'
 
 module Daemons
-  class BootstrapCommandHandler
+  class EC2BootstrapCommandHandler
     def initialize(publisher = Publisher.new)
       @publisher = publisher
     end
