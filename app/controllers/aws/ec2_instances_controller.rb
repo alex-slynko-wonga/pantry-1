@@ -1,24 +1,35 @@
 class Aws::Ec2InstancesController < ApplicationController
-  
-  def new
+  before_filter :initialize_ec2_instance
+
+  def initialize_ec2_instance
+    ec2 = AWS::EC2::Client.new()
     @ec2_instance = Ec2Instance.new
-    fog = Fog::Compute.new(provider: 'AWS')
-    amis = fog.describe_images("Owner" => "self").body["imagesSet"]
-    @ami_options = amis.each_with_object({}) do |ami, ami_options|
+    fog = Fog::Compute.new(provider: 'AWS')    
+    @amis = fog.describe_images("Owner" => "self").body["imagesSet"]
+    @subnets = ec2.describe_subnets()[:subnet_set]
+    @secgroups = ec2.describe_security_groups[:security_group_info]
+    @ami_options = @amis.each_with_object({}) do |ami, ami_options|
       ami_options[ami["name"]] = ami["imageId"]
     end
-    subnets = fog.subnets
-    @subnet_options = subnets.each_with_object({}) do |subnet, subnet_options|
-      subnet_options[subnet.subnet_id] = subnet.subnet_id
+    @subnet_options = @subnets.each_with_object({}) do |subnet, subnet_options|
+      subnet_options[subnet[:subnet_id]] = subnet[:subnet_id]
     end
-    secgroups = fog.security_groups
-    @secgroup_options = secgroups.each_with_object({}) do |secgroup, secgroup_options|
-      secgroup_options[secgroup.name] = secgroup.group_id
+    @secgroup_options = @secgroups.each_with_object({}) do |secgroup, secgroup_options|
+      secgroup_options[secgroup[:group_name]] = secgroup[:group_id]
     end
-    flavors = fog.flavors
+    flavors = [
+      {id: "t1.micro"}, 
+      {id: "m1.small"}, 
+      {id: "m1.medium"}, 
+      {id: "m1.large"}
+    ]
     @flavor_options = flavors.each_with_object({}) do |flavor, flavor_options|
-      flavor_options[flavor.id] = flavor.id
+      flavor_options[flavor[:id]] = flavor[:id]
     end
+  end
+  
+  def new
+    ec2_query_url = "https://ec2.amazonaws.com/"
   end
 
   def create
