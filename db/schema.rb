@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130718102725) do
+ActiveRecord::Schema.define(:version => 20130726152006) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20130718102725) do
     t.boolean  "joined"
     t.string   "subnet_id"
     t.string   "security_group_ids"
+    t.string   "domain"
   end
 
   create_table "job_logs", :force => true do |t|

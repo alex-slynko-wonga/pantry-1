@@ -1,8 +1,14 @@
 %h1 Create EC2 Instance
 
 = form_for [:aws, @ec2_instance] do |f|
+  = render "shared/error_messages", :target => @ec2_instance
   = f.label :name
+  = mark_required(@ec2_instance, :name)
   = f.text_field :name
+  
+  = f.label :domain
+  = mark_required(@ec2_instance, :domain)
+  = f.text_field :domain
 
   = f.label :ami
   = f.select :ami, options_for_select(@ami_options)
