@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :ec2_instance do
     name "MyString"
-    domain "MyDomain"
+    domain "example.com"
     instance_id "MyString"
     team
     user
