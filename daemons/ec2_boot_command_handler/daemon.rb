@@ -24,7 +24,7 @@ daemon_config = {
 ec2 = AWS::EC2.new
 publisher = Publisher.new(config['sns']['topic_arn'])
 
-Daemons.run_proc(config['daemon']['monitor'], daemon_config) {
+Daemons.run_proc(config['daemon']['app_name'], daemon_config) {
   begin
     Daemons::Subscriber.new.subscribe(
       config['sqs']['queue_name'],
