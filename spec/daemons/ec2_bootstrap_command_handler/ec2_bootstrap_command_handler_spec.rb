@@ -1,5 +1,5 @@
 require 'spec_helper'
-require "#{Rails.root}/daemons/bootstrap_command_handler/bootstrap_command_handler"
+require "#{Rails.root}/daemons/ec2_bootstrap_command_handler/ec2_bootstrap_command_handler"
 
 shared_examples "bootstrap with runner" do
   it "runs chef_client command" do
@@ -18,10 +18,10 @@ shared_examples "bootstrap with runner" do
   end
 end
 
-describe Daemons::BootstrapCommandHandler do
+describe Daemons::EC2BootstrapCommandHandler do
   let(:message) { { 'instance_id' => "i-11111111" } }
   let(:publisher) { instance_double('Publisher').as_null_object }
-  subject(:bootstrap) { Daemons::BootstrapCommandHandler.new(publisher) }
+  subject(:bootstrap) { Daemons::EC2BootstrapCommandHandler.new(publisher) }
 
   context "#handle_message" do
     let(:instance) { double }
