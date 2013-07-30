@@ -12,7 +12,7 @@ module Daemons
       url = @config["pantry"]["url"]
       msg_json = JSON.parse(message["Message"])
       request_url = "#{url}/aws/ec2_instances/#{msg_json["request_id"].to_s}"
-      update = ({:joined=>true,:instance_id=>msg_json["instance_id"]}).to_json
+      update = ({:joined=>true}).to_json
       puts "#{update}"
       Timeout::timeout(@config['pantry']['timeout']){
         RestClient.put request_url, update, {:content_type => :json, :'x-auth-token' => @config['pantry']['api_key'] }
