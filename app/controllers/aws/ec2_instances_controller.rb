@@ -48,7 +48,7 @@ class Aws::Ec2InstancesController < ApplicationController
           run_list:           run_list
       }.to_json
       sqs = AWS::SQS::Client.new()
-      queue_url = sqs.get_queue_url(queue_name: "boot_ec2_instance")[:queue_url]
+      queue_url = sqs.get_queue_url(queue_name: "pantry_wonga_aws-ec2_boot_command")[:queue_url]
       puts "QUEUE #{queue_url}"
       if !queue_url.nil?
         sqs.send_message(queue_url: queue_url, message_body: msg)
