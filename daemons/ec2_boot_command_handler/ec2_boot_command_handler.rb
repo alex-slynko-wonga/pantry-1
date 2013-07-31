@@ -30,17 +30,14 @@ module Daemons
         puts "Machine request #{msg["pantry_request_id"]} already booted"
       end
       raise_machine_booted_event(
-        msg["pantry_request_id"],
+        msg,
         instance_id        
       )
     end
 
-    def raise_machine_booted_event(request_id, instance_id)
-      msg = {
-        request_id: request_id,
-        instance_id: instance_id
-      }
-      @publisher.publish(msg)      
+    def raise_machine_booted_event(msg_in, instance_id)
+      msg_out = msg_in.merge({instance_id: instance_id})
+      @publisher.publish(msg_out)      
     end
 
     def machine_already_booted(request_id)
