@@ -6,6 +6,8 @@ class Ec2Instance < ActiveRecord::Base
   validates :team_id, presence: true 
   validates :user_id, presence: true
   validates :domain, :presence => true, :domain_name => true
+  validates :chef_environment, :presence => true
+  validates :run_list, :presence => true, :chef_run_list_format => true
 
   after_initialize :init, on: :create
   before_create :set_start_time

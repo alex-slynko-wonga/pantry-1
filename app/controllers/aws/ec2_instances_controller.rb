@@ -33,6 +33,7 @@ class Aws::Ec2InstancesController < ApplicationController
     @ec2_instance = Ec2Instance.new(
       ec2_instance_params.merge({user_id: current_user.id})
     )
+    run_list = @ec2_instance.run_list.split "\r\n"
     if @ec2_instance.save
       msg = {
           pantry_request_id:  @ec2_instance.id,
@@ -42,7 +43,9 @@ class Aws::Ec2InstancesController < ApplicationController
           ami:                params["ec2_instance"][:ami],
           team_id:            params["ec2_instance"][:team_id],
           subnet_id:          params["ec2_instance"][:subnet_id],
-          security_group_ids: params["ec2_instance"][:security_group_ids]
+          security_group_ids: params["ec2_instance"][:security_group_ids],
+          chef_environment:   params["ec2_instance"][:chef_environment],
+          run_list:           run_list
       }.to_json
       sqs = AWS::SQS::Client.new()
       queue_url = sqs.get_queue_url(queue_name: "boot_ec2_instance")[:queue_url]
@@ -88,7 +91,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :security_group_ids, :domain)
+    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :security_group_ids, :domain, :chef_environment, :run_list)
   end
 end
 
