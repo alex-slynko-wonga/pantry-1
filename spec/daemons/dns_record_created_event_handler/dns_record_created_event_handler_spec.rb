@@ -1,7 +1,7 @@
 require 'spec_helper'
-require "#{Rails.root}/daemons/ec2_booted_event_handler/ec2_booted_event_handler"
-describe Daemons::EC2BootedEventHandler do
-  subject { Daemons::EC2BootedEventHandler.new() }
+require "#{Rails.root}/daemons/dns_record_created_event_handler/dns_record_created_event_handler"
+describe Daemons::DnsRecordCreatedEventHandler do
+  subject { Daemons::DnsRecordCreatedEventHandler.new() }
 
   let(:good_message_hash) {
     {
@@ -17,9 +17,9 @@ describe Daemons::EC2BootedEventHandler do
   let(:api_key) { "some_api_key"}
   let(:timeout) { 10 }
 
-  describe "#update_instance_booted_status" do
-    it "Updates the instance boot status from a good message" do
-      expect{subject.update_instance_booted_status(url,good_payload_json,api_key,timeout)}.not_to be false
+  describe "#update_instance_joined_status" do
+    it "Updates the instance join to domain status from a good message" do
+      expect{subject.update_instance_joined_status(url,good_payload_json,api_key,timeout)}.not_to be false
     end
   end
 
@@ -30,3 +30,4 @@ describe Daemons::EC2BootedEventHandler do
   end
 
 end
+
