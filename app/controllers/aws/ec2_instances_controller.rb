@@ -34,18 +34,7 @@ class Aws::Ec2InstancesController < ApplicationController
       ec2_instance_params.merge({user_id: current_user.id})
     )
     if @ec2_instance.save
-      msg = {
-          pantry_request_id:  @ec2_instance.id,
-          instance_name:      params["ec2_instance"][:name],
-          domain:             params["ec2_instance"][:domain],
-          flavor:             params["ec2_instance"][:flavor],
-          ami:                params["ec2_instance"][:ami],
-          team_id:            params["ec2_instance"][:team_id],
-          subnet_id:          params["ec2_instance"][:subnet_id],
-          security_group_ids: params["ec2_instance"][:security_group_ids],
-          chef_environment:   params["ec2_instance"][:chef_environment],
-          run_list:           @ec2_instance.message_run_list
-      }.to_json
+      msg = @ec2_instance.boot_message
       sqs = AWS::SQS::Client.new()
       queue_url = sqs.get_queue_url(queue_name: "pantry_wonga_aws-ec2_boot_command")[:queue_url]
       puts "QUEUE #{queue_url}"

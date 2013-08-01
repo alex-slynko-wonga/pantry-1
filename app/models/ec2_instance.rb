@@ -67,6 +67,22 @@ class Ec2Instance < ActiveRecord::Base
   def message_run_list
     self.run_list.split "\r\n"
   end
+  
+  def boot_message
+    msg = {
+          pantry_request_id:  self.id,
+          instance_name:      self.name,
+          domain:             self.domain,
+          flavor:             self.flavor,
+          ami:                self.ami,
+          team_id:            self.team_id,
+          subnet_id:          self.subnet_id,
+          security_group_ids: self.security_group_ids,
+          chef_environment:   self.chef_environment,
+          run_list:           self.message_run_list
+      }.to_json
+
+  end
 
   private
     def init
