@@ -23,7 +23,8 @@ module Daemons
           msg["ami"],
           msg["team_id"],
           msg["subnet_id"],
-          msg["security_group_ids"]
+          msg["security_group_ids"],
+          msg["aws_key_pair_name"]
         )
       else
         instance_id = existing_instance_id
@@ -49,18 +50,19 @@ module Daemons
       end
     end
 
-    def boot_machine(request_id, instance_name, flavor, ami, team_id, subnet_id, secgroup_ids)
-      instance = create_instance(ami, flavor, secgroup_ids, subnet_id)
+    def boot_machine(request_id, instance_name, flavor, ami, team_id, subnet_id, secgroup_ids, key_name)
+      instance = create_instance(ami, flavor, secgroup_ids, subnet_id, key_name)
       tag_and_wait_instance(instance, request_id, instance_name, team_id)
     end
 
-    def create_instance(ami, flavor, secgroup_ids, subnet_id)
+    def create_instance(ami, flavor, secgroup_ids, subnet_id, key_name)
       instance = @ec2.instances.create(
         image_id:             ami,
         instance_type:        flavor,
         count:                1,
         security_group_ids:   [secgroup_ids],
         subnet:               subnet_id,
+        key_name:             key_name
       )
       return instance
     end

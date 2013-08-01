@@ -79,7 +79,8 @@ class Ec2Instance < ActiveRecord::Base
           subnet_id:          self.subnet_id,
           security_group_ids: self.security_group_ids,
           chef_environment:   self.chef_environment,
-          run_list:           self.message_run_list
+          run_list:           self.message_run_list,
+          aws_key_pair_name:  "aws-ssh-keypair"
       }.to_json
 
   end
