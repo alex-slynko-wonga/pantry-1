@@ -15,7 +15,6 @@ describe Daemons::EC2BootCommandHandler do
       team_id: "test team",
       subnet_id: "subnet-f3c63a98", 
       security_group_ids: "sg-f94dc88e",
-      ssh_key: '123456F',
       aws_key_pair_name: 'eu-test-1'
     }
   }
