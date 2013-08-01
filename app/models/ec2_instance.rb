@@ -6,6 +6,8 @@ class Ec2Instance < ActiveRecord::Base
   validates :team_id, presence: true 
   validates :user_id, presence: true
   validates :domain, :presence => true, :domain_name => true
+  validates :chef_environment, :presence => true
+  validates :run_list, :presence => true, :chef_run_list_format => true
 
   after_initialize :init, on: :create
   before_create :set_start_time
@@ -60,6 +62,27 @@ class Ec2Instance < ActiveRecord::Base
     else
       0
     end
+  end
+  
+  def message_run_list
+    self.run_list.split "\r\n"
+  end
+  
+  def boot_message
+    msg = {
+          pantry_request_id:  self.id,
+          instance_name:      self.name,
+          domain:             self.domain,
+          flavor:             self.flavor,
+          ami:                self.ami,
+          team_id:            self.team_id,
+          subnet_id:          self.subnet_id,
+          security_group_ids: self.security_group_ids,
+          chef_environment:   self.chef_environment,
+          run_list:           self.message_run_list,
+          aws_key_pair_name:  "aws-ssh-keypair"
+      }.to_json
+
   end
 
   private

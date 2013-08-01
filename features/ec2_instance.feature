@@ -6,7 +6,7 @@ Feature: EC2 Instance
   @javascript
   Scenario: Creating a new instance
     Given I am in the "teamname" team
-    And I request an instance named "instanceName" on domain "example.com"
+    And I request an instance named "instanceName" on domain "example.com" using chef environment "MyChefEnvironment" specifying a run list "role[ted]"
     Then an instance build should be started
 
     When I am on the teams page
