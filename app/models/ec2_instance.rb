@@ -63,6 +63,10 @@ class Ec2Instance < ActiveRecord::Base
       0
     end
   end
+  
+  def message_run_list
+    self.run_list.split "\r\n"
+  end
 
   private
     def init
