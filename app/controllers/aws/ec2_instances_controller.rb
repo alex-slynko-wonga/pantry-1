@@ -40,7 +40,8 @@ class Aws::Ec2InstancesController < ApplicationController
           ami:                params["ec2_instance"][:ami],
           team_id:            params["ec2_instance"][:team_id],
           subnet_id:          params["ec2_instance"][:subnet_id],
-          security_group_ids: params["ec2_instance"][:security_group_ids]
+          security_group_ids: params["ec2_instance"][:security_group_ids],
+          aws_key_pair_name:  "aws-ssh-keypair"
       }.to_json
       sqs = AWS::SQS::Client.new()
       queue_url = sqs.get_queue_url(queue_name: "boot_ec2_instance")[:queue_url]
