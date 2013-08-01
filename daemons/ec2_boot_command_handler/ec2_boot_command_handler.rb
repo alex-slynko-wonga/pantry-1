@@ -50,7 +50,7 @@ module Daemons
       end
     end
 
-    def boot_machine(request_id, instance_name, flavor, ami, team_id, subnet_id, secgroup_ids, aws_key_pair_name)
+    def boot_machine(request_id, instance_name, flavor, ami, team_id, subnet_id, secgroup_ids, key_name)
       instance = create_instance(ami, flavor, secgroup_ids, subnet_id, key_name)
       tag_and_wait_instance(instance, request_id, instance_name, team_id)
     end
