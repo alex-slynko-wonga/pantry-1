@@ -1,7 +1,9 @@
-Given(/^I request an instance named "(.*?)" on domain "(.*?)"$/) do |name, domain|
+Given(/^I request an instance named "(.*?)" on domain "(.*?)" using chef environment "(.*?)" specifying a run list "(.*?)"$/) do |name, domain, chef_environment, run_list|
   visit '/aws/ec2_instances/new'
   fill_in "Name", with: name
   fill_in "Domain", with: domain
+  fill_in "Chef environment", with: chef_environment
+  fill_in "Run list", with: run_list
   click_on 'Create'
 end
 

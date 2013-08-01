@@ -9,6 +9,14 @@
   = f.label :domain
   = mark_required(@ec2_instance, :domain)
   = f.text_field :domain
+  
+  = f.label :chef_environment
+  = mark_required(@ec2_instance, :chef_environment)
+  = f.text_field :chef_environment
+  
+  = f.label :run_list
+  = mark_required(@ec2_instance, :run_list)
+  = f.text_area :run_list
 
   = f.label :ami
   = f.select :ami, options_for_select(@ami_options)
