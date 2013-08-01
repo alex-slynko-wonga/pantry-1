@@ -1,25 +1,30 @@
 require 'spec_helper'
 require "#{Rails.root}/daemons/ec2_bootstrap_command_handler/ec2_bootstrap_command_handler"
 
-shared_examples "bootstrap with runner" do
-  it "runs chef_client command" do
-    subject.handle_message message
-    expect(runner).to have_received(:run_commands).with('chef-client')
-  end
-
-  it "connects to machine" do
-    subject.handle_message message
-    expect(runner).to have_received(:add_host).with(address)
-  end
-
-  it "publishes success message" do
-    subject.handle_message message
-    expect(publisher).to have_received(:publish).with(message)
-  end
-end
-
 describe Daemons::EC2BootstrapCommandHandler do
-  let(:message) { { 'instance_id' => "i-11111111" } }
+  let(:message) {
+    {
+      "pantry_request_id" => 45,
+      "name" => "myhostname",
+      "domain" => "mydomain.tld",
+      "ami" => "ami-hexidstr",
+      "size" => "aws.size1",
+      "subnet_id" => "subnet-hexidstr",
+      "security_group_ids" => [
+        "sg-01234567",
+        "sg-89abcdef",
+        "sg-7654fedc"
+      ],
+      "chef_environment" => "my_team_ci",
+      "run_list" => [
+        "recipe[cookbook_name::specific_recipe]",
+        "role[dbserver]"
+      ],
+      "instance_id" => "i-0123abcd",
+      "ip_address" => "10.1.1.100"
+    }
+  }
+
   let(:publisher) { instance_double('Publisher').as_null_object }
   subject(:bootstrap) { Daemons::EC2BootstrapCommandHandler.new(publisher) }
 
@@ -33,52 +38,30 @@ describe Daemons::EC2BootstrapCommandHandler do
     end
 
     context "for linux machine" do
-      let(:runner) { instance_double('SshRunner').as_null_object }
-
       before(:each) do
         instance.stub(:platform)
-        SshRunner.stub(:new).and_return(runner)
+        Chef::Knife::Bootstrap.any_instance.stub(:run)
       end
 
-      it_should_behave_like "bootstrap with runner"
+      include_examples "send message"
+
+      it "runs bootstrap" do
+        expect_any_instance_of(Chef::Knife::Bootstrap).to receive(:run)
+        subject.handle_message message
+      end
     end
 
     context "for windows machine" do
-      let(:runner) { instance_double('WinRMRunner').as_null_object }
-
       before(:each) do
         instance.stub(:platform).and_return('windows')
-        WinRMRunner.stub(:new).and_return(runner)
+        Chef::Knife::BootstrapWindowsWinrm.any_instance.stub(:run)
       end
 
-      it_should_behave_like "bootstrap with runner"
-    end
-  end
+      include_examples "send message"
 
-  context "#valid_message?" do
-    subject { bootstrap.valid_message?(message) }
-
-    it { should be_true }
-
-    context "when message doesn't have instance_id" do
-      let(:message) { {} }
-
-      it { should be_false }
-
-      it "notifies using Publisher" do
-        subject
-        expect(publisher).to have_received(:publish_error)
-      end
-    end
-
-    context "when instance_id has invalid format" do
-      let(:message) { { "instance_id" => 1 } }
-
-      it { should be_false }
-
-      it "notifies using Publisher" do
-        subject
-        expect(publisher).to have_received(:publish_error)
+      it "runs bootstrap" do
+        expect_any_instance_of(Chef::Knife::BootstrapWindowsWinrm).to receive(:run)
+        subject.handle_message message
       end
     end
   end
