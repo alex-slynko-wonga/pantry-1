@@ -12,7 +12,6 @@ Then(/^an instance build should be started$/) do
 end
 
 When(/^an instance is created$/) do
-  p "FIXME when job will be ready"
   instance = Ec2Instance.last
   instance.bootstrapped = true
   instance.joined = true

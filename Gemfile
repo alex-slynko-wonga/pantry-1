@@ -2,18 +2,13 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
 gem 'mysql2'
-gem 'delayed_job_active_record'
 gem 'omniauth-ldap'
 
 gem 'strong_parameters'
 gem 'haml-rails'
 gem "chef", "~> 11.6.0"
-gem "knife-windows", "~> 0.5.12"
-gem 'em-winrm'
-gem 'daemons'
 gem 'fog'
 gem 'aws-sdk'
-gem 'rest-client'
 
 gem 'sass-rails'
 gem 'coffee-rails'
