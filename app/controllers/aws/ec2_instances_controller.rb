@@ -26,18 +26,21 @@ class Aws::Ec2InstancesController < ApplicationController
       flavor_options[flavor[:id]] = flavor[:id]
     end
   end
-  
+
   def create
     @ec2_instance = Ec2Instance.new(
       ec2_instance_params.merge({user_id: current_user.id})
     )
     if @ec2_instance.save
       msg = @ec2_instance.boot_message
+      msg['http_proxy'] = "http://proxy.example.com:8080"
+      msg['windows_set_admin_password'] = true
+      msg['windows_admin_password'] = "LocalAdminPassword"
       sqs = AWS::SQS::Client.new()
       queue_url = sqs.get_queue_url(queue_name: "pantry_wonga_aws-ec2_boot_command")[:queue_url]
       puts "QUEUE #{queue_url}"
       if !queue_url.nil?
-        sqs.send_message(queue_url: queue_url, message_body: msg)
+        sqs.send_message(queue_url: queue_url, message_body: msg.to_json )
       end
       redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
     else
@@ -52,7 +55,7 @@ class Aws::Ec2InstancesController < ApplicationController
       format.json { render json: @ec2_instance }
     end
   end
-  
+
   def update
     @ec2_instance = Ec2Instance.find params[:id]
     if params[:booted]
@@ -67,7 +70,7 @@ class Aws::Ec2InstancesController < ApplicationController
     if params[:joined]
       @ec2_instance.complete! :joined
     end
-    
+
     respond_to do |format|
       format.html
       format.json { render json: @ec2_instance }
