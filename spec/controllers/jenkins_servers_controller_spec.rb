@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe JenkinsServersController do
   let(:user) {FactoryGirl.create(:user)}
-  let(:single_team) {FactoryGirl.create(:team)}
+  let(:team) {FactoryGirl.create(:team)}
 
   before(:each) do
 	session[:user_id] = user.id
-	user.teams = [single_team]
+	user.teams = [team]
   end
 
   describe "GET 'new'" do
@@ -21,5 +21,12 @@ describe JenkinsServersController do
       get 'create'
       response.should be_success
     end
+  end
+
+  describe "POST 'create'" do
+	it "creates new resource and redirects to it" do
+		post 'create', {"jenkins_server" => {"team_id" => team.id}}
+		response.should be_redirect
+	end
   end
 end
