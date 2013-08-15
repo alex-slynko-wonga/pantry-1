@@ -12,14 +12,17 @@ class Aws::Ec2InstancesController < ApplicationController
     @subnet_options = subnets.each_with_object({}) do |subnet, subnet_options|
       subnet_options[subnet[:subnet_id]] = subnet[:subnet_id]
     end
-    secgroups = ec2.describe_security_groups[:security_group_info]
+    secgroups = ec2.describe_security_groups(
+        :filters => [ { :name =>"vpc-id",
+                        :values =>["vpc-00110011"] } ]
+      )[:security_group_info]
     @secgroup_options = secgroups.each_with_object({}) do |secgroup, secgroup_options|
       secgroup_options[secgroup[:group_name]] = secgroup[:group_id]
     end
     flavors = [
-      {id: "t1.micro"}, 
-      {id: "m1.small"}, 
-      {id: "m1.medium"}, 
+      {id: "t1.micro"},
+      {id: "m1.small"},
+      {id: "m1.medium"},
       {id: "m1.large"}
     ]
     @flavor_options = flavors.each_with_object({}) do |flavor, flavor_options|
@@ -44,7 +47,7 @@ class Aws::Ec2InstancesController < ApplicationController
       end
       redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
     else
-       render :action => "new"
+      render :action => "new"
     end
   end
 
