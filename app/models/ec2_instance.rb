@@ -80,8 +80,9 @@ class Ec2Instance < ActiveRecord::Base
           security_group_ids: self.security_group_ids,
           chef_environment:   self.chef_environment,
           run_list:           self.message_run_list,
-          aws_key_pair_name:  "aws-ssh-keypair"
-      }
+          aws_key_pair_name:  "aws-ssh-keypair",
+          platform:           self.platform
+      }.to_json
 
   end
 

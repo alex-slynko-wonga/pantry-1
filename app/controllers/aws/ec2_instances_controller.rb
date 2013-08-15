@@ -1,12 +1,14 @@
 class Aws::Ec2InstancesController < ApplicationController
   before_filter :initialize_ec2_instance
 
-  def initialize_ec2_instance
-    ec2 = AWS::EC2::Client.new()
+  def initialize_ec2_instance(ec2 = AWS::EC2::Client.new)
     @ec2_instance = Ec2Instance.new
     amis = ec2.describe_images({owners: ['self']})[:images_set]
+    @ami_platforms = {}
     @ami_options = amis.each_with_object({}) do |ami, ami_options|
-      ami_options[ami[:name]] = ami[:image_id]
+      platform = (ami[:platform] == "windows") ? "windows" : "linux"
+      ami_options["#{ami[:name]} - #{platform}"] = ami[:image_id]
+      @ami_platforms[ami[:image_id]] = platform    
     end
     subnets = ec2.describe_subnets()[:subnet_set]
     @subnet_options = subnets.each_with_object({}) do |subnet, subnet_options|
@@ -31,8 +33,11 @@ class Aws::Ec2InstancesController < ApplicationController
   end
 
   def create
+    platform = @ami_platforms[ec2_instance_params["ami"]]    
     @ec2_instance = Ec2Instance.new(
-      ec2_instance_params.merge({user_id: current_user.id})
+      ec2_instance_params.merge(
+        {user_id: current_user.id, platform: platform}
+      )
     )
     if @ec2_instance.save
       msg = @ec2_instance.boot_message
@@ -83,7 +88,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :security_group_ids, :domain, :chef_environment, :run_list)
+    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :security_group_ids, :domain, :chef_environment, :run_list, :platform)
   end
 end
 
