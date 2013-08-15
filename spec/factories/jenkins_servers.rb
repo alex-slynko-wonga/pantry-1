@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :jenkins_server do
-    Team nil
+    team nil
   end
 end

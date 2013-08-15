@@ -5,9 +5,8 @@ class JenkinsServersController < ApplicationController
   end
 
   def create
-	@jenkins_server = JenkinsServer.new()
-	@jenkins_server.Team = get_teams
-	
+	@jenkins_server = JenkinsServer.new(jenkins_attributes)
+
 	if @jenkins_server.save
 		redirect_to @jenkins_server
 	else
@@ -20,9 +19,7 @@ class JenkinsServersController < ApplicationController
 
   private 
   
-  def get_teams
-	return nil if params[:jenkins_server].blank? 
-	Team.find(params[:jenkins_server][:team_id])
+  def jenkins_attributes
+	params.require(:jenkins_server).permit(:team_id)
   end
-
 end

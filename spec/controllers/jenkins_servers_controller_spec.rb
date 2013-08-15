@@ -16,13 +16,6 @@ describe JenkinsServersController do
 	end
   end
 
-  describe "GET 'create'" do
-    it "returns http success" do
-      get 'create'
-      response.should be_success
-    end
-  end
-
   describe "POST 'create'" do
 	it "creates new resource and redirects to it" do
 		post 'create', {"jenkins_server" => {"team_id" => team.id}}

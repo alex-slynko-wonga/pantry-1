@@ -51,12 +51,12 @@ ActiveRecord::Schema.define(:version => 20130815111823) do
   end
 
   create_table "jenkins_servers", :force => true do |t|
-    t.integer  "Team_id"
+    t.integer  "team_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
-  add_index "jenkins_servers", ["Team_id"], :name => "index_jenkins_servers_on_Team_id"
+  add_index "jenkins_servers", ["team_id"], :name => "index_jenkins_servers_on_team_id"
 
   create_table "job_logs", :force => true do |t|
     t.integer  "job_id"
