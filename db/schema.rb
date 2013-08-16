@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130815111823) do
+ActiveRecord::Schema.define(:version => 20130816092437) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20130815111823) do
     t.string   "domain"
     t.string   "chef_environment"
     t.string   "run_list"
+    t.string   "platform"
   end
 
   create_table "jenkins_servers", :force => true do |t|
