@@ -82,7 +82,7 @@ class Ec2Instance < ActiveRecord::Base
           run_list:           self.message_run_list,
           aws_key_pair_name:  "aws-ssh-keypair",
           platform:           self.platform
-      }.to_json
+      }
 
   end
 
