@@ -1,0 +1,12 @@
+%h1 Create a new Jenkins Server for your team
+
+= form_for @jenkins_server do |f|
+	%fieldset
+	.control-group
+		= f.label :my_team
+		-if @user_teams.count == 1
+			= f.label @user_teams.first.name
+			= f.hidden_field :team_id, :value => @user_teams.first.id
+		-else
+			= f.select :team_id, options_for_select(@user_teams.map {|t| [t.name, t.id] } )
+	= f.submit "Create server", {:class => "btn"}

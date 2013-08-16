@@ -7,7 +7,8 @@ Pantry::Application.routes.draw do
   get "aws/security_groups", as: "secgroups"
 
   resources :ec2_instance_statuses, only: [:show]
-  
+  resources :jenkins_servers, except: [:destroy] 
+
   namespace :aws do 
     resources :ec2_instances, only: [:new, :create, :show, :update] 
   end
