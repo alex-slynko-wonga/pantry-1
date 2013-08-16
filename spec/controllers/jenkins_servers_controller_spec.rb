@@ -7,6 +7,8 @@ describe JenkinsServersController do
   before(:each) do
 	session[:user_id] = user.id
 	user.teams = [team]
+
+	AWS.stub!
   end
 
   describe "GET 'new'" do
@@ -17,7 +19,16 @@ describe JenkinsServersController do
   end
 
   describe "POST 'create'" do
-	it "creates new resource and redirects to it" do
+	it "creates new resource, sends message to AWS and redirects to resource" do
+		client = AWS::SQS.new.client
+		resp = client.stub_for(:get_queue_url)
+		resp[:queue_url] = "some_url"
+		
+		client.should_receive(:send_message) do |msg|
+			JSON.parse(msg[:message_body])
+			AWS::Core::Response.new
+		end
+
 		post 'create', {"jenkins_server" => {"team_id" => team.id}}
 		response.should be_redirect
 	end
