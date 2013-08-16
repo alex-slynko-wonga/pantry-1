@@ -51,6 +51,14 @@ ActiveRecord::Schema.define(:version => 20130815174522) do
     t.string   "platform"
   end
 
+  create_table "jenkins_servers", :force => true do |t|
+    t.integer  "team_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "jenkins_servers", ["team_id"], :name => "index_jenkins_servers_on_team_id"
+
   create_table "job_logs", :force => true do |t|
     t.integer  "job_id"
     t.text     "log_text"
