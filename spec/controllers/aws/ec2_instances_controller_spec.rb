@@ -11,7 +11,8 @@ describe Aws::Ec2InstancesController do
     {ec2_instance: FactoryGirl.attributes_for(:ec2_instance, 
       name: 'InstanceName',
       team_id: team.id,
-      user_id: user.id
+      user_id: user.id,
+      platform: "Ubantob"
     )} 
   }
 
