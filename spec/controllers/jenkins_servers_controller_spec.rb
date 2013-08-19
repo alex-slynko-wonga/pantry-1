@@ -7,8 +7,6 @@ describe JenkinsServersController do
   before(:each) do
 	session[:user_id] = user.id
 	user.teams = [team]
-
-	AWS.stub!
   end
 
   describe "GET 'new'" do

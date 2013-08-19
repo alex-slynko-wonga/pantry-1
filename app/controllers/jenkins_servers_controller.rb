@@ -36,7 +36,7 @@ class JenkinsServersController < ApplicationController
 		instance_name: "#{@jenkins_server.team.id} jenkins server",
 		domain: "example.com",
 		flavour: "m1.medium",
-		ami: "ami-00110010", #Canonicla Ubuntu 12.05 64-bit paravirtual
+		ami: "ami-00110010", #Canonical Ubuntu 12.4 64-bit paravirtual
 		team_id: @jenkins_server.team.id,
 		subnet_id: "subnet-a8dc0bc0",
 		security_group_ids: ["sg-2ee73959", #base-linux
