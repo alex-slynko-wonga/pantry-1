@@ -33,7 +33,7 @@ class JenkinsServersController < ApplicationController
   def message
 	{
 		pantry_request_id: @jenkins_server.id,
-		instance_name: "#{@jenkins_server.team.id} jenkins server",
+		instance_name: "#{@jenkins_server.team.id}",
 		domain: "example.com",
 		flavour: "m1.medium",
 		ami: "ami-00110010", #Canonical Ubuntu 12.4 64-bit paravirtual
