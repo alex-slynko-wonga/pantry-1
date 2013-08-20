@@ -1,0 +1,18 @@
+%h1 Jenkins Slaves
+
+= link_to "Go back to master server ##{@jenkins_server.id}", jenkins_server_path(@jenkins_server)
+
+%table.table
+  %thead
+    %tr
+      %th #
+      %th ID
+      %th ImageID
+      %th Groups
+      %th State
+      %th Tags
+    - @slaves.each do |slave|
+      %tr
+        %td= slave.inspect
+
+        

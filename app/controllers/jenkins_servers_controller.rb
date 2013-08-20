@@ -16,6 +16,7 @@ class JenkinsServersController < ApplicationController
   end
 
   def show
+    @jenkins_server = JenkinsServer.find(params[:id])
   end
 
   private 
