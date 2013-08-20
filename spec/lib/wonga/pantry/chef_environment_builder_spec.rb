@@ -20,8 +20,8 @@ describe Wonga::Pantry::ChefEnvironmentBuilder do
 
     it "sets address for jenkins" do
       jenkins = environment.default_attributes['jenkins']['server']
-      expect(jenkins['host']).to eq "#{team_name}#{domain}"
-      expect(jenkins["url"]).to include("#{team_name}#{domain}")
+      expect(jenkins['host']).to eq "#{team_name}.#{domain}"
+      expect(jenkins["url"]).to include("#{team_name}.#{domain}")
     end
 
     context "for team with restricted symbols in name" do
