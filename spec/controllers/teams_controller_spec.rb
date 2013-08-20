@@ -8,6 +8,11 @@ describe TeamsController do
 
   describe "POST 'create'" do
     let(:team) { Team.last }
+    let(:builder) { instance_double('Wonga::Pantry::ChefEnvironmentBuilder').as_null_object }
+
+    before(:each) do
+      Wonga::Pantry::ChefEnvironmentBuilder.stub(:new).and_return(builder)
+    end
 
     it "returns http success" do
       post 'create', team_params
@@ -31,6 +36,10 @@ describe TeamsController do
       expect { post :create, team_params.merge(user_params) }.to_not change(User, :count)
       expect(team.reload).to have(1).users
       expect(team.users.first).to eq(user)
+    end
+
+    it "creates chef environment using special lib" do
+
     end
   end
 
