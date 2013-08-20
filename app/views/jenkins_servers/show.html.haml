@@ -1,3 +1,49 @@
-%h1 Your server is being created!
+%h1= "#{@team.name}'s jenkins server"
+.row-fluid
+  .span2
+    FQDN:
+  .span3= @ec2_instance.name
+.row-fluid
+  .span2
+    Team:
+  .span3= link_to(@team.name, team_path(@team))
+.row-fluid
+  .span2
+    Created by user:
+  .span3= link_to(@user.name, user_path(@user))
+.row-fluid
+  .span2
+    At time:
+  .span3= @ec2_instance.created_at
+.row-fluid
+  .span2
+    Cost per day:
+  .span3= "$13.37"
+.row-fluid
+  .span2
+    Request No:
+  .span3= link_to(@ec2_instance.id, "/aws/ec2_instances/#{@ec2_instance.id}")
+.row-fluid
+  .span2
+    Machine Size:
+  .span3= @ec2_instance.flavor
+.row-fluid
+  .span2
+    Platform:
+  .span3= @ec2_instance.platform
+#ec2instance_status{'data-url' => ec2_instance_status_url(@ec2_instance)}
+  #ec2instance_status_content
 
-= link_to "Slave servers", jenkins_server_jenkins_slaves_path(@jenkins_server)
+%h4= "Jenkins Slaves"
+.row-fluid
+  .span2
+    Slave 1:
+  .span3= link_to("jenkins slave", "#") 
+.row-fluid
+  .span2
+    Slave 2:
+  .span3= link_to("jenkins slave", "#") 
+.row-fluid
+  .span2
+    Slave 3:
+  .span3= link_to("jenkins slave", "#") 
