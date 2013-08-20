@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130815174522) do
+ActiveRecord::Schema.define(:version => 20130820113013) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -58,6 +58,16 @@ ActiveRecord::Schema.define(:version => 20130815174522) do
   end
 
   add_index "jenkins_servers", ["team_id"], :name => "index_jenkins_servers_on_team_id"
+
+  create_table "jenkins_slaves", :force => true do |t|
+    t.integer  "jenkins_server_id"
+    t.integer  "ec2_instance_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "jenkins_slaves", ["ec2_instance_id"], :name => "index_jenkins_slaves_on_ec2_instance_id"
+  add_index "jenkins_slaves", ["jenkins_server_id"], :name => "index_jenkins_slaves_on_jenkins_server_id"
 
   create_table "job_logs", :force => true do |t|
     t.integer  "job_id"
