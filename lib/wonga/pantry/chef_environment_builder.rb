@@ -1,6 +1,7 @@
 class Wonga::Pantry::ChefEnvironmentBuilder
-  def initialize(team)
+  def initialize(team, domain='test.example.com')
     @team = team
+    @domain = domain
   end
 
   def build!
@@ -37,10 +38,10 @@ class Wonga::Pantry::ChefEnvironmentBuilder
           "home" => "C:\\Jenkins"
         },
         "server" => {
-          "host" => "#{prepared_team_name}.example.com",
+          "host" => "#{prepared_team_name}#{@domain}",
           "plugins" => [ "active-directory" ],
           "port" => 8080,
-          "url" => "http://#{prepared_team_name}.example.com:8080"
+          "url" => "http://#{prepared_team_name}#{@domain}:8080"
         }
       }
     }

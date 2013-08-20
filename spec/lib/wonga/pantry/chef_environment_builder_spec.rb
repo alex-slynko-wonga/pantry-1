@@ -3,7 +3,8 @@ require 'spec_helper'
 describe Wonga::Pantry::ChefEnvironmentBuilder do
   let(:team_name) { 'some-name' }
   let(:team) { FactoryGirl.build(:team, name: team_name) }
-  subject { described_class.new(team) }
+  let(:domain) { 'test-domain' }
+  subject { described_class.new(team, domain) }
 
   describe "#build!" do
     before(:each) do
@@ -19,8 +20,8 @@ describe Wonga::Pantry::ChefEnvironmentBuilder do
 
     it "sets address for jenkins" do
       jenkins = environment.default_attributes['jenkins']['server']
-      expect(jenkins['host']).to eq "#{team_name}.example.com"
-      expect(jenkins["url"]).to include("#{team_name}.example.com")
+      expect(jenkins['host']).to eq "#{team_name}#{domain}"
+      expect(jenkins["url"]).to include("#{team_name}#{domain}")
     end
 
     context "for team with restricted symbols in name" do
