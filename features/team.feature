@@ -1,9 +1,11 @@
 Feature: Managing Teams
+  @chef-zero
   Scenario: Adding a new Team
     Given I am on the teams page
     When An agent creates a new team named "TeamName"
     Then I should be on team page
     And I should see "TeamName"
+    And new chef environment "team-name-env" should be created
 
   Scenario: Updating existing team
     Given the "TeamName" team
@@ -33,3 +35,4 @@ Feature: Managing Teams
     And click on remove cross
     And save team
     Then team should not contain "Test User"
+
