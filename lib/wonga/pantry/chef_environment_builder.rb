@@ -38,7 +38,7 @@ class Wonga::Pantry::ChefEnvironmentBuilder
           "home" => "C:\\Jenkins"
         },
         "server" => {
-          "host" => "#{prepared_team_name}#{@domain}",
+          "host" => "#{prepared_team_name}.#{@domain}",
           "plugins" => [ "active-directory" ],
           "port" => 8080,
           "url" => "http://#{prepared_team_name}#{@domain}:8080"
