@@ -3,11 +3,10 @@ class JenkinsSlavesController < ApplicationController
   
   def index
     @slaves = @jenkins_server.jenkins_slaves
-    @ec2_instances = JenkinsSlave.ec2_instances(@slaves)
+    @slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance)
     
     respond_to do |format|
       format.html
-      format.json { render json: @ec2_instances }
     end
   end
   
