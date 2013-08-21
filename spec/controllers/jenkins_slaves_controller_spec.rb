@@ -17,5 +17,12 @@ describe JenkinsSlavesController do
       assigns(:jenkins_server).id.should be jenkins_server.id
     end
   end
+  
+  describe "GET show" do
+    it "returns http success" do
+      get :show, id: jenkins_server.id
+      response.should be_success
+    end
+  end
 
 end
