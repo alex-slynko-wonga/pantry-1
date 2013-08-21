@@ -9,13 +9,17 @@
       %th Name
       %th ImageID
       %th Groups
-      %th Run List
+      %th bootstrapped
+      %th Booted
+      %th Joined
     - @ec2_instances.each do |instance|
       %tr
         %td= instance.id
         %td= instance.name
         %td= instance.ami
         %td= instance.security_group_ids
-        %td= instance.run_list
+        %td= instance.bootstrapped
+        %td= instance.booted
+        %td= instance.joined
 
         
