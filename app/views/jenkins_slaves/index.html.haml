@@ -6,13 +6,9 @@
   %thead
     %tr
       %th #
-      %th ID
-      %th ImageID
-      %th Groups
-      %th State
-      %th Tags
     - @slaves.each do |slave|
-      %tr
-        %td= slave.inspect
+      - if slave.ec2_instance
+        %tr
+          %td= slave.id
 
         
