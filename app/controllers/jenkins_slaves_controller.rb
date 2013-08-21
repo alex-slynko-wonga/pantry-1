@@ -15,7 +15,7 @@ class JenkinsSlavesController < ApplicationController
   end
   
 private
- def load_objects
+  def load_objects
    @jenkins_server = JenkinsServer.find(params[:jenkins_server_id])
- end
+  end
 end
