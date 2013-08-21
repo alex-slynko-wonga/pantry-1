@@ -8,7 +8,6 @@ describe JenkinsSlavesController do
 
   before(:each) do
   	session[:user_id] = user.id
-  	user.teams = [team]
   end
 
   describe "GET 'index'" do
