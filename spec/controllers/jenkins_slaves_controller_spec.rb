@@ -12,9 +12,18 @@ describe JenkinsSlavesController do
 
   describe "GET 'index'" do
     it "returns http success" do
-      get :index, jenkins_server_id: jenkins_server.id, jenkins_slaves: {}
+      get :index, jenkins_server_id: jenkins_server.id
       response.should be_success
       assigns(:jenkins_server).id.should be jenkins_server.id
+    end
+  end
+  
+  describe "GET 'show'" do
+    it "returns http success" do
+      get :show, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id
+      response.should be_success
+      assigns(:jenkins_server).id.should be jenkins_server.id
+      assigns(:ec2_instance).id.should be jenkins_slave.ec2_instance.id
     end
   end
 
