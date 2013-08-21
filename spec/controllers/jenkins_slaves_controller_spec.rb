@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe JenkinsSlavesController do
   let(:jenkins_server) {FactoryGirl.create(:jenkins_server)}
+  let(:jenkins_slave) {FactoryGirl.create(:jenkins_slave)}
   let(:user) {FactoryGirl.create(:user)}
   let(:team) {FactoryGirl.create(:team)}
 
@@ -20,7 +21,7 @@ describe JenkinsSlavesController do
   
   describe "GET show" do
     it "returns http success" do
-      get :show, id: jenkins_server.id
+      get :show, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id
       response.should be_success
     end
   end
