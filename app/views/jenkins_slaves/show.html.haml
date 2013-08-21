@@ -2,22 +2,4 @@
 
 = link_to "Go back to the list of slaves", jenkins_server_jenkins_slaves_path(@jenkins_server) 
 
-.row-fluid
-  .span2
-    Name:
-  .span2= @ec2_instance.name
-.row-fluid
-  .span2
-    Domain:
-  .span2= @ec2_instance.domain
-.row-fluid
-  .span2
-    AMI:
-  .span2= @ec2_instance.ami
-.row-fluid
-  .span2
-    Instance ID:
-  .span2= @ec2_instance.instance_id 
-#ec2instance_status{'data-url' => ec2_instance_status_url(@ec2_instance)}
-  #ec2instance_status_content
-
+= render 'shared/ec2_instance'
