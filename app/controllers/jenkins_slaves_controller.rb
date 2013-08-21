@@ -5,7 +5,6 @@ class JenkinsSlavesController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.json { render json: @ec2_instances }
     end
   end
   
