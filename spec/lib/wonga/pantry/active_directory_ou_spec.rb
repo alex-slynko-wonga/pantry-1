@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Wonga::Pantry::ActiveDirectoryOU do
-  let(:name) { "Team" }
+  let(:name) { "team" }
   let(:domain) { 'example.com' }
   let(:instance) { FactoryGirl.build(:ec2_instance, team: FactoryGirl.build(:team, name: name), domain: domain) }
   subject { described_class.new(instance) }
@@ -17,33 +17,19 @@ describe Wonga::Pantry::ActiveDirectoryOU do
       expect(subject.ou).to include("OU=#{name},")
     end
 
-    context "when team name has whitespace on the beginning or end" do
-      let(:name) { " Test " }
-      it "escapes them" do
-        expect(subject.ou).to include("OU=\\ Test\\ ,")
+    context "when team name has restricted symbols" do
+      let(:name) { 'test test -,.#test  , ' }
+
+      it "uses sanitized name" do
+        expect(subject.ou).to include("OU=test-test-test,OU")
       end
     end
 
-    context "when team name has # on the beginning" do
-      let(:name) { "#Test" }
-      it "escapes #" do
-        expect(subject.ou).to include("OU=\\#{name}")
-      end
-    end
+    context "when team name is too long" do
+      let(:name) { 'a'*64 + 'b' }
 
-    context "when team has slash in name" do
-      let(:name) { "Te,st" }
-
-      it "escapes ," do
-        expect(subject.ou).to include("OU=Te\\,st,")
-      end
-    end
-
-    context "when team has slash in name" do
-      let(:name) { "Te\\st" }
-
-      it "escapes \\" do
-        expect(subject.ou).to include("OU=Te\\\\st,")
+      it "shortens it" do
+        expect(subject.ou).to include("aaaa,OU")
       end
     end
   end

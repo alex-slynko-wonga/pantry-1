@@ -15,12 +15,7 @@ module Wonga
 
       private
       def escape(name)
-        name = name.dup
-        name.gsub!("\\", "\\\\\\")
-        name.gsub!(",", "\\,")
-        name = '\\' + name if name[0] == ' ' || name[0] == '#'
-        name[-1] = '\ ' if name[-1] == ' '
-        name
+        name.parameterize[0..63]
       end
     end
   end
