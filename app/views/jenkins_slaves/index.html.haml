@@ -6,20 +6,22 @@
   %thead
     %tr
       %th #
+      %th InstanceID
       %th Name
       %th ImageID
       %th Groups
       %th bootstrapped
       %th Booted
       %th Joined
-    - @ec2_instances.each do |instance|
+    - @slaves.each do |slave|
       %tr
-        %td= instance.id
-        %td= instance.name
-        %td= instance.ami
-        %td= instance.security_group_ids
-        %td= instance.bootstrapped
-        %td= instance.booted
-        %td= instance.joined
+        %td= link_to slave.id, jenkins_server_jenkins_slave_path(@jenkins_server, slave)
+        %td= slave.ec2_instance.id
+        %td= slave.ec2_instance.name
+        %td= slave.ec2_instance.ami
+        %td= slave.ec2_instance.security_group_ids
+        %td= slave.ec2_instance.bootstrapped
+        %td= slave.ec2_instance.booted
+        %td= slave.ec2_instance.joined
 
         
