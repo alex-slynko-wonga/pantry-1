@@ -1,6 +1,7 @@
 class JenkinsSlavesController < ApplicationController
+  before_filter :load_objects
+  
   def index
-    @jenkins_server = JenkinsServer.find(params[:jenkins_server_id])
     @slaves = @jenkins_server.jenkins_slaves
     @ec2_instances = JenkinsSlave.ec2_instances(@slaves)
     
@@ -11,6 +12,11 @@ class JenkinsSlavesController < ApplicationController
   end
   
   def show
-    
+    @ec2_instance = JenkinsSlave.find(params[:id]).ec2_instance
   end
+  
+private
+ def load_objects
+   @jenkins_server = JenkinsServer.find(params[:jenkins_server_id])
+ end
 end
