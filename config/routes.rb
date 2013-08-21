@@ -1,4 +1,4 @@
-Pantry::Application.routes.draw do
+Wonga::Pantry::Application.routes.draw do
   get "ec2_instances/index"
 
   get "aws/ec2s", as: "ec2"
