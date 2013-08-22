@@ -1,16 +1,15 @@
 class AwsController < ApplicationController
 
   def aws
-     Fog::Compute.new(:provider=>'AWS')
+    AWS::EC2.new
   end
   
   def ec2s
-    @lists = aws.servers
+    @lists = aws.instances.to_a
   end
-  
-  def amis 
-    my_images_raw = aws.describe_images('Owner' => 'self')
-    @lists = my_images_raw.body["imagesSet"]
+
+  def amis
+    @lists = aws.images.with_owner('self').to_a
   end
 
   def vpcs

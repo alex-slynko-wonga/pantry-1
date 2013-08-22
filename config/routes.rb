@@ -12,7 +12,7 @@ Wonga::Pantry::Application.routes.draw do
   end
 
   namespace :aws do 
-    resources :ec2_instances, only: [:new, :create, :show, :update] 
+    resources :ec2_instances, only: [:new, :create, :show, :update]
   end
 
   resources :teams, except: [:destroy] do

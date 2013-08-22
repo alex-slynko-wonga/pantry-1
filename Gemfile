@@ -1,13 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '~> 3.2.14'
 gem 'mysql2'
 gem 'omniauth-ldap'
 
 gem 'strong_parameters'
 gem 'haml-rails'
 gem 'chef','~> 11.6.0'
-gem 'fog'
 gem 'aws-sdk'
 
 gem 'sass-rails'
@@ -16,7 +15,7 @@ gem 'uglifier'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'bootstrap-sass', '~> 2.3.2.0'
+gem 'bootstrap-sass'
 gem 'resolv-ipv6favor'
 
 group :development do
