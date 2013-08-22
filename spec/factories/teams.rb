@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :team do
-    name "MyString"
+    sequence(:name) { |n| "TeamName#{n}" }
     description "MyString"
   end
 end
