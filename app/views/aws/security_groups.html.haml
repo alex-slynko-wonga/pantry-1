@@ -6,11 +6,9 @@
       %th Name
       %th Description
       %th Group ID
-      %th IP Permissions
     - @lists.each_with_index do |list,index|
       %tr
         %td= index + 1
         %td= list.name
         %td= list.description
         %td= list.group_id
-        %td= list.ip_permissions

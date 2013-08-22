@@ -3,7 +3,7 @@ class Ec2Instance < ActiveRecord::Base
   belongs_to :user
 
   validates :name, presence: true
-  validates :team_id, presence: true 
+  validates :team_id, presence: true
   validates :user_id, presence: true
   validates :domain, :presence => true, :domain_name => true
   validates :chef_environment, :presence => true
@@ -18,7 +18,7 @@ class Ec2Instance < ActiveRecord::Base
   end
 
   def complete!(status)
-    case status 
+    case status
     when :booted
       self.booted = true
     when :bootstrapped
@@ -28,14 +28,6 @@ class Ec2Instance < ActiveRecord::Base
       self.end_time = Time.current
     end
     save!
-  end
-
-  def get_status
-    {
-      booted: self.booted,
-      bootstrapped: self.bootstrapped,
-      joined: self.joined
-    }
   end
 
   def human_status
@@ -50,7 +42,7 @@ class Ec2Instance < ActiveRecord::Base
       "Booting"
     end
   end
-  
+
   def progress
     return 100 if bootstrapped && joined
     if bootstrapped
@@ -63,37 +55,37 @@ class Ec2Instance < ActiveRecord::Base
       0
     end
   end
-  
+
   def message_run_list
     self.run_list.split "\r\n"
   end
-  
-  def boot_message
-    msg = {
-          pantry_request_id:  self.id,
-          instance_name:      self.name,
-          domain:             self.domain,
-          flavor:             self.flavor,
-          ami:                self.ami,
-          team_id:            self.team_id,
-          subnet_id:          self.subnet_id,
-          security_group_ids: self.security_group_ids,
-          chef_environment:   self.chef_environment,
-          run_list:           self.message_run_list,
-          aws_key_pair_name:  "aws-ssh-keypair",
-          platform:           self.platform
-      }
 
+  def boot_message
+    {
+      pantry_request_id:  self.id,
+      instance_name:      self.name,
+      domain:             self.domain,
+      flavor:             self.flavor,
+      ami:                self.ami,
+      team_id:            self.team_id,
+      subnet_id:          self.subnet_id,
+      security_group_ids: self.security_group_ids,
+      chef_environment:   self.chef_environment,
+      run_list:           self.message_run_list,
+      aws_key_pair_name:  "aws-ssh-keypair",
+      platform:           self.platform,
+      ou:                 Wonga::Pantry::ActiveDirectoryOU.new(self).ou
+    }
   end
 
   private
-    def init
-      self.booted ||= false
-      self.bootstrapped ||= false
-      self.joined ||= false
-    end
+  def init
+    self.booted ||= false
+    self.bootstrapped ||= false
+    self.joined ||= false
+  end
 
-    def set_start_time
-      self.start_time = Time.current
-    end
+  def set_start_time
+    self.start_time = Time.current
+  end
 end

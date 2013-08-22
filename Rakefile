@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Pantry::Application.load_tasks
+Wonga::Pantry::Application.load_tasks
