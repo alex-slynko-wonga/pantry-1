@@ -7,8 +7,9 @@ describe Wonga::Pantry::AWSUtility do
   let(:user) { FactoryGirl.create(:user) }
   let(:jenkins_params) {
     {
-      user_id: team.id,
-      name: "TestName"
+      user_id: user.id,
+      name: "TestName",
+      team: team
     }
   }
   let(:ec2_params) { 
