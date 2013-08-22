@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe JenkinsSlavesController do
+  let(:ec2_instance) {FactoryGirl.create(:ec2_instance)}
   let(:jenkins_server) {FactoryGirl.create(:jenkins_server)}
-  let(:jenkins_slave) {FactoryGirl.create(:jenkins_slave)}
+  let(:jenkins_slave) {FactoryGirl.create(:jenkins_slave, jenkins_server: jenkins_server, ec2_instance: ec2_instance)}
   let(:user) {FactoryGirl.create(:user, team: team)}
   let(:team) {FactoryGirl.create(:team)}
 

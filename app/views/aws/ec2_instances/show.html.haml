@@ -1,3 +1,2 @@
 %h1= @ec2_instance.name
-= render 'shared/ec2_instance'
-   
+= render partial: 'shared/ec2_instance', locals: {ec2_instance: @ec2_instance}

@@ -2,4 +2,4 @@
 
 = link_to "Go back to the list of slaves", jenkins_server_jenkins_slaves_path(@jenkins_server) 
 
-= render 'shared/ec2_instance'
+= render partial: 'shared/ec2_instance', locals: {ec2_instance: @ec2_instance}

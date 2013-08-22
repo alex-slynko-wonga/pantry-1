@@ -10,7 +10,7 @@ class JenkinsSlavesController < ApplicationController
   end
   
   def show
-    @jenkins_server.jenkins_slaves.find(params[:id]).ec2_instance
+    @ec2_instance = @jenkins_server.jenkins_slaves.find(params[:id]).ec2_instance
   end
   
 private

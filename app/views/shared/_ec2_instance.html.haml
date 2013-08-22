@@ -1,18 +1,18 @@
 .row-fluid
   .span2
     Name:
-  .span2= @ec2_instance.name
+  .span2= ec2_instance.name
 .row-fluid
   .span2
     Domain:
-  .span2= @ec2_instance.domain
+  .span2= ec2_instance.domain
 .row-fluid
   .span2
     AMI:
-  .span2= @ec2_instance.ami
+  .span2= ec2_instance.ami
 .row-fluid
   .span2
     Instance ID:
-  .span2= @ec2_instance.instance_id 
-#ec2instance_status{'data-url' => ec2_instance_status_url(@ec2_instance)}
+  .span2= ec2_instance.instance_id 
+#ec2instance_status{'data-url' => ec2_instance_status_url(ec2_instance)}
   #ec2instance_status_content
