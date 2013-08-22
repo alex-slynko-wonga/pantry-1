@@ -25,10 +25,7 @@ class Wonga::Pantry::AWSUtility
     end
     msg = ec2_instance.boot_message
     if jenkins_instance.persisted?
-      #@sqs.send_message(msg)
-      return jenkins_instance
-    else
-      return jenkins_instance
+      @sqs.send_message(msg)
     end
   end 
 end
