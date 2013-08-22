@@ -13,8 +13,8 @@
         %td= index + 1
         %td= list.id
         %td= list.image_id
-        %td= list.groups
-        %td= list.state
-        %td= list.tags
+        %td= list.groups.map(&:name)
+        %td= list.status
+        %td= list.tags.to_h
 
         

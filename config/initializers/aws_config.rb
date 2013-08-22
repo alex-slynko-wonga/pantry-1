@@ -1,1 +1,0 @@
-Fog.credentials_path = Rails.root.join('config/aws.yml')
