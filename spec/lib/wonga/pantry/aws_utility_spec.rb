@@ -5,6 +5,7 @@ describe Wonga::Pantry::AWSUtility do
   subject { described_class.new(sqs) }  
   let(:team) { FactoryGirl.create(:team) }
   let(:user) { FactoryGirl.create(:user) }
+  let(:existing_server) { FactoryGirl.create(:jenkins_server) }
   let(:jenkins_params) {
     {
       user_id: user.id,
@@ -26,13 +27,21 @@ describe Wonga::Pantry::AWSUtility do
     @aws_utility = Wonga::Pantry::AWSUtility.new(sqs_sender) 
   end
 
-  describe 'request existing jenkins server' do 
+  describe 'request jenkins server' do 
     it "requests an instance when a team requests a first server" do
       expect{
         subject.request_jenkins_instance(
           jenkins_params, 
           JenkinsServer.new(team_id: team.id)
         )}.to change(JenkinsServer, :count).by(1)
+    end
+
+    it "does not request an instance when a team already owns one server" do 
+      expect{
+        subject.request_jenkins_instance(
+          jenkins_params,
+          JenkinsServer.new(team: existing_server.team)
+        )}.to raise_error
     end
   end
 end
