@@ -61,7 +61,11 @@ describe JenkinsSlavesController do
       JenkinsSlave.any_instance.stub(:persisted?).and_return(false)
       
       post :create, jenkins_server_id: jenkins_server.id
+<<<<<<< HEAD
       assigns(:user_teams).size.should be 
+=======
+      assigns(:user_teams).size.should be 1
+>>>>>>> Completed JenkinsSlave and added specs
     end
     
     it "creates new slave with the master ID" do      
