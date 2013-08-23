@@ -23,9 +23,9 @@ class Wonga::Pantry::AWSUtility
       jenkins_instance.save!
     end
     msg = ec2_instance.boot_message
-    puts msg
+    
     if jenkins_instance.persisted?
       @sqs.send_message(msg)
     end
-  end 
+  end
 end
