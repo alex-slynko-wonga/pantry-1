@@ -1,3 +1,18 @@
-%h1 Your server is being created!
+%h1= "#{@team.name}'s jenkins server"
 
-= link_to "Slave servers", jenkins_server_jenkins_slaves_path(@jenkins_server)
+%h4= link_to "Slave servers", jenkins_server_jenkins_slaves_path(@jenkins_server)
+
+.row-fluid
+  .span2
+    Request No:
+  .span3= link_to(@ec2_instance.id, "/aws/ec2_instances/#{@ec2_instance.id}")
+.row-fluid
+  .span2
+    Machine Size:
+  .span3= @ec2_instance.flavor
+.row-fluid
+  .span2
+    Platform:
+  .span3= @ec2_instance.platform
+
+= render partial: 'shared/ec2_instance', locals: {ec2_instance: @ec2_instance}

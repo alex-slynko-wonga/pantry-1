@@ -12,6 +12,12 @@ class Ec2Instance < ActiveRecord::Base
   after_initialize :init, on: :create
   before_create :set_start_time
 
+  before_validation(on: :create) do 
+    self.domain       =  "example.com"
+    self.subnet_id    =  "subnet-a8dc0bc0"
+    self.instance_id  =  "pending"
+  end
+
   def exists!(instance_id)
     self.instance_id = instance_id
     self.save!
@@ -62,19 +68,22 @@ class Ec2Instance < ActiveRecord::Base
 
   def boot_message
     {
-      pantry_request_id:  self.id,
-      instance_name:      self.name,
-      domain:             self.domain,
-      flavor:             self.flavor,
-      ami:                self.ami,
-      team_id:            self.team_id,
-      subnet_id:          self.subnet_id,
-      security_group_ids: self.security_group_ids,
-      chef_environment:   self.chef_environment,
-      run_list:           self.message_run_list,
-      aws_key_pair_name:  "aws-ssh-keypair",
-      platform:           self.platform,
-      ou:                 Wonga::Pantry::ActiveDirectoryOU.new(self).ou
+      pantry_request_id:          self.id,
+      instance_name:              self.name,
+      domain:                     self.domain,
+      flavor:                     self.flavor,
+      ami:                        self.ami,
+      team_id:                    self.team_id,
+      subnet_id:                  self.subnet_id,
+      security_group_ids:         self.security_group_ids,
+      chef_environment:           self.chef_environment,
+      run_list:                   self.message_run_list,
+      aws_key_pair_name:          "aws-ssh-keypair",
+      platform:                   self.platform,
+      http_proxy:                 "http://proxy.example.com:8080",
+      windows_set_admin_password: true,
+      windows_admin_password:     "LocalAdminPassword",
+      ou: Wonga::Pantry::ActiveDirectoryOU.new(self).ou
     }
   end
 
