@@ -1,6 +1,7 @@
 %h1= "#{@team.name}'s jenkins server"
 
 %h4= link_to "Slave servers", jenkins_server_jenkins_slaves_path(@jenkins_server)
+= link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
 
 .row-fluid
   .span2

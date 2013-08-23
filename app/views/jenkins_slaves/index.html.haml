@@ -1,6 +1,8 @@
 %h1 Jenkins Slaves
 
 = link_to "Go back to master server ##{@jenkins_server.id}", jenkins_server_path(@jenkins_server)
+|
+= link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
 
 %table.table
   %thead
