@@ -1,6 +1,7 @@
 class Ec2Instance < ActiveRecord::Base  
   belongs_to :team
   belongs_to :user
+  has_one :jenkins_slave
 
   validates :name, presence: true
   validates :team_id, presence: true
