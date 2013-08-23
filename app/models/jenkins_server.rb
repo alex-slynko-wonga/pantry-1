@@ -6,7 +6,7 @@ class JenkinsServer < ActiveRecord::Base
   has_one :ec2_instance
   belongs_to :ec2_instance
 
-  validate :team_cannot_own_multiple_servers
+  validate :team_cannot_own_multiple_servers, :on => :create
 
   def team_cannot_own_multiple_servers
   	unless JenkinsServer.find_by_team_id(self.team_id).nil?
