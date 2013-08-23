@@ -24,8 +24,7 @@ class JenkinsSlavesController < ApplicationController
     attributes = { 
       user_id: current_user.id, 
       name: @jenkins_server.team.name,
-      team: @jenkins_server.team,
-      domain: 'example.com',
+      team: @jenkins_server.team
     }
     aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
     
