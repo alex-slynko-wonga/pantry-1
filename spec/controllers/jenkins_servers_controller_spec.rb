@@ -8,6 +8,26 @@ describe JenkinsServersController do
   	session[:user_id] = user.id
   	user.teams = [team]
   end
+  
+  describe "index" do
+  	it "returns http success" do
+  	  get 'index'
+  	  response.should be_success
+  	end
+    
+    it "should assign a server if there is only one team" do
+      FactoryGirl.create(:jenkins_server)
+      get 'index'
+      assigns(:jenkins_servers).count.should be 1
+    end
+    
+    it "should not assign a server if threre are two teams" do
+      jenkins_server = FactoryGirl.create(:jenkins_server)
+      FactoryGirl.create(:team) # we have two teams
+      get 'index', team_id: jenkins_server.team.id
+      assigns(:jenkins_servers).count.should be 1
+    end
+  end
 
   describe "GET 'new'" do
   	it "returns http success" do
