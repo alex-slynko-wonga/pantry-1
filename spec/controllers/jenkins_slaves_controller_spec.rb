@@ -26,5 +26,19 @@ describe JenkinsSlavesController do
       assigns(:ec2_instance).id.should be jenkins_slave.ec2_instance.id
     end
   end
+  
+  describe "GET 'new'" do
+    it "returns http success" do
+      get :new, jenkins_server_id: jenkins_server.id
+      response.should be_success
+      assigns(:jenkins_server).id.should be jenkins_server.id
+      assigns(:jenkins_slave).should_not be_nil
+    end
+  end
+  
+  describe "POST 'create'" do
+  	it "creates new resource, sends message to AWS and redirects to resource" do
+  	end
+  end
 
 end

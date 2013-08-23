@@ -17,7 +17,6 @@ class Wonga::Pantry::AWSUtility
   def request_jenkins_instance(additional_params, jenkins_instance)
     instance_params = jenkins_instance_params.merge(additional_params)
     ec2_instance = Ec2Instance.new(instance_params)
-    puts jenkins_instance.team_id
     Ec2Instance.transaction do 
       ec2_instance.save!
       jenkins_instance.ec2_instance = ec2_instance
