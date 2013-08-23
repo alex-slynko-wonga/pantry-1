@@ -9,7 +9,7 @@ class JenkinsServer < ActiveRecord::Base
   validate :team_cannot_own_multiple_servers
 
   def team_cannot_own_multiple_servers
-  	if !JenkinsServer.find_by_team_id(self.team_id).nil?
+  	unless JenkinsServer.find_by_team_id(self.team_id).nil?
       errors.add(:team, "can't own multiple servers")
     end
   end
