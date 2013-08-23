@@ -4,26 +4,4 @@
 |
 = link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
 
-%table.table
-  %thead
-    %tr
-      %th #
-      %th InstanceID
-      %th Name
-      %th ImageID
-      %th Groups
-      %th bootstrapped
-      %th Booted
-      %th Joined
-    - @slaves.each do |slave|
-      %tr
-        %td= link_to slave.id, jenkins_server_jenkins_slave_path(@jenkins_server, slave)
-        %td= slave.ec2_instance.id
-        %td= slave.ec2_instance.name
-        %td= slave.ec2_instance.ami
-        %td= slave.ec2_instance.security_group_ids
-        %td= slave.ec2_instance.bootstrapped
-        %td= slave.ec2_instance.booted
-        %td= slave.ec2_instance.joined
-
-        
+= render partial: 'shared/jenkins_index', locals: { jenkins_instances: @jenkins_slaves, jenkins_server: @jenkins_server }

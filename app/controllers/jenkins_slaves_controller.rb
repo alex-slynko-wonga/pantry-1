@@ -2,7 +2,7 @@ class JenkinsSlavesController < ApplicationController
   before_filter :load_objects
   
   def index
-    @slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance)
+    @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance)
     
     respond_to do |format|
       format.html
@@ -11,6 +11,7 @@ class JenkinsSlavesController < ApplicationController
   
   def show
     @ec2_instance = @jenkins_server.jenkins_slaves.find(params[:id]).ec2_instance
+    @team = @jenkins_server.team
   end
   
   def new
