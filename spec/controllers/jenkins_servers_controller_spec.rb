@@ -20,14 +20,6 @@ describe JenkinsServersController do
       get 'index'
       assigns(:jenkins_servers).count.should be 1
     end
-    
-    it "should not assign a server if threre are two teams" do
-      jenkins_server = FactoryGirl.create(:jenkins_server)
-      user.teams << FactoryGirl.create(:team) # we have two teams
-      user.teams << jenkins_server.team
-      get 'index', team_id: nil
-      assigns(:jenkins_servers).should be_nil
-    end
   end
 
   describe "GET 'new'" do

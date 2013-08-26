@@ -1,5 +1,5 @@
 !!!
-%html
+%html{"ng-app" => "Pantry"}
   %head
     %title= content_for?(:title) ? yield(:title) : Wonga::Pantry
     = stylesheet_link_tag    "application", :media => "all"

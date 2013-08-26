@@ -17,6 +17,8 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'bootstrap-sass'
 gem 'resolv-ipv6favor'
+gem 'angularjs-rails'
+gem 'rabl'
 
 group :development do
   gem 'guard-bundler'

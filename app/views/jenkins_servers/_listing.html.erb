@@ -1,0 +1,39 @@
+<div ng-controller="JenkinsServersCtrl" data-ng-init="init()">
+  <% if jenkins_servers && user_teams.count > 1 %>
+    Select a team:
+    <select id="change_team_id" name="change_team_id" ng-change="getInstances()" ng-model="team_id">
+      <option value=""></option>
+      <option value="1">Devops</option>
+      <option value="2">Team 2</option>
+    </select>
+  <% else %>
+    Your team is
+    <span id="single_team_id" data-team_id="<%= jenkins_servers.first.team.id %>">
+      <%= jenkins_servers.first.team.name %>
+    </span>
+  <% end %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>InstanceID</th>
+        <th>Name</th>
+        <th>ImageID</th>
+        <th>Groups</th>
+        <th>bootstrapped</th>
+        <th>Booted</th>
+        <th>Joined</th>
+      </tr>
+    </thead>
+    <tr ng-repeat="instance in instances">
+      <td><a href="/jenkins_servers/{{instance.id}}">{{instance.id}}</a></td>
+      <td>{{instance.ec2_instance.id}}</td>
+      <td>{{instance.ec2_instance.name}}</td>
+      <td>{{instance.ec2_instance.ami}}</td>
+      <td>{{instance.ec2_instance.security_group_ids}}</td>
+      <td>{{instance.ec2_instance.bootstrapped}}</td>
+      <td>{{instance.ec2_instance.booted}}</td>
+      <td>{{instance.ec2_instance.joined}}</td>
+    </tr>
+  </table>
+</div>

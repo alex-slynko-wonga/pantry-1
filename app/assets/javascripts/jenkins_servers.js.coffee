@@ -1,5 +1,12 @@
-$ ->
-  $("#index_jenkins_servers_team_id").change ->
-    team_id = $("#index_jenkins_servers_team_id").val()
-    $.get "/jenkins_servers?team_id=" + team_id, (data) ->
-      document.write data
+@JenkinsServersCtrl = ["$scope", "$resource", ($scope, $resource) ->
+  $scope.instances = []
+  $scope.getInstances = ->
+    unless $scope.team_id is ""
+      team_id = $('#single_team_id').attr('data-team_id') # load default team if possible
+      team_id = $scope.team_id unless team_id? # otherwise get selected team
+      Instance = $resource("/jenkins_servers?team_id=:team_id", team_id: team_id)
+      $scope.instances = Instance.query()
+      
+  $scope.init = ->
+    $scope.getInstances()
+]

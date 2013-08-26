@@ -14,7 +14,7 @@
 			.span9
 				%h4 You're in more than 1 team, please select your team below
 				%span= "#{@current_user.name}'s teams: "
-				= f.select :team_id, options_from_collection_for_select(@users_teams, 'id', 'name')
+				= f.select :team_id, options_from_collection_for_select(@user_teams, 'id', 'name')
 	.row
 		.span5
 			%span You are going to create the following:
