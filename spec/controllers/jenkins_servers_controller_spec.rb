@@ -23,9 +23,10 @@ describe JenkinsServersController do
     
     it "should not assign a server if threre are two teams" do
       jenkins_server = FactoryGirl.create(:jenkins_server)
-      FactoryGirl.create(:team) # we have two teams
-      get 'index', team_id: jenkins_server.team.id
-      assigns(:jenkins_servers).count.should be 1
+      user.teams << FactoryGirl.create(:team) # we have two teams
+      user.teams << jenkins_server.team
+      get 'index', team_id: nil
+      assigns(:jenkins_servers).should be_nil
     end
   end
 
@@ -37,15 +38,8 @@ describe JenkinsServersController do
   end
   
   describe "POST 'create'" do
-    before(:each) do
-      client = AWS::SQS.new.client
-      resp = client.stub_for(:get_queue_url)
-      resp[:queue_url] = "https://sqs.eu-west-1.amazonaws.com/000000000000/blop"
-      sqs_sender = Wonga::Pantry::SQSSender.new()
-      @aws_utility = Wonga::Pantry::AWSUtility.new(sqs_sender)
-    end
-    
     it "creates new resource, sends message to AWS and redirects to resource" do
+      Wonga::Pantry::SQSSender.any_instance.stub(:send_message)
       post :create, jenkins_server: { team_id: team.id }
       response.should be_redirect
   	end

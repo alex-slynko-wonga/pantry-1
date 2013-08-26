@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :ec2_instance do
-    name "MyString"
+    sequence(:name) { |n| "Name#{n}" }
     domain "example.com"
     instance_id "MyString"
     platform "Lindows"

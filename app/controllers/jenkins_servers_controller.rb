@@ -2,7 +2,7 @@ class JenkinsServersController < ApplicationController
   
   def index
     @user_teams = current_user.teams
-    @current_team = Team.find(params[:team_id]) if params[:team_id]
+    @current_team = @user_teams.find(params[:team_id]) if params[:team_id]
     @jenkins_servers = JenkinsServer.includes(:ec2_instance) if @user_teams.size == 1
     @jenkins_servers = JenkinsServer.where(team_id: params[:team_id]).includes(:ec2_instance) if params[:team_id]
   end
