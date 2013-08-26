@@ -7,13 +7,11 @@ class JenkinsServersController < ApplicationController
 
   def create
     aws_utility = Wonga::Pantry::AWSUtility.new
-    name = Team.find(jenkins_attributes[:team_id]).name
-    attributes = jenkins_attributes.merge(
-      {user_id: current_user.id, name: name}
-    )
     @jenkins_server = JenkinsServer.new(team_id: attributes[:team_id])
-    aws_utility.request_jenkins_instance(attributes, @jenkins_server)
-    if @jenkins_server.persisted?
+    attributes = jenkins_attributes.merge(
+      { user_id: current_user.id }
+    )
+    if aws_utility.request_jenkins_instance(attributes, @jenkins_server)
       redirect_to @jenkins_server
     else
       @user_teams = current_user.teams
