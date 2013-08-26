@@ -6,7 +6,7 @@ describe JenkinsServersController do
 
   before(:each) do
   	session[:user_id] = user.id
-  	user.teams = [team]
+  	user.teams << team
   end
   
   describe "index" do
@@ -16,7 +16,8 @@ describe JenkinsServersController do
   	end
     
     it "should assign a server if there is only one team" do
-      FactoryGirl.create(:jenkins_server)
+      jenkins_server = FactoryGirl.create(:jenkins_server, team: user.teams.first)
+      user.teams.count.should be 1
       get 'index'
       assigns(:jenkins_servers).count.should be 1
     end
