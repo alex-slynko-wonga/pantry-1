@@ -13,10 +13,9 @@ class Ec2Instance < ActiveRecord::Base
   before_create :set_start_time
 
   before_validation(on: :create) do 
-    self.domain       =  "example.com"
-    self.subnet_id    =  "subnet-a8dc0bc0"
-    self.name         =  "#{self.team.name.parameterize[0..32]}.#{domain}"
-    self.instance_id  =  "pending"
+    self.domain       ||=  "example.com"
+    self.subnet_id    ||=  "subnet-a8dc0bc0"
+    self.instance_id  ||=  "pending"
   end
 
   def exists!(instance_id)
