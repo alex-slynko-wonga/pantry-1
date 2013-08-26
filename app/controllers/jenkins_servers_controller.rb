@@ -7,7 +7,7 @@ class JenkinsServersController < ApplicationController
 
   def create
     aws_utility = Wonga::Pantry::AWSUtility.new
-    @jenkins_server = JenkinsServer.new(team_id: attributes[:team_id])
+    @jenkins_server = JenkinsServer.new(jenkins_attributes)
     attributes = jenkins_attributes.merge(
       { user_id: current_user.id }
     )
