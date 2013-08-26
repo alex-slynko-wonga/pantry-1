@@ -19,6 +19,7 @@ gem 'bootstrap-sass'
 gem 'resolv-ipv6favor'
 gem 'angularjs-rails'
 gem 'rabl'
+gem 'simple_form'
 
 group :development do
   gem 'guard-bundler'
