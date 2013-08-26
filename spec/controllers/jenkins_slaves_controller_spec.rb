@@ -37,15 +37,8 @@ describe JenkinsSlavesController do
   end
   
   describe "POST 'create'" do
-    before(:each) do
-      client = AWS::SQS.new.client
-      resp = client.stub_for(:get_queue_url)
-      resp[:queue_url] = "https://sqs.eu-west-1.amazonaws.com/000000000000/blop"
-      sqs_sender = Wonga::Pantry::SQSSender.new()
-      @aws_utility = Wonga::Pantry::AWSUtility.new(sqs_sender)
-    end
-    
     it "redirects on success" do
+      Wonga::Pantry::SQSSender.any_instance.stub(:send_message)
       post :create, jenkins_server_id: jenkins_server.id
       response.should be_redirect
     end
@@ -64,7 +57,8 @@ describe JenkinsSlavesController do
       assigns(:user_teams).size.should be 1
     end
     
-    it "creates new slave with the master ID" do      
+    it "creates new slave with the master ID" do 
+      Wonga::Pantry::SQSSender.any_instance.stub(:send_message)     
       post :create, jenkins_server_id: jenkins_server.id
       assigns(:jenkins_slave).jenkins_server_id.should be jenkins_server.id
   	end
