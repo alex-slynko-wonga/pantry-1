@@ -1,8 +1,14 @@
-%div{"ng-controller" => "JenkinsServersCtrl"}
-  %select{:id => "change_team_id", :name => "change_team_id", "ng-change" => "getInstances()", "ng-model" => "team_id"}
-    %option{:value => ""}
-    = user_teams.each do |team|
-      %option{:value => "1"}= team.name
+%div{"ng-controller" => "JenkinsServersCtrl", "ng-init" => "getInstances()"}
+  - if current_team
+    %span{'id' => 'single_team_id', 'data-team_id' => current_team.id}
+      Current team: 
+      = link_to current_team.name, current_team
+  - else
+    %select{:id => "change_team_id", :name => "change_team_id", "ng-change" => "getInstances()", "ng-model" => "team_id"}
+      %option{:value => ""}
+      = user_teams.each do |team|
+        %option{:value => team.id}= team.name
+      
   %table.table
     %thead
       %tr

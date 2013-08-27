@@ -3,9 +3,14 @@ class JenkinsServersController < ApplicationController
   def index
     @user_teams = current_user.teams
     @current_team = @user_teams.find(params[:team_id]) if params[:team_id]
-    @jenkins_servers = JenkinsServer.where("team_id=?", @user_teams.first.id).includes(:ec2_instance) if @user_teams.size == 1
-    @jenkins_servers = JenkinsServer.where(team_id: params[:team_id]).includes(:ec2_instance) if params[:team_id]
-    @jenkins_servers =  JenkinsServer.where("team_id IN(?)", current_user.teams.map(&:id)).includes(:ec2_instance) unless @jenkins_servers
+    @current_team = @user_teams.first if @user_teams && @user_teams.count == 1
+    @jenkins_servers = JenkinsServer.includes(:ec2_instance)
+    
+    if @current_team
+      @jenkins_servers = @jenkins_servers.where(team_id: @current_team.id)
+    else
+      @jenkins_servers = @jenkins_servers.where(team_id: @user_teams.map(&:id))
+    end
   end
 
   def new
