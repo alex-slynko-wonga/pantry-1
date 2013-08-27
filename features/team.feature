@@ -35,4 +35,18 @@ Feature: Managing Teams
     And click on remove cross
     And save team
     Then team should not contain "Test User"
-
+    
+  Scenario: Show Create a new jenkins server in the team page
+    Given the "TeamName" team
+    And I am on the teams page
+    When I click "TeamName"
+    Then I should see "Jenkins server"
+    And I should see "Create a new jenkins server"
+    
+  Scenario: Show the existing jenkins server in the team page
+    Given the "TeamName" team
+    And the team has a Jenkins server
+    And I am on the teams page
+    When I click "TeamName"
+    Then I should see "Jenkins server"
+    And I should see the Jennkins server name
