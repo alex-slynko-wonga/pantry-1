@@ -28,6 +28,7 @@ GEM
     activesupport (3.2.14)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
+    angularjs-rails (1.0.7)
     arel (3.0.2)
     aws-sdk (1.11.1)
       json (~> 1.4)
@@ -214,6 +215,8 @@ GEM
     puma (1.6.3)
       rack (~> 1.2)
     pyu-ruby-sasl (0.0.3.3)
+    rabl (0.8.6)
+      activesupport (>= 2.3.14)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -321,6 +324,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  angularjs-rails
   aws-sdk
   bootstrap-sass
   brakeman
@@ -342,6 +346,7 @@ DEPENDENCIES
   omniauth-ldap
   pry-debugger
   pry-rails
+  rabl
   rails (~> 3.2.14)
   resolv-ipv6favor
   rspec-fire

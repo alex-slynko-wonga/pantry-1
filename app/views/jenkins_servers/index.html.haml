@@ -1,0 +1,10 @@
+%h1 
+  Jenkins Servers
+  = " assigned to #{@current_team.name}" if params[:team_id]
+  
+.row
+  .span12= link_to "Create a new server", new_jenkins_server_path
+
+.row
+  .span12
+    = render partial: 'listing', locals: { jenkins_servers: @jenkins_servers, user_teams: @user_teams, current_team: @current_team }

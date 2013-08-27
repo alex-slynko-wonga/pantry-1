@@ -1,5 +1,5 @@
 !!!
-%html
+%html{"ng-app" => "Pantry"}
   %head
     %title= content_for?(:title) ? yield(:title) : Wonga::Pantry
     = stylesheet_link_tag    "application", :media => "all"
@@ -13,6 +13,8 @@
           = link_to "Home", root_url
         %li{class: (current_page?(teams_url) ? 'active' : '')}
           = link_to "Teams", teams_url
+        %li{class: (current_page?(jenkins_servers_url) ? 'active' : '')}
+          = link_to "Jenkins", jenkins_servers_url
         %li{class: (current_page?(search_chef_nodes_url) ? 'active' : '')}
           = link_to "Search Chef Nodes", search_chef_nodes_url
         %li.divider-vertical
