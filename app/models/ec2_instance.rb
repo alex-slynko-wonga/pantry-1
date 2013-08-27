@@ -68,6 +68,13 @@ class Ec2Instance < ActiveRecord::Base
   end
 
   def boot_message
+    security_groups = Array(self.security_group_ids)
+    if platform == 'windows'
+      security_groups << 'sg-00110011'
+    else
+      security_groups << 'sg-00110010'
+    end
+    security_groups.uniq
     {
       pantry_request_id:          self.id,
       instance_name:              self.name,
@@ -76,7 +83,7 @@ class Ec2Instance < ActiveRecord::Base
       ami:                        self.ami,
       team_id:                    self.team_id,
       subnet_id:                  self.subnet_id,
-      security_group_ids:         self.security_group_ids,
+      security_group_ids:         security_groups,
       chef_environment:           self.chef_environment,
       run_list:                   self.message_run_list,
       aws_key_pair_name:          "aws-ssh-keypair",

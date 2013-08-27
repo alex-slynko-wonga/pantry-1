@@ -14,5 +14,11 @@ describe Ec2Instance do
       Wonga::Pantry::ActiveDirectoryOU.stub_chain(:new, :ou).and_return('test')
       expect(subject.boot_message[:ou]).to eq('test')
     end
+
+    it "adds default group" do
+      expect(subject.boot_message[:security_group_ids]).to include('sg-00110010')
+      subject.platform = 'windows'
+      expect(subject.boot_message[:security_group_ids]).to include('sg-00110011')
+    end
   end
 end
