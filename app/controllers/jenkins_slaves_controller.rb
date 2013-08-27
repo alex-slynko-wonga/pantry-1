@@ -23,8 +23,7 @@ class JenkinsSlavesController < ApplicationController
     aws_utility = Wonga::Pantry::AWSUtility.new
     @jenkins_slave = JenkinsSlave.new(jenkins_server: @jenkins_server)
     attributes = { 
-      user_id: current_user.id, 
-      name: "#{@jenkins_server.team.name.parameterize}-slave#{@jenkins_server.jenkins_slaves.count + 1}",
+      user_id: current_user.id,
       team: @jenkins_server.team
     }
     aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
