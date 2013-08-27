@@ -1,8 +1,8 @@
 %div{"ng-controller" => "JenkinsServersCtrl"}
   %select{:id => "change_team_id", :name => "change_team_id", "ng-change" => "getInstances()", "ng-model" => "team_id"}
     %option{:value => ""}
-    %option{:value => "1"} Devops
-    %option{:value => "2"} Team 2
+    = user_teams.each do |team|
+      %option{:value => "1"}= team.name
   %table.table
     %thead
       %tr
