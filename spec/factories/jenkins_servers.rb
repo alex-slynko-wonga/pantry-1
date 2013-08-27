@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :jenkins_server do
-    team 
+    team
     ec2_instance
   end
 end

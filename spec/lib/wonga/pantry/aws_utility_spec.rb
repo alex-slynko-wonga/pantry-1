@@ -1,47 +1,79 @@
 require 'spec_helper'
 
 describe Wonga::Pantry::AWSUtility do
-  let(:sqs) { Wonga::Pantry::SQSSender.new() }
-  subject { described_class.new(sqs) }  
+  subject { described_class.new(sqs_sender) }
   let(:team) { FactoryGirl.create(:team) }
   let(:user) { FactoryGirl.create(:user) }
   let(:existing_server) { FactoryGirl.create(:jenkins_server) }
+  let(:sqs_sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
+  let(:jenkins) { JenkinsServer.new(team: team) }
+
   let(:jenkins_params) {
     {
       user_id: user.id,
-      name: "TestName",
       team: team
     }
   }
-  let(:ec2_params) { 
-    FactoryGirl.attributes_for(:ec2_instance).merge(
-      { team_id: team.id, user_id: user.id }
-    ) 
-  }
 
-  before(:each) do 
-    client = AWS::SQS.new.client
-    resp = client.stub_for(:get_queue_url)
-    resp[:queue_url] = "https://sqs.eu-west-1.amazonaws.com/000000000000/blop"
-    sqs_sender = Wonga::Pantry::SQSSender.new()
-    @aws_utility = Wonga::Pantry::AWSUtility.new(sqs_sender) 
-  end
-
-  describe 'request jenkins server' do 
-    it "requests an instance when a team requests a first server" do
-      expect{
-        subject.request_jenkins_instance(
-          jenkins_params, 
-          JenkinsServer.new(team_id: team.id)
-        )}.to change(JenkinsServer, :count).by(1)
+  describe 'request jenkins server' do
+    it "saves jenkins instance" do
+      subject.request_jenkins_instance(
+        jenkins_params,
+        jenkins
+      )
+      expect(jenkins).to be_persisted
     end
 
-    it "does not request an instance when a team already owns one server" do 
+    it "requests an instance" do
       expect{
         subject.request_jenkins_instance(
           jenkins_params,
-          JenkinsServer.new(team: existing_server.team)
-        )}.to raise_error
+          jenkins
+        )}.to change(Ec2Instance, :count).by(1)
+    end
+
+    it "sets instance_name from jenkins" do
+      jenkins.stub(:instance_name).and_return('test')
+      subject.request_jenkins_instance(
+        jenkins_params,
+        jenkins
+      )
+      expect(jenkins.ec2_instance.name).to eq 'test'
+    end
+
+    it "sends message to sqs using sqs_sender" do
+      subject.request_jenkins_instance(
+        jenkins_params,
+        jenkins
+      )
+      expect(sqs_sender).to have_received(:send_message)
+    end
+
+    context "when team already owns one server" do
+      let!(:team) { existing_server.team }
+
+      it "saves jenkins instance" do
+        subject.request_jenkins_instance(
+          jenkins_params,
+          jenkins
+        )
+        expect(jenkins).to_not be_persisted
+      end
+
+      it "does not request an instance" do 
+        expect { subject.request_jenkins_instance(
+          jenkins_params,
+          jenkins
+        )}.to_not change(Ec2Instance, :count)
+      end
+
+      it "sends message to sqs using sqs_sender" do
+        subject.request_jenkins_instance(
+          jenkins_params,
+          jenkins
+        )
+        expect(sqs_sender).to_not have_received(:send_message)
+      end
     end
   end
 end
