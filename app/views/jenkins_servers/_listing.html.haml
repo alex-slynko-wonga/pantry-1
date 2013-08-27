@@ -1,0 +1,26 @@
+%div{"ng-controller" => "JenkinsServersCtrl"}
+  %select{:id => "change_team_id", :name => "change_team_id", "ng-change" => "getInstances()", "ng-model" => "team_id"}
+    %option{:value => ""}
+    %option{:value => "1"} Devops
+    %option{:value => "2"} Team 2
+  %table.table
+    %thead
+      %tr
+        %th #
+        %th InstanceID
+        %th Name
+        %th ImageID
+        %th Groups
+        %th bootstrapped
+        %th Booted
+        %th Joined
+    %tr{"ng-repeat" => "instance in instances"}
+      %td 
+        %a{:href => "/jenkins_servers/{{instance.id}}"} {{instance.id}}
+      %td {{instance.ec2_instance.id}}
+      %td {{instance.ec2_instance.name}}
+      %td {{instance.ec2_instance.ami}}
+      %td {{instance.ec2_instance.security_group_ids}}
+      %td {{instance.ec2_instance.bootstrapped}}
+      %td {{instance.ec2_instance.booted}}
+      %td {{instance.ec2_instance.joined}}
