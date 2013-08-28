@@ -49,4 +49,4 @@ Feature: Managing Teams
     And I am on the teams page
     When I click "TeamName"
     Then I should see "Jenkins server"
-    And I should see the Jennkins server name
+    And I should see the Jenkins server name
