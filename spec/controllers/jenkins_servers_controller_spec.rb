@@ -31,22 +31,34 @@ describe JenkinsServersController do
   end
   
   describe "POST 'create'" do
+    before(:each) do
+      client = AWS::SQS.new.client
+      resp = client.stub_for(:get_queue_url)
+      resp[:queue_url] = "some_url"
+
+      client.stub(:send_message) do |msg|
+        JSON.parse(msg[:message_body])
+        AWS::Core::Response.new
+      end
+    end
+    
     it "creates new resource, sends message to AWS and redirects to resource" do
-      Wonga::Pantry::SQSSender.any_instance.stub(:send_message)
+      Wonga::Pantry::AWSUtility.any_instance.stub(:request_jenkins_instance).and_return(true)
+      
       post :create, jenkins_server: { team_id: team.id }
       response.should be_redirect
   	end
   
     it "renders new if JenkinsServer was not saved" do
-      JenkinsServer.any_instance.stub(:persisted?).and_return(false)
-    
+      Wonga::Pantry::AWSUtility.any_instance.stub(:request_jenkins_instance).and_return(false)
+      
       post :create, jenkins_server: { team_id: team.id }
       response.should render_template('new')
     end
   
     it "assigns the teams to the current user if JenkinsServer was not saved" do
-      JenkinsServer.any_instance.stub(:persisted?).and_return(false)
-    
+      Wonga::Pantry::AWSUtility.any_instance.stub(:request_jenkins_instance).and_return(false)
+      
       post :create, jenkins_server: { team_id: team.id }
       assigns(:user_teams).size.should be 1
     end

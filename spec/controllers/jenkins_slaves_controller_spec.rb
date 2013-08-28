@@ -37,28 +37,22 @@ describe JenkinsSlavesController do
   end
   
   describe "POST 'create'" do
-    it "redirects on success" do
-      Wonga::Pantry::SQSSender.any_instance.stub(:send_message)
-      post :create, jenkins_server_id: jenkins_server.id
-      response.should be_redirect
-    end
-    
     it "renders new if JenkinsSlave was not saved" do
-      JenkinsSlave.any_instance.stub(:persisted?).and_return(false)
+      Wonga::Pantry::AWSUtility.any_instance.stub(:request_jenkins_instance).and_return(false)
       
       post :create, jenkins_server_id: jenkins_server.id
       response.should render_template('new')
     end
     
     it "assigns the teams to the current user if JenkinsSlave was not saved" do
-      JenkinsSlave.any_instance.stub(:persisted?).and_return(false)
+     Wonga::Pantry::AWSUtility.any_instance.stub(:request_jenkins_instance).and_return(false)
       
       post :create, jenkins_server_id: jenkins_server.id
       assigns(:user_teams).size.should be 1
     end
     
     it "creates new slave with the master ID" do 
-      Wonga::Pantry::SQSSender.any_instance.stub(:send_message)     
+      Wonga::Pantry::AWSUtility.any_instance.stub(:request_jenkins_instance).and_return(true)
       post :create, jenkins_server_id: jenkins_server.id
       assigns(:jenkins_slave).jenkins_server_id.should be jenkins_server.id
   	end
