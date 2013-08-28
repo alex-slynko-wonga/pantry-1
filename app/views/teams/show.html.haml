@@ -23,6 +23,11 @@
             %tr
               %td= index + 1
               %td= link_to user.username, user_url(user.id)
+    %h4 Jenkins servers
+    - if @team.jenkins_server
+      %li= link_to @team.jenkins_server.ec2_instance.name, @team.jenkins_server
+    - else
+      = link_to "Create a new jenkins server", new_jenkins_server_url
   .span6
     %h4
       Instances

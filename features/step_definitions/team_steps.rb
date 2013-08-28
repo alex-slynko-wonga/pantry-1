@@ -53,3 +53,11 @@ Given(/^(?:the|a)? "(.*?)" team $/) do |name|
   FactoryGirl.create(:team, name: name)
 end
 
+Given(/^the team has a Jenkins server$/) do
+  @team.should be_true
+  @jenkins_server = FactoryGirl.create(:jenkins_server, team: @team)
+end
+
+Then(/^I should see the Jennkins server name$/) do
+  page.should have_content @jenkins_server.ec2_instance.name
+end
