@@ -3,18 +3,16 @@ Feature: EC2 Instance
   As a team member
   I want to manage my EC2 instances
 
+  Background:
+    Given AWS has information about machines
+
   @javascript
   Scenario: Creating a new instance
     Given I am in the "teamname" team
-    And I request an instance named "instanceName" on domain "example.com" using chef environment "MyChefEnvironment" specifying a run list "role[ted]"
-    Then an instance build should be started
-
-    When I am on the teams page
-    And I click on "teamname"
+    And I request an instance named "instanceName" on domain "example.com"
     Then I should see "instanceName"
-
-    When I click on "instanceName"
-    Then I should see "Booting"
+    And I should see "Booting"
+    And an instance build should start
 
     When an instance is created
     And I am still on instance page

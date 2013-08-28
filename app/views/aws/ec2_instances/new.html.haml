@@ -1,40 +1,24 @@
 %h1 Create EC2 Instance
 
-= form_for [:aws, @ec2_instance] do |f|
-  = render "shared/error_messages", :target => @ec2_instance
-  = f.label :name
-  = mark_required(@ec2_instance, :name)
-  = f.text_field :name
-  
-  = f.label :domain
-  = mark_required(@ec2_instance, :domain)
-  = f.text_field :domain
-  
-  = f.label :chef_environment
-  = mark_required(@ec2_instance, :chef_environment)
-  = f.text_field :chef_environment
-  
-  = f.label :run_list
-  = mark_required(@ec2_instance, :run_list)
-  = f.text_area :run_list
+= simple_form_for [:aws, @ec2_instance] do |f|
+  = f.input :name
+  = f.input :domain
+  = f.input :chef_environment
+  = f.input :run_list, as: :text
 
-  = f.label :ami
-  = f.select :ami, options_for_select(@ami_options)
+  = f.input :ami, collection: @ec2_adapter.amis, as: :grouped_select, group_method: :second, group_label_method: :first
 
-  = f.label :flavor
-  = f.select :flavor, options_for_select(@flavor_options)
+  = f.input :flavor, collection: @ec2_adapter.flavors
 
-  = f.label :subnet_id
-  = f.select :subnet_id, options_for_select(@subnet_options)
+  = f.input :subnet_id, collection: @ec2_adapter.subnets
 
-  = f.label :security_group_ids
-  = f.select :security_group_ids, options_for_select(@secgroup_options)
+  = f.input :security_group_ids, collection: @ec2_adapter.security_groups
 
   - if current_user.teams.size == 1
     = f.hidden_field :team_id, value: current_user.teams.first.id
   - else
-    = f.select :team_id, options_from_collection_for_select(current_user.teams, :id, :name)
+    = f.input :team_id, collection: current_user.teams
 
 
   %br
-  = f.submit "Create", {class: "btn"}
+  = f.submit "Create"

@@ -9,15 +9,10 @@ class Ec2Instance < ActiveRecord::Base
   validates :domain, :presence => true, :domain_name => true
   validates :chef_environment, :presence => true
   validates :run_list, :presence => true, :chef_run_list_format => true
+  validates :ami, presence: true
 
   after_initialize :init, on: :create
   before_create :set_start_time
-
-  before_validation(on: :create) do 
-    self.domain       ||=  "example.com"
-    self.subnet_id    ||=  "subnet-a8dc0bc0"
-    self.instance_id  ||=  "pending"
-  end
 
   def exists!(instance_id)
     self.instance_id = instance_id
@@ -68,6 +63,9 @@ class Ec2Instance < ActiveRecord::Base
     self.booted ||= false
     self.bootstrapped ||= false
     self.joined ||= false
+    self.domain       ||=  "example.com"
+    self.subnet_id    ||=  "subnet-a8dc0bc0"
+    self.instance_id  ||=  "pending"
   end
 
   def set_start_time

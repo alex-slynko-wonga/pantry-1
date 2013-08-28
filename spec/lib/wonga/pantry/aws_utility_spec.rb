@@ -1,21 +1,6 @@
 require 'spec_helper'
 
-describe Wonga::Pantry::AWSUtility do
-  subject { described_class.new(sqs_sender) }
-  let(:team) { FactoryGirl.create(:team) }
-  let(:user) { FactoryGirl.create(:user) }
-  let(:existing_server) { FactoryGirl.create(:jenkins_server) }
-  let(:sqs_sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
-  let(:jenkins) { JenkinsServer.new(team: team) }
-
-  let(:jenkins_params) {
-    {
-      user_id: user.id,
-      team: team
-    }
-  }
-
-  describe 'request jenkins server' do
+shared_examples_for "request_instance" do
     it "saves jenkins instance" do
       subject.request_jenkins_instance(
         jenkins_params,
@@ -48,6 +33,31 @@ describe Wonga::Pantry::AWSUtility do
       )
       expect(sqs_sender).to have_received(:send_message)
     end
+end
+
+describe Wonga::Pantry::AWSUtility do
+  subject { described_class.new(sqs_sender) }
+  let(:team) { FactoryGirl.create(:team) }
+  let(:user) { FactoryGirl.create(:user) }
+  let(:existing_server) { FactoryGirl.create(:jenkins_server) }
+  let(:sqs_sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
+
+  let(:jenkins_params) {
+    {
+      user_id: user.id,
+      team: team
+    }
+  }
+
+  describe 'request jenkins slave' do
+    let!(:jenkins) { JenkinsSlave.new(jenkins_server: existing_server) }
+
+    include_examples 'request_instance'
+  end
+
+  describe 'request jenkins server' do
+    let(:jenkins) { JenkinsServer.new(team: team) }
+    include_examples 'request_instance'
 
     context "when team already owns one server" do
       let!(:team) { existing_server.team }
@@ -67,7 +77,7 @@ describe Wonga::Pantry::AWSUtility do
         )}.to_not change(Ec2Instance, :count)
       end
 
-      it "sends message to sqs using sqs_sender" do
+      it "does not send message to sqs using sqs_sender" do
         subject.request_jenkins_instance(
           jenkins_params,
           jenkins
