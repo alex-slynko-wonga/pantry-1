@@ -43,8 +43,3 @@ group :test, :development do
   gem 'simplecov-rcov', require: false
   gem 'timecop'
 end
-
-group :test do
-  gem 'selenium-webdriver'
-  gem 'launchy'
-end
