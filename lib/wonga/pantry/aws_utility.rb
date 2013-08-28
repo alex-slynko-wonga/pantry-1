@@ -18,8 +18,8 @@ class Wonga::Pantry::AWSUtility
     instance_params = jenkins_instance_params.merge(additional_params).merge(name: jenkins_instance.instance_name)
     jenkins_instance.ec2_instance = Ec2Instance.new(instance_params)
     if jenkins_instance.save
-      msg = jenkins_instance.ec2_instance.boot_message
-      @sqs.send_message(msg)
+      message = Wonga::Pantry::BootMessage.new(jenkins_instance.ec2_instance)
+      @sqs.send_message(message)
       true
     end
   end 
