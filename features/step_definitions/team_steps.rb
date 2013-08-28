@@ -58,6 +58,6 @@ Given(/^the team has a Jenkins server$/) do
   @jenkins_server = FactoryGirl.create(:jenkins_server, team: @team)
 end
 
-Then(/^I should see the Jennkins server name$/) do
+Then(/^I should see the Jenkins server name$/) do
   page.should have_content @jenkins_server.ec2_instance.name
 end
