@@ -8,9 +8,12 @@ class JenkinsSlave < ActiveRecord::Base
   before_validation :set_ec2_instance_name
   
   def set_ec2_instance_name
+    ec2_instance.name = instance_name if ec2_instance
+  end
+
+  def instance_name
     counter = JenkinsSlave.count
     raise 'There are too many Jenkins Slaves to generate a number lower than 15 characters' if counter > 99999999
-    padding = '0' * (15 - ('agent-'.length + (counter + 1).to_s.length))
-    ec2_instance.name = "agent-#{padding}#{JenkinsSlave.count + 1}" if ec2_instance
+    "agent-#{"%09d" % (counter + 1)}"
   end
 end

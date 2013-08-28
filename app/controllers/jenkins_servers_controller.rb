@@ -1,11 +1,11 @@
 class JenkinsServersController < ApplicationController
-  
+
   def index
     @user_teams = current_user.teams
     @current_team = @user_teams.find(params[:team_id]) if params[:team_id]
     @current_team = @user_teams.first if @user_teams && @user_teams.count == 1
     @jenkins_servers = JenkinsServer.includes(:ec2_instance)
-    
+
     if @current_team
       @jenkins_servers = @jenkins_servers.where(team_id: @current_team.id)
     else
@@ -14,8 +14,8 @@ class JenkinsServersController < ApplicationController
   end
 
   def new
-  	@user_teams = current_user.teams
-  	@jenkins_server = JenkinsServer.new
+    @user_teams = current_user.teams
+    @jenkins_server = JenkinsServer.new
   end
 
   def create
@@ -33,14 +33,14 @@ class JenkinsServersController < ApplicationController
   end
 
   def show
-  	@jenkins_server = JenkinsServer.find(params[:id])
+    @jenkins_server = JenkinsServer.find(params[:id])
     @team = @jenkins_server.team
     @ec2_instance = @jenkins_server.ec2_instance
   end
 
   private 
-  
+
   def jenkins_attributes
-  	params.require(:jenkins_server).permit(:team_id)
+    params.require(:jenkins_server).permit(:team_id)
   end
 end

@@ -1,55 +1,20 @@
 class Aws::Ec2InstancesController < ApplicationController
-  before_filter :initialize_ec2_instance
+  before_filter :initialize_ec2_adapter, only: [:new, :create]
 
-  def initialize_ec2_instance(ec2 = AWS::EC2::Client.new)
+  def new
     @ec2_instance = Ec2Instance.new
-    amis = ec2.describe_images({owners: ['self']})[:images_set]
-    @ami_platforms = {}
-    @ami_options = amis.each_with_object({}) do |ami, ami_options|
-      platform = (ami[:platform] == "windows") ? "windows" : "linux"
-      ami_options["#{ami[:name]} - #{platform}"] = ami[:image_id]
-      @ami_platforms[ami[:image_id]] = platform    
-    end
-    subnets = ec2.describe_subnets()[:subnet_set]
-    @subnet_options = subnets.each_with_object({}) do |subnet, subnet_options|
-      subnet_options[subnet[:subnet_id]] = subnet[:subnet_id]
-    end
-    secgroups = ec2.describe_security_groups(
-        :filters => [ { :name =>"vpc-id",
-                        :values =>["vpc-00110011"] } ]
-      )[:security_group_info]
-    @secgroup_options = secgroups.each_with_object({}) do |secgroup, secgroup_options|
-      secgroup_options[secgroup[:group_name]] = secgroup[:group_id]
-    end
-    flavors = [
-      {id: "t1.micro"},
-      {id: "m1.small"},
-      {id: "m1.medium"},
-      {id: "m1.large"}
-    ]
-    @flavor_options = flavors.each_with_object({}) do |flavor, flavor_options|
-      flavor_options[flavor[:id]] = flavor[:id]
-    end
   end
 
   def create
-    platform = @ami_platforms[ec2_instance_params["ami"]]    
+    platform = @ec2_adapter.platform_for_ami(ec2_instance_params[:ami])
     @ec2_instance = Ec2Instance.new(
       ec2_instance_params.merge(
         {user_id: current_user.id, platform: platform}
       )
     )
     if @ec2_instance.save
-      msg = @ec2_instance.boot_message
-      msg['http_proxy'] = "http://proxy.example.com:8080"
-      msg['windows_set_admin_password'] = true
-      msg['windows_admin_password'] = "LocalAdminPassword"
-      sqs = AWS::SQS::Client.new()
-      queue_url = sqs.get_queue_url(queue_name: "pantry_wonga_aws-ec2_boot_command")[:queue_url]
-      puts "QUEUE #{queue_url}"
-      if !queue_url.nil?
-        sqs.send_message(queue_url: queue_url, message_body: msg.to_json )
-      end
+      message = Wonga::Pantry::BootMessage.new(@ec2_instance)
+      Wonga::Pantry::SQSSender.new.send_message(message)
       redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
     else
       render :action => "new"
@@ -89,6 +54,10 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def ec2_instance_params
     params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :security_group_ids, :domain, :chef_environment, :run_list, :platform)
+  end
+
+  def initialize_ec2_adapter
+    @ec2_adapter = Wonga::Pantry::Ec2Adapter.new
   end
 end
 
