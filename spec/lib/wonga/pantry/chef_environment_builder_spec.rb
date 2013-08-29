@@ -12,7 +12,7 @@ describe Wonga::Pantry::ChefEnvironmentBuilder do
     end
 
     let(:environment) { Chef::Environment.load("some-name-env") }
-    %w( authorization build_agent build_essential jenkins).each do |group|
+    %w( authorization build_agent build_essential jenkins nginx openssh).each do |group|
       it "creates new Chef environment with #{group} information" do
         expect(environment.default_attributes).to have_key(group)
       end
