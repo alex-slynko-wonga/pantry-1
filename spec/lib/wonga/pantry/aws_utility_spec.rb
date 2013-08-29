@@ -86,14 +86,14 @@ describe Wonga::Pantry::AWSUtility do
       end
     end
     
-    context "when creating a new one" do
-      it "creates a JenkinsServer" do
+    context "when creating a new Jenkins server or agent" do
+      it "creates a JenkinsServer with jenkins_linux_server role" do
         subject.jenkins_instance_params(jenkins)[:run_list].should == "role[jenkins_linux_server]"
       end
       
-      it "creates a JenkinsSlave" do
+      it "creates a JenkinsSlave with jenkins_windows_agent role" do
         subject.jenkins_instance_params(
-        FactoryGirl.create(:jenkins_slave)
+          FactoryGirl.build(:jenkins_slave)
         )[:run_list].should == "role[jenkins_windows_agent]"
       end
     end
