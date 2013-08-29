@@ -6,9 +6,13 @@ class Wonga::Pantry::ChefEnvironmentBuilder
 
   def build!
     e = Chef::Environment.new
-    e.name("#{prepared_team_name}-env")
+    e.name(chef_environment)
     e.default_attributes = attributes
     e.create
+  end
+
+  def chef_environment
+    prepared_team_name
   end
 
   private

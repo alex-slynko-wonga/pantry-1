@@ -4,5 +4,6 @@ FactoryGirl.define do
   factory :team do
     sequence(:name) { |n| "TeamName#{n}" }
     description "MyString"
+    chef_environment { name.parameterize }
   end
 end

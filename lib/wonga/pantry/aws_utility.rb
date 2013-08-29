@@ -8,11 +8,11 @@ class Wonga::Pantry::AWSUtility
       ami:                "ami-00110010",
       security_group_ids: "sg-00110012",
       platform:           "linux",
-      flavor:             "t1.micro",
-      chef_environment:   "pantry",
-      name: jenkins_instance.instance_name
+      chef_environment:   jenkins_instance.team.chef_environment,
+      name:               jenkins_instance.instance_name,
+      flavor:             "t1.micro"
     }
-    
+
     if jenkins_instance.instance_of?(JenkinsServer)
       params.merge(run_list: "role[jenkins_linux_server]")
     else
