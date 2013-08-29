@@ -31,7 +31,7 @@ describe Wonga::Pantry::ChefEnvironmentBuilder do
     end
 
     context "for team with restricted symbols in name" do
-      let(:team_name) { 'so .,+me_name?' }
+      let(:team_name) { 'some .,+_name?' }
 
       it "creates new Chef environment" do
         expect(environment).not_to be_nil
