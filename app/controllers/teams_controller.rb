@@ -8,6 +8,8 @@ class TeamsController < ApplicationController
   def create
     @team = Team.new(team_params)
     @team.users = users
+    builder = Wonga::Pantry::ChefEnvironmentBuilder.new(@team)
+    @team.chef_environment = builder.chef_environment
     if @team.save
       Wonga::Pantry::ChefEnvironmentBuilder.new(@team).build!
       redirect_to @team
