@@ -11,15 +11,14 @@ describe JenkinsServer do
   end
 
   describe "#instance_name" do
-    let(:team) { FactoryGirl.build(:team, name: 'Test ,.!@£$%^&*() test for a long team name') }
-    subject { FactoryGirl.build(:jenkins_server, team: team).instance_name }
 
-    it "escapes team name" do
-      expect(subject).to match(/\A(\w|-)*\z/)
-    end
-
-    it "is max 15 symbols" do
-      expect(subject.size).to be 15
+    it "gets instance_name from chef_environment" do
+      team = Team.new(chef_environment: 'test')
+      jenkins = JenkinsServer.new(team: team)
+      e = Chef::Environment.new
+      e.default_attributes = { 'jenkins' => { 'server' => { 'host' => 'pantry.test.example.com' } } }
+      expect(Chef::Environment).to receive(:load).with('test').and_return(e)
+      expect(jenkins.instance_name).to eq('pantry')
     end
   end
 end
