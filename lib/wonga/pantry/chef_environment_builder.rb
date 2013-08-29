@@ -1,5 +1,5 @@
 class Wonga::Pantry::ChefEnvironmentBuilder
-  def initialize(team, domain='test.example.com')
+  def initialize(team, domain='example.com')
     @team = team
     @domain = domain
   end
@@ -30,6 +30,10 @@ class Wonga::Pantry::ChefEnvironmentBuilder
         "compiletime" => true
       },
       "jenkins" => {
+        "http_proxy" => {
+          "host_name" =>"#{prepared_team_name}.#{@domain}",
+          "variant" => "nginx"
+        },
         "node" => {
           "auth_ad_domain" => "EXAMPLE",
           "auth_enabled" => true,
@@ -39,9 +43,32 @@ class Wonga::Pantry::ChefEnvironmentBuilder
         },
         "server" => {
           "host" => "#{prepared_team_name}.#{@domain}",
-          "plugins" => [ "active-directory" ],
+          "plugins" => [
+            "active-directory",
+            "ansicolor",
+            "git",
+            "git-client",
+            "github",
+            "greenballs",
+            "htmlpublisher",
+            "ldap",
+            "mailer",
+            "msbuild",
+            "parameterized-trigger",
+            "radiatorviewplugin",
+            "translation",
+            "versionnumber"
+          ],
           "port" => 8080,
           "url" => "http://#{prepared_team_name}.#{@domain}:8080"
+        }
+      },
+      "nginx" => {
+        "default_site_enabled" => false
+      },
+      "openssh" => {
+        "client" => {
+          "strict_host_key_checking" => "no"
         }
       }
     }
