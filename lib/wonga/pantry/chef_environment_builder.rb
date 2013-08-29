@@ -12,7 +12,7 @@ class Wonga::Pantry::ChefEnvironmentBuilder
   end
 
   def chef_environment
-    prepared_team_name
+    @team.name.underscore.parameterize.gsub('_', '-').gsub('--', '-')
   end
 
   private
@@ -35,7 +35,7 @@ class Wonga::Pantry::ChefEnvironmentBuilder
       },
       "jenkins" => {
         "http_proxy" => {
-          "host_name" =>"#{host_name}.#{@domain}",
+          "host_name" =>"#{@team.jenkins_host_name}.#{@domain}",
           "variant" => "nginx"
         },
         "node" => {
@@ -46,7 +46,7 @@ class Wonga::Pantry::ChefEnvironmentBuilder
           "home" => "C:\\Jenkins"
         },
         "server" => {
-          "host" => "#{host_name}.#{@domain}",
+          "host" => "#{@team.jenkins_host_name}.#{@domain}",
           "plugins" => [
             "active-directory",
             "ansicolor",
@@ -64,7 +64,7 @@ class Wonga::Pantry::ChefEnvironmentBuilder
             "versionnumber"
           ],
           "port" => 8080,
-          "url" => "http://#{host_name}.#{@domain}:8080"
+          "url" => "http://#{@team.jenkins_host_name}.#{@domain}:8080"
         }
       },
       "nginx" => {
@@ -76,14 +76,6 @@ class Wonga::Pantry::ChefEnvironmentBuilder
         }
       }
     }
-  end
-
-  def prepared_team_name
-    @prepared_name ||= @team.name.parameterize.gsub('_', '-').gsub('--', '-')
-  end
-
-  def host_name
-    prepared_team_name[0..14]
   end
 end
 

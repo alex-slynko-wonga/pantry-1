@@ -11,14 +11,10 @@ describe JenkinsServer do
   end
 
   describe "#instance_name" do
-
-    it "gets instance_name from chef_environment" do
+    it "gets instance_name from team" do
       team = Team.new(chef_environment: 'test')
       jenkins = JenkinsServer.new(team: team)
-      e = Chef::Environment.new
-      e.default_attributes = { 'jenkins' => { 'server' => { 'host' => 'pantry.test.example.com' } } }
-      expect(Chef::Environment).to receive(:load).with('test').and_return(e)
-      expect(jenkins.instance_name).to eq('pantry')
+      expect(jenkins.instance_name).to eq('test')
     end
   end
 end

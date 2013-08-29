@@ -5,7 +5,7 @@ Feature: Managing Teams
     When An agent creates a new team named "TeamName"
     Then I should be on team page
     And I should see "TeamName"
-    And new chef environment "team-name-env" should be created
+    And new chef environment "team-name" should be created
 
   Scenario: Updating existing team
     Given the "TeamName" team
