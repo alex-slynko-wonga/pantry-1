@@ -8,8 +8,7 @@ class JenkinsServer < ActiveRecord::Base
   validate :team_cannot_own_multiple_servers, on: :create
 
   def instance_name
-    @address ||= Chef::Environment.load(team.chef_environment).default_attributes['jenkins']['server']['host']
-    @address.split('.').first
+    self.team.jenkins_host_name
   end
 
   private
