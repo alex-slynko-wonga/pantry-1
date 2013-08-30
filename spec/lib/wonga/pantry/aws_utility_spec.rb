@@ -53,6 +53,22 @@ describe Wonga::Pantry::AWSUtility do
     let!(:jenkins) { JenkinsSlave.new(jenkins_server: existing_server) }
 
     include_examples 'request_instance'
+    
+    it "sets platform to 'linux" do
+      subject.jenkins_instance_params(jenkins)[:platform].should == 'windows'
+    end
+    
+    it "sets jenkins_windows_agent role" do
+      subject.jenkins_instance_params(
+        FactoryGirl.build(:jenkins_slave)
+      )[:run_list].should == "role[jenkins_windows_agent]"
+    end
+    
+    it "sets ami-00110011" do
+      subject.jenkins_instance_params(
+        FactoryGirl.build(:jenkins_slave)
+      )[:ami].should == "ami-00110011"
+    end
   end
 
   describe 'request jenkins server' do
@@ -84,27 +100,13 @@ describe Wonga::Pantry::AWSUtility do
         )
         expect(sqs_sender).to_not have_received(:send_message)
       end
-    end
-    
-    context "when creating a new Jenkins server or agent" do
-      it "creates a JenkinsServer with jenkins_linux_server role" do
+      
+      it "sets jenkins_linux_server role" do
         subject.jenkins_instance_params(jenkins)[:run_list].should == "role[jenkins_linux_server]"
       end
       
-      it "creates a JenkinsSlave with jenkins_windows_agent role" do
-        subject.jenkins_instance_params(
-          FactoryGirl.build(:jenkins_slave)
-        )[:run_list].should == "role[jenkins_windows_agent]"
-      end
-      
-      it "creates a JenkinsServer with ami-00110010" do
+      it "sets ami-00110010" do
         subject.jenkins_instance_params(jenkins)[:ami].should == "ami-00110010"
-      end
-      
-      it "creates a JenkinsSlave with ami-00110011" do
-        subject.jenkins_instance_params(
-          FactoryGirl.build(:jenkins_slave)
-        )[:ami].should == "ami-00110011"
       end
     end
   end
