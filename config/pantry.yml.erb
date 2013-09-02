@@ -8,12 +8,6 @@
     uid: <%= @config["omniauth"]["uid"] %>
     bind_dn: <%= @config["omniauth"]["bin_dn"] %>
     password: <%= @config["omniauth"]["password"] %>
+    auth_method: <%= @config["ldap"]["auth_method"] %>
   sqs:
     queue_name: <%= @config["aws"]["queue_name"] %>
-  ldap:
-    host: <%= @config["ldap"]["host"] %>
-    port: <%= @config["ldap"]["port"] %>
-    base: <%= @config["ldap"]["base"] %>
-    auth_method: <%= @config["ldap"]["auth_method"] %>
-    username: <%= @config["ldap"]["username"] %>
-    password:  <%= @config["ldap"]["password"] %>

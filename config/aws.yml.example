@@ -1,22 +1,14 @@
 # Just like the config/database.yml this file requires an entry for each environment
 # http://aws.amazon.com/security-credentials
-non_default:
-  aws_access_key_id: xxx  
-  aws_secret_access_key: yyy
-  region: eu-west-1
 test:
   access_key_id: test
   secret_access_key: your_secret_access_key
   region: eu-west-1
-default:
-  aws_access_key_id: AKIEXAMPLEACCESSKEYZ
-  aws_secret_access_key: your_secret_access_key
-  region: eu-west-1
 development:
-  access_key_id: AKIEXAMPLEACCESSKEYZ
+  access_key_id: your_access_key_id
   secret_access_key: your_secret_access_key
   region: eu-west-1
 production:
-  access_key_id: AKIEXAMPLEACCESSKEYZ
+  access_key_id: your_access_key_id
   secret_access_key: your_secret_access_key
   region: eu-west-1
