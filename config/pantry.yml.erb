@@ -1,0 +1,13 @@
+<%= @app_environment %>:
+  omniauth:
+    title: <%= @config["omniauth"]["title"] %>
+    host: <%= @config["omniauth"]["host"] %>
+    port: <%= @config["omniauth"]["port"] %>
+    method: <%= @config["omniauth"]["method"] %>
+    base: <%= @config["omniauth"]["base"] %>
+    uid: <%= @config["omniauth"]["uid"] %>
+    bind_dn: <%= @config["omniauth"]["bin_dn"] %>
+    password: <%= @config["omniauth"]["password"] %>
+    auth_method: <%= @config["ldap"]["auth_method"] %>
+  sqs:
+    queue_name: <%= @config["aws"]["queue_name"] %>
