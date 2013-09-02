@@ -1,0 +1,19 @@
+development:
+  omniauth:
+    title: "Pantry LDAP Login"
+    host: "ldap.example.com"
+    port: 3268
+    method: 'plain'
+    base: "dc=example,dc=com"
+    uid: "sAMAccountName"
+    bind_dn: "ProvisionerUsername@example.com"
+    password: "ProvisionerPassword"
+  sqs:
+    queue_name: <%= @config["aws"]["queue_name"] %>
+  ldap:
+    host: "ldap.example.com"
+    port: 3268
+    base: "dc=example,dc=com"
+    auth_method: 'simple'
+    username: "ProvisionerUsername@example.com"
+    password:  "ProvisionerPassword"
