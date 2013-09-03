@@ -12,3 +12,4 @@ Feature: Jenkins
     And I request jenkins server
     Then I should see "Pantry Team's jenkins server"
     And an instance build should start
+    
