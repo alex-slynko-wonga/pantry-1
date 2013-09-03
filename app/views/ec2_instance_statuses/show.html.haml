@@ -3,7 +3,7 @@
     Current Step:
   .span2
     .current_step
-    .progress-info.progress-striped
+    .progress-info.progress-striped{style: "background-color: red;"}
       .bar{:style => "width: #{@ec2_instance.progress}%; color: black;"}=@ec2_instance.human_status
 .row-fluid
   .span2

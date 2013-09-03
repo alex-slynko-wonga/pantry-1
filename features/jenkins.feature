@@ -13,3 +13,8 @@ Feature: Jenkins
     Then I should see "Pantry Team's jenkins server"
     And an instance build should start
 
+  Scenario: Start jenkins slave
+    Given I am in the "Pantry Team" team
+    And I request a jenkins slave and server
+    Then I should see "Pantry Team's jenkins slave"
+    And an instance build should start
