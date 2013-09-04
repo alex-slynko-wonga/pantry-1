@@ -10,17 +10,17 @@
   .span2
     Booted:
   .span2
-    .booted= display_status_image(@ec2_statuses[:booted])
+    .booted= display_status_image(@ec2_instance.booted)
 .row-fluid
   .span2
     Bootstrapped:
   .span2
-    .bootstrapped= display_status_image(@ec2_statuses[:bootstrapped])
+    .bootstrapped= display_status_image(@ec2_instance.bootstrapped)
 .row-fluid
   .span2
     Joined to Domain:
   .span2
-    .joined= display_status_image(@ec2_statuses[:joined])
+    .joined= display_status_image(@ec2_instance.joined)
 - unless @ec2_instance.human_status == 'Ready'
   :javascript 
       Ec2InstanceRequestStatusPoller.poll();

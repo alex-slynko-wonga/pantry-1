@@ -18,6 +18,6 @@ describe Ec2InstanceStatusesHelper do
 
     it "displays a spinner for a false value status" do 
       expect(helper.display_status_image(false)).to eq(image_tag("/assets/spinner.gif"))
-	end    	
+    end     
   end  
 end
