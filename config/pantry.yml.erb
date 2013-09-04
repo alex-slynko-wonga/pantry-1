@@ -8,6 +8,6 @@
     uid: <%= @config["omniauth"]["uid"] %>
     bind_dn: <%= @config["omniauth"]["bin_dn"] %>
     password: <%= @config["omniauth"]["password"] %>
-    auth_method: <%= @config["ldap"]["auth_method"] %>
+    auth_method: <%= @config["omniauth"]["auth_method"] %>
   sqs:
     queue_name: <%= @config["aws"]["queue_name"] %>
