@@ -16,8 +16,8 @@
 
 # Ignore configuration files
 /config/database.yml
-/daemons/daemon.yml
-/daemons/*/daemon.yml
+/config/pantry.yml
+/config/aws.yml
 
 # Ignore aptana project config
 /.project

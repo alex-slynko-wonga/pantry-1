@@ -8,5 +8,19 @@ development:
     uid: "sAMAccountName"
     bind_dn: "your_user@example.com"
     password: "secret_password"
-  sqs:
-    queue_name: <%= @config["aws"]["queue_name"] %>
+    auth_method: "simple"
+  aws:
+    queue_name: pantry_wonga_aws-ec2_boot_command
+test:
+  omniauth:
+    title: "Pantry LDAP Login"
+    host: "ldap.example.com"
+    port: 3268
+    method: 'plain'
+    base: "dc=example,dc=com"
+    uid: "sAMAccountName"
+    bind_dn: "your_user@example.com"
+    password: "secret_password"
+    auth_method: "simple"
+  aws:
+    queue_name: pantry_wonga_aws-ec2_boot_command
