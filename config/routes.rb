@@ -6,6 +6,8 @@ Wonga::Pantry::Application.routes.draw do
   get "aws/vpcs", as: "vpc"
   get "aws/security_groups", as: "secgroups"
 
+  resources :aws_costs, only: [:index, :show]
+
   resources :ec2_instance_statuses, only: [:show]
   resources :jenkins_servers, except: [:destroy] do
     resources :jenkins_slaves

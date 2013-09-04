@@ -11,6 +11,7 @@ development:
     auth_method: "simple"
   aws:
     queue_name: pantry_wonga_aws-ec2_boot_command
+    billing_bucket: "some-bucketname"
 test:
   omniauth:
     title: "Pantry LDAP Login"
@@ -24,3 +25,4 @@ test:
     auth_method: "simple"
   aws:
     queue_name: pantry_wonga_aws-ec2_boot_command
+    billing_bucket: "some-bucketname"
