@@ -9,6 +9,8 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), 'pantry.yml')))[Rails.env]
+
 module Wonga
   module Pantry
     class Application < Rails::Application
