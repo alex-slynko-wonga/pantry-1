@@ -28,7 +28,7 @@ class JenkinsSlavesController < ApplicationController
     }
 
     if aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
-      redirect_to jenkins_server_jenkins_slave_path(@jenkins_server, @jenkins_slave)
+      redirect_to jenkins_server_path(@jenkins_server)
     else
       @user_teams = current_user.teams
       render :new

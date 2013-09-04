@@ -11,5 +11,13 @@ require 'spec_helper'
 #   end
 # end
 describe Ec2InstanceStatusesHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "display_status_image" do 
+    it "displays a tick for a true value status" do 
+      expect(helper.display_status_image(true)).to eq(image_tag("/assets/tick.png"))
+    end
+
+    it "displays a spinner for a false value status" do 
+      expect(helper.display_status_image(false)).to eq(image_tag("/assets/spinner.gif"))
+    end     
+  end  
 end

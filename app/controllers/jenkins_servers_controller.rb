@@ -35,6 +35,7 @@ class JenkinsServersController < ApplicationController
   def show
     @jenkins_server = JenkinsServer.find(params[:id])
     @team = @jenkins_server.team
+    @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance)
     @ec2_instance = @jenkins_server.ec2_instance
   end
 
