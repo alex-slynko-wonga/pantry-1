@@ -40,4 +40,4 @@ guard 'migrate' do
   watch('db/seeds.rb')
 end
 
-ENV["SKIP_COV"] = true
+ENV["SKIP_COV"] = 'true'

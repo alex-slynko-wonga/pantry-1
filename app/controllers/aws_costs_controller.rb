@@ -1,7 +1,5 @@
 class AwsCostsController < ApplicationController
-  def s3
-    AWS::S3::Client.new
-  end
+  before_filter :check_rights
 
   def show
     key = "#{params[:id]}.#{params[:format]}"
@@ -17,5 +15,14 @@ class AwsCostsController < ApplicationController
     @csv_keys = s3.list_objects(bucket_name: CONFIG["aws"]["billing_bucket"])[:contents].map {|i|
       i[:key]
     }
+  end
+
+  private
+  def s3
+    AWS::S3::Client.new
+  end
+
+  def check_rights
+    redirect_to root_url unless current_user.email == 'jonathan.galore@example.com'
   end
 end
