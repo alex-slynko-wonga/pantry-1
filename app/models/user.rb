@@ -26,4 +26,9 @@ class User < ActiveRecord::Base
       "#{username}@example.com"
     end
   end
+
+  def have_billing_access?
+    self.email ==  'jonathan.galore@example.com' ||
+      Array(CONFIG['billing_users']).include?(self.email)
+  end
 end

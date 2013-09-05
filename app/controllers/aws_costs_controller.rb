@@ -23,6 +23,6 @@ class AwsCostsController < ApplicationController
   end
 
   def check_rights
-    redirect_to root_url unless current_user.email == 'jonathan.galore@example.com'
+    redirect_to root_url unless current_user.have_billing_access?
   end
 end
