@@ -1,4 +1,11 @@
 <%= @app_environment %>:
+  billing_users:
+<% if @config["billing_users"] %>
+  <% @config["billing_users"].each do |user| %>
+    - <%= user %>
+  <% end %>
+<% end %>
+
   omniauth:
     title: <%= @config["omniauth"]["title"] %>
     host: <%= @config["omniauth"]["host"] %>

@@ -32,7 +32,32 @@ describe User do
     context "when user hasn't entered email" do
       subject { User.new(username: user_id) }
 
-      its(:email) { should == "#{user_id}@example.com" }
+      it "should be generated from user_name" do
+       expect(subject.email).to eq("#{user_id}@example.com")
+      end
+    end
+  end
+
+  describe "#have_billing_access?" do
+    let(:user) { User.new(email: email) }
+    subject { user.have_billing_access? }
+    let(:email) { 'test@example.com' }
+
+    context "for jonathan" do
+      let(:email) { 'jonathan.galore@example.com' }
+      it { should be_true }
+    end
+
+    context "for user who allowed in config" do
+      before(:each) do
+        stub_const('CONFIG', { 'billing_users' => 'test@example.com' })
+      end
+
+      it { should be_true }
+    end
+
+    context "for any other user" do
+      it { should be_false }
     end
   end
 end

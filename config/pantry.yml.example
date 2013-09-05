@@ -1,4 +1,6 @@
 development:
+  allowed_users:
+    - 'your.email@example.com'
   omniauth:
     title: "Pantry LDAP Login"
     host: "ldap.example.com"
