@@ -63,9 +63,9 @@ class Ec2Instance < ActiveRecord::Base
     self.booted ||= false
     self.bootstrapped ||= false
     self.joined ||= false
-    self.domain       ||=  "example.com"
-    self.subnet_id    ||=  "subnet-a8dc0bc0"
-    self.instance_id  ||=  "pending"
+    self.domain       ||= CONFIG['pantry']['domain']
+    self.subnet_id    ||= "subnet-a8dc0bc0"
+    self.instance_id  ||= "pending"
   end
 
   def set_start_time
