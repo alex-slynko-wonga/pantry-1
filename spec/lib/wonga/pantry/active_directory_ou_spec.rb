@@ -7,11 +7,11 @@ describe Wonga::Pantry::ActiveDirectoryOU do
   subject { described_class.new(instance) }
 
   it "returns default ou" do
-    expect(subject.ou).to eql("OU=Computers,DC=wonga,DC=aws")
+    expect(subject.ou).to eql(CONFIG['pantry']['default_ou'])
   end
 
-  context "when team has domain test.example.com" do
-    let(:domain) { 'test.example.com' }
+  context "when team has domain test.#{CONFIG['pantry']['domain']}" do
+    let(:domain) { "test.#{CONFIG['pantry']['domain']}" }
 
     it "uses team name in ou" do
       expect(subject.ou).to include("OU=#{name},")

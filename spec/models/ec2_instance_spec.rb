@@ -7,7 +7,10 @@ describe Ec2Instance do
   context "domain" do
     let(:domain) { 'example.com' }
     before(:each) do
-      stub_const('CONFIG', { 'pantry' => { 'domain' => domain }})
+      config = Marshal.load(Marshal.dump(CONFIG))
+      config['pantry'] ||= {}
+      config['pantry']['domain'] = domain
+      stub_const('CONFIG', config)
     end
 
     it "should be invalid when is different from domain in config" do
