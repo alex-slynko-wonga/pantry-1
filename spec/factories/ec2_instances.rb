@@ -3,7 +3,6 @@
 FactoryGirl.define do
   factory :ec2_instance do
     sequence(:name) { |n| "Name#{n}" }
-    domain "example.com"
     instance_id "MyString"
     platform "Lindows"
     chef_environment "MyChefEnvironment"
