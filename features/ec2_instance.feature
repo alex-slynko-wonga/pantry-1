@@ -9,7 +9,7 @@ Feature: EC2 Instance
   @javascript
   Scenario: Creating a new instance
     Given I am in the "teamname" team
-    And I request an instance named "instanceName" on domain "example.com"
+    And I request an instance named "instanceName"
     Then I should see "instanceName"
     And I should see "Booting"
     And an instance build should start
