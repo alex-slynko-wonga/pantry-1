@@ -19,5 +19,20 @@
   aws:
     queue_name: <%= @config["aws"]["queue_name"] %>
     billing_bucket: <%= @config["aws"]["billing_bucket"] %>
+    vpc_id:  <%= @config["aws"]["vpc_id"] %>
+    security_group_windows: <%= @config["aws"]["security_group_windows"] %>
+    security_group_linux: <%= @config["aws"]["security_group_linux"] %>
+    security_group_jenkins: <%= @config["aws"]["security_group_jenkins"] %>
+    jenkins_flavor: <%= @config["aws"]["jenkins_flavor"] %>
+    key_pair_name: <%= @config["aws"]["key_pair_name"] %>
+    http_proxy: <%= @config["aws"]["http_proxy"] %>
+    windows_admin_password: <%= @config["aws"]["windows_admin_password"] %>
+    jenkins_windows_ami: <%= @config["aws"]["jenkins_windows_ami"] %>
+    jenkins_linux_ami: <%= @config["aws"]["jenkins_linux_ami"] %>
+    jenkins_linux_server_role: <%= @config["aws"]["jenkins_linux_server_role"] %>
+    jenkins_windows_agent_role: <%= @config["aws"]["jenkins_windows_agent_role"] %>
+    default_subnet: <%= @config["aws"]["default_subnet"] %>
   pantry:
-    domain: <%= @config["pantry"]["domain"] %>
+    domain: <%= @config['pantry']['domain'] %>
+    default_ou: <%= @config['pantry']['default_ou'] %>
+    api_key: <%= @config['pantry']['api_key'] %>

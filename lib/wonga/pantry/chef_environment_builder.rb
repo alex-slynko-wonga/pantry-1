@@ -1,5 +1,5 @@
 class Wonga::Pantry::ChefEnvironmentBuilder
-  def initialize(team, domain='example.com')
+  def initialize(team, domain = CONFIG['pantry']['domain'])
     @team = team
     @domain = domain
   end

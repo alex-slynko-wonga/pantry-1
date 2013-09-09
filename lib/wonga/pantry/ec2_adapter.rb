@@ -7,7 +7,7 @@ class Wonga::Pantry::Ec2Adapter
   def security_groups
     ec2.describe_security_groups(
         :filters => [ { :name =>"vpc-id",
-                        :values =>["vpc-00110011"] } ]
+                        :values => [CONFIG['aws']['vpc_id']] } ]
       )[:security_group_info].map do |group|
         [ group[:group_name], group[:group_id] ]
       end.sort

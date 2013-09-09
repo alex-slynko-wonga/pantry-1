@@ -6,10 +6,10 @@ module Wonga
       end
 
       def ou
-        if @record.domain == "test.example.com"
+        if @record.domain == "test.#{CONFIG['pantry']['domain']}"
           "OU=INT,OU=#{escape(@record.team.name)},OU=Member Servers,DC=test,DC=wonga,DC=com"
         else
-          "OU=Computers,DC=wonga,DC=aws"
+          CONFIG['pantry']['default_ou']
         end
       end
 
@@ -20,4 +20,3 @@ module Wonga
     end
   end
 end
-

@@ -5,22 +5,22 @@ class Wonga::Pantry::AWSUtility
 
   def jenkins_instance_params(jenkins_instance)
     params = {
-      security_group_ids: "sg-00110012",
-      flavor:             "t1.micro",
+      security_group_ids: CONFIG["aws"]["security_group_jenkins"],
+      flavor:             CONFIG["aws"]["flavor"],
       chef_environment:   jenkins_instance.team.chef_environment,
       name: jenkins_instance.instance_name
     }
     
     if jenkins_instance.instance_of?(JenkinsServer)
       params.merge(
-        ami: "ami-00110010",
-        run_list: "role[jenkins_linux_server]",
+        ami: CONFIG["aws"]["jenkins_linux_ami"],
+        run_list: CONFIG["aws"]["jenkins_linux_server_role"],
         platform: 'linux'
       )
     else
       params.merge(
-        ami: "ami-00110011",
-        run_list: "role[jenkins_windows_agent]",
+        ami: CONFIG["aws"]["jenkins_windows_ami"],
+        run_list: CONFIG["aws"]["jenkins_windows_agent_role"],
         platform: 'windows'
       )
     end
