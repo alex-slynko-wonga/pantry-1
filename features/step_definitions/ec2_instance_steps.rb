@@ -12,10 +12,9 @@ Given(/^AWS has information about machines$/) do
   sqs_client.stub(:send_message).and_return(AWS::Core::Response.new)
 end
 
-Given(/^I request an instance named "(.*?)" on domain "(.*?)"$/) do |name, domain|
+Given(/^I request an instance named "(.*?)"$/) do |name|
   visit '/aws/ec2_instances/new'
   fill_in "Name", with: name
-  fill_in "Domain", with: domain
   fill_in "Chef environment", with: 'chef_environment'
   fill_in "Run list", with: 'role[ted]'
   select 'image_name', from: 'Ami'
