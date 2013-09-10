@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130829083842) do
+ActiveRecord::Schema.define(:version => 20130910101409) do
+
+  create_table "bills", :force => true do |t|
+    t.date     "bill_date",                                                    :null => false
+    t.decimal  "total_cost", :precision => 10, :scale => 2,                    :null => false
+    t.boolean  "actual",                                    :default => false
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
+  end
+
+  add_index "bills", ["bill_date"], :name => "index_bills_on_bill_date", :unique => true
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0

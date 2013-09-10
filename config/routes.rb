@@ -1,4 +1,7 @@
 Wonga::Pantry::Application.routes.draw do
+  namespace :api do
+    resources :bills, only: [:create, :show]
+  end
   get "ec2_instances/index"
 
   get "aws/ec2s", as: "ec2"
@@ -13,7 +16,7 @@ Wonga::Pantry::Application.routes.draw do
     resources :jenkins_slaves
   end
 
-  namespace :aws do 
+  namespace :aws do
     resources :ec2_instances, only: [:new, :create, :show, :update]
   end
 
