@@ -53,17 +53,17 @@ describe Wonga::Pantry::AWSUtility do
     let!(:jenkins) { JenkinsSlave.new(jenkins_server: existing_server) }
 
     include_examples 'request_instance'
-    
-    it "sets platform to 'linux" do
+
+    it "sets platform to 'windows" do
       subject.jenkins_instance_params(jenkins)[:platform].should == 'windows'
     end
-    
+
     it "sets jenkins_windows_agent role" do
       subject.jenkins_instance_params(
         FactoryGirl.build(:jenkins_slave)
       )[:run_list].should == "role[jenkins_windows_agent]"
     end
-    
+
     it "sets ami-00110011" do
       subject.jenkins_instance_params(
         FactoryGirl.build(:jenkins_slave)

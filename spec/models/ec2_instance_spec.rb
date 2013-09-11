@@ -19,4 +19,9 @@ describe Ec2Instance do
       expect(subject).to have(1).error_on(:domain)
     end
   end
+
+  it "should be invalid without run_list" do
+    subject.run_list = nil
+    expect(subject).to be_invalid
+  end
 end
