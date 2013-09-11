@@ -3,6 +3,8 @@ class JenkinsServer < ActiveRecord::Base
   has_many :jenkins_slaves
   belongs_to :ec2_instance
 
+  accepts_nested_attributes_for :ec2_instance
+
   validates :team, presence: true
   validates :ec2_instance, presence: true
   validate :team_cannot_own_multiple_servers, on: :create

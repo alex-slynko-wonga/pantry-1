@@ -2,11 +2,13 @@ class JenkinsSlave < ActiveRecord::Base
   belongs_to :ec2_instance
   belongs_to :jenkins_server
   has_one :team, through: :jenkins_server
-  
+
+  accepts_nested_attributes_for :ec2_instance
+
   validates :ec2_instance, :jenkins_server, presence: true
-  
+
   before_validation :set_ec2_instance_name
-  
+
   def set_ec2_instance_name
     ec2_instance.name = instance_name if ec2_instance
   end
