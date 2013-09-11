@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :jenkins_server do
     team
-    ec2_instance
+    ec2_instance { FactoryGirl.build(:ec2_instance, team: team) }
 
     trait :bootstrapped do
       association :ec2_instance, :bootstrapped
