@@ -12,7 +12,21 @@ class Wonga::Pantry::ChefEnvironmentBuilder
   end
 
   def chef_environment
-    @team.name.underscore.parameterize.gsub('_', '-').gsub('--', '-')
+    environments = Chef::Environment.list.keys
+    team_name = @team.name.underscore.parameterize.gsub('_', '-').gsub('--', '-')
+    if !environments.include?(team_name)
+      team_name
+    else
+      first_env(environments, team_name)
+    end
+  end
+
+  def first_env(envs, team, i=1)
+    if !envs.include? "#{team}-#{i}"
+      "#{team}-#{i}"
+    else
+      first_env(envs, team, i+1)
+    end
   end
 
   private
