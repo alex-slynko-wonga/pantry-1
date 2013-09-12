@@ -55,9 +55,20 @@ end
 
 Given(/^the team has a Jenkins server$/) do
   @team.should be_true
-  @jenkins_server = FactoryGirl.create(:jenkins_server, team: @team)
+  @jenkins_server = FactoryGirl.create(:jenkins_server,
+                                       team: @team,
+                                       ec2_instance: FactoryGirl.create(:ec2_instance, bootstrapped: true)
+  )
 end
 
 Then(/^I should see the Jenkins server name$/) do
   page.should have_content @jenkins_server.ec2_instance.name
+end
+
+Then(/^I click the server link$/) do
+  click_on @jenkins_server.ec2_instance.name
+end
+
+Then(/^I should see the url of the Jenkins server$/) do
+  page.should have_selector("a[href='http://#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}']")
 end
