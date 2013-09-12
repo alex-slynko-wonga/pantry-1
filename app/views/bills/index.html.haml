@@ -1,0 +1,13 @@
+%h1 Bills
+%table.table
+  %thead
+    %tr
+      %th Month
+      %th Total cost
+  - @bills.each do |bill|
+    %tr
+      %td
+        = I18n.t('date.month_names')[bill.bill_date.month]
+        = bill.bill_date.year
+      %td= number_to_currency(bill.total_cost)
+
