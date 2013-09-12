@@ -1,6 +1,6 @@
 class LdapResource
   def find_user_by_name(name)
-    find(Net::LDAP::Filter.eq('sAMAccountName', name))
+    find(Net::LDAP::Filter.eq('sAMAccountName', name) | Net::LDAP::Filter.eq('DisplayName', name))
   end
 
   def find_user_by_display_name(display_name)
