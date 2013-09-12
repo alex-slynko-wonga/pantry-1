@@ -12,6 +12,10 @@
   .span2
     Platform:
   .span3= @ec2_instance.platform
+.row-fluid
+  .span2
+    URL:
+  .span3= link_to_instance(@ec2_instance)
 
 = render partial: 'shared/ec2_instance', locals: {ec2_instance: @ec2_instance}
 
