@@ -11,8 +11,8 @@ $ ->
           replace(/%%name%%/g, ui.item.label).
           replace('%%username%%', ui.item.value)
         document.getElementById('users').innerHTML += template
-        document.getElementById('users_list').value += ui.item.label + '\n'
-      true
+        @value = ""
+        false
 
   $("i.icon-remove").on "click", (event) ->
     event.preventDefault()
