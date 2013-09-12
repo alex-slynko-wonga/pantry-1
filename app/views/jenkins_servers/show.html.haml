@@ -21,6 +21,10 @@
 
 %h2= "#{@team.name}'s jenkins slaves"
 
-%h4= link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
+- if @ec2_instance.bootstrapped?
+  %h4= link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
+- else
+  %h4
+    You will be able to create slaves after Jenkins Server is loaded
 
 = render partial: 'shared/jenkins_index', locals: { jenkins_instances: @jenkins_slaves, jenkins_server: @jenkins_server }

@@ -10,7 +10,7 @@ class Wonga::Pantry::AWSUtility
       chef_environment:   jenkins_instance.team.chef_environment,
       name: jenkins_instance.instance_name
     }
-    
+
     if jenkins_instance.instance_of?(JenkinsServer)
       params.merge(
         ami: CONFIG["aws"]["jenkins_linux_ami"],

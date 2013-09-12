@@ -38,5 +38,6 @@ class JenkinsSlavesController < ApplicationController
   private
   def load_objects
     @jenkins_server = JenkinsServer.find(params[:jenkins_server_id])
+    redirect_to @jenkins_server and return unless @jenkins_server.ec2_instance.bootstrapped?
   end
 end
