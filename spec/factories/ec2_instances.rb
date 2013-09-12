@@ -2,6 +2,12 @@
 
 FactoryGirl.define do
   factory :ec2_instance do
+    trait :bootstrapped do
+      bootstrapped true
+      booted true
+      joined true
+    end
+
     sequence(:name) { |n| "Name#{n}" }
     domain CONFIG['pantry']['domain']
     instance_id "MyString"
