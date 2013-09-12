@@ -1,4 +1,6 @@
 Wonga::Pantry::Application.routes.draw do
+  resources :bills, only: [:index]
+
   namespace :api do
     resources :bills, only: [:create, :show]
   end
