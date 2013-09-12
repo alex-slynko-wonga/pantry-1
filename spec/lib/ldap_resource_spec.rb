@@ -27,8 +27,11 @@ describe LdapResource do
   end
 
   context "#find_user_by_name" do
+    let(:or_filter) { double(:| => filter) }
+
     before(:each) do
-      expect(Net::LDAP::Filter).to receive(:eq).with('sAMAccountName', username).and_return(filter)
+      expect(Net::LDAP::Filter).to receive(:eq).with('sAMAccountName', username).and_return(or_filter)
+      expect(Net::LDAP::Filter).to receive(:eq).with('DisplayName', username).and_return(filter)
     end
 
     it "searches using Net::LDAP" do
