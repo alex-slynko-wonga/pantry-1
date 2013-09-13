@@ -21,6 +21,7 @@ gem 'rabl'
 gem 'simple_form'
 
 group :development do
+  gem 'quiet_assets'
   gem 'guard-bundler'
   gem 'guard-cucumber'
   gem 'guard-migrate'
