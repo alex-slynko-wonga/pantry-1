@@ -12,7 +12,7 @@
 
   = f.input :subnet_id, collection: @ec2_adapter.subnets
 
-  = f.input :security_group_ids, collection: @ec2_adapter.security_groups
+  = f.input :security_group_ids, collection: @ec2_adapter.security_groups, as: 'check_boxes'
 
   - if current_user.teams.size == 1
     = f.hidden_field :team_id, value: current_user.teams.first.id
