@@ -19,6 +19,7 @@
     ebs:
     <% @config['aws']['flavors'].each do |flavor| %>
       '<%= flavor['name'] %>': <%= flavor['size'] %>
+    <% end %>
   billing_users:
 <% if @config["billing_users"] %>
   <% @config["billing_users"].each do |user| %>
