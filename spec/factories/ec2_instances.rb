@@ -17,5 +17,7 @@ FactoryGirl.define do
     ami "i-111111"
     team
     user
+    volume_size 10
+    flavor 't1.micro'
   end
 end

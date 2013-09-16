@@ -16,6 +16,9 @@
     security_group_windows: <%= @config["aws"]["security_group_windows"] %>
     vpc_id:  <%= @config["aws"]["vpc_id"] %>
     windows_admin_password: <%= @config["aws"]["windows_admin_password"] %>
+    ebs:
+    <% @config['aws']['flavors'].each do |flavor| %>
+      '<%= flavor['name'] %>': <%= flavor['size'] %>
   billing_users:
 <% if @config["billing_users"] %>
   <% @config["billing_users"].each do |user| %>
