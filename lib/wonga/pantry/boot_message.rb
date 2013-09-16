@@ -28,13 +28,6 @@ class Wonga::Pantry::BootMessage
   private
   def security_group_ids
     security_groups = Array(@instance.security_group_ids)
-
-    if @instance.platform == 'windows'
-      security_groups << CONFIG['aws']['security_group_windows']
-    else
-      security_groups << CONFIG['aws']['security_group_linux']
-    end
-
     security_groups.uniq
   end
 

@@ -13,7 +13,7 @@ describe Aws::Ec2InstancesController do
                                               name: 'InstanceName',
                                               team_id: team.id,
                                               user_id: user.id
-                                             )} 
+                                             )}
   }
 
   describe "#new" do
@@ -24,7 +24,7 @@ describe Aws::Ec2InstancesController do
   end
 
   describe "POST 'create'" do
-    let (:ec2_instance) { Ec2Instance.last }
+    let(:ec2_instance) { Ec2Instance.last }
     let(:sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
     let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', platform_for_ami: 'Lindows') }
 

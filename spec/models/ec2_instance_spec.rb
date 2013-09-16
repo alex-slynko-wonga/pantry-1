@@ -24,4 +24,9 @@ describe Ec2Instance do
     subject.run_list = nil
     expect(subject).to be_invalid
   end
+
+  it "should be invalid with 6 security_group_ids" do
+    subject.security_group_ids = ["sg-00000001","sg-00000002","sg-00000003","sg-00000004","sg-00000005","sg-00000006"]
+    expect(subject).to be_invalid
+  end
 end
