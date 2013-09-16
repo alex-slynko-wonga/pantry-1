@@ -17,3 +17,9 @@ Feature: EC2 Instance
     When an instance is created
     And I am still on instance page
     Then I should see "Ready"
+
+  @javascript
+  Scenario: Cannot select more than four security groups
+    Given I visit "ec2 instance" new page
+    When I select four security groups
+    Then I should not be able to add a fifth security group

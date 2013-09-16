@@ -10,6 +10,7 @@ class Ec2Instance < ActiveRecord::Base
   validates :chef_environment, :presence => true
   validates :run_list, :presence => true, :chef_run_list_format => true
   validates :ami, presence: true
+  serialize :security_group_ids
 
   after_initialize :init, on: :create
   before_create :set_start_time
