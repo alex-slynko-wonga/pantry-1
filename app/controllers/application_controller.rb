@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in_user
-    #session[:user_id] = User.first.id and return
     #THIS IS A HAAAACK!!!!!
     #Due to time limits we are using a hard coded API Tocken
     #TD-966 was added to the backlog to redress this woeful wrong
