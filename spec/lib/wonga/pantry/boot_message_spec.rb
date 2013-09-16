@@ -21,6 +21,12 @@ describe Wonga::Pantry::BootMessage do
       instance.platform = 'windows'
       expect(subject.boot_message[:security_group_ids]).to include('sg-00110011')
     end
+
+    it "sets block device mappings" do
+      instance.volume_size = 1000
+      mapping = subject.boot_message[:block_device_mappings].first
+      expect(mapping[:ebs][:volume_size]).to eq(1000)
+    end
   end
 end
 

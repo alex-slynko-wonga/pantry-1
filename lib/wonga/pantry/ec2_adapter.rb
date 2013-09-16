@@ -18,12 +18,7 @@ class Wonga::Pantry::Ec2Adapter
   end
 
   def flavors
-    %w(
-      t1.micro
-      m1.small
-      m1.medium
-      m1.large
-    )
+    CONFIG['aws']['ebs'].keys
   end
 
    def amis

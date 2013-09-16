@@ -11,9 +11,12 @@ class Ec2Instance < ActiveRecord::Base
   validates :run_list, :presence => true, :chef_run_list_format => true
   validates :ami, presence: true
   serialize :security_group_ids
+  validates :volume_size, presence: true
+  validates :flavor, presence: true
 
   after_initialize :init, on: :create
   before_create :set_start_time
+  before_validation :set_volume_size, on: :create
 
   def exists!(instance_id)
     self.instance_id = instance_id
@@ -71,5 +74,9 @@ class Ec2Instance < ActiveRecord::Base
 
   def set_start_time
     self.start_time = Time.current
+  end
+
+  def set_volume_size
+    self.volume_size ||= CONFIG['aws']['ebs'][flavor]
   end
 end

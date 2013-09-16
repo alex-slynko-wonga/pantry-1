@@ -26,6 +26,11 @@ development:
     jenkins_linux_server_role: "role[jenkins_linux_server]"
     jenkins_windows_agent_role: "role[jenkins_windows_agent]"
     default_subnet: "subnet-00110011"
+    ebs:
+      't1.micro': 80
+      'm1.small': 160
+      'm1.medium': 410
+      'm1.large': 840
   pantry:
     domain: "example.com"
     default_ou: "OU=Computers,DC=wonga,DC=aws"
@@ -59,6 +64,11 @@ test:
     jenkins_linux_server_role: "role[jenkins_linux_server]"
     jenkins_windows_agent_role: "role[jenkins_windows_agent]"
     default_subnet: "subnet-00110011"
+    ebs:
+      't1.micro': 80
+      'm1.small': 160
+      'm1.medium': 410
+      'm1.large': 840
   pantry:
     domain: "example.com"
     default_ou: "OU=Computers,DC=wonga,DC=aws"
