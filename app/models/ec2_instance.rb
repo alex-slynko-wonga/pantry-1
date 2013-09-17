@@ -16,8 +16,13 @@ class Ec2Instance < ActiveRecord::Base
 
   before_validation :set_platform_security_group_id
   after_initialize :init, on: :create
+  before_validation :check_security_group_ids
   before_create :set_start_time
   before_validation :set_volume_size, on: :create
+
+  def check_security_group_ids
+    self.security_group_ids.reject! { |i| i.empty? } if self.security_group_ids
+  end
 
   def exists!(instance_id)
     self.instance_id = instance_id

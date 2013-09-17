@@ -12,6 +12,7 @@ class Aws::Ec2InstancesController < ApplicationController
         {user_id: current_user.id, platform: platform}
       )
     )
+    
     if @ec2_instance.save
       message = Wonga::Pantry::BootMessage.new(@ec2_instance)
       Wonga::Pantry::SQSSender.new.send_message(message)
