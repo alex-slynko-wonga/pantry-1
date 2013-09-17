@@ -15,18 +15,6 @@ describe Wonga::Pantry::BootMessage do
       Wonga::Pantry::ActiveDirectoryOU.stub_chain(:new, :ou).and_return('test')
       expect(subject.boot_message[:ou]).to eq('test')
     end
-
-    it "adds default group" do
-      expect(subject.boot_message[:security_group_ids]).to include('sg-00110010')
-      instance.platform = 'windows'
-      expect(subject.boot_message[:security_group_ids]).to include('sg-00110011')
-    end
-
-    it "sets block device mappings" do
-      instance.volume_size = 1000
-      mapping = subject.boot_message[:block_device_mappings].first
-      expect(mapping[:ebs][:volume_size]).to eq(1000)
-    end
   end
 end
 

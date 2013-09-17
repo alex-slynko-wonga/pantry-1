@@ -1,7 +1,6 @@
 class Ec2Instance < ActiveRecord::Base
   belongs_to :team
   belongs_to :user
-  has_one :jenkins_slave
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 15 }
   validates :team_id, presence: true
@@ -10,10 +9,12 @@ class Ec2Instance < ActiveRecord::Base
   validates :chef_environment, :presence => true
   validates :run_list, :presence => true, :chef_run_list_format => true
   validates :ami, presence: true
-  serialize :security_group_ids
   validates :volume_size, presence: true
   validates :flavor, presence: true
+  validates :security_group_ids, :presence => true, :security_group_ids_limit => true
+  serialize :security_group_ids
 
+  before_validation :set_platform_security_group_id
   after_initialize :init, on: :create
   before_create :set_start_time
   before_validation :set_volume_size, on: :create
@@ -78,5 +79,15 @@ class Ec2Instance < ActiveRecord::Base
 
   def set_volume_size
     self.volume_size ||= CONFIG['aws']['ebs'][flavor]
+  end
+
+  def set_platform_security_group_id
+    self.security_group_ids = Array(self.security_group_ids)
+    if self.platform == 'windows'
+      self.security_group_ids << CONFIG['aws']['security_group_windows']
+    else
+      self.security_group_ids << CONFIG['aws']['security_group_linux']
+    end
+    self.security_group_ids.uniq!
   end
 end

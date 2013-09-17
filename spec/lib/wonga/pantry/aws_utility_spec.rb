@@ -54,7 +54,7 @@ describe Wonga::Pantry::AWSUtility do
 
     include_examples 'request_instance'
 
-    it "sets platform to 'windows" do
+    it "sets platform to 'windows'" do
       subject.jenkins_instance_params(jenkins)[:platform].should == 'windows'
     end
 
@@ -71,7 +71,7 @@ describe Wonga::Pantry::AWSUtility do
     end
   end
 
-  describe 'request jenkins server' do
+  describe "request jenkins server" do
     let(:jenkins) { JenkinsServer.new(team: team) }
     include_examples 'request_instance'
 
