@@ -12,7 +12,7 @@
     - jenkins_instances.each do |jenkins_instance|
       %tr
         %td= link_to jenkins_instance.id, [jenkins_server, jenkins_instance]
-        %td= jenkins_instance.ec2_instance.id
+        %td= jenkins_instance.ec2_instance.instance_id
         %td= jenkins_instance.ec2_instance.name
         %td= jenkins_instance.ec2_instance.ami
         %td= jenkins_instance.ec2_instance.security_group_ids
