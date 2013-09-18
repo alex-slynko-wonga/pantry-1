@@ -1,9 +1,13 @@
 Wonga::Pantry::Application.routes.draw do
+
   resources :bills, only: [:index]
 
   namespace :api do
     resources :bills, only: [:create, :show]
   end
+  
+  post '/api/teams/:team_id/chef_environments', :to => 'api/teams/chef_environments#create'
+
   get "ec2_instances/index"
 
   get "aws/ec2s", as: "ec2"
