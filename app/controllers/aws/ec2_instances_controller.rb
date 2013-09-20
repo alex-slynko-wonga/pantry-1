@@ -14,7 +14,7 @@ class Aws::Ec2InstancesController < ApplicationController
     )
     
     if @ec2_instance.save
-      message = Wonga::Pantry::BootMessage.new(@ec2_instance)
+      message = Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message
       Wonga::Pantry::SQSSender.new.send_message(message)
       redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
     else
