@@ -27,6 +27,7 @@ group :development do
   gem 'guard-migrate'
   gem 'guard-rspec'
   gem 'thin'
+  gem 'bundler-audit'
 end
 
 group :test, :development do
