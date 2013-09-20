@@ -14,7 +14,7 @@ Given(/^AWS has information about machines$/) do
   amis[:images_set] = [ { name: 'image_name', image_id: 'i-121111' } ]
   sqs_client = AWS::SQS.new.client
   resp = sqs_client.stub_for(:get_queue_url)
-  resp[:queue_url] = "http://some_url.example.com"
+  resp[:queue_url] = "https://sqs.eu.amazonaws.com/1337/fakequeue"
   sqs_client.stub(:send_message).and_return(AWS::Core::Response.new)
 end
 

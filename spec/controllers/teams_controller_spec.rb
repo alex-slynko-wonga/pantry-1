@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe TeamsController do
-  let (:team) { FactoryGirl.create(:team) }
+  let(:sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
+  let(:team) { FactoryGirl.create(:team) }
   let(:team_params) { {team: FactoryGirl.attributes_for(:team, name: 'TeamName', description: 'TeamDescription')} }
   let(:user_params) { { users: [username, "Test User"] } }
   let(:username) { 'test.user' }
@@ -9,8 +10,8 @@ describe TeamsController do
   describe "POST 'create'" do
     let(:team) { Team.last }
 
-    before(:each) do
-      Wonga::Pantry::ChefEnvironmentBuilder.any_instance.stub(:build!)
+    before :each do 
+      Wonga::Pantry::SQSSender.stub(:new).and_return(sender)
     end
 
     it "returns http success" do
@@ -37,10 +38,9 @@ describe TeamsController do
       expect(team.users.first).to eq(user)
     end
 
-    it "creates chef environment using special lib" do
-      expect_any_instance_of(Wonga::Pantry::ChefEnvironmentBuilder).to receive(:build!)
+    it "sends SQS message to chef env create daemon" do
       post :create, team_params
-      expect(team.chef_environment).to be_present
+      expect(sender).to have_received(:send_message)      
     end
   end
 

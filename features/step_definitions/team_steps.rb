@@ -1,4 +1,7 @@
 When(/^An agent creates a new team named "(.*?)"$/) do |name|
+  sqs_client = AWS::SQS.new.client
+  resp = sqs_client.stub_for(:get_queue_url)
+  resp[:queue_url] = "https://sqs.eu.amazonaws.com/1337/fakequeue"  
   click_on 'New Team'
   fill_in('team_name', :with => name)
   fill_in('team_description', :with => "TeamDescription")
