@@ -10,11 +10,4 @@ class Team < ActiveRecord::Base
   def jenkins_host_name
     self.chef_environment[0...63]
   end
-
-  def create_environment_message(team)
-    {
-      team_name:          team.name,
-      domain:             domain = CONFIG['pantry']['domain'],
-    }
-  end
 end

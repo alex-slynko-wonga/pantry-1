@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe TeamsController do
-  let(:sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
+  let(:chef_utility) { instance_double('Wonga::Pantry::ChefUtility').as_null_object }
   let(:team) { FactoryGirl.create(:team) }
   let(:team_params) { {team: FactoryGirl.attributes_for(:team, name: 'TeamName', description: 'TeamDescription')} }
   let(:user_params) { { users: [username, "Test User"] } }
@@ -11,7 +11,7 @@ describe TeamsController do
     let(:team) { Team.last }
 
     before :each do 
-      Wonga::Pantry::SQSSender.stub(:new).and_return(sender)
+      Wonga::Pantry::ChefUtility.stub(:new).and_return(chef_utility)
     end
 
     it "returns http success" do
@@ -40,7 +40,7 @@ describe TeamsController do
 
     it "sends SQS message to chef env create daemon" do
       post :create, team_params
-      expect(sender).to have_received(:send_message)      
+      expect(chef_utility).to have_received(:request_chef_environment)      
     end
   end
 
