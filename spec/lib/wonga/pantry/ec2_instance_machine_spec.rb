@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Wonga::Pantry::Ec2InstanceMachine do
-  let(:ec2_instance) { FactoryGirl.build(:ec2_instance) }
+  let(:ec2_instance) { FactoryGirl.build_stubbed(:ec2_instance) }
 
   subject { described_class.new(ec2_instance) }
 

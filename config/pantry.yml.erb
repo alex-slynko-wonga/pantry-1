@@ -28,12 +28,6 @@
     <% @config['aws']['flavors'].each do |flavor| %>
       '<%= flavor['name'] %>': <%= flavor['size'] %>
     <% end %>
-  billing_users:
-<% if @config["billing_users"] %>
-  <% @config["billing_users"].each do |user| %>
-    - <%= user %>
-  <% end %>
-<% end %>
   omniauth:
     auth_method: <%= @config["omniauth"]["auth_method"] %>
     base: <%= @config["omniauth"]["base"] %>
@@ -45,6 +39,24 @@
     title: <%= @config["omniauth"]["title"] %>
     uid: <%= @config["omniauth"]["uid"] %>
     ldap_group: <%= @config["omniauth"]["ldap_group"] %>
+  mailer:
+    host: <%= @config["pantry"]["pantry_url"] || @pantry_url %>
+    delivery_method: <%= @config["mailer"]["delivery_method"] %>
+    default_options:
+      from: <%= @config["mailer"]["from"] %>
+      reply_to: <%= @config["mailer"]["reply_to"] %>
+      bcc: <%= @config["mailer"]["bcc"] %>
+<% if @config["mailer"]["smtp_options"] %>
+    smtp_settings:
+      address: <%= @config["mailer"]["smtp_options"]["address"] %>
+      enable_starttls_auto: <%= @config["mailer"]["smtp_options"]["enable_starttls_auto"] %>
+      port: <%= @config["mailer"]["smtp_options"]["port"] %>
+      domain: <%= @config["mailer"]["smtp_options"]["domain"] %>
+      user_name: <%= @config["mailer"]["smtp_options"]["user_name"] %>
+      password: <%= @config["mailer"]["smtp_options"]["password"] %>
+      authentication: <%= @config["mailer"]["smtp_options"]["authentication"] %>
+<% end %>
+
   pantry:
     api_key: <%= @config['pantry']['api_key'] %>
     default_ou: <%= @config['pantry']['default_ou'] %>

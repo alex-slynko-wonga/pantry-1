@@ -20,6 +20,7 @@ Feature: EC2 Instance
     Then I should see "Ready" after page is updated
     And I should see "123.456.7.8"
     And I should see "INT"
+    And I should receive email
 
     When I check my profile page
     Then I should see machine info

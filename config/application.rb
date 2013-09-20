@@ -56,6 +56,8 @@ module Wonga
         config.middleware.insert_before 0, Rack::SSL, :exclude => proc { |env| !env['REQUEST_URI']['/auth/ldap'] }
       end
 
+      config.action_mailer.default_url_options = { host: CONFIG["mailer"]["host"] }
+      config.action_mailer.default_options = CONFIG["mailer"]["default_options"].symbolize_keys if CONFIG["mailer"] && CONFIG["mailer"]["default_options"]
       # Configure logger if attributes present
       if CONFIG['pantry']['log']
         case CONFIG['pantry']['log']['logger']
