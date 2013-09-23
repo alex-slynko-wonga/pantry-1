@@ -14,8 +14,8 @@ class JenkinsServersController < ApplicationController
   end
 
   def new
-    @user_teams = current_user.teams
     @jenkins_server = JenkinsServer.new
+    load_servers
   end
 
   def create
@@ -27,7 +27,7 @@ class JenkinsServersController < ApplicationController
     if aws_utility.request_jenkins_instance(attributes, @jenkins_server)
       redirect_to @jenkins_server
     else
-      @user_teams = current_user.teams
+      load_servers
       render :new
     end
   end
@@ -43,5 +43,10 @@ class JenkinsServersController < ApplicationController
 
   def jenkins_attributes
     params.require(:jenkins_server).permit(:team_id)
+  end
+
+  def load_servers
+    @user_teams = current_user.teams.with_environment.without_jenkins
+    redirect_to jenkins_servers_path and return if @user_teams.empty?
   end
 end

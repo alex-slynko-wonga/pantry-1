@@ -17,9 +17,7 @@
     URL:
   .span3= link_to_instance(@ec2_instance)
 
-= render partial: 'shared/ec2_instance', locals: {ec2_instance: @ec2_instance}
-
-%h2= "#{@team.name}'s jenkins slaves"
+= render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
 - if @ec2_instance.bootstrapped?
   %h4= link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
@@ -27,4 +25,4 @@
   %h4
     You will be able to create slaves after Jenkins Server is loaded
 
-= render partial: 'shared/jenkins_index', locals: { jenkins_instances: @jenkins_slaves, jenkins_server: @jenkins_server }
+= render 'shared/jenkins_index', jenkins_instances: @jenkins_slaves, jenkins_server: @jenkins_server

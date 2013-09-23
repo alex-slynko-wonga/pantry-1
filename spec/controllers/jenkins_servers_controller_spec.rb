@@ -27,6 +27,15 @@ describe JenkinsServersController do
       get 'new'
       response.should be_success
     end
+
+    describe "when user has no teams without jenkins server" do
+      let(:user) { FactoryGirl.create(:user) }
+
+      it "redirects to index page" do
+        get 'new'
+        expect(response).to be_redirect
+      end
+    end
   end
 
   describe "POST 'create'" do
