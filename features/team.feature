@@ -2,10 +2,11 @@ Feature: Managing Teams
   @chef-zero
   Scenario: Adding a new Team
     Given I am on the teams page
+    And AWS has information about machines
     When An agent creates a new team named "TeamName"
     Then I should be on team page
     And I should see "TeamName"
-    And new chef environment "team-name" should be created
+    And a new chef environment should be requested
 
   Scenario: Updating existing team
     Given the "TeamName" team

@@ -5,7 +5,7 @@ class Team < ActiveRecord::Base
   has_one :jenkins_server
 
   validates :name, presence: true, uniqueness: true
-  validates :chef_environment, uniqueness: true
+  validates :chef_environment, uniqueness: true, if: 'chef_environment'
 
   def jenkins_host_name
     self.chef_environment[0...63]
