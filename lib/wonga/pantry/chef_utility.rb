@@ -10,7 +10,7 @@ class Wonga::Pantry::ChefUtility
   def create_environment_message(team)
     {
       team_name:          team.name,
-      domain:             domain = CONFIG['pantry']['domain'],
+      domain:             CONFIG['pantry']['domain'],
     }
   end
 end
