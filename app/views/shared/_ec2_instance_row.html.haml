@@ -1,0 +1,5 @@
+%tr
+  %td= ec2_instance_row.id
+  %td= link_to ec2_instance_row.name, url_for([:aws, ec2_instance_row])
+  %td= ec2_instance_row.human_status
+  %td= os_image(ec2_instance_row.platform)

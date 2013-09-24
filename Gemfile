@@ -32,6 +32,7 @@ end
 
 group :test, :development do
   # gem 'selenium-webdriver' # uncomment if you want to use @selenium in you cucmber tests
+  gem 'launchy'
   gem 'brakeman', :require => false
   gem 'capybara-webkit'
   gem 'chef-zero'
