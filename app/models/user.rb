@@ -21,9 +21,9 @@ class User < ActiveRecord::Base
 
   def email
     if attributes['email']
-      attributes['email']
+      attributes['email'].downcase
     elsif username
-      "#{username}@example.com"
+      "#{username}@example.com".downcase
     end
   end
 

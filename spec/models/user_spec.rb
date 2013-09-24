@@ -36,6 +36,10 @@ describe User do
        expect(subject.email).to eq("#{user_id}@example.com")
       end
     end
+
+    it "returns lowercase email" do
+      expect(User.new(email: 'Test@example.com').email).to eq('test@example.com')
+    end
   end
 
   describe "#have_billing_access?" do
