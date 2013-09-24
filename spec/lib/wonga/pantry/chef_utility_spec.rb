@@ -13,7 +13,7 @@ describe Wonga::Pantry::ChefUtility do
       team.id = 42
       sqs_sender.stub(:send_message) do |message|
         expect(message[:team_name]).to eq(team.name)
-        expect(message[:id]).to eq(42)
+        expect(message[:team_id]).to eq(42)
         expect(message).to have_key(:domain)
       end
       subject.request_chef_environment(team)
