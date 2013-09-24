@@ -17,7 +17,7 @@ FactoryGirl.define do
     security_group_ids ["sg-00000001","sg-00000002"]
     ami "i-111111"
     team
-    user
+    user { FactoryGirl.build(:user, team: team) }
     volume_size 10
     flavor 't1.micro'
   end

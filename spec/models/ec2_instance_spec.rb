@@ -29,4 +29,12 @@ describe Ec2Instance do
     subject.security_group_ids = ["sg-00000001","sg-00000002","sg-00000003","sg-00000004","sg-00000005","sg-00000006"]
     expect(subject).to be_invalid
   end
+  
+  it "raises a validation error if the user does not belogs to the current team" do
+    user = FactoryGirl.create(:user)
+    team = FactoryGirl.create(:team)
+    instance = FactoryGirl.build(:ec2_instance, user: user, team: FactoryGirl.create(:team))
+    team.should_not == instance.team
+    expect {instance.save!}.to raise_error(ActiveRecord::RecordInvalid)
+  end
 end

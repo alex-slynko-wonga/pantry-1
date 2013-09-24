@@ -38,7 +38,7 @@ end
 describe Wonga::Pantry::AWSUtility do
   subject { described_class.new(sqs_sender) }
   let(:team) { FactoryGirl.create(:team) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.create(:user, team: team) }
   let(:existing_server) { FactoryGirl.create(:jenkins_server) }
   let(:sqs_sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
 

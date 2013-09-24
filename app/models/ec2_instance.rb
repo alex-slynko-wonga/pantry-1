@@ -3,8 +3,8 @@ class Ec2Instance < ActiveRecord::Base
   belongs_to :user
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 15 }
-  validates :team_id, presence: true
-  validates :user_id, presence: true
+  validates :team, presence: true
+  validates :user, presence: true
   validates :domain, :presence => true, :domain_name => true
   validates :chef_environment, :presence => true
   validates :run_list, :presence => true, :chef_run_list_format => true
@@ -12,6 +12,8 @@ class Ec2Instance < ActiveRecord::Base
   validates :volume_size, presence: true
   validates :flavor, presence: true
   validates :security_group_ids, :presence => true, :security_group_ids_limit => true
+  validate  :check_user_team
+  
   serialize :security_group_ids
 
   before_validation :set_platform_security_group_id
@@ -19,6 +21,10 @@ class Ec2Instance < ActiveRecord::Base
   before_validation :check_security_group_ids
   before_create :set_start_time
   before_validation :set_volume_size, on: :create
+  
+  def check_user_team
+    errors.add(:team_id, "Current user is not in this team.") unless self.user.teams.include?(self.team)
+  end
 
   def check_security_group_ids
     self.security_group_ids.reject! { |i| i.empty? } if self.security_group_ids
