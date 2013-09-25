@@ -30,7 +30,7 @@ group :development do
   gem 'bundler-audit'
 end
 
-group :test, :development do
+group :test do
   # gem 'selenium-webdriver' # uncomment if you want to use @selenium in you cucmber tests
   gem 'launchy'
   gem 'brakeman', :require => false
@@ -38,12 +38,16 @@ group :test, :development do
   gem 'chef-zero'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
-  gem 'pry-debugger'
-  gem 'pry-rails'
   gem 'rspec-fire'
-  gem 'rspec-rails'
   gem 'simplecov', require: false
   gem 'simplecov-rcov', require: false
   gem 'timecop'
+  gem "therubyracer", require: 'v8'
+end
+
+group :test, :development do
+  gem 'factory_girl_rails'
+  gem 'pry-debugger'
+  gem 'pry-rails'
+  gem 'rspec-rails'
 end
