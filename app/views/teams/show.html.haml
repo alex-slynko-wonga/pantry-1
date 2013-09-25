@@ -14,7 +14,7 @@
           - @team.users.each_with_index do |user|
             %tr
               %td
-                %img{src: current_user.image_url(25), alt: 'Gravatar'}
+                %img{src: user.image_url(25), alt: 'Gravatar'}
               %td= link_to user.username, user_url(user.id)
               %td= user.name
 .row-fluid
