@@ -7,5 +7,6 @@ When(/^I click (?:on )?"(.*?)"$/) do |text|
 end
 
 When(/^click on remove cross$/) do
+  first('i.icon-remove').click
   find('i.icon-remove').click
 end

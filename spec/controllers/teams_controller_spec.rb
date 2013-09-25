@@ -3,6 +3,7 @@ require 'spec_helper'
 describe TeamsController do
   let(:chef_utility) { instance_double('Wonga::Pantry::ChefUtility').as_null_object }
   let(:team) { FactoryGirl.create(:team) }
+  let(:user) { FactoryGirl.create(:user, team: team) }
   let(:team_params) { {team: FactoryGirl.attributes_for(:team, name: 'TeamName', description: 'TeamDescription')} }
   let(:user_params) { { users: [username, "Test User"] } }
   let(:username) { 'test.user' }
@@ -40,11 +41,16 @@ describe TeamsController do
 
     it "sends SQS message to chef env create daemon" do
       post :create, team_params
-      expect(chef_utility).to have_received(:request_chef_environment)      
+      expect(chef_utility).to have_received(:request_chef_environment)
     end
   end
 
   describe "PUT 'update'" do
+    before(:each) do
+      # make sure current_user is the stubbed user and is part of team to grant permission
+      session[:user_id] = user.id
+    end
+
     it "returns http success" do
       put 'update', team_params.merge({id: team.id})
       response.should be_redirect

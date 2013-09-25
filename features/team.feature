@@ -9,15 +9,21 @@ Feature: Managing Teams
     And a new chef environment should be requested
 
   Scenario: Updating existing team
-    Given the "TeamName" team
+    Given I am in the "TeamName" team with "Test User" user
     And I am on the teams page
     When I update team "TeamName" with name "NewName"
     And I click "Teams"
     Then I should see "NewName"
+    
+  Scenario: Updating existing team when the user is not in it
+    Given I am not in the "TeamName" team
+    And I am on the "TeamName" page
+    When I click on "Edit this team"
+    Then I should see "Permission denied"
 
   @javascript
   Scenario: Adding an user to the team
-    Given the "TeamName" team
+    Given I am in the "TeamName" team with "Test User" user
     And a LDAP user "Test Ldap User"
     And I am on the teams page
     When I click on "Edit"
@@ -30,7 +36,7 @@ Feature: Managing Teams
 
   @javascript
   Scenario: Removing an user from the team
-    Given the "TeamName" team with "Test User" user
+    Given I am in the "TeamName" team with "Test User" user
     And I am on the teams page
     When I click on "Edit"
     And click on remove cross
