@@ -35,7 +35,7 @@ class Wonga::Pantry::Ec2Adapter
    end
 
    def platform_for_ami(ami)
-     return unless ami
+     return if ami.blank?
      return unless image = ec2.describe_images({owners: ['self'], image_ids: [ami] })[:images_set][0]
      platform = image[:platform]
      platform == "windows" ? 'windows' : 'linux'
