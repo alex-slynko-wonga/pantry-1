@@ -1,0 +1,9 @@
+%tr
+  %td= jenkins_instance.ec2_instance.id
+  - if jenkins_instance.instance_of? JenkinsServer
+    %td= link_to jenkins_instance.ec2_instance.name, jenkins_instance
+  - else
+    %td= link_to jenkins_instance.ec2_instance.name, [@jenkins_server, jenkins_instance]
+  %td= jenkins_instance.ec2_instance.human_status
+  %td= os_image(jenkins_instance.ec2_instance.platform)
+  %td= link_to_instance(jenkins_instance.ec2_instance) if jenkins_instance.instance_of? JenkinsServer

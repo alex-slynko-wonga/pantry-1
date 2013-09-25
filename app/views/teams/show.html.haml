@@ -1,45 +1,61 @@
-%h1
-  Team
-  = @team.name
-%p= "Description: #{@team.description}" 
-%p= "Created: #{@team.created_at}"
-%p= "Updated: #{@team.updated_at}"
-%p= link_to "edit", {:action => "edit", :id => @team.id}
-
-%h4 EC2 Instance Control
-
-%p= link_to "Launch New Instance", new_aws_ec2_instance_url
+%h1 Team #{@team.name}
+%p= link_to "Edit this team", edit_team_url(@team)
 
 .row-fluid
-  .span6
+  .span12
     %h4
       Team Members
     %table.table
       %thead
         %tr
-          %th #
+          %th Picture
           %th Username
-          - @team.users.each_with_index do |user, index|
+          %th Name
+          - @team.users.each_with_index do |user|
             %tr
-              %td= index + 1
+              %td
+                %img{src: current_user.image_url(25), alt: 'Gravatar'}
               %td= link_to user.username, user_url(user.id)
-    %h4 Jenkins servers
-    - if @team.jenkins_server
-      %li= link_to @team.jenkins_server.ec2_instance.name, @team.jenkins_server
+              %td= user.name
+.row-fluid
+  .span12
+    %h4 Jenkins server
+    - if @jenkins_server
+      %table.table
+        %thead
+          %tr
+            %th ID
+            %th Address
+            %th Status
+            %th OS
+            %th URL
+          = render partial: 'jenkins_instance', collection: [@jenkins_server]
     - else
-      = link_to "Create a new jenkins server", new_jenkins_server_url
-  .span6
-    %h4
-      Instances
-    %table.table
-      %thead
-        %tr
-          %th #
-          %th Address
-          %th Status
-          - @team.ec2_instances.each_with_index do |instance, index|
-            %tr
-              %td= index + 1
-              %td= link_to instance.name, url_for([:aws, instance])
-              %td= instance.human_status
+      %p= link_to "Create a new jenkins server", new_jenkins_server_url
+    
+    - if @jenkins_slaves && @jenkins_slaves.size > 0
+      %h4 Jenkins slaves
+      %table.table
+        %thead
+          %tr
+            %th ID
+            %th Address
+            %th Status
+            %th OS
+          = render partial: 'jenkins_instance', collection: @jenkins_slaves
+.row-fluid
+  .span12
+    - if @ec2_instances.size > 0
+      %h4 Instances
+      %table.table
+        %thead
+          %tr
+            %th ID
+            %th Name
+            %th Status
+            %th OS
+          = render partial: 'shared/ec2_instance_row', collection: @ec2_instances
+
+    %h4 EC2 Instance Control
+    %p= link_to "Launch New Instance", new_aws_ec2_instance_url
 

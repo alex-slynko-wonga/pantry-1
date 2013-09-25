@@ -1,7 +1,7 @@
 When(/^An agent creates a new team named "(.*?)"$/) do |name|
   sqs_client = AWS::SQS.new.client
   resp = sqs_client.stub_for(:get_queue_url)
-  resp[:queue_url] = "https://some_url.example.com"  
+  resp[:queue_url] = "https://some_url.example.com"
   click_on 'New Team'
   fill_in('team_name', :with => name)
   fill_in('team_description', :with => "TeamDescription")
@@ -74,4 +74,19 @@ end
 
 Then(/^I should see the url of the Jenkins server$/) do
   page.should have_selector("a[href='http://#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}']")
+end
+
+Given(/^I have at least one EC2 in the team$/) do
+  @team = FactoryGirl.create(:team)
+  @ec2_instance = FactoryGirl.create(:ec2_instance, team: @team, platform: nil)
+end
+
+When(/^I am on the team page$/) do
+  visit team_url @team
+end
+
+Then(/^I should see the a table with the instance$/) do
+  page.should have_content @ec2_instance.name
+  page.should have_content @ec2_instance.human_status
+  page.should have_selector "img[src$='/assets/linux_icon.png']"
 end

@@ -15,8 +15,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def image_url
-    "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=40&d=blank" if email
+  def image_url(pixels = 40)
+    "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest(email)}?s=#{pixels}&d=blank" if email
   end
 
   def email
