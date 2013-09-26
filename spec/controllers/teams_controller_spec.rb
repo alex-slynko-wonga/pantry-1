@@ -27,10 +27,9 @@ describe TeamsController do
     end
     
     it "creates a team without selecting a user" do
-      session[:user_id] = user.id
-      expect{ post :create, team_params.merge(users: "") }.to change(Team, :count).by(1)
-      assigns(:team).name.should == 'TeamName'
-      assigns(:team).description.should == 'TeamDescription'
+      session[:user_id] = FactoryGirl.create(:user).id
+      expect{ post :create, team_params }.to change(Team, :count).by(1)
+      expect(team).to have(1).user
     end
 
     it "creates user and add him to team" do
@@ -76,7 +75,7 @@ describe TeamsController do
     end
 
     it "finds user by its username and adds it to team" do
-      user = User.create(username: username)
+      user = FactoryGirl.create(:user, username: username)
       expect { put :update, team_params.merge({id: team.id}).merge(user_params) }.to_not change(User, :count)
       expect(team.reload).to have(1).user
       expect(team.users.first).to eq(user)
@@ -84,7 +83,6 @@ describe TeamsController do
 
     it "removes users from team if they were not in params" do
       team.users << User.create(username: username)
-      team.users << User.create # the team must have at least a user
       put 'update', team_params.merge({id: team.id})
       expect(team).to have(1).users
     end
