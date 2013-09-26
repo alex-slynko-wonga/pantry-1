@@ -91,6 +91,7 @@ describe TeamsController do
 
   describe "GET 'show'" do
     it "returns http success" do
+      session[:user_id] = user.id
       get 'show', :id => team.id
       response.should be_success
     end

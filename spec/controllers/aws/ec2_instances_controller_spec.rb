@@ -9,7 +9,7 @@ describe Aws::Ec2InstancesController do
 
   let(:team) { FactoryGirl.create(:team) }
   let(:ec2_instance_params) {
-    { ec2_instance: FactoryGirl.attributes_for(:ec2_instance, 
+    { ec2_instance: FactoryGirl.attributes_for(:ec2_instance,
                                               name: 'InstanceName',
                                               team_id: team.id,
                                               user_id: user.id
@@ -20,6 +20,11 @@ describe Aws::Ec2InstancesController do
     it "returns http success" do
       get "new"
       response.should be_success
+    end
+    
+    it "sets the team if team_id is given" do
+      get "new", team_id: team.id
+      assigns(:ec2_instance).team_id.should == team.id
     end
   end
 
