@@ -26,6 +26,7 @@ class TeamsController < ApplicationController
     @jenkins_server = @team.jenkins_server
     @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance) if @jenkins_server
     @ec2_instances = @team.ec2_instances
+    @can_create_ec2_instance = current_user.member_of_team?(@team)
   end
 
   def edit
@@ -63,6 +64,6 @@ class TeamsController < ApplicationController
   end
   
   def check_permission
-    flash[:error] = 'Permission denied: you cannot change this team.' and redirect_to root_url unless current_user.teams.include?(@team)
+    flash[:error] = 'Permission denied: you cannot change this team.' and redirect_to root_url unless current_user.member_of_team?(@team)
   end
 end

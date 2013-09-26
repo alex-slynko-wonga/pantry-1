@@ -31,4 +31,8 @@ class User < ActiveRecord::Base
     self.email ==  'jonathan.galore@example.com' ||
       Array(CONFIG['billing_users']).include?(self.email)
   end
+  
+  def member_of_team?(team)
+    teams.include?(team)
+  end
 end

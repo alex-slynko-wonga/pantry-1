@@ -64,4 +64,18 @@ describe User do
       it { should be_false }
     end
   end
+  
+  describe "member_of_team?" do
+    it "returns true if the user is member of the given team" do
+      user = FactoryGirl.create(:user)
+      team = FactoryGirl.create(:team, users: [user])
+      user.member_of_team?(team).should be_true
+    end
+    
+    it "returns false if the user is not a member of the given team" do
+      user = FactoryGirl.create(:user)
+      team = FactoryGirl.create(:team, users: [])
+      user.member_of_team?(team).should be_false
+    end
+  end
 end

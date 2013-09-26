@@ -56,6 +56,6 @@
             %th OS
           = render partial: 'shared/ec2_instance_row', collection: @ec2_instances
 
-    %h4 EC2 Instance Control
-    %p= link_to "Launch New Instance", new_aws_ec2_instance_url
+    = create_new_ec2_instance(@can_create_ec2_instance)
+    = @con_create_ec2_instance
 
