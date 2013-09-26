@@ -16,14 +16,21 @@ describe TeamsController do
     end
 
     it "returns http success" do
-      post 'create', team_params
+      post 'create', team_params.merge(users: [user.username, user.name])
       response.should be_redirect
     end
 
     it "creates a team" do
-      expect{ post :create, team_params}.to change(Team, :count).by(1)
-      team.name.should == 'TeamName'
-      team.description.should == 'TeamDescription'
+      expect{ post :create, team_params.merge(users: [user.username, user.name]) }.to change(Team, :count).by(1)
+      assigns(:team).name.should == 'TeamName'
+      assigns(:team).description.should == 'TeamDescription'
+    end
+    
+    it "creates a team without selecting a user" do
+      session[:user_id] = user.id
+      expect{ post :create, team_params.merge(users: "") }.to change(Team, :count).by(1)
+      assigns(:team).name.should == 'TeamName'
+      assigns(:team).description.should == 'TeamDescription'
     end
 
     it "creates user and add him to team" do
@@ -40,7 +47,7 @@ describe TeamsController do
     end
 
     it "sends SQS message to chef env create daemon" do
-      post :create, team_params
+      post :create, team_params.merge(users: [user.username, user.name])
       expect(chef_utility).to have_received(:request_chef_environment)
     end
   end
@@ -77,8 +84,9 @@ describe TeamsController do
 
     it "removes users from team if they were not in params" do
       team.users << User.create(username: username)
+      team.users << User.create # the team must have at least a user
       put 'update', team_params.merge({id: team.id})
-      expect(team).to have(0).users
+      expect(team).to have(1).users
     end
   end
 

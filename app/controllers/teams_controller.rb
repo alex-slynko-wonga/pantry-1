@@ -4,6 +4,7 @@ class TeamsController < ApplicationController
 
   def new
     @team = Team.new
+    @team.users << current_user
   end
 
   def create
@@ -47,7 +48,7 @@ class TeamsController < ApplicationController
   end
 
   def users
-    return [] if params[:users].blank?
+    return [current_user] if params[:users].blank? # make sure there is at least on user in the list
     @users ||= params[:users].each_slice(2).with_object([]) do |(username, name), user_array|
       user = User.where(username: username).first
       if user.nil?

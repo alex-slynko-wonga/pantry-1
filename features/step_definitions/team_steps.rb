@@ -8,6 +8,10 @@ When(/^An agent creates a new team named "(.*?)"$/) do |name|
   click_button("Submit")
 end
 
+Then(/^the team page has the current user$/) do
+  page.should have_content User.last.name
+end
+
 Given(/^I update team "(.*?)" with name "(.*?)"$/) do |oldname, newname|
   visit '/teams'
   click_on 'Edit'
