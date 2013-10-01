@@ -36,6 +36,8 @@ development:
     domain: "example.com"
     default_ou: "OU=Computers,DC=wonga,DC=aws"
     api_key: "00110011-0011-0011-0011-001100110011"
+    webapp:
+      ssl_enabled: false
 test:
   omniauth:
     title: "Pantry LDAP Login"
@@ -75,3 +77,5 @@ test:
     domain: "example.com"
     default_ou: "OU=Computers,DC=wonga,DC=aws"
     api_key: "00110011-0011-0011-0011-001100110011"
+    webapp:
+      ssl_enabled: false

@@ -364,6 +364,7 @@ DEPENDENCIES
   pry-rails
   quiet_assets
   rabl
+  rack-ssl
   rails (~> 3.2.14)
   rspec-fire
   rspec-rails

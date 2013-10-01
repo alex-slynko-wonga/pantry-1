@@ -52,6 +52,9 @@ module Wonga
 
       config.assets.enabled = true
       config.assets.version = '1.0'
+      if CONFIG['pantry']['webapp']['ssl_enabled']
+        config.middleware.insert_before ActionDispatch::Static, Rack::SSL, :exclude => proc { |env| !env['REQUEST_URI']['/auth/ldap'] }
+      end
 
       config.generators do |g|
         g.view_specs false
