@@ -19,6 +19,7 @@ gem 'bootstrap-sass'
 gem 'angularjs-rails'
 gem 'rabl'
 gem 'simple_form'
+gem 'rack-ssl'
 
 group :development do
   gem 'quiet_assets'

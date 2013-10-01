@@ -1,6 +1,9 @@
 class SessionsController < ApplicationController
+  
+  force_ssl if: :ssl_needed
 
   skip_before_filter :signed_in_user, only: :create
+  
   def new
     redirect_to '/auth/ldap'
   end
@@ -9,7 +12,7 @@ class SessionsController < ApplicationController
     redirect_to 'auth/ldap' and return unless env && env['omniauth.auth']
     user = User.from_omniauth(env['omniauth.auth']['extra']['raw_info'])
     session[:user_id]= user.id
-    redirect_to root_url, notice: "Signed in!"
+    redirect_to session['requested_url'] || root_url, notice: "Signed in!"
   end
 
   def failure
@@ -21,4 +24,8 @@ class SessionsController < ApplicationController
     redirect_to '/auth/ldap', notice: "Signed out!"
   end
 
+  private
+  def ssl_needed
+    CONFIG['pantry']['use_ssl']
+  end
 end
