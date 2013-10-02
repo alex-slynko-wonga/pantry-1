@@ -8,15 +8,16 @@
     %table.table
       %thead
         %tr
-          %th Picture
-          %th Username
           %th Name
+          %th Username
+          %th Email
           - @team.users.each_with_index do |user|
             %tr
+              %td= user.name
               %td
                 %img{src: user.image_url(25), alt: 'Gravatar'}
-              %td= link_to user.username, user_url(user.id)
-              %td= user.name
+                = link_to user.username, user_url(user.id)
+              %td= mail_to user.email
 .row-fluid
   .span12
     %h4 Jenkins server

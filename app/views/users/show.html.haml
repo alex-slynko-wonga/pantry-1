@@ -2,14 +2,15 @@
 %strong Username:
 %p= @user.username
 %strong Email:
-%p= @user.email
-%h4
-  Instances
-%table.table
-  %thead
-    %tr
-      %th #
-      %th Address
-      %th Status
-      %th OS
-      = render partial: 'shared/ec2_instance_row', collection: @ec2_instances
+%p= mail_to @user.email
+- if @ec2_instances.present?
+  %h4
+    Instances
+  %table.table
+    %thead
+      %tr
+        %th #
+        %th Address
+        %th Status
+        %th OS
+        = render partial: 'shared/ec2_instance_row', collection: @ec2_instances
