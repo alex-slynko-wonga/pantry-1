@@ -1,27 +1,28 @@
-.row-fluid
-  .span2
-    Current Step:
-  .span2
-    .current_step
-    .progress-info.progress-striped{style: "background-color: red;"}
-      .bar{:style => "width: #{@ec2_instance.progress}%; color: black;"}=@ec2_instance.human_status
-      #spinner
-.row-fluid
-  .span2
-    Booted:
-  .span2
-    .booted= display_status_image(@ec2_instance.booted)
-.row-fluid
-  .span2
-    Bootstrapped:
-  .span2
-    .bootstrapped= display_status_image(@ec2_instance.bootstrapped)
-.row-fluid
-  .span2
-    Joined to Domain:
-  .span2
-    .joined= display_status_image(@ec2_instance.joined)
-- unless @ec2_instance.human_status == 'Ready'
-  :javascript 
-      Ec2InstanceRequestStatusPoller.poll();
-    
+- cache @ec2_instance do
+  .row-fluid
+    .span2
+      Current Step:
+    .span2
+      .current_step
+      .progress-info.progress-striped{style: "background-color: red;"}
+        .bar{:style => "width: #{@ec2_instance.progress}%; color: black;"}=@ec2_instance.human_status
+        #spinner
+  .row-fluid
+    .span2
+      Booted:
+    .span2
+      .booted= display_status_image(@ec2_instance.booted)
+  .row-fluid
+    .span2
+      Bootstrapped:
+    .span2
+      .bootstrapped= display_status_image(@ec2_instance.bootstrapped)
+  .row-fluid
+    .span2
+      Joined to Domain:
+    .span2
+      .joined= display_status_image(@ec2_instance.joined)
+  - unless @ec2_instance.human_status == 'Ready'
+    :javascript
+        Ec2InstanceRequestStatusPoller.poll();
+
