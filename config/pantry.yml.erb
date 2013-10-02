@@ -16,6 +16,7 @@
     security_group_windows: <%= @config["aws"]["security_group_windows"] %>
     vpc_id:  <%= @config["aws"]["vpc_id"] %>
     chef_env_create_queue_name: <%= @config["aws"]["chef_env_create_queue_name"] %>
+    terminate_queue_name: <%= @config["aws"]["terminate_queue_name"] %>
     windows_admin_password: <%= @config["aws"]["windows_admin_password"] %>
     ebs:
     <% @config['aws']['flavors'].each do |flavor| %>

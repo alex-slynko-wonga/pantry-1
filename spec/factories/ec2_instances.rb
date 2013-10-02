@@ -8,6 +8,10 @@ FactoryGirl.define do
       joined true
     end
 
+    trait :running do
+      bootstrapped
+    end
+
     sequence(:name) { |n| "Name#{n}" }
     domain CONFIG['pantry']['domain']
     instance_id "MyString"

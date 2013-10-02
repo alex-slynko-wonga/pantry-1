@@ -21,7 +21,7 @@ describe Aws::Ec2InstancesController do
       get "new"
       response.should be_success
     end
-    
+
     it "sets the team if team_id is given" do
       get "new", team_id: team.id
       assigns(:ec2_instance).team_id.should == team.id
@@ -40,7 +40,7 @@ describe Aws::Ec2InstancesController do
 
     it "creates an ec2 instance request record" do
       expect{ post :create, ec2_instance_params}.to change(Ec2Instance, :count).by(1)
-      ec2_instance.booted.should == false
+      expect(ec2_instance).to_not be_booted
     end
 
     it "sends message using SQSSender" do
@@ -56,7 +56,7 @@ describe Aws::Ec2InstancesController do
   end
 
   describe "PUT 'update'" do
-    let(:ec2_instance) { FactoryGirl.create(:ec2_instance) }
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
 
     it "updates booted field" do
       incoming_params = { id: ec2_instance.id, booted: true, format: :json }
@@ -85,9 +85,31 @@ describe Aws::Ec2InstancesController do
   end
 
   context "#show" do
-    let(:ec2_instance) { FactoryGirl.create(:ec2_instance) }
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
     it "should be success" do
       get :show, id: ec2_instance.id
+      expect(response).to be_success
+    end
+  end
+
+  context "#destroy" do
+    let(:terminator) { instance_double('Wonga::Pantry::Ec2Terminator') }
+
+    before(:each) do
+      Wonga::Pantry::Ec2Terminator.stub(:new).and_return(terminator)
+      terminator.stub(:terminate)
+    end
+
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
+
+    it "should be success" do
+      delete :destroy, id: ec2_instance.id
+      expect(response).to be_success
+    end
+
+    it "terminates instance" do
+      delete :destroy, id: ec2_instance.id
+      expect(terminator).to have_received(:terminate).with(user)
     end
   end
 end

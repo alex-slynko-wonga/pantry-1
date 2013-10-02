@@ -4,6 +4,24 @@ describe Ec2Instance do
   subject { FactoryGirl.build :ec2_instance }
   it { should be_valid }
 
+  context "#is_running?" do
+    it "is true when bootstrapped" do
+      subject.bootstrapped = true
+      expect(subject).to be_running
+    end
+
+    it "is false when terminated" do
+      subject.bootstrapped = true
+      subject.terminated = true
+      expect(subject).to_not be_running
+    end
+
+    it "is false when is not bootstrapped" do
+      subject.bootstrapped = false
+      expect(subject).to_not be_running
+    end
+  end
+
   context "domain" do
     let(:domain) { 'example.com' }
     before(:each) do
@@ -20,6 +38,31 @@ describe Ec2Instance do
     end
   end
 
+  context "#human_status" do
+    let(:user) { User.new }
+
+    it "is 'Booting' by default" do
+      expect(subject.human_status).to eq('Booting')
+    end
+
+    { booted: 'Booted', joined: 'Joined to domain', bootstrapped: 'Bootstrapped', terminated: 'Terminated' }.each do |status, human_name|
+      it "is '#{human_name}' when instance is #{status}" do
+        subject[status] = true
+        expect(subject.human_status).to eq(human_name)
+      end
+    end
+
+    it "is 'Being terminated' if termination process is started" do
+      subject.terminated_by = User.new
+      expect(subject.human_status).to eq('Terminating')
+    end
+
+    it "is 'Ready' when joined and bootstrapped" do
+      subject.joined = subject.bootstrapped = true
+      expect(subject.human_status).to eq('Ready')
+    end
+  end
+
   it "should be invalid without run_list" do
     subject.run_list = nil
     expect(subject).to be_invalid
@@ -29,7 +72,7 @@ describe Ec2Instance do
     subject.security_group_ids = ["sg-00000001","sg-00000002","sg-00000003","sg-00000004","sg-00000005","sg-00000006"]
     expect(subject).to be_invalid
   end
-  
+
   it "raises a validation error if the user does not belogs to the current team" do
     user = FactoryGirl.create(:user)
     team = FactoryGirl.create(:team)

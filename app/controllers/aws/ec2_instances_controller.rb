@@ -52,6 +52,11 @@ class Aws::Ec2InstancesController < ApplicationController
     end
   end
 
+  def destroy
+    Wonga::Pantry::Ec2Terminator.new(@ec2_instance = Ec2Instance.find(params[:id])).terminate(current_user)
+    render :show
+  end
+
   private
 
   def ec2_instance_params

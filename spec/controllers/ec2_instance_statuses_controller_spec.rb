@@ -36,7 +36,6 @@ describe Ec2InstanceStatusesController do
 
       get 'show', id: instance.id, format: :json
       result = JSON.parse(response.body)
-      expect(expected.keys).to eq(result.keys.sort)
       expected.each do |key, value|
         if value.is_a? Time
           expect(value.to_i).to eq(Time.parse(result[key]).to_i)
