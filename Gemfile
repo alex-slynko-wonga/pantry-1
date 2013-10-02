@@ -20,6 +20,7 @@ gem 'angularjs-rails'
 gem 'rabl'
 gem 'simple_form'
 gem 'rack-ssl'
+gem 'cache_digests'
 
 group :development do
   gem 'quiet_assets'
