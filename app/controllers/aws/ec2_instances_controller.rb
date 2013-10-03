@@ -13,10 +13,10 @@ class Aws::Ec2InstancesController < ApplicationController
         {user_id: current_user.id, platform: platform}
       )
     )
-    
+
     if @ec2_instance.save
       message = Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message
-      Wonga::Pantry::SQSSender.new.send_message(message)
+      Wonga::Pantry::SQSSender.new(CONFIG["aws"]['boot_machine_queue_name']).send_message(message)
       redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
     else
       render :action => "new"

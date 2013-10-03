@@ -1,5 +1,5 @@
 class Wonga::Pantry::AWSUtility
-  def initialize(sqs = Wonga::Pantry::SQSSender.new )
+  def initialize(sqs = Wonga::Pantry::SQSSender.new(CONFIG["aws"]['boot_machine_queue_name']))
     @sqs = sqs
   end
 
