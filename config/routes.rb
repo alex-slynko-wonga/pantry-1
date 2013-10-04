@@ -4,6 +4,7 @@ Wonga::Pantry::Application.routes.draw do
 
   namespace :api do
     resources :bills, only: [:create, :show]
+    resources :chef_nodes, only: [:destroy]
   end
   
   post '/api/teams/:team_id/chef_environments', :to => 'api/teams/chef_environments#create'

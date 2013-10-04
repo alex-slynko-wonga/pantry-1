@@ -37,4 +37,11 @@ describe Ec2Instance do
     team.should_not == instance.team
     expect {instance.save!}.to raise_error(ActiveRecord::RecordInvalid)
   end
+  
+  describe "chef_node_delete" do
+    it "sets bootstrapped to false" do
+      subject.chef_node_delete
+      expect(subject.bootstrapped).to be_false
+    end
+  end
 end
