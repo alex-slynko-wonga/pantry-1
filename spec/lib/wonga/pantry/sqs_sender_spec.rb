@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Wonga::Pantry::SQSSender do
+  subject { described_class.new('queue') }
   let(:message) { double(boot_message: { 'message' => 'boot' }) }
 
   describe '#send_message' do 
