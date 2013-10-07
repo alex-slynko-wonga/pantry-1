@@ -85,6 +85,25 @@ describe Ec2Instance do
     it "sets bootstrapped to false" do
       subject.chef_node_delete
       expect(subject.bootstrapped).to be_false
+
+  describe "#complete!" do 
+    let(:params) { 
+      {
+        "bootstrapped"  => true, 
+        "joined"        => true,
+        "booted"        => true,
+      }
+    }
+    
+    it "Takes a parameter hash and updates the model appropriately" do 
+      subject.complete! params
+      subject.joined.should be_true
+      subject.booted.should be_true
+    end
+
+    it "Takes a parameter hash including 'terminated' and updates appropriately" do
+      subject.complete! params.merge({"terminated" => true})
+      subject.booted.should be_false
     end
   end
 
