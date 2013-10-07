@@ -40,15 +40,21 @@ class Ec2Instance < ActiveRecord::Base
     self.save!
   end
 
-  def complete!(status)
-    case status
-    when :booted
-      self.booted = true
-    when :bootstrapped
-      self.bootstrapped = true
-    when :joined
-      self.joined = true
-      self.end_time = Time.current
+  def complete!(params)
+    params.each do |key, val|
+      case key
+      when "booted" 
+        self.booted = true 
+      when "bootstrapped"
+        self.bootstrapped = true 
+      when "joined" 
+        self.joined = true 
+        self.end_time = Time.current
+      when "terminated"
+        self.booted = false
+      when "instance_id"
+        self.exists val 
+      end
     end
     save!
   end

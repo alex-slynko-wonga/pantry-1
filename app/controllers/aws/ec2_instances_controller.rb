@@ -33,18 +33,7 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def update
     @ec2_instance = Ec2Instance.find params[:id]
-    if params[:booted]
-      @ec2_instance.complete! :booted
-    end
-    if params[:instance_id]
-      @ec2_instance.exists! params[:instance_id]
-    end
-    if params[:bootstrapped]
-      @ec2_instance.complete! :bootstrapped
-    end
-    if params[:joined]
-      @ec2_instance.complete! :joined
-    end
+    @ec2_instance.complete! params
 
     respond_to do |format|
       format.html
