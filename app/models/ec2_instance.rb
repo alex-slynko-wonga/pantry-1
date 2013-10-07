@@ -52,6 +52,7 @@ class Ec2Instance < ActiveRecord::Base
         self.end_time = Time.current
       when "terminated"
         self.booted = false
+        self.terminated = true
       when "instance_id"
         self.exists val 
       end
