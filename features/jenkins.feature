@@ -5,6 +5,7 @@ Feature: Jenkins
 
   Background:
     Given AWS has information about machines
+    And queues are configured
 
   @javascript
   Scenario: Start jenkins server

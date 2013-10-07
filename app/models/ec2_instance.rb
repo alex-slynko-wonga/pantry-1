@@ -1,6 +1,7 @@
 class Ec2Instance < ActiveRecord::Base
   belongs_to :team
   belongs_to :user
+  belongs_to :terminated_by, class_name: 'User'
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 15 }
   validates :team, presence: true
@@ -13,7 +14,7 @@ class Ec2Instance < ActiveRecord::Base
   validates :flavor, presence: true
   validates :security_group_ids, :presence => true, :security_group_ids_limit => true
   validate  :check_user_team
-  
+
   serialize :security_group_ids
 
   before_validation :set_platform_security_group_id
@@ -21,7 +22,7 @@ class Ec2Instance < ActiveRecord::Base
   before_validation :check_security_group_ids
   before_create :set_start_time
   before_validation :set_volume_size, on: :create
-  
+
   def check_user_team
     errors.add(:team_id, "Current user is not in this team.") unless self.user.teams.include?(self.team)
   end
@@ -53,6 +54,8 @@ class Ec2Instance < ActiveRecord::Base
   end
 
   def human_status
+    return "Terminated" if terminated
+    return "Terminating" if terminated_by
     return "Ready" if bootstrapped && joined
     if bootstrapped
       "Bootstrapped"
@@ -78,11 +81,12 @@ class Ec2Instance < ActiveRecord::Base
     end
   end
 
+  def running?
+    bootstrapped && !terminated_by_id? && !terminated?
+  end
+
   private
   def init
-    self.booted ||= false
-    self.bootstrapped ||= false
-    self.joined ||= false
     self.domain       ||=  CONFIG['pantry']['domain']
     self.subnet_id    ||=  CONFIG['aws']['default_subnet']
     self.instance_id  ||=  "pending"

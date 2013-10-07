@@ -12,6 +12,9 @@ Given(/^AWS has information about machines$/) do
   subnets[:subnet_set] = [ { subnet_id: '42' } ]
   amis = client.stub_for(:describe_images)
   amis[:images_set] = [ { name: 'image_name', image_id: 'i-121111' } ]
+end
+
+Given(/^queues are configured$/) do
   sqs_client = AWS::SQS.new.client
   resp = sqs_client.stub_for(:get_queue_url)
   resp[:queue_url] = "https://some_url.example.com"
@@ -41,15 +44,6 @@ When(/^an instance is created$/) do
   instance.save
 end
 
-When(/^I am still on instance page$/) do
-  visit page.current_path
-end
-
-Given(/^I visit "(.*?)" new page$/) do |arg1|
-  visit '/aws/ec2_instances/new'
-  page.should have_content 'Create EC2 Instance'
-end
-
 When(/^I select four security groups$/) do
   check('name1')
   check('name2')
@@ -59,4 +53,21 @@ end
 
 Then(/^I should not be able to add a fifth security group$/) do
   expect{ check('name5') }.to raise_error # because it is grayed out
+end
+
+When(/^I destroy an instance$/) do
+  click_on "Destroy"
+end
+
+Then(/^instance destroying process should start$/) do
+  expect(AWS::SQS.new.client).to have_received(:send_message)
+end
+
+When(/^an instance is destroyed$/) do
+  Ec2Instance.last.update_attribute(:terminated, true)
+end
+
+Then(/^I should see that instance is destroyed$/) do
+  expect(page).to have_no_button('Destroy')
+  expect(page.text).to include('Terminated')
 end

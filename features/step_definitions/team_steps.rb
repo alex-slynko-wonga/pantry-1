@@ -44,7 +44,7 @@ When(/^I search for "(.*?)"$/) do |search_term|
 end
 
 Then(/^I should see dropdown with "(.*?)"$/) do |text|
-  wait_until(5) { page.has_xpath?("//a[contains(text(),'#{text}')]") }
+  expect(page).to have_xpath("//a[contains(text(),'#{text}')]")
 end
 
 When(/^I select "(.*?)" from dropdown$/) do |text|
@@ -91,7 +91,7 @@ end
 
 Given(/^I have at least one EC2 in the team$/) do
   @team = FactoryGirl.create(:team)
-  @ec2_instance = FactoryGirl.create(:ec2_instance, team: @team, platform: nil)
+  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, team: @team)
 end
 
 When(/^I am on the team page$/) do

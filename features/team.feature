@@ -2,7 +2,7 @@ Feature: Managing Teams
   @chef-zero
   Scenario: Adding a new Team
     Given I am on the teams page
-    And AWS has information about machines
+    And queues are configured
     When An agent creates a new team named "TeamName"
     Then I should be on team page
     And I should see "TeamName"
@@ -15,7 +15,7 @@ Feature: Managing Teams
     When I update team "TeamName" with name "NewName"
     And I click "Teams"
     Then I should see "NewName"
-    
+
   Scenario: Updating existing team when the user is not in it
     Given I am not in the "TeamName" team
     And I am on the "TeamName" page
@@ -43,14 +43,14 @@ Feature: Managing Teams
     And click on remove cross
     And save team
     Then team should not contain "Test User"
-    
+
   Scenario: Show Create a new jenkins server in the team page
     Given the "TeamName" team
     And I am on the teams page
     When I click "TeamName"
     Then I should see "Jenkins server"
     And I should see "Create a new jenkins server"
-    
+
   Scenario: Show the existing jenkins server in the team page
     Given the "TeamName" team
     And the team has a Jenkins server
@@ -60,9 +60,9 @@ Feature: Managing Teams
     And I should see the Jenkins server name
     When I click the server link
     And I should see the url of the Jenkins server
-    
+
   Scenario: Show EC2 instances in the team page
     Given I have at least one EC2 in the team
     When I am on the team page
     Then I should see the a table with the instance
-  
+
