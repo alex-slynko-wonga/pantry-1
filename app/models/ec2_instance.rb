@@ -25,6 +25,10 @@ class Ec2Instance < ActiveRecord::Base
   def check_user_team
     errors.add(:team_id, "Current user is not in this team.") unless self.user.teams.include?(self.team)
   end
+  
+  def chef_node_delete
+    update_attributes(bootstrapped: false)
+  end
 
   def check_security_group_ids
     self.security_group_ids.reject! { |i| i.empty? } if self.security_group_ids
