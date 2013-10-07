@@ -13,6 +13,7 @@ development:
     auth_method: "simple"
   aws:
     chef_env_create_queue_name: some_queue
+    terminate_queue_name: pantry_wonga_aws-ec2_terminate_command
     boot_machine_queue_name: pantry_wonga_aws-ec2_boot_command
     vpc_id: "vpc-00110011"
     security_group_windows: "sg-00110011"
@@ -50,8 +51,9 @@ test:
     password: "secret_password"
     auth_method: "simple"
   aws:
-    chef_env_create_queue_name: some_queue
     boot_machine_queue_name: pantry_wonga_aws-ec2_boot_command
+    terminate_queue_name: pantry_wonga_aws-ec2_terminate_command
+    chef_env_create_queue_name: some_queue
     billing_bucket: "some-bucketname"
     vpc_id: "vpc-00110011"
     security_group_windows: "sg-00110011"
