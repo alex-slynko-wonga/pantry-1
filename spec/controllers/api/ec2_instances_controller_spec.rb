@@ -13,7 +13,7 @@ describe Api::Ec2InstancesController do
 
       it "updates an instance" do
         @ec2_instance.should_receive(:complete!)
-        post :update, id: 45, terminated: true, format: 'json'
+        put :update, id: 45, terminated: true, format: 'json'
       end
     end
   end
