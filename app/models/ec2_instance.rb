@@ -48,8 +48,10 @@ class Ec2Instance < ActiveRecord::Base
       when "bootstrapped"
         self.bootstrapped = true 
       when "joined" 
-        self.joined = true 
-        self.end_time = Time.current
+        self.joined = val
+        if val 
+          self.end_time = Time.current
+        end
       when "terminated"
         self.booted = false
         self.terminated = true
