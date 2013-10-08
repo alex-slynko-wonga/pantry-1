@@ -54,7 +54,7 @@ class Ec2Instance < ActiveRecord::Base
         self.booted = false
         self.terminated = true
       when "instance_id"
-        self.exists val 
+        self.exists! val 
       end
     end
     save!

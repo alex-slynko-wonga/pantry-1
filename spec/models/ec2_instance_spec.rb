@@ -94,6 +94,7 @@ describe Ec2Instance do
         "bootstrapped"  => true,
         "joined"        => true,
         "booted"        => true,
+        "instance_id"   => 45
       }
     }
 
