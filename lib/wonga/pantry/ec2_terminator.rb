@@ -5,6 +5,7 @@ class Wonga::Pantry::Ec2Terminator
   end
 
   def terminate(user)
+    return unless user.teams.include?(@ec2_instance.team)
     if @ec2_instance.running?
       @ec2_instance.terminated_by = user
       @ec2_instance.save
