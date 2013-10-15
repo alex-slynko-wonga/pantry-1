@@ -10,7 +10,8 @@ class JenkinsSlavesController < ApplicationController
   end
 
   def show
-    @ec2_instance = @jenkins_server.jenkins_slaves.find(params[:id]).ec2_instance
+    @jenkins_slave = @jenkins_server.jenkins_slaves.find(params[:id])
+    @ec2_instance = @jenkins_slave.ec2_instance
     @team = @jenkins_server.team
   end
 
@@ -33,6 +34,13 @@ class JenkinsSlavesController < ApplicationController
       @user_teams = current_user.teams
       render :new
     end
+  end
+  
+  def destroy
+    @jenkins_slave = @jenkins_server.jenkins_slaves.find(params[:id])
+    server_fqdn = "#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}"
+    Wonga::Pantry::JenkinsSlaveDestroyer.new(@jenkins_slave.ec2_instance, server_fqdn, 80, current_user).delete
+    redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
   end
 
   private

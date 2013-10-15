@@ -23,3 +23,13 @@ Feature: Jenkins
     Then I should see the server listing
     When I click the server ID
     Then I should see the slaves listing
+
+  Scenario: As a user want to delete a slave
+    Given I am in the "Pantry Team" team
+    And I have a jenkins server
+    And I have a jenkins slave
+    When I go into Jenkins slave page
+    And I click destroy
+    Then I should be redirected to the Jenkins server page
+    And I click the jenkins slave
+    And I should see "Destroy action sent. This slave is not usable anymore."
