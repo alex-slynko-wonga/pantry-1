@@ -24,6 +24,7 @@
 
 # Ignore code coverage reports
 /coverage
+/stepdown
 
 /config/chef.yml
 /config/chef/*.pem

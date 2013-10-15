@@ -65,10 +65,6 @@ Then(/^team should (not )?contain "(.*?)"$/) do |not_contains, name|
   end
 end
 
-Given(/^(?:the|a)? "(.*?)" team $/) do |name|
-  FactoryGirl.create(:team, name: name)
-end
-
 Given(/^the team has a Jenkins server$/) do
   @team.should be_true
   @jenkins_server = FactoryGirl.create(:jenkins_server,

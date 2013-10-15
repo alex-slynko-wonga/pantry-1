@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131002150433) do
+ActiveRecord::Schema.define(:version => 20131004181943) do
 
   create_table "bills", :force => true do |t|
     t.date     "bill_date",                                                    :null => false
@@ -22,22 +22,6 @@ ActiveRecord::Schema.define(:version => 20131002150433) do
   end
 
   add_index "bills", ["bill_date"], :name => "index_bills_on_bill_date", :unique => true
-
-  create_table "delayed_jobs", :force => true do |t|
-    t.integer  "priority",   :default => 0
-    t.integer  "attempts",   :default => 0
-    t.text     "handler"
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-  end
-
-  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "ec2_instances", :force => true do |t|
     t.string   "name"
@@ -82,34 +66,6 @@ ActiveRecord::Schema.define(:version => 20131002150433) do
 
   add_index "jenkins_slaves", ["ec2_instance_id"], :name => "index_jenkins_slaves_on_ec2_instance_id"
   add_index "jenkins_slaves", ["jenkins_server_id"], :name => "index_jenkins_slaves_on_jenkins_server_id"
-
-  create_table "job_logs", :force => true do |t|
-    t.integer  "job_id"
-    t.text     "log_text"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "jobs", :force => true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.string   "status"
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  create_table "packages", :force => true do |t|
-    t.string   "name"
-    t.string   "version"
-    t.string   "url"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-    t.string   "bag_title"
-    t.string   "item_title"
-    t.datetime "data_bag_updated_at"
-  end
 
   create_table "team_members", :force => true do |t|
     t.integer  "team_id"

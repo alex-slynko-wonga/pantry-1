@@ -45,6 +45,7 @@ group :test do
   gem 'simplecov-rcov', require: false
   gem 'timecop'
   gem "therubyracer", require: 'v8'
+  gem "stepdown", require: false
 end
 
 group :test, :development do
