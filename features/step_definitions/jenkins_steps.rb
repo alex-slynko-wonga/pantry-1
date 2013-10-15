@@ -15,10 +15,6 @@ When(/^I click the server ID$/) do
   click_on @jenkins_server.id
 end
 
-When(/^I visit the Jenkins slave page$/) do
-  visit  "jenkins_servers/#{@jenkins_server.id}/jenkins_slaves"
-end
-
 Then(/^I should see the server listing$/) do
   page.should have_content @jenkins_server.ec2_instance.name
 end
