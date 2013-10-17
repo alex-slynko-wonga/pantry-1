@@ -1,9 +1,5 @@
 Wonga::Pantry::Application.routes.draw do
-
-  resources :bills, only: [:index]
-
   namespace :api do
-    resources :bills, only: [:create, :show]
     resources :chef_nodes, only: [:destroy]
     resources :ec2_instances, only: [:update]
     resources :jenkins_slaves, only: [:update]

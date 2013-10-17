@@ -13,16 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20131022105524) do
 
-  create_table "bills", :force => true do |t|
-    t.date     "bill_date",                                                    :null => false
-    t.decimal  "total_cost", :precision => 10, :scale => 2,                    :null => false
-    t.boolean  "actual",                                    :default => false
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
-  end
-
-  add_index "bills", ["bill_date"], :name => "index_bills_on_bill_date", :unique => true
-
   create_table "ec2_instances", :force => true do |t|
     t.string   "name"
     t.string   "instance_id"
