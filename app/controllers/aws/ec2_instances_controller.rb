@@ -31,16 +31,6 @@ class Aws::Ec2InstancesController < ApplicationController
     end
   end
 
-  def update
-    @ec2_instance = Ec2Instance.find params[:id]
-    @ec2_instance.complete! params
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @ec2_instance }
-    end
-  end
-
   def destroy
     Wonga::Pantry::Ec2Terminator.new(@ec2_instance = Ec2Instance.find(params[:id])).terminate(current_user)
     render :show
