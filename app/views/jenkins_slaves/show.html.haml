@@ -1,5 +1,10 @@
 %h1= "#{@team.name}'s jenkins slave"
 
-= link_to "Go back to the list of servers", jenkins_server_jenkins_slaves_path(@jenkins_server) 
+= link_to "Go back to the list of servers", jenkins_server_jenkins_slaves_path(@jenkins_server)
 
 = render partial: 'shared/ec2_instance', locals: {ec2_instance: @ec2_instance}
+
+- if @ec2_instance.running?
+  = button_to('Destroy', [@jenkins_server, @jenkins_slave], method: :delete)
+- else
+  %p Destroy action sent. This slave is not usable anymore.

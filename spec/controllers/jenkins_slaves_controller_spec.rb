@@ -73,4 +73,28 @@ describe JenkinsSlavesController do
       end
     end
   end
+  
+  describe "DELETE 'destroy'" do
+    let(:destroyer) { instance_double('Wonga::Pantry::JenkinsSlaveDestroyer') }
+    
+    before(:each) do
+      Wonga::Pantry::JenkinsSlaveDestroyer.stub(:new).and_return(destroyer)
+      destroyer.stub(:delete)
+    end
+    
+    it "find the jenkins slave" do
+      delete :destroy, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id
+      assigns(:jenkins_slave).should be_true
+    end
+    
+    it "should redirect to the list of slaves" do
+      delete :destroy, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id
+      response.should redirect_to jenkins_server_jenkins_slaves_url(jenkins_server)
+    end
+    
+    it "deletes the slave record" do
+      destroyer.should_receive(:delete)
+      delete :destroy, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id
+    end
+  end
 end
