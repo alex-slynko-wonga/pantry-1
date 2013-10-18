@@ -26,7 +26,6 @@ Given(/^(I am in )?the "(.*?)" team(?: with "(.*?)" user)?$/) do |include_logged
 end
 
 Given(/^I am not in the "(.*?)" team$/) do |team_name|
-  FactoryGirl.create(:user)
   @team = FactoryGirl.create(:team, name: team_name)
 end
 
@@ -87,7 +86,9 @@ end
 
 Given(/^I have at least one EC2 in the team$/) do
   @team = FactoryGirl.create(:team)
-  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, team: @team)
+  user = User.first
+  @team.users << user
+  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team)
 end
 
 When(/^I am on the team page$/) do

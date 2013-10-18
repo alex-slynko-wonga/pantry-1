@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Wonga::Pantry::Ec2Terminator do
-  let(:ec2_instance) { FactoryGirl.create(:ec2_instance, :running, user: user, team: team) }
+  let!(:ec2_instance) { FactoryGirl.create(:ec2_instance, :running, user: user, team: team) }
   subject { described_class.new(ec2_instance, sqs_sender) }
   let(:user) { FactoryGirl.create(:user, team: team) }
   let(:team) { FactoryGirl.create(:team) }
@@ -23,6 +23,15 @@ describe Wonga::Pantry::Ec2Terminator do
       subject.terminate(user)
       expect(sqs_sender).to_not have_received(:send_message)
       expect(ec2_instance.terminated_by).to_not eq(user)
+    end
+
+    context "when user doesn't belong to team" do
+      it "does nothing" do
+        user.teams = []
+        subject.terminate(user)
+        expect(sqs_sender).to_not have_received(:send_message)
+        expect(ec2_instance.terminated_by).to_not eq(user)
+      end
     end
   end
 end
