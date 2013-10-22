@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131004181943) do
+ActiveRecord::Schema.define(:version => 20131021161718) do
 
   create_table "bills", :force => true do |t|
     t.date     "bill_date",                                                    :null => false
@@ -60,8 +60,9 @@ ActiveRecord::Schema.define(:version => 20131004181943) do
   create_table "jenkins_slaves", :force => true do |t|
     t.integer  "jenkins_server_id"
     t.integer  "ec2_instance_id"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.boolean  "removed",           :default => false
   end
 
   add_index "jenkins_slaves", ["ec2_instance_id"], :name => "index_jenkins_slaves_on_ec2_instance_id"
