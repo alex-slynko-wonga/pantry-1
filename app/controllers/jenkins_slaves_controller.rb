@@ -39,7 +39,7 @@ class JenkinsSlavesController < ApplicationController
   def destroy
     @jenkins_slave = @jenkins_server.jenkins_slaves.find(params[:id])
     server_fqdn = "#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}"
-    Wonga::Pantry::JenkinsSlaveDestroyer.new(@jenkins_slave.ec2_instance, server_fqdn, 80, current_user).delete
+    Wonga::Pantry::JenkinsSlaveDestroyer.new(@jenkins_slave, server_fqdn, 80, current_user).delete
     redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
   end
 
