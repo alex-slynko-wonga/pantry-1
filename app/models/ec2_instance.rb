@@ -99,6 +99,7 @@ class Ec2Instance < ActiveRecord::Base
     self.domain       ||=  CONFIG['pantry']['domain']
     self.subnet_id    ||=  CONFIG['aws']['default_subnet']
     self.instance_id  ||=  "pending"
+    self.ip_address   ||=  "pending"
   end
 
   def set_start_time
