@@ -55,6 +55,8 @@ class Ec2Instance < ActiveRecord::Base
         self.terminated = true
       when "instance_id"
         self.exists! val 
+      when "ip_address"
+        self.ip_address = val 
       end
     end
     save!

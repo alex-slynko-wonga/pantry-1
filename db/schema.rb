@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131021161718) do
+ActiveRecord::Schema.define(:version => 20131022105524) do
 
   create_table "bills", :force => true do |t|
     t.date     "bill_date",                                                    :null => false
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20131021161718) do
     t.integer  "volume_size"
     t.boolean  "terminated"
     t.integer  "terminated_by_id"
+    t.string   "ip_address"
   end
 
   create_table "jenkins_servers", :force => true do |t|
