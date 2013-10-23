@@ -13,11 +13,18 @@ Feature: EC2 Instance
     And I request an instance named "instanceName"
     Then I should see "instanceName"
     And I should see "Booting"
+    And I should see "pending"
     And an instance build should start
 
     When an instance is created
     And I am still on instance page
     Then I should see "Ready"
+
+    When an instance is created
+    And an instance is updated with ip "123.456.7.8"
+    And I am still on instance page
+    Then I should see "123.456.7.8"
+
 
   @javascript
   Scenario: Cannot select more than four security groups
