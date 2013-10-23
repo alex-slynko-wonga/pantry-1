@@ -1,5 +1,17 @@
 .row-fluid
   .span2
+    IP address:
+  .span2= ec2_instance.ip_address
+.row-fluid
+  .span2
+    Requested by user:
+  .span2= link_to(ec2_instance.user.username, @ec2_instance.user)
+.row-fluid
+  .span2
+    Requested on:
+  .span2= ec2_instance.created_at
+.row-fluid
+  .span2
     Name:
   .span2= ec2_instance.name
 .row-fluid

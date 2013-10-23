@@ -44,6 +44,12 @@ When(/^an instance is created$/) do
   instance.save
 end
 
+When(/^an instance is updated with ip "(.*?)"$/) do |arg1|
+  instance = Ec2Instance.last
+  instance.complete!({"ip_address" => "123.456.7.8"})
+  instance.save
+end
+
 When(/^I select four security groups$/) do
   check('name1')
   check('name2')
