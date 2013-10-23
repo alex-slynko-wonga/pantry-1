@@ -5,7 +5,7 @@
 .row-fluid
   .span2
     Requested by user:
-  .span2= link_to(ec2_instance.user.username, "/users/#{@ec2_instance.user_id}")
+  .span2= link_to(ec2_instance.user.username, @ec2_instance.user)
 .row-fluid
   .span2
     Requested on:
