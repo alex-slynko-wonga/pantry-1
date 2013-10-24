@@ -9,10 +9,10 @@ class Wonga::Pantry::JenkinsSlaveDestroyer
   end
   
   def delete
-    @ec2_instance.platform == "windows" ? node = @ec2_instance.name.upcase : node = @ec2_instance.name
     @sqs.send_message({
       'server_ip' => @server_ip, 'server_port' => @server_port,
-      'node' => "#{node}.#{@ec2_instance.domain}", 'instance_id' => @ec2_instance.instance_id, 'id' => @ec2_instance.id,
+      'node' => "#{@ec2_instance.name}", "domain" => @ec2_instance.domain,
+      'instance_id' => @ec2_instance.instance_id, 'id' => @ec2_instance.id,
       'jenkins_slave_id' => @jenkins_slave.id
     })
   end
