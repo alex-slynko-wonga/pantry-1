@@ -6,5 +6,5 @@
 
 - if @ec2_instance.running?
   = button_to('Destroy', [@jenkins_server, @jenkins_slave], method: :delete)
-- else
+- elsif @ec2_instance.terminated_by_id.present? && !@ec2_instance.terminated?
   %p Destroy action sent. This slave is not usable anymore.
