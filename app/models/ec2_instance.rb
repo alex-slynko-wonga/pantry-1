@@ -3,16 +3,17 @@ class Ec2Instance < ActiveRecord::Base
   belongs_to :user
   belongs_to :terminated_by, class_name: 'User'
 
-  validates :name, presence: true, uniqueness: true, length: { maximum: 15 }
+  validates :name, uniqueness: { scope: [:terminated] }, if: '!terminated?'
+  validates :name, presence: true, length: { maximum: 15 }
   validates :team, presence: true
   validates :user, presence: true
-  validates :domain, :presence => true, :domain_name => true
-  validates :chef_environment, :presence => true
-  validates :run_list, :presence => true, :chef_run_list_format => true
+  validates :domain, presence: true, domain_name: true
+  validates :chef_environment, presence: true
+  validates :run_list, presence: true, chef_run_list_format: true
   validates :ami, presence: true
   validates :volume_size, presence: true
   validates :flavor, presence: true
-  validates :security_group_ids, :presence => true, :security_group_ids_limit => true
+  validates :security_group_ids, presence: true, security_group_ids_limit: true
   validate  :check_user_team
 
   serialize :security_group_ids

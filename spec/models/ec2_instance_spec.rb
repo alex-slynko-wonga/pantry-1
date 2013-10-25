@@ -4,6 +4,18 @@ describe Ec2Instance do
   subject { FactoryGirl.build :ec2_instance }
   it { should be_valid }
 
+  it "doesn't validate name if older instance was destroyed" do
+    old_instance = FactoryGirl.create(:ec2_instance, name: subject.name)
+    expect(subject).to be_invalid
+    old_instance.update_attribute(:terminated, true)
+    expect(subject).to be_valid
+  end
+
+  it "validates name that it is long enough" do
+    subject.name = "1" * 20
+    expect(subject).to be_invalid
+  end
+
   context "#is_running?" do
     it "is true when bootstrapped" do
       subject.bootstrapped = true
