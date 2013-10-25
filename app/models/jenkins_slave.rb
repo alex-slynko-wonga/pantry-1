@@ -14,7 +14,7 @@ class JenkinsSlave < ActiveRecord::Base
   end
 
   def instance_name
-    counter = JenkinsSlave.count
+    counter = JenkinsSlave.last.try(:id) || 0
     raise 'There are too many Jenkins Slaves to generate a number lower than 15 characters' if counter > 99999999
     "agent-#{"%09d" % (counter + 1)}"
   end
