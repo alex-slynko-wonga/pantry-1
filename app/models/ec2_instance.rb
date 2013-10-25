@@ -24,6 +24,9 @@ class Ec2Instance < ActiveRecord::Base
   before_create :set_start_time
   before_validation :set_volume_size, on: :create
 
+  scope :terminated, -> { where(terminated: true) }
+  scope :running, -> { where(terminated: [false, nil]) }
+
   def check_user_team
     errors.add(:team_id, "Current user is not in this team.") unless self.user.teams.include?(self.team)
   end
