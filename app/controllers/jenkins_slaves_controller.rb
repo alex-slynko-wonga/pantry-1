@@ -31,6 +31,7 @@ class JenkinsSlavesController < ApplicationController
     if aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
       redirect_to jenkins_server_path(@jenkins_server)
     else
+      flash[:error] = "Error: #{@jenkins_slave.inspect}"
       @user_teams = current_user.teams
       render :new
     end
