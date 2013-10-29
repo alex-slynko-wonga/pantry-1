@@ -12,6 +12,11 @@ FactoryGirl.define do
       bootstrapped
     end
 
+    trait :terminated do
+      terminated_by { self.user }
+      terminated true
+    end
+
     sequence(:name) { |n| "Name#{n}" }
     domain CONFIG['pantry']['domain']
     instance_id "MyString"
