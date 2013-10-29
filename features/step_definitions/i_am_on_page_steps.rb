@@ -23,3 +23,9 @@ When(/^I am on instance page$/) do
   visit "/aws/ec2_instances/#{@ec2_instance.id}"
 end
 
+When(/^I proceed to "(.*?)" page$/) do |page_name|
+  links = all('.navbar .navbar-inner ul.nav li a')
+  link = links.detect { |l| l.text == page_name }
+  link.click
+end
+

@@ -1,0 +1,15 @@
+%h1= "Billing for #{@bill_date}"
+
+= link_to("Previous month", "#")
+.row-fluid
+  .span12
+    %table.table
+      %thead
+        %tr
+          %th Team
+          %th Costs
+      %tbody
+        - @costs.each do |cost|
+          %tr
+            %td= link_to(cost["name"], team_url(cost["id"]))
+            %td= cost["costs"]

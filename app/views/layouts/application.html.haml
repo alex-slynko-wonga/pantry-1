@@ -12,6 +12,8 @@
         = navbar_link_to("Home", root_url)
         = navbar_link_to("Teams", teams_url)
         = navbar_link_to("Jenkins", jenkins_servers_url)
+        - if current_user.have_billing_access?
+          = navbar_link_to("Billing", ec2_instance_costs_url)
 
       - if current_user
         %ul.nav.pull-right

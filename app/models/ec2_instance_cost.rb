@@ -4,5 +4,4 @@ class Ec2InstanceCost < ActiveRecord::Base
   validates :ec2_instance, presence: true
   validates :bill_date, presence: true, uniqueness: { scope: :ec2_instance_id }
   validates :cost, presence: true
-
 end
