@@ -9,12 +9,9 @@
   .navbar
     .navbar-inner
       %ul.nav
-        %li{class: (current_page?(root_url) ? 'active' : '')}
-          = link_to "Home", root_url
-        %li{class: (current_page?(teams_url) ? 'active' : '')}
-          = link_to "Teams", teams_url
-        %li{class: (current_page?(jenkins_servers_url) ? 'active' : '')}
-          = link_to "Jenkins", jenkins_servers_url
+        = navbar_link_to("Home", root_url)
+        = navbar_link_to("Teams", teams_url)
+        = navbar_link_to("Jenkins", jenkins_servers_url)
 
       - if current_user
         %ul.nav.pull-right
