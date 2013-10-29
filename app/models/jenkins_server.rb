@@ -2,7 +2,7 @@ class JenkinsServer < ActiveRecord::Base
   belongs_to :team
   has_many :jenkins_slaves
   belongs_to :ec2_instance
-  default_scope includes(:ec2_instance).merge(Ec2Instance.running)
+  default_scope eager_load(:ec2_instance).merge(Ec2Instance.running)
 
   accepts_nested_attributes_for :ec2_instance
 
