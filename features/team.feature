@@ -2,7 +2,7 @@ Feature: Managing Teams
   @chef-zero
   Scenario: Adding a new Team
     Given I am on the teams page
-    And queues are configured
+    And queues and topics are configured
     When An agent creates a new team named "TeamName"
     Then I should be on team page
     And I should see "TeamName"
