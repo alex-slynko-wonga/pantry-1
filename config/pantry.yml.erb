@@ -18,6 +18,7 @@
     chef_env_create_queue_name: <%= @config["aws"]["chef_env_create_queue_name"] %>
     terminate_queue_name: <%= @config["aws"]["terminate_queue_name"] %>
     jenkins_slave_delete_queue_name: <%= @config["aws"]["jenkins_slave_delete_queue_name"] %>
+    jenkins_slave_delete_topic_arn: <%= @config["aws"]["jenkins_slave_delete_topic_arn"] %>    
     windows_admin_password: <%= @config["aws"]["windows_admin_password"] %>
     ebs:
     <% @config['aws']['flavors'].each do |flavor| %>
