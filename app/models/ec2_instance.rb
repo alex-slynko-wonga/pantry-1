@@ -27,10 +27,6 @@ class Ec2Instance < ActiveRecord::Base
   scope :terminated, -> { where(terminated: true) }
   scope :running, -> { where(terminated: [false, nil]) }
 
-  def check_user_team
-    errors.add(:team_id, "Current user is not in this team.") unless self.user.teams.include?(self.team)
-  end
-  
   def chef_node_delete
     update_attributes(bootstrapped: false)
   end
@@ -47,20 +43,20 @@ class Ec2Instance < ActiveRecord::Base
   def complete!(params)
     params.each do |key, val|
       case key
-      when "booted" 
-        self.booted = true 
+      when "booted"
+        self.booted = true
       when "bootstrapped"
-        self.bootstrapped = true 
+        self.bootstrapped = true
         self.end_time = Time.current
-      when "joined" 
+      when "joined"
         self.joined = val
       when "terminated"
         self.booted = false
         self.terminated = true
       when "instance_id"
-        self.exists! val 
+        self.exists! val
       when "ip_address"
-        self.ip_address = val 
+        self.ip_address = val
       end
     end
     save!
@@ -122,5 +118,10 @@ class Ec2Instance < ActiveRecord::Base
       self.security_group_ids << CONFIG['aws']['security_group_linux']
     end
     self.security_group_ids.uniq!
+  end
+
+  def check_user_team
+    return unless self.user && self.team
+    errors.add(:team_id, "Current user is not in this team.") unless self.user.teams.include?(self.team)
   end
 end

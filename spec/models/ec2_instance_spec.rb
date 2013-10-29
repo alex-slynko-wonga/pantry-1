@@ -4,6 +4,10 @@ describe Ec2Instance do
   subject { FactoryGirl.build :ec2_instance }
   it { should be_valid }
 
+  it "should be invalid without attributes (and not raise exception)" do
+    expect(Ec2Instance.new).to be_invalid
+  end
+
   it "doesn't validate name if older instance was destroyed" do
     old_instance = FactoryGirl.create(:ec2_instance, name: subject.name)
     expect(subject).to be_invalid
