@@ -16,7 +16,7 @@ class TeamsController < ApplicationController
       flash[:notice] = "Team created successfully"
       redirect_to @team
     else
-      flash[:error] = "Team creation failed: #{@team.inspect}"      
+      flash[:error] = "Team creation failed: #{@team.errors.full_messages.to_sentence}"      
       render :new
     end
   end
@@ -41,7 +41,7 @@ class TeamsController < ApplicationController
       redirect_to @team
       flash[:notice] = "Team updated successfully"      
     else
-      flash[:error] = "Team update failed: #{@team.inspect}"            
+      flash[:error] = "Team update failed: #{@team.errors.full_messages.to_sentence}"            
       render :edit
     end
   end

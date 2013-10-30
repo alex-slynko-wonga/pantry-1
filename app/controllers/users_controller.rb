@@ -29,7 +29,7 @@ class UsersController < ApplicationController
                       :notice => "User update failed!" ) }
         format.json { render :json => @user.errors,
                       :status => :unprocessable_entity  }
-        flash[:error] = "User updating failed: #{user.inspect}"                
+        flash[:error] = "User updating failed: #{user.errors.full_messages.to_sentence}"                
       end
     end
   end

@@ -20,7 +20,7 @@ class Aws::Ec2InstancesController < ApplicationController
       flash[:notice] = "Ec2 Instance request succeeded."      
       redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
     else
-      flash[:error] = "Ec2 Instance request failed: #{@ec2_instance.inspect}"
+      flash[:error] = "Ec2 Instance request failed: #{@ec2_instance.errors.full_messages.to_sentence}"
       render :action => "new"
     end
   end
@@ -38,7 +38,7 @@ class Aws::Ec2InstancesController < ApplicationController
     unless @ec2_instance.terminated_by.nil?
       flash[:notice] = "Ec2 Instance deletion request success"
     else
-      flash[:error] = "Ec2 Instance deletion request failed: #{@ec2_instance.inspect}" 
+      flash[:error] = "Ec2 Instance deletion request failed: #{@ec2_instance.errors.full_messages.to_sentence}" 
     end
     render :show
   end

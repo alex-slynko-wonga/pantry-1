@@ -32,7 +32,7 @@ class JenkinsSlavesController < ApplicationController
       flash[:notice] = "Jenkins slave request succeeded."     
       redirect_to jenkins_server_path(@jenkins_server)
     else
-      flash[:error] = "Error: #{@jenkins_slave.inspect}"
+      flash[:error] = "Error: #{@jenkins_slave.errors.full_messages.to_sentence}"
       @user_teams = current_user.teams
       render :new
     end
@@ -45,7 +45,7 @@ class JenkinsSlavesController < ApplicationController
     unless @jenkins_slave.ec2_instance.terminated_by.nil?
       flash[:notice] = "Jenkins slave deletion request succeeded"
     else
-      flash[:error] = "Jenkins slave deletion request failed: #{@jenkins_slave.inspect}"
+      flash[:error] = "Jenkins slave deletion request failed: #{@jenkins_slave.errors.full_messages.to_sentence}"
     end
     redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
   end

@@ -28,7 +28,7 @@ class JenkinsServersController < ApplicationController
       flash[:notice] = "Jenkins server request succeeded."
       redirect_to @jenkins_server
     else
-      flash[:error] = "Jenkins server request failed: #{@jenkins_server.inspect}"      
+      flash[:error] = "Jenkins server request failed: #{@jenkins_server.errors.full_messages.to_sentence}"      
       load_servers
       render :new
     end
