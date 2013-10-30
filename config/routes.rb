@@ -5,6 +5,7 @@ Wonga::Pantry::Application.routes.draw do
     resources :chef_nodes, only: [:destroy]
     resources :ec2_instances, only: [:update]
     resources :jenkins_slaves, only: [:update]
+    resources :costs, only: [:create]
   end
 
   post '/api/teams/:team_id/chef_environments', :to => 'api/teams/chef_environments#create'
