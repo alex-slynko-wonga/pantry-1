@@ -5,7 +5,7 @@ Feature: EC2 Instance
 
   Background:
     Given AWS has information about machines
-    And queues are configured
+    And queues and topics are configured
 
   @javascript
   Scenario: Creating a new instance

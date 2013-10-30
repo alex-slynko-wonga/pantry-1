@@ -14,7 +14,10 @@ Given(/^AWS has information about machines$/) do
   amis[:images_set] = [ { name: 'image_name', image_id: 'i-121111' } ]
 end
 
-Given(/^queues are configured$/) do
+Given(/^queues and topics are configured$/) do
+  sns_client = AWS::SNS.new.client
+  sns_client.stub(:publish).and_return(AWS::Core::Response.new)
+
   sqs_client = AWS::SQS.new.client
   resp = sqs_client.stub_for(:get_queue_url)
   resp[:queue_url] = "https://some_url.example.com"
@@ -66,7 +69,7 @@ When(/^I destroy an instance$/) do
 end
 
 Then(/^instance destroying process should start$/) do
-  expect(AWS::SQS.new.client).to have_received(:send_message)
+  expect(AWS::SNS.new.client).to have_received(:publish)
 end
 
 When(/^an instance is destroyed$/) do

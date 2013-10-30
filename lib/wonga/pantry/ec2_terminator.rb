@@ -1,7 +1,7 @@
 class Wonga::Pantry::Ec2Terminator
-  def initialize(ec2_instance, sqs = Wonga::Pantry::SQSSender.new(CONFIG["aws"]["terminate_queue_name"]))
+  def initialize(ec2_instance, sns = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]["ec2_instance_delete_topic_arn"]))
     @ec2_instance = ec2_instance
-    @sqs = sqs
+    @sns = sns 
   end
 
   def terminate(user)
@@ -9,7 +9,7 @@ class Wonga::Pantry::Ec2Terminator
     if @ec2_instance.running?
       @ec2_instance.terminated_by = user
       @ec2_instance.save
-      @sqs.send_message(termination_message)
+      @sns.publish_message(termination_message)
     end
   end
 
