@@ -13,8 +13,10 @@ class TeamsController < ApplicationController
     if @team.save
       chef_utility = Wonga::Pantry::ChefUtility.new
       chef_utility.request_chef_environment(@team)
+      flash[:notice] = "Team created successfully"
       redirect_to @team
     else
+      flash[:error] = "Team creation failed: #{@team.inspect}"      
       render :new
     end
   end
@@ -37,7 +39,9 @@ class TeamsController < ApplicationController
     @team.users = users
     if @team.update_attributes(team_params)
       redirect_to @team
+      flash[:notice] = "Team updated successfully"      
     else
+      flash[:error] = "Team update failed: #{@team.inspect}"            
       render :edit
     end
   end

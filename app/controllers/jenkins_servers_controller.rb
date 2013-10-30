@@ -25,8 +25,10 @@ class JenkinsServersController < ApplicationController
       { user_id: current_user.id }
     )
     if aws_utility.request_jenkins_instance(attributes, @jenkins_server)
+      flash[:notice] = "Jenkins server request succeeded."
       redirect_to @jenkins_server
     else
+      flash[:error] = "Jenkins server request failed: #{@jenkins_server.inspect}"      
       load_servers
       render :new
     end

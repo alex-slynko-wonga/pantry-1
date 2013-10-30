@@ -24,7 +24,7 @@
             = link_to 'Log out', logout_url
   .container
     - unless flash.empty?
-      %div{:class => flash_class(flash.first.first)}
+      %div{:class => ["alert-message", flash_class(flash.first.first)]}
         %button{:type => "button", :class => "close", "data-dismiss" => "alert"} &times;
         = flash.first.try(:last)
     = yield

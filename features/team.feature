@@ -7,12 +7,14 @@ Feature: Managing Teams
     Then I should be on team page
     And I should see "TeamName"
     And the team page has the current user
+    And I should see a flash message with "Team created successfully"        
     And a new chef environment should be requested
 
   Scenario: Updating existing team
     Given I am in the "TeamName" team with "Test User" user
     And I am on the teams page
     When I update team "TeamName" with name "NewName"
+    And I should see a flash message with "Team updated successfully"    
     And I click "Teams"
     Then I should see "NewName"
 
