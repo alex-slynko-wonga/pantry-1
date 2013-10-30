@@ -1,9 +1,7 @@
 Wonga::Pantry::Application.routes.draw do
-
-  resources :bills, only: [:index]
+  get "ec2_instance_costs/index"
 
   namespace :api do
-    resources :bills, only: [:create, :show]
     resources :chef_nodes, only: [:destroy]
     resources :ec2_instances, only: [:update]
     resources :jenkins_slaves, only: [:update]
@@ -14,6 +12,7 @@ Wonga::Pantry::Application.routes.draw do
   get "ec2_instances/index"
 
   resources :aws_costs, only: [:index, :show]
+  resources :ec2_instance_costs, only: [ :index ]
 
   resources :ec2_instance_statuses, only: [:show]
   resources :jenkins_servers, except: [:destroy] do

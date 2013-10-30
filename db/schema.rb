@@ -13,15 +13,15 @@
 
 ActiveRecord::Schema.define(:version => 20131022105524) do
 
-  create_table "bills", :force => true do |t|
-    t.date     "bill_date",                                                    :null => false
-    t.decimal  "total_cost", :precision => 10, :scale => 2,                    :null => false
-    t.boolean  "actual",                                    :default => false
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
+  create_table "ec2_instance_costs", :force => true do |t|
+    t.date     "bill_date"
+    t.decimal  "cost",            :precision => 10, :scale => 2
+    t.integer  "ec2_instance_id"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
   end
 
-  add_index "bills", ["bill_date"], :name => "index_bills_on_bill_date", :unique => true
+  add_index "ec2_instance_costs", ["bill_date", "ec2_instance_id"], :name => "index_ec2_instance_costs_on_bill_date_and_ec2_instance_id"
 
   create_table "ec2_instances", :force => true do |t|
     t.string   "name"
