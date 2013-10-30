@@ -23,11 +23,13 @@ class UsersController < ApplicationController
                       :notice => "User updated" ) }
         format.json { render :json => @user,
                       :status => :updated, :location => @user  }
+        flash[:notice] = "User updated successfully"                      
       else
         format.html { redirect_to(@user,
                       :notice => "User update failed!" ) }
         format.json { render :json => @user.errors,
                       :status => :unprocessable_entity  }
+        flash[:error] = "User updating failed: #{user.errors.full_messages.to_sentence}"                
       end
     end
   end

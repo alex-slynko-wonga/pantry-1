@@ -14,6 +14,7 @@ Feature: EC2 Instance
     Then I should see "instanceName"
     And I should see "Booting"
     And I should see "pending"
+    And I should see a flash message with "Ec2 Instance request succeeded."
     And an instance build should start
 
     When an instance is created
@@ -38,6 +39,7 @@ Feature: EC2 Instance
     When I am on instance page
     And I destroy an instance
     Then I should see "Terminating"
+    And I should see a flash message with "Ec2 Instance deletion request success"    
     And instance destroying process should start
 
     When an instance is destroyed

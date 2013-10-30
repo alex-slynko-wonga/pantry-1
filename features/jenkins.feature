@@ -12,6 +12,7 @@ Feature: Jenkins
     Given I am in the "Pantry Team" team
     And I request jenkins server
     Then I should see "Pantry Team's jenkins server"
+    And I should see a flash message with "Jenkins server request succeeded."    
     And an instance build should start
 
   @javascript
@@ -31,5 +32,6 @@ Feature: Jenkins
     When I go into Jenkins slave page
     And I click destroy
     Then I should be redirected to the Jenkins server page
+    And I should see a flash message with "Jenkins slave deletion request succeeded"    
     And I click the jenkins slave
     And I should see "Destroy action sent. This slave is not usable anymore."

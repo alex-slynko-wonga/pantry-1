@@ -29,9 +29,10 @@ class JenkinsSlavesController < ApplicationController
     }
 
     if aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
+      flash[:notice] = "Jenkins slave request succeeded."     
       redirect_to jenkins_server_path(@jenkins_server)
     else
-      flash[:error] = "Error: #{@jenkins_slave.inspect}"
+      flash[:error] = "Error: #{@jenkins_slave.errors.full_messages.to_sentence}"
       @user_teams = current_user.teams
       render :new
     end
@@ -41,6 +42,11 @@ class JenkinsSlavesController < ApplicationController
     @jenkins_slave = @jenkins_server.jenkins_slaves.find(params[:id])
     server_fqdn = "#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}"
     Wonga::Pantry::JenkinsSlaveDestroyer.new(@jenkins_slave, server_fqdn, 80, current_user).delete
+    unless @jenkins_slave.ec2_instance.terminated_by.nil?
+      flash[:notice] = "Jenkins slave deletion request succeeded"
+    else
+      flash[:error] = "Jenkins slave deletion request failed: #{@jenkins_slave.errors.full_messages.to_sentence}"
+    end
     redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
   end
 
