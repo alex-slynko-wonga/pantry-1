@@ -1,12 +1,10 @@
 class Api::CostsController < ApiController
   def create
-    ec2_instance_cost = Ec2InstanceCost.create(ec2_instance_cost_attributes)
-    respond_with({:msg => "success"}, :location => ec2_instance_costs_url)
-  end
-  
-private
+    params[:ec2_total].each do |entry|
+      cost = Ec2InstanceCost.where(ec2_instance_id: entry[:ec2_instance_id], bill_date: params[:bill_date].to_date).first_or_initialize
+      cost.update_attributes(cost: entry[:cost], estimated: entry[:estimated])
+    end
 
-  def ec2_instance_cost_attributes
-    params.require(:ec2_instance_cost).permit(:bill_date, :cost, :ec2_instance_id)
+    respond_with({:msg => "success"}, :location => ec2_instance_costs_url)
   end
 end

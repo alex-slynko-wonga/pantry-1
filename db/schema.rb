@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131022105524) do
+ActiveRecord::Schema.define(:version => 20131101181833) do
 
   create_table "ec2_instance_costs", :force => true do |t|
     t.date     "bill_date"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20131022105524) do
     t.integer  "ec2_instance_id"
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
+    t.boolean  "estimated"
   end
 
   add_index "ec2_instance_costs", ["bill_date", "ec2_instance_id"], :name => "index_ec2_instance_costs_on_bill_date_and_ec2_instance_id"
