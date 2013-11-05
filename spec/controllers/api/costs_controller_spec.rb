@@ -11,7 +11,7 @@ describe Api::CostsController do
     
     it "should add the cost" do
       params = {ec2_total: [
-          {:estimated => false, :ec2_instance_id => ec2_instance.id, :cost => "23.33"}
+          {:estimated => false, :instance_id => ec2_instance.id, :cost => "23.33"}
         ], bill_date: bill_date }
       expect {
         post :create, params
@@ -22,7 +22,7 @@ describe Api::CostsController do
       cost = Ec2InstanceCost.create!(:estimated => false, :ec2_instance_id => ec2_instance.id, :cost => "23.33", bill_date: bill_date)
 
       params = {ec2_total: [
-          {:estimated => true, :ec2_instance_id => cost.ec2_instance_id, :cost => "53.33"}
+          {:estimated => true, :instance_id => cost.ec2_instance_id, :cost => "53.33"}
         ], bill_date: bill_date}
       
       expect {
