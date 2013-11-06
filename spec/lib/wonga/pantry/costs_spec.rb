@@ -16,6 +16,13 @@ describe Wonga::Pantry::Costs do
       expect(result).to eq(expected)
     end
 
+    it "returns array of hashes with 0 if team has no reported costs selected date" do
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date + 1, ec2_instance: ec2_instance, cost: 50)
+      result = subject.costs_per_team
+      expected = [{"id" => team.id, "name" => team.name, "costs" => 0.to_d } ]
+      expect(result).to eq(expected)
+    end
+
     it "returns array of hashes with 0 if team has no reported costs" do
       result = subject.costs_per_team
       expected = [{"id" => team.id, "name" => team.name, "costs" => 0.to_d } ]
