@@ -39,7 +39,7 @@ describe Wonga::Pantry::AWSUtility do
   subject { described_class.new(sqs_sender) }
   let(:team) { FactoryGirl.create(:team) }
   let(:user) { FactoryGirl.create(:user, team: team) }
-  let(:existing_server) { FactoryGirl.create(:jenkins_server) }
+  let(:existing_server) { FactoryGirl.create(:jenkins_server, team: team) }
   let(:sqs_sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
 
   let(:jenkins_params) {
@@ -76,7 +76,7 @@ describe Wonga::Pantry::AWSUtility do
     include_examples 'request_instance'
 
     context "when team already owns one server" do
-      let!(:team) { existing_server.team }
+      let!(:existing_server) { FactoryGirl.create(:jenkins_server, team: team) }
 
       it "saves jenkins instance" do
         subject.request_jenkins_instance(
@@ -100,11 +100,11 @@ describe Wonga::Pantry::AWSUtility do
         )
         expect(sqs_sender).to_not have_received(:send_message)
       end
-      
+
       it "sets jenkins_linux_server role" do
         subject.jenkins_instance_params(jenkins)[:run_list].should == "role[jenkins_linux_server]"
       end
-      
+
       it "sets ami-00110010" do
         subject.jenkins_instance_params(jenkins)[:ami].should == "ami-00110010"
       end

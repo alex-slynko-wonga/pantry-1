@@ -1,6 +1,6 @@
 class JenkinsServer < ActiveRecord::Base
   belongs_to :team
-  has_many :jenkins_slaves
+  has_many :jenkins_slaves, conditions: { removed: [false, nil] }
   belongs_to :ec2_instance
   default_scope eager_load(:ec2_instance).merge(Ec2Instance.running)
 

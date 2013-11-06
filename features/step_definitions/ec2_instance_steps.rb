@@ -64,10 +64,6 @@ Then(/^I should not be able to add a fifth security group$/) do
   expect{ check('name5') }.to raise_error # because it is grayed out
 end
 
-When(/^I destroy an instance$/) do
-  click_on "Destroy"
-end
-
 Then(/^instance destroying process should start$/) do
   expect(AWS::SNS.new.client).to have_received(:publish)
 end
