@@ -4,14 +4,14 @@ Given(/^I request jenkins server$/) do
 end
 
 Given(/^I have a jenkins server$/) do
-  @jenkins_server = FactoryGirl.create(:jenkins_server, ec2_instance: FactoryGirl.create(:ec2_instance, :bootstrapped), team: @team)
+  @jenkins_server = FactoryGirl.create(:jenkins_server, ec2_instance: FactoryGirl.create(:ec2_instance, :bootstrapped, team: @team), team: @team)
 end
 
 Given(/^I have a jenkins slave$/) do
-  @jenkins_slave = FactoryGirl.create(:jenkins_slave, ec2_instance: FactoryGirl.create(:ec2_instance, :bootstrapped), jenkins_server: @jenkins_server)
+  @jenkins_slave = FactoryGirl.create(:jenkins_slave, ec2_instance: FactoryGirl.create(:ec2_instance, :bootstrapped, team: @team), jenkins_server: @jenkins_server)
 end
 
-When(/^I click the server ID$/) do
+When(/^I click on the server ID$/) do
   click_on @jenkins_server.id
 end
 
@@ -20,35 +20,47 @@ When(/^I visit the Jenkins slave page$/) do
 end
 
 Then(/^I should see the server listing$/) do
-  page.should have_content @jenkins_server.ec2_instance.name
+  expect(page).to have_content @jenkins_server.ec2_instance.name
 end
 
 Then(/^I should see the slaves listing$/) do
-  page.should have_content @jenkins_slave.ec2_instance.instance_id
-  page.should have_content @jenkins_slave.ec2_instance.name
-  page.should have_content @jenkins_slave.ec2_instance.ami
-  page.should have_content @jenkins_slave.ec2_instance.instance_id
-  page.should have_content @jenkins_slave.ec2_instance.bootstrapped
-  page.should have_content @jenkins_slave.ec2_instance.booted
-  page.should have_content @jenkins_slave.ec2_instance.joined
-end
-
-When(/^I click destroy$/) do
-  click_on "Destroy"
+  @jenkins_slave ||= JenkinsSlave.last
+  expect(page).to have_content @jenkins_slave.ec2_instance.instance_id
+  expect(page).to have_content @jenkins_slave.ec2_instance.name
+  expect(page).to have_content @jenkins_slave.ec2_instance.ami
+  expect(page).to have_content @jenkins_slave.ec2_instance.instance_id
+  expect(page).to have_content @jenkins_slave.ec2_instance.bootstrapped
+  expect(page).to have_content @jenkins_slave.ec2_instance.booted
+  expect(page).to have_content @jenkins_slave.ec2_instance.joined
 end
 
 Then(/^I should be redirected to the Jenkins server page$/) do
-  page.should have_content "Jenkins Slaves"
+  expect(page).to have_content "Jenkins Slaves"
 end
 
-When(/^I click the jenkins slave$/) do
+When(/^I click on the jenkins slave$/) do
   click_on @jenkins_slave.id
-end
-
-Then(/^I should not be able to see "(.*?)"$/) do |text|
-  page.should_not have_content text
 end
 
 When(/^I go into Jenkins slave page$/) do
   visit "/jenkins_servers/#{@jenkins_server.id}/jenkins_slaves/#{@jenkins_slave.id}"
+end
+
+When(/^I request new slave$/) do
+  page.click_on "Create a new slave"
+  click_on "Create slave"
+end
+
+When(/^slave is deleted$/) do
+  @jenkins_slave.update_attribute(:removed, true)
+end
+
+Then(/^I should not see slave in listing$/) do
+  expect(page).to_not have_content @jenkins_slave.ec2_instance.instance_id
+  expect(page).to_not have_content @jenkins_slave.ec2_instance.name
+  expect(page).to_not have_content @jenkins_slave.ec2_instance.ami
+  expect(page).to_not have_content @jenkins_slave.ec2_instance.instance_id
+  expect(page).to_not have_content @jenkins_slave.ec2_instance.bootstrapped
+  expect(page).to_not have_content @jenkins_slave.ec2_instance.booted
+  expect(page).to_not have_content @jenkins_slave.ec2_instance.joined
 end

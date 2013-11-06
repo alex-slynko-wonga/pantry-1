@@ -20,6 +20,15 @@ describe JenkinsServer do
     end
   end
 
+  describe "jenkins_slaves" do
+    it "shows only not removed slaves" do
+      slave = FactoryGirl.create(:jenkins_slave)
+      server = slave.jenkins_server
+      slave.update_attribute(:removed, true)
+      expect(server.jenkins_slaves).to be_blank
+    end
+  end
+
   it { should be_valid }
 
   it "is invalid when team already have a jenkins server" do

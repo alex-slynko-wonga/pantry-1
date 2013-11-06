@@ -29,15 +29,15 @@ class JenkinsSlavesController < ApplicationController
     }
 
     if aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
-      flash[:notice] = "Jenkins slave request succeeded."     
-      redirect_to jenkins_server_path(@jenkins_server)
+      flash[:notice] = "Jenkins slave request succeeded."
+      redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
     else
       flash[:error] = "Error: #{@jenkins_slave.errors.full_messages.to_sentence}"
       @user_teams = current_user.teams
       render :new
     end
   end
-  
+
   def destroy
     @jenkins_slave = @jenkins_server.jenkins_slaves.find(params[:id])
     server_fqdn = "#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}"
