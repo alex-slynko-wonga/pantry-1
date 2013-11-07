@@ -13,6 +13,7 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'chef_zero/server'
 AWS.stub!
+AWS.config(sqs_verify_checksums: false)
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

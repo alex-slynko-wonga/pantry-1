@@ -14,14 +14,17 @@
         = navbar_link_to("Jenkins", jenkins_servers_url)
         - if current_user.have_billing_access?
           = navbar_link_to("Billing", ec2_instance_costs_url)
+        - #TODO: make it better
+        - if current_user.team_ids.include?(1)
+          = navbar_link_to("Queues", queues_url)
 
-      - if current_user
-        %ul.nav.pull-right
-          - if current_user.image_url
-            %li
-              %img{src: current_user.image_url, alt: 'Gravatar'}
+      %ul.nav.pull-right
+        - if current_user.image_url
           %li
-            = link_to 'Log out', logout_url
+            %img{src: current_user.image_url, alt: 'Gravatar'}
+        %li
+          = link_to 'Log out', logout_url
+
   .container
     - unless flash.empty?
       %div{:class => ["alert-message", flash_class(flash.first.first)]}

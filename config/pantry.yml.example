@@ -12,6 +12,7 @@ development:
     password: "secret_password"
     auth_method: "simple"
   aws:
+    queue_prefix: pantry_example_com
     chef_env_create_queue_name: some_queue
     terminate_queue_name: pantry_wonga_aws-ec2_terminate_command
     jenkins_slave_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-jenkins_slave_delete
@@ -53,6 +54,7 @@ test:
     password: "secret_password"
     auth_method: "simple"
   aws:
+    queue_prefix: pantry_example_com
     boot_machine_queue_name: pantry_wonga_aws-ec2_boot_command
     terminate_queue_name: pantry_wonga_aws-ec2_terminate_command
     jenkins_slave_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-jenkins_slave_delete    
