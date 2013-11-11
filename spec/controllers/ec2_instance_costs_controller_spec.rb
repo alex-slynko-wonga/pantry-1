@@ -10,7 +10,7 @@ describe Ec2InstanceCostsController do
 
     it "sets costs using Wonga::Pantry::Costs class" do
       expect(Wonga::Pantry::Costs).to receive(:new).and_call_original
-      get 'index'
+      get 'index', format: :json
     end
   end
 end

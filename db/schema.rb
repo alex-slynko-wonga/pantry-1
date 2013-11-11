@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131106151345) do
+ActiveRecord::Schema.define(:version => 20131111103654) do
 
   create_table "ec2_instance_costs", :force => true do |t|
     t.date     "bill_date"
@@ -85,6 +85,13 @@ ActiveRecord::Schema.define(:version => 20131106151345) do
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
     t.string   "chef_environment"
+  end
+
+  create_table "total_costs", :force => true do |t|
+    t.decimal  "cost",       :precision => 10, :scale => 2
+    t.date     "bill_date"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "users", :force => true do |t|
