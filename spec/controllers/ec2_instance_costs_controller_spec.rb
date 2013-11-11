@@ -13,5 +13,4 @@ describe Ec2InstanceCostsController do
       get 'index'
     end
   end
-
 end

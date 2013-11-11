@@ -1,7 +1,13 @@
-Given(/^it has an instance which costs (\d+) dollars for (\d+) months?$/) do |cost, months|
-  instance = FactoryGirl.create(:ec2_instance, team: @team)
-  today = Date.today
-  months.to_i.times { |i| FactoryGirl.create(:ec2_instance_cost, ec2_instance: instance, bill_date: (today - i.months).end_of_month, cost: cost) }
+Given(/^"(.*?)" team has an instance which costs (\d+) dollars for "(.*?)" "(.*?)"$/) do |team_name, cost, month, year|
+  instance = FactoryGirl.create(:ec2_instance, team: Team.find_by_name(team_name))
+  month = Date::MONTHNAMES.index(month)
+  date = DateTime.parse("#{year}-#{month}-01").end_of_month.to_date
+  FactoryGirl.create(:ec2_instance_cost, ec2_instance: instance, bill_date: date, cost: cost)
+  $stdout.puts Ec2InstanceCost.last.inspect
+end
+
+Given(/^I have a "(.*?)" team$/) do |team_name|
+  @team = FactoryGirl.create(:team, name: team_name)
 end
 
 Then(/^I see that "(.*?)" team costs (\d+) dollars$/) do |team_name, cost|
@@ -9,8 +15,6 @@ Then(/^I see that "(.*?)" team costs (\d+) dollars$/) do |team_name, cost|
   expect(page.text).to include(cost)
 end
 
-When(/^I open details for "(.*?)" team costs$/) do |arg1|
-end
-
-Then(/^I see (\d+) and (\d+) as instances cost$/) do |arg1, arg2|
+When(/^I select "(.*?)" as date$/) do |date|
+  select date
 end
