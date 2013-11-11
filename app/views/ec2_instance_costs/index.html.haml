@@ -5,7 +5,7 @@
   .row-fluid
     .span6
       %select{"id" => "change_date", "name" => "change_date", "ng-model" => "date", "ng-change" => "getCosts()", "ng-options" => "o[0] as o[1] for o in options", "value" => "o"}
-        
+
       %table.table
         %thead
           %tr
@@ -15,5 +15,18 @@
           %tr{"ng-repeat" => "cost in costs"}
             %td
               %a{:href => "/teams/{{cost.id}}"} {{cost.name}}
-            %td {{cost.costs}}
+            %td ${{cost.costs}}
+          %tr.warning
+            %td Total for instances created in Pantry
+            %td ${{total_pantry_costs}}
+          %tr
+            %td
+            %td
+          %tr.success
+            %td
+              %strong
+                Total costs for AWS
+            %td
+              %strong
+                ${{total_costs}}
     .span6
