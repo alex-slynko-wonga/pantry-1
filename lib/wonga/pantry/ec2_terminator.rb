@@ -16,8 +16,8 @@ class Wonga::Pantry::Ec2Terminator
   private
   def termination_message
     {
-      :hostname      => "#{@ec2_instance.name}",
-      :domain        => "#{@ec2_instance.domain}",
+      :hostname      => @ec2_instance.name,
+      :domain        => @ec2_instance.domain,
       :instance_id   => @ec2_instance.instance_id,
       :id            => @ec2_instance.id
     }

@@ -14,7 +14,7 @@ class Wonga::Pantry::JenkinsSlaveDestroyer
     @sns.publish_message({
       'server_ip'         => @server_ip,
       'server_port'       => @server_port,
-      'hostname'          => "#{@ec2_instance.name}", 
+      'hostname'          => @ec2_instance.name, 
       'domain'            => @ec2_instance.domain,
       'instance_id'       => @ec2_instance.instance_id,
       'id'                => @ec2_instance.id,
