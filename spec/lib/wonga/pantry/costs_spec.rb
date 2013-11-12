@@ -11,17 +11,30 @@ describe Wonga::Pantry::Costs do
     it "returns array of hashes with total costs for current bill date only" do
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date + 1, ec2_instance: ec2_instance, cost: 50)
-      result = subject.costs_per_team
-      expected = [{"id" => team.id, "name" => team.name, "costs" => 100.to_d } ]
-      expect(result).to eq(expected)
+      result = subject.costs_per_team.first
+      result.id.should eq team.id
+      result.name.should eq team.name
     end
 
     it "returns array of hashes with total costs for all instances" do
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: FactoryGirl.create(:ec2_instance, team: team), cost: 50)
-      result = subject.costs_per_team
-      expected = [{"id" => team.id, "name" => team.name, "costs" => 150.to_d } ]
-      expect(result).to eq(expected)
+      result = subject.costs_per_team.first
+      result.id.should eq team.id
+      result.name.should eq team.name
+    end
+  end
+
+  describe "#costs_details_per_team" do
+    let!(:team) { FactoryGirl.create(:team) }
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
+
+    it "returns the instances with their cost, providing a date and the team id" do
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: FactoryGirl.create(:ec2_instance, team: team), cost: 50)
+      result = subject.costs_details_per_team(team.id)
+      result[0].cost.should eq(100)
+      result[1].cost.should eq(50)
     end
   end
 

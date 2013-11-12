@@ -1,9 +1,9 @@
 Given(/^"(.*?)" team has an instance which costs (\d+) dollars for "(.*?)"$/) do |team_name, cost, month_and_year|
-  instance = FactoryGirl.create(:ec2_instance, team: Team.find_by_name(team_name))
+  @instance = FactoryGirl.create(:ec2_instance, team: Team.find_by_name(team_name))
   (month, year) = month_and_year.split
   month = Date::MONTHNAMES.index(month)
   date = Date.new(year.to_i, month, 1).end_of_month
-  FactoryGirl.create(:ec2_instance_cost, ec2_instance: instance, bill_date: date, cost: cost)
+  FactoryGirl.create(:ec2_instance_cost, ec2_instance: @instance, bill_date: date, cost: cost)
 end
 
 Given(/^I have a "(.*?)" team$/) do |team_name|
