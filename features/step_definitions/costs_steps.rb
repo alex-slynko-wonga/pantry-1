@@ -11,8 +11,7 @@ Given(/^I have a "(.*?)" team$/) do |team_name|
 end
 
 Then(/^I see that "(.*?)" team costs (\d+) dollars$/) do |team_name, cost|
-  wait_until(5) { page.text.include?(team_name) }
-  expect(page.text).to include(cost)
+  wait_until(5) { page.text.include?(cost) }
   expect(page).to have_xpath("//table/tbody/tr[td[contains(.,'#{team_name}')]]/td[contains(.,'#{cost}')]")
 end
 
@@ -33,7 +32,6 @@ Then(/^I see that total cost are (\d+) dollars$/) do |cost|
 end
 
 Then(/^I see that total Pantry costs are (\d+) dollars$/) do |cost|
-  p page.text
   wait_until(5) { page.text.include?(cost) }
   expect(page).to have_xpath("//table/tbody/tr[td[contains(.,'Total for instances created in Pantry')]]/td[contains(.,'#{cost}')]")
 end
