@@ -1,7 +1,6 @@
 class Api::Ec2InstancesController < ApiController
   def update
-    ec2_instance = Ec2Instance.find params[:id]
-    ec2_instance.complete! params
-    respond_with {}    
+    Wonga::Pantry::Ec2InstanceState.new(Ec2Instance.find(params[:id]), nil, params).change_state
+    respond_with {}
   end
 end

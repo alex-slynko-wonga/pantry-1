@@ -21,6 +21,7 @@ gem 'rabl'
 gem 'simple_form'
 gem 'rack-ssl'
 gem 'cache_digests'
+gem "state_machine", "~> 1.2.0"
 
 group :development do
   gem 'quiet_assets'

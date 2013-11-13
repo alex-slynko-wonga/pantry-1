@@ -1,5 +1,6 @@
 - cache [:v1, @ec2_instance] do
   %h1= @ec2_instance.name
-  = render 'shared/ec2_instance', ec2_instance: @ec2_instance
-  - if @ec2_instance.running?
-    = button_to 'Destroy', [:aws, @ec2_instance], method: :delete, data: { confirm: 'This will permanently delete this instance. Are you sure?' }
+  = render partial: 'shared/ec2_instance', locals: {ec2_instance: @ec2_instance}
+  -# if @something.can? (:terminated)
+  - if @ec2_instance.state != "terminating" && @ec2_instance.state != "terminated"
+    = button_to 'Destroy', [:aws, @ec2_instance], method: :delete, confirm: 'This will permanently delete this instance. Are you sure?'
