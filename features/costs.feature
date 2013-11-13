@@ -1,6 +1,6 @@
 Feature: As a manager
-  To keep company effective
-  I need to know cost of each instance
+         To keep company effective
+         I need to know cost of each instance
 
   @javascript
   Scenario: Teams costs

@@ -14,7 +14,7 @@ Wonga::Pantry::Application.routes.draw do
 
   resources :aws_costs, only: [:index, :show]
   resources :total_costs, only: [:show]
-  resources :ec2_instance_costs, only: [ :index ]
+  resources :ec2_instance_costs, only: [ :index, :show ]
 
   resources :ec2_instance_statuses, only: [:show]
   resources :jenkins_servers, except: [:destroy] do

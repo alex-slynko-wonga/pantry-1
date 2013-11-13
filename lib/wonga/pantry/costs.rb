@@ -10,13 +10,13 @@ class Wonga::Pantry::Costs
     result = Team.joins(:ec2_instance_costs).
       where(ec2_instance_costs: { bill_date: @bill_date }).
       select('teams.id, teams.name, SUM(ec2_instance_costs.cost) as costs').
-      group('teams.id, teams.name').all
-
-    result.map do |record|
-      attributes = record.attributes
-      attributes['costs'] ||= BigDecimal(0)
-      attributes
-    end
+      group('teams.id, teams.name').
+      order('teams.name').all
+  end
+  
+  def costs_details_per_team(team_id)
+    Ec2InstanceCost.includes(:ec2_instance).
+      where(ec2_instance_costs: { bill_date: @bill_date }, ec2_instances: {team_id: team_id}).
+      order('ec2_instances.name').all
   end
 end
-
