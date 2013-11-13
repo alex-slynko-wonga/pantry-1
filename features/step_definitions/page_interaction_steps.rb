@@ -2,8 +2,14 @@ Then(/^I should see "(.*?)"$/) do |some_text|
   expect(page.text).to include(some_text)
 end
 
+Then(/^I should see "(.*?)" after page is updated$/) do |some_text|
+  wait_until(10) do
+    page.has_content? some_text
+  end
+end
+
 Then(/^I should not see "(.*?)"$/) do |some_text|
-  expect(page.text).to_not include(some_text)
+  expect(page).to_not have_content(some_text)
 end
 
 When(/^I click (?:on )?"(.*?)"$/) do |text|

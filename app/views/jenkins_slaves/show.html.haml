@@ -2,7 +2,7 @@
 
 = link_to "Go back to the Jenkins server", jenkins_server_jenkins_slaves_path(@jenkins_server)
 
-= render partial: 'shared/ec2_instance', locals: {ec2_instance: @ec2_instance}
+= render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
 - if @ec2_instance.running?
   = button_to('Destroy', [@jenkins_server, @jenkins_slave], method: :delete, confirm: 'This will permanently delete this instance. Are you sure?')

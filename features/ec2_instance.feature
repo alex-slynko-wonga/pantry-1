@@ -17,15 +17,16 @@ Feature: EC2 Instance
     And I should see a flash message with "Ec2 Instance request succeeded."
     And an instance build should start
 
-    When an instance is created
-    And I am still on instance page
-    Then I should see "Ready"
+    When an instance is created with ip "123.456.7.8"
+    Then I should see "Ready" after page is updated
+    And I should see "123.456.7.8"
 
-    When an instance is created
-    And an instance is updated with ip "123.456.7.8"
-    And I am still on instance page
-    Then I should see "123.456.7.8"
-
+  @javascript
+  Scenario: Machine status
+    Given I have at least one EC2 in the team
+    And instance load is "2.42"
+    When I am on instance page
+    Then I should see "2.42" after page is updated
 
   @javascript
   Scenario: Cannot select more than four security groups
@@ -39,7 +40,7 @@ Feature: EC2 Instance
     When I am on instance page
     And I destroy an instance
     Then I should see "Terminating"
-    And I should see a flash message with "Ec2 Instance deletion request success"    
+    And I should see a flash message with "Ec2 Instance deletion request success"
     And instance destroying process should start
 
     When an instance is destroyed

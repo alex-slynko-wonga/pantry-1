@@ -40,16 +40,11 @@ Then(/^an instance build should start$/) do
   expect(AWS::SQS.new.client).to have_received(:send_message)
 end
 
-When(/^an instance is created$/) do
-  instance = Ec2Instance.last
-  instance.bootstrapped = true
-  instance.joined = true
-  instance.save
-end
-
-When(/^an instance is updated with ip "(.*?)"$/) do |arg1|
+When(/^an instance is created with ip "(.*?)"$/) do |ip|
   instance = Ec2Instance.last
   instance.complete!({"ip_address" => "123.456.7.8"})
+  instance.bootstrapped = true
+  instance.joined = true
   instance.save
 end
 
@@ -75,4 +70,11 @@ end
 Then(/^I should see that instance is destroyed$/) do
   expect(page).to have_no_button('Destroy')
   expect(page.text).to include('Terminated')
+end
+
+When(/^instance load is "(.*?)"$/) do |load|
+  metrics = AWS::CloudWatch.new.client.stub_for(:list_metrics)
+  metrics[:metrics] = [{metric_name: 'CPUUtilization', namespace: 'Test'}]
+  statistics = AWS::CloudWatch.new.client.stub_for :get_metric_statistics
+  statistics[:datapoints] =  [{timestamp: Time.current, unit: 'Percent', average: load.to_d}]
 end
