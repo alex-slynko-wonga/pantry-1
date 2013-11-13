@@ -1,0 +1,21 @@
+%h1
+  Queue
+  = params[:id]
+
+%h4
+  Messages being processed
+  = @queue.invisible_messages
+
+%h4
+  Pending messages:
+  = @queue.visible_messages
+
+- if @message
+  .row-fluid
+    .span2
+      Body:
+    .span2= @message.body
+  .row-fluid
+    .span2
+      Times received:
+    .span2= @message.receive_count.to_i

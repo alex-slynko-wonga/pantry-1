@@ -8,14 +8,12 @@ describe Wonga::Pantry::SQSSender do
     it "sends a message to a queue" do
       client = AWS::SQS.new.client
       resp = client.stub_for(:get_queue_url)
-      resp[:queue_url] = "https://sqs.eu.amazonaws.com/1337/fakequeue"
+      resp[:queue_url] = "https://sqs.eu.amazonaws.com/fakequeue"
 
-      client.should_receive(:send_message) do |msg|
-        JSON.parse(msg[:message_body])
-        AWS::Core::Response.new
-      end
+      expect(client).to receive(:send_message).and_call_original
 
       subject.send_message(message)
+      resp.clear
     end
   end
 end

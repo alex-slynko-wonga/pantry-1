@@ -12,6 +12,7 @@ Wonga::Pantry::Application.routes.draw do
 
   get "ec2_instances/index"
 
+  resources :queues, only: [:index, :show]
   resources :aws_costs, only: [:index, :show]
   resources :total_costs, only: [:show]
   resources :ec2_instance_costs, only: [ :index, :show ]

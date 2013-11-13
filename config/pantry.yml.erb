@@ -1,5 +1,6 @@
 <%= @app_environment %>:
   aws:
+    queue_prefix: <%= @config["aws"]["queue_prefix"] %>
     billing_bucket: <%= @config["aws"]["billing_bucket"] %>
     default_subnet: <%= @config["aws"]["default_subnet"] %>
     flavor: <%= @config["aws"]["flavor"] %>

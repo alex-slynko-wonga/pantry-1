@@ -1,0 +1,15 @@
+%h1 Queues
+
+%table.table
+  %thead
+    %tr
+      %th Name
+      %th Pending messages
+      %th Messages being processed
+  %tbody
+    - @queues.each do |queue|
+      %tr
+        %td= link_to queue.arn.split(':').last, queue_url(queue.arn.split(':').last)
+        %td= queue.visible_messages
+        %td= queue.invisible_messages
+
