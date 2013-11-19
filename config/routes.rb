@@ -10,14 +10,15 @@ Wonga::Pantry::Application.routes.draw do
 
   post '/api/teams/:team_id/chef_environments', :to => 'api/teams/chef_environments#create'
 
-  get "ec2_instances/index"
+  resources :ec2_instances, only: [:show] do
+    get 'aws_status', on: :member
+  end
 
   resources :queues, only: [:index, :show]
   resources :aws_costs, only: [:index, :show]
   resources :total_costs, only: [:show]
   resources :ec2_instance_costs, only: [ :index, :show ]
 
-  resources :ec2_instance_statuses, only: [:show]
   resources :jenkins_servers, except: [:destroy] do
     resources :jenkins_slaves
   end

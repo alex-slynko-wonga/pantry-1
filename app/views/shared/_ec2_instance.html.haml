@@ -1,31 +1,26 @@
-.row-fluid
-  .span2
-    IP address:
-  .span2= ec2_instance.ip_address
-.row-fluid
-  .span2
-    Requested by user:
-  .span2= link_to(ec2_instance.user.username, @ec2_instance.user)
-.row-fluid
-  .span2
-    Requested on:
-  .span2= ec2_instance.created_at
-.row-fluid
-  .span2
-    Name:
-  .span2= ec2_instance.name
-.row-fluid
-  .span2
-    Domain:
-  .span2= ec2_instance.domain
-.row-fluid
-  .span2
-    AMI:
-  .span2= ec2_instance.ami
-.row-fluid
-  .span2
-    Instance ID:
-  .span2= ec2_instance.instance_id
-#ec2instance_status{'data-url' => ec2_instance_status_url(ec2_instance)}
-  #ec2instance_status_content
-    = render 'shared/ec2_instance_status', ec2_instance: ec2_instance
+- cache [:v1, ec2_instance] do
+  .row-fluid
+    .span2
+      Requested by user:
+    .span2= link_to(ec2_instance.user.username, @ec2_instance.user)
+  .row-fluid
+    .span2
+      Requested on:
+    .span2= l ec2_instance.created_at, format: :long
+  .row-fluid
+    .span2
+      Name:
+    .span2= ec2_instance.name
+  .row-fluid
+    .span2
+      Domain:
+    .span2= ec2_instance.domain
+  .row-fluid
+    .span2 AMI:
+    .span2= ec2_instance.ami
+  .row-fluid
+    .span2 Type:
+    .span2= ec2_instance.flavor
+  #ec2instance_status{'data-url' => ec2_instance_url(ec2_instance)}
+    #ec2instance_status_content
+      = render 'shared/ec2_instance_status', ec2_instance: ec2_instance

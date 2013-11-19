@@ -11,7 +11,7 @@
         %td= index + 1
         %td= link_to team.name, team
         %td= team.description
-        %td= team.created_at
+        %td= l team.created_at, format: :long
         %td= link_to 'Edit', edit_team_url(team)
 = link_to "New Team", new_team_url
 

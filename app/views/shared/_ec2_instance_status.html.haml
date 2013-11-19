@@ -1,4 +1,12 @@
-- cache [:v1, ec2_instance] do
+- cache [:v2, ec2_instance] do
+  .row-fluid
+    .span2
+      Instance ID:
+    .span2= ec2_instance.instance_id
+  .row-fluid
+    .span2
+      IP address:
+    .span2= ec2_instance.ip_address
   .row-fluid
     .span2
       Current Step:
@@ -22,6 +30,19 @@
       Joined to Domain:
     .span2
       .joined= display_status_image(ec2_instance.joined)
-  - unless ec2_instance.human_status == 'Ready'
+  - if ec2_instance.human_status == 'Ready'
+    %div{"ng-controller" => "Ec2InstanceCtrl", "ng-init" => "getAwsStatus()", "id" => "Ec2InstanceCtrl", "data-instance-id" => ec2_instance.instance_id}
+      .row-fluid
+        .span2
+          Status check failed:
+        .span2
+          {{ec2_instance_status.status_check_failed}}
+      .row-fluid
+        .span2
+          CPU Utilization:
+        .span2
+          {{ec2_instance_status.cpu_utilization}}
+
+  - else
     :javascript
         Ec2InstanceRequestStatusPoller.poll();
