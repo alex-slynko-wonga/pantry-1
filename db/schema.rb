@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131111103654) do
+ActiveRecord::Schema.define(:version => 20131118140021) do
 
   create_table "ec2_instance_costs", :force => true do |t|
     t.date     "bill_date"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(:version => 20131111103654) do
   end
 
   add_index "ec2_instance_costs", ["bill_date", "ec2_instance_id"], :name => "index_ec2_instance_costs_on_bill_date_and_ec2_instance_id"
+
+  create_table "ec2_instance_logs", :force => true do |t|
+    t.integer  "ec2_instance_id"
+    t.string   "from_state"
+    t.string   "event"
+    t.integer  "user_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "ec2_instances", :force => true do |t|
     t.string   "name"
@@ -48,6 +57,8 @@ ActiveRecord::Schema.define(:version => 20131111103654) do
     t.boolean  "terminated"
     t.integer  "terminated_by_id"
     t.string   "ip_address"
+    t.boolean  "dns"
+    t.string   "state"
   end
 
   create_table "jenkins_servers", :force => true do |t|

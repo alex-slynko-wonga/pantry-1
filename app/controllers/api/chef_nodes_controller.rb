@@ -1,7 +1,7 @@
 class Api::ChefNodesController < ApiController
   def destroy
     ec2_instance = Ec2Instance.find(params[:id])
-    ec2_instance.chef_node_delete
+    Wonga::Pantry::Ec2InstanceState.new(ec2_instance, nil, params).change_state
     respond_with {}
   end
 end

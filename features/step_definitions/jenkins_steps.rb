@@ -9,6 +9,7 @@ end
 
 Given(/^I have a jenkins slave$/) do
   @jenkins_slave = FactoryGirl.create(:jenkins_slave, ec2_instance: FactoryGirl.create(:ec2_instance, :bootstrapped, team: @team), jenkins_server: @jenkins_server)
+  @jenkins_slave.ec2_instance.update_attributes(state: "ready", terminated: true, booted: false, dns: false, bootstrapped: false, joined: false)
 end
 
 When(/^I click on the server ID$/) do

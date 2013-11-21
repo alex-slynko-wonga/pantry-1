@@ -3,6 +3,7 @@ class Ec2Instance < ActiveRecord::Base
   belongs_to :user
   belongs_to :terminated_by, class_name: 'User'
   has_many :ec2_instance_costs
+  has_many :ec2_instance_logs
 
   validates :name, uniqueness: { scope: [:terminated] }, if: '!terminated?'
   validates :name, presence: true, length: { maximum: 15 }
@@ -15,7 +16,8 @@ class Ec2Instance < ActiveRecord::Base
   validates :volume_size, presence: true
   validates :flavor, presence: true
   validates :security_group_ids, presence: true, security_group_ids_limit: true
-  validate  :check_user_team
+  validate  :check_user_team, on: :create
+  validates :state, presence: true
 
   serialize :security_group_ids
 
@@ -28,54 +30,12 @@ class Ec2Instance < ActiveRecord::Base
   scope :terminated, -> { where(terminated: true) }
   scope :running, -> { where(terminated: [false, nil]) }
 
-  def chef_node_delete
-    update_attributes(bootstrapped: false)
-  end
-
   def check_security_group_ids
     self.security_group_ids.reject! { |i| i.empty? } if self.security_group_ids
   end
 
-  def exists!(instance_id)
-    self.instance_id = instance_id
-    self.save!
-  end
-
-  def complete!(params)
-    params.each do |key, val|
-      case key
-      when "booted"
-        self.booted = true
-      when "bootstrapped"
-        self.bootstrapped = true
-        self.end_time = Time.current
-      when "joined"
-        self.joined = val
-      when "terminated"
-        self.booted = false
-        self.terminated = true
-      when "instance_id"
-        self.exists! val
-      when "ip_address"
-        self.ip_address = val
-      end
-    end
-    save!
-  end
-
   def human_status
-    return "Terminated" if terminated
-    return "Terminating" if terminated_by
-    return "Ready" if bootstrapped && joined
-    if bootstrapped
-      "Bootstrapped"
-    elsif joined
-      "Joined to domain"
-    elsif booted
-      "Booted"
-    else
-      "Booting"
-    end
+    state ? state.humanize : "Initial state"
   end
 
   def progress
@@ -91,16 +51,13 @@ class Ec2Instance < ActiveRecord::Base
     end
   end
 
-  def running?
-    bootstrapped && !terminated_by_id? && !terminated?
-  end
-
   private
   def init
-    self.domain       ||=  CONFIG['pantry']['domain']
-    self.subnet_id    ||=  CONFIG['aws']['default_subnet']
-    self.instance_id  ||=  "pending"
-    self.ip_address   ||=  "pending"
+    self.domain       ||= CONFIG['pantry']['domain']
+    self.subnet_id    ||= CONFIG['aws']['default_subnet']
+    self.instance_id  ||= "pending"
+    self.ip_address   ||= "pending"
+    self.state        ||= Wonga::Pantry::Ec2InstanceState.initial_state
   end
 
   def set_start_time

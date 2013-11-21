@@ -10,15 +10,16 @@ class Wonga::Pantry::JenkinsSlaveDestroyer
 
   def delete
     return unless @user.teams.include?(@ec2_instance.team)
-    @ec2_instance.update_attributes(terminated_by: @user)
-    @sns.publish_message({
-      'server_ip'         => @server_ip,
-      'server_port'       => @server_port,
-      'hostname'          => @ec2_instance.name,
-      'domain'            => @ec2_instance.domain,
-      'instance_id'       => @ec2_instance.instance_id,
-      'id'                => @ec2_instance.id,
-      'jenkins_slave_id'  => @jenkins_slave.id
-    })
+    if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, { 'event' => "termination" }).change_state
+      @sns.publish_message({
+        'server_ip'         => @server_ip,
+        'server_port'       => @server_port,
+        'hostname'          => @ec2_instance.name,
+        'domain'            => @ec2_instance.domain,
+        'instance_id'       => @ec2_instance.instance_id,
+        'id'                => @ec2_instance.id,
+        'jenkins_slave_id'  => @jenkins_slave.id
+      })
+    end
   end
 end

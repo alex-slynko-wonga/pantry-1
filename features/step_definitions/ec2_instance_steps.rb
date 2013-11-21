@@ -42,9 +42,25 @@ end
 
 When(/^an instance is created with ip "(.*?)"$/) do |ip|
   instance = Ec2Instance.last
+  instance.update_attributes({"ip_address" => "123.456.7.8"})
+  instance.bootstrapped = true
+  instance.joined = true
+  instance.state = "ready"
+  instance.save
+end
+
+When(/^an instance is updated with ip "(.*?)"$/) do |arg1|
+  instance = Ec2Instance.last
+  instance.update_attributes(ip_address: "123.456.7.8")
+end
+
+When(/^an instance is created$/) do
+  #TODO: change to API calls
+  instance = Ec2Instance.last
   instance.complete!({"ip_address" => "123.456.7.8"})
   instance.bootstrapped = true
   instance.joined = true
+  instance.state = "ready"
   instance.save
 end
 
@@ -64,7 +80,8 @@ Then(/^instance destroying process should start$/) do
 end
 
 When(/^an instance is destroyed$/) do
-  Ec2Instance.last.update_attribute(:terminated, true)
+  #TODO: change to API calls
+  Ec2Instance.last.update_attribute(:state, :terminated)
 end
 
 Then(/^I should see that instance is destroyed$/) do

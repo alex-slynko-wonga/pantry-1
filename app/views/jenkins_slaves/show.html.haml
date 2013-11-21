@@ -4,7 +4,7 @@
 
 = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
-- if @ec2_instance.running?
+- if @ec2_instance.state == "ready"
   = button_to('Destroy', [@jenkins_server, @jenkins_slave], method: :delete, confirm: 'This will permanently delete this instance. Are you sure?')
-- elsif @ec2_instance.terminated_by_id.present? && !@ec2_instance.terminated?
+- if @ec2_instance.state == "terminating"
   %p Destroy action sent. This slave is not usable anymore.

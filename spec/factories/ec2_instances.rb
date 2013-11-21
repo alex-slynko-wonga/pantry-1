@@ -6,6 +6,7 @@ FactoryGirl.define do
       bootstrapped true
       booted true
       joined true
+      state 'ready'
     end
 
     trait :running do
@@ -15,6 +16,7 @@ FactoryGirl.define do
     trait :terminated do
       terminated_by { self.user }
       terminated true
+      state 'terminated'
     end
 
     sequence(:name) { |n| "Name#{n}" }
@@ -28,6 +30,6 @@ FactoryGirl.define do
     team
     user { FactoryGirl.build(:user, team: team) }
     volume_size 10
-    flavor 't1.micro'
+    flavor "t1.micro"
   end
 end
