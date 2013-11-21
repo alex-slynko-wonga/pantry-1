@@ -1,10 +1,10 @@
 module Wonga
   module Pantry
     class Ec2InstanceMachine
-      attr_accessor :instance_state
+      attr_accessor :ec2_instance
 
       def termination_condition
-        instance_state[:dns] == false && instance_state[:terminated] == true && instance_state[:bootstrapped] == false && instance_state[:joined] == false
+        ec2_instance[:dns] == false && ec2_instance[:terminated] == true && ec2_instance[:bootstrapped] == false && ec2_instance[:joined] == false
       end
 
       state_machine :state, :initial => :initial_state do
