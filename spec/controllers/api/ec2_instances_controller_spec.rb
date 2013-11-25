@@ -15,10 +15,10 @@ describe Api::Ec2InstancesController do
         @state.should_receive(:change_state)
         put :update, id: 45, terminated: true, format: 'json'
       end
-      
+
       it "returns http success" do
         @state.stub(:change_state)
-        put :update, id: 45, terminated: true, format: 'json'
+        put :update, id: 45, terminated: true, format: 'json', test: false
         response.should be_success
       end
     end
