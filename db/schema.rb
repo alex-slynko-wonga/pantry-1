@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131118140021) do
+ActiveRecord::Schema.define(:version => 20131125141318) do
 
   create_table "ec2_instance_costs", :force => true do |t|
     t.date     "bill_date"
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(:version => 20131118140021) do
     t.string   "ip_address"
     t.boolean  "dns"
     t.string   "state"
+    t.boolean  "protected"
   end
 
   create_table "jenkins_servers", :force => true do |t|
