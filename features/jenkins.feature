@@ -45,3 +45,9 @@ Feature: Jenkins
     When slave is deleted
     And I click on "Go back to the Jenkins server"
     Then I should not see slave in listing
+    
+  Scenario: a team can create only one server
+    Given I am in the "Pantry Team" team
+    And I have a jenkins server
+    When I click "Jenkins"
+    Then I should not see "Create a new server"
