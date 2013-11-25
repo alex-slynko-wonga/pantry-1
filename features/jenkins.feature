@@ -23,6 +23,10 @@ Feature: Jenkins
     Then I should see the server listing
     When I click on the server ID
     Then I should see "Create a new slave"
+
+    When I click "Teams"
+    And I click "Pantry Team"
+    Then I should see "Create a new slave"
     When I request new slave
     Then I should be redirected to the Jenkins server page
     And I should see the slaves listing
