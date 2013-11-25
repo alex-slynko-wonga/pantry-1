@@ -42,26 +42,10 @@ end
 
 When(/^an instance is created with ip "(.*?)"$/) do |ip|
   instance = Ec2Instance.last
-  instance.update_attributes({"ip_address" => "123.456.7.8"})
-  instance.bootstrapped = true
-  instance.joined = true
-  instance.state = "ready"
-  instance.save
-end
-
-When(/^an instance is updated with ip "(.*?)"$/) do |arg1|
-  instance = Ec2Instance.last
-  instance.update_attributes(ip_address: "123.456.7.8")
-end
-
-When(/^an instance is created$/) do
-  #TODO: change to API calls
-  instance = Ec2Instance.last
-  instance.complete!({"ip_address" => "123.456.7.8"})
-  instance.bootstrapped = true
-  instance.joined = true
-  instance.state = "ready"
-  instance.save
+  put "/api/ec2_instances/#{instance.id}", {booted: true, ip_address: ip, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
+  put "/api/ec2_instances/#{instance.id}", {joined: true, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
+  put "/api/ec2_instances/#{instance.id}", {event: :create_dns_record, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
+  put "/api/ec2_instances/#{instance.id}", {bootstrapped: true, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
 end
 
 When(/^I select four security groups$/) do
@@ -80,8 +64,12 @@ Then(/^instance destroying process should start$/) do
 end
 
 When(/^an instance is destroyed$/) do
-  #TODO: change to API calls
-  Ec2Instance.last.update_attribute(:state, :terminated)
+  instance = Ec2Instance.last
+  put "/api/ec2_instances/#{instance.id}", {terminated: true, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
+  delete "/api/chef_nodes/#{instance.id}", { format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key'] }
+  put "/api/ec2_instances/#{instance.id}", {joined: false, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
+  expect(instance.reload.state).to_not eq('terminated')
+  put "/api/ec2_instances/#{instance.id}", {event: :terminated, dns: false, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
 end
 
 Then(/^I should see that instance is destroyed$/) do
