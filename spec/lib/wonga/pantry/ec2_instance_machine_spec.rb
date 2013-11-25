@@ -96,7 +96,7 @@ describe Wonga::Pantry::Ec2InstanceMachine do
         :bootstrap, :shutdown_now, :shutdown, :start_instance, :started, :termination
       ]
       subject.should be_terminating
-      subject.instance_state = { dns: false, terminated: true, bootstrapped: false, joined: false }
+      subject.ec2_instance = { dns: false, terminated: true, bootstrapped: false, joined: false }
       subject.terminated
       subject.should be_terminated
     end

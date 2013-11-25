@@ -35,6 +35,11 @@ describe JenkinsServersController do
         get 'new'
         expect(response).to be_redirect
       end
+      
+      it "notifies the user" do
+        get 'new'
+        flash[:error].should eq("You cannot create a server because you do not belong to this team")
+      end
     end
   end
 

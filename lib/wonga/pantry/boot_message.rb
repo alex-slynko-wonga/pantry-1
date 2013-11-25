@@ -21,7 +21,8 @@ class Wonga::Pantry::BootMessage
       windows_set_admin_password: true,
       windows_admin_password:     CONFIG["aws"]["windows_admin_password"],
       ou: Wonga::Pantry::ActiveDirectoryOU.new(@instance).ou,
-      block_device_mappings:      block_device_mappings
+      block_device_mappings:      block_device_mappings,
+      protected:                  @instance.protected?
     }
   end
 

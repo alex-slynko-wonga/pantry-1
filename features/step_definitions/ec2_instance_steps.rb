@@ -55,6 +55,10 @@ When(/^I select four security groups$/) do
   check('name4')
 end
 
+When(/^I shut down an instance$/) do
+  click_on "Shut down"
+end
+
 Then(/^I should not be able to add a fifth security group$/) do
   expect{ check('name5') }.to raise_error # because it is grayed out
 end

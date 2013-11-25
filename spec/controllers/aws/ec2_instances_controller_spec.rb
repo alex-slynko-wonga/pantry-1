@@ -83,4 +83,21 @@ describe Aws::Ec2InstancesController do
       expect(terminator).to have_received(:terminate).with(user)
     end
   end
+  
+  describe "PUT 'update'" do
+    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team, state: "ready") }
+    
+    it "initiates the shut down using json format" do
+      put :update, id: ec2_instance.id, ec2_instance: {}, event: 'shutdown_now', format: 'json'
+      response.should be_success
+      JSON.parse(response.body)["state"].should eq("shutting_down")
+      ec2_instance.reload.state.should eq("shutting_down")
+    end
+    
+    it "initiates the shut down using html format" do
+      put :update, id: ec2_instance.id, event: 'shutdown_now'
+      response.should redirect_to [:aws, ec2_instance]
+      ec2_instance.reload.state.should eq("shutting_down")
+    end
+  end
 end

@@ -46,3 +46,14 @@ Feature: EC2 Instance
     When an instance is destroyed
     And I am still on instance page
     Then I should see that instance is destroyed
+
+  @javascript
+  Scenario: Shutting down an instance
+    Given I have at least one EC2 in the team
+    When I am on instance page
+    And I shut down an instance
+    Then I should see "Shutting down has started"
+    And I should not see "Bootstrapped"
+    And I should not see "Joined to Domain"
+    And I should not see "Status check failed"
+    And I should not see "CPU Utilization"

@@ -54,13 +54,13 @@ describe Wonga::Pantry::Ec2InstanceState do
       state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
       state.change_state.should be_true
     end
-    
+
     it "returns false if the change of state fails" do
       state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "terminated" })
       state.change_state.should be_false
     end
   end
-  
+
   describe "move from terminating to terminated" do
     it "moves the state" do
       instance = FactoryGirl.create(:ec2_instance, state: "terminating", dns: false, terminated: true, bootstrapped: false, joined: false)
@@ -88,10 +88,18 @@ describe Wonga::Pantry::Ec2InstanceState do
       expect { state.change_state }.to_not change(Ec2InstanceLog, :count)
     end
   end
-  
+
   describe "get initial state" do
     it "returns initial_state" do
       Wonga::Pantry::Ec2InstanceState.initial_state.should eq("initial_state")
+    end
+  end
+
+  describe "get next states" do
+    it "returns the states" do
+      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
+      state.change_state
+      expect { state.can_ec2_booted? }.to be_true
     end
   end
 end
