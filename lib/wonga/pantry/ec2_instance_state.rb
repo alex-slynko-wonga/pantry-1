@@ -5,17 +5,16 @@ class Wonga::Pantry::Ec2InstanceState
     @ec2_instance = ec2_instance
     @user = user
     @instance_params = instance_params
+    @state_machine = Wonga::Pantry::Ec2InstanceMachine.new
+    @state_machine.state = ec2_instance.state if ec2_instance.state
+    @state_machine.ec2_instance = @ec2_instance
   end
 
   def change_state
-    @state_machine = Wonga::Pantry::Ec2InstanceMachine.new
-    @state_machine.state = ec2_instance.state if ec2_instance.state
-
     ["terminated", "bootstrapped", "dns", "joined", "ip_address", "instance_id"].each do |key|
       @ec2_instance[key] = @instance_params[key] if @instance_params.key?(key)
     end
 
-    @state_machine.instance_state = @ec2_instance
     event = prepare_params
     before_state = @state_machine.state
 
