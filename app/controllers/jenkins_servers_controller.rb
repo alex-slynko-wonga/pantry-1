@@ -28,7 +28,7 @@ class JenkinsServersController < ApplicationController
       flash[:notice] = "Jenkins server request succeeded."
       redirect_to @jenkins_server
     else
-      flash[:error] = "Jenkins server request failed: #{@jenkins_server.errors.full_messages.to_sentence}"      
+      flash[:error] = "Jenkins server request failed: #{@jenkins_server.errors.full_messages.to_sentence}"
       load_servers
       render :new
     end
@@ -41,7 +41,7 @@ class JenkinsServersController < ApplicationController
     @ec2_instance = @jenkins_server.ec2_instance
   end
 
-  private 
+  private
 
   def jenkins_attributes
     params.require(:jenkins_server).permit(:team_id)
@@ -49,6 +49,9 @@ class JenkinsServersController < ApplicationController
 
   def load_servers
     @user_teams = current_user.teams.with_environment.without_jenkins
-    redirect_to jenkins_servers_path and return if @user_teams.empty?
+    if @user_teams.empty?
+      flash[:error] = "You cannot create a server because you do not belong to this team"
+      redirect_to jenkins_servers_path and return
+    end
   end
 end
