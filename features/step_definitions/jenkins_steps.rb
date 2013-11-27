@@ -40,8 +40,7 @@ Then(/^I should be redirected to the Jenkins server page$/) do
 end
 
 Then(/^the slave should be starting$/) do
-  @jenkins_slave ||= JenkinsSlave.last
-  @jenkins_slave.reload
+  @jenkins_slave = JenkinsSlave.last
   expect(@jenkins_slave.ec2_instance.state).to eq("starting")  
 end
 

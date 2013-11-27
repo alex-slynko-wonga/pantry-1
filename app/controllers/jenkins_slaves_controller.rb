@@ -57,7 +57,7 @@ class JenkinsSlavesController < ApplicationController
       if Wonga::Pantry::Ec2InstanceState.new(@jenkins_slave.ec2_instance, @user, { "event" => "start_instance" }).change_state
         flash[:notice] = "Starting instance"
       else
-        flash[:error] = "An error accourred when attempt to start instance"
+        flash[:error] = "An error occurred while attempting to start the slave"
       end
     end
 

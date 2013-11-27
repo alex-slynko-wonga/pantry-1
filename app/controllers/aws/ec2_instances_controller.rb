@@ -58,7 +58,7 @@ class Aws::Ec2InstancesController < ApplicationController
       if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, { "event" => "start_instance" }).change_state
         flash[:notice] = "Starting instance"
       else
-        flash[:error] = "An error accourred when attempt to start instance"
+        flash[:error] = "An error occurred while attempting to start the instance"
       end
     end
     
