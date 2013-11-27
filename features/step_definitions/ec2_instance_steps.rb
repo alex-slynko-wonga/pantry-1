@@ -59,6 +59,11 @@ When(/^I shut down an instance$/) do
   click_on "Shut down"
 end
 
+When(/^the instance is shut down$/) do
+  instance = Ec2Instance.last
+  instance.update_attributes(state: "shutdown", booted: "false")
+end
+
 Then(/^I should not be able to add a fifth security group$/) do
   expect{ check('name5') }.to raise_error # because it is grayed out
 end

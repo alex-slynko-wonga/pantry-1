@@ -38,7 +38,6 @@ Feature: Jenkins
     And the slave is shut down
     When I go into Jenkins slave page    
     And I click "Start"
-    Then I should be redirected to the Jenkins slave page
     And the slave should be starting
 
   Scenario: Delete a slave

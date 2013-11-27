@@ -73,6 +73,17 @@ describe JenkinsSlavesController do
       end
     end
   end
+
+  describe "PUT 'update'" do
+    before(:each) do 
+      jenkins_slave.ec2_instance.update_attributes(state: "shutdown")
+    end
+    
+    it "initiates starting instance" do
+      put :update, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id, event: 'start_instance'
+      jenkins_slave.ec2_instance.reload.state.should eq("starting")
+    end
+  end  
   
   describe "DELETE 'destroy'" do
     let(:destroyer) { instance_double('Wonga::Pantry::JenkinsSlaveDestroyer') }
