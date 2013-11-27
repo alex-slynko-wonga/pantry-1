@@ -17,10 +17,4 @@ module ApplicationHelper
     when :alert   then "alert alert-error"
     end
   end
-  
-  def can?(ec2_instance, meth)
-    delegated_method = "can_#{meth}?"
-    state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance)
-    state.state_machine.respond_to?(delegated_method) ? state.state_machine.send(delegated_method) : false
-  end
 end

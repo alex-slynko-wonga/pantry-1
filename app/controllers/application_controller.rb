@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :current_user
+  helper_method :current_user, :can?
   protect_from_forgery
   before_filter :signed_in_user
 
@@ -14,6 +14,12 @@ class ApplicationController < ActionController::Base
   def signed_in_user
     session['requested_url'] = request.url
     redirect_to '/auth/ldap', notice: "Please sign in." unless signed_in?
+  end
+  
+  def can?(ec2_instance, meth)
+    delegated_method = "can_#{meth}?"
+    state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance)
+    state.state_machine.respond_to?(delegated_method) ? state.state_machine.send(delegated_method) : false
   end
 end
 
