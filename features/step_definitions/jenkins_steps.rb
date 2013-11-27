@@ -39,6 +39,16 @@ Then(/^I should be redirected to the Jenkins server page$/) do
   expect(page).to have_content "Jenkins Slaves"
 end
 
+Then(/^I should be redirected to the Jenkins slave page$/) do
+  @jenkins_slave ||= JenkinsSlave.last
+  expect(page).to have_content @jenkins_slave.ec2_instance.name
+end
+
+Then(/^the slave should be starting$/) do
+  @jenkins_slave ||= JenkinsSlave.last
+  expect(@jenkins_slave.ec2_instance.state).to eq("starting")  
+end
+
 When(/^I click on the jenkins slave$/) do
   click_on @jenkins_slave.id
 end
@@ -54,6 +64,11 @@ end
 
 When(/^slave is deleted$/) do
   @jenkins_slave.update_attribute(:removed, true)
+end
+
+Given(/^the slave is shut down$/) do
+  @jenkins_slave ||= JenkinsSlave.last
+  @jenkins_slave.ec2_instance.update_attributes(state: "shutdown", booted: false)
 end
 
 Then(/^I should not see slave in listing$/) do
