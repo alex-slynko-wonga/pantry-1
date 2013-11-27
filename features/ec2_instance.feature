@@ -47,6 +47,11 @@ Feature: EC2 Instance
     And I am still on instance page
     Then I should see that instance is destroyed
 
+    Given I have at least one EC2 in the team
+    When I am on instance page
+    And the instance is protected
+    Then I should not see "Destroy"
+
   @javascript
   Scenario: Shutting down an instance
     Given I have at least one EC2 in the team

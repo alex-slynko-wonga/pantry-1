@@ -4,7 +4,7 @@ module Wonga
       attr_accessor :ec2_instance
 
       def termination_condition
-        ec2_instance[:dns] == false && ec2_instance[:terminated] == true && ec2_instance[:bootstrapped] == false && ec2_instance[:joined] == false
+        ec2_instance[:dns] == false && ec2_instance[:terminated] == true && ec2_instance[:bootstrapped] == false && ec2_instance[:joined] == false && ec2_instance[:protected] != true
       end
 
       state_machine :state, :initial => :initial_state do

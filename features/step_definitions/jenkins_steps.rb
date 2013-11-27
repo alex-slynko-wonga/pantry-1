@@ -67,6 +67,10 @@ Given(/^the slave is shut down$/) do
   @jenkins_slave.ec2_instance.update_attributes(state: "shutdown", booted: false)
 end
 
+When(/^the jenkins slave is protected$/) do
+  @jenkins_slave.ec2_instance.update_attributes(protected: true)
+end
+
 Then(/^I should not see slave in listing$/) do
   expect(page).to_not have_content @jenkins_slave.ec2_instance.instance_id
   expect(page).to_not have_content @jenkins_slave.ec2_instance.name
