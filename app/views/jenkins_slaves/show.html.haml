@@ -8,3 +8,6 @@
   = button_to('Destroy', [@jenkins_server, @jenkins_slave], method: :delete, confirm: 'This will permanently delete this instance. Are you sure?')
 - if can?(@ec2_instance, :terminated)
   %p Destroy action sent. This slave is not usable anymore.
+
+- if can?(@ec2_instance, :shutdown_now)
+  = button_to "Shut down", aws_ec2_instance_url(@ec2_instance, "event" => "shutdown_now"), method: :put
