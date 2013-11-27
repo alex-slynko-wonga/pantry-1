@@ -42,6 +42,13 @@ Feature: Jenkins
     And I click on the jenkins slave
     And I should see "Destroy action sent. This slave is not usable anymore."
 
+    Given I am in the "Pantry Team 2" team
+    And I have a jenkins server
+    And I have a jenkins slave
+    When I go into Jenkins slave page
+    And the jenkins slave is protected
+    Then I should not see "Destroy"
+
     When slave is deleted
     And I click on "Go back to the Jenkins server"
     Then I should not see slave in listing
