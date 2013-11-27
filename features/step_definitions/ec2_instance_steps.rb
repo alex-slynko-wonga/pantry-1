@@ -76,6 +76,12 @@ When(/^an instance is destroyed$/) do
   put "/api/ec2_instances/#{instance.id}", {event: :terminated, dns: false, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
 end
 
+When(/^the instance is protected$/) do
+  instance = Ec2Instance.last
+  instance.protected = true
+  instance.save
+end
+
 Then(/^I should see that instance is destroyed$/) do
   expect(page).to have_no_button('Destroy')
   expect(page.text).to include('Terminated')

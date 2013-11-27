@@ -56,6 +56,10 @@ When(/^slave is deleted$/) do
   @jenkins_slave.update_attribute(:removed, true)
 end
 
+When(/^the jenkins slave is protected$/) do
+  @jenkins_slave.ec2_instance.update_attributes(protected: true)
+end
+
 Then(/^I should not see slave in listing$/) do
   expect(page).to_not have_content @jenkins_slave.ec2_instance.instance_id
   expect(page).to_not have_content @jenkins_slave.ec2_instance.name
