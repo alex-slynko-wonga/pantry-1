@@ -62,3 +62,11 @@ Feature: EC2 Instance
     And I should not see "Joined to Domain"
     And I should not see "Status check failed"
     And I should not see "CPU Utilization"
+
+  Scenario: Starting a shut down instance
+    Given I have at least one EC2 in the team
+    And the instance is shut down
+    When I am on instance page
+    And I click "Start"
+    Then I should see "Starting instance"    
+    And I should see "Starting"

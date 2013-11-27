@@ -53,6 +53,14 @@ class Aws::Ec2InstancesController < ApplicationController
         flash[:error] = "An error accourred when shutting down"
       end
     end
+
+    if params[:event] == "start_instance"
+      if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, { "event" => "start_instance" }).change_state
+        flash[:notice] = "Starting instance"
+      else
+        flash[:error] = "An error occurred while attempting to start the instance"
+      end
+    end
     
     respond_to do |format|
       format.json { render json: @ec2_instance }

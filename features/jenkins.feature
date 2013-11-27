@@ -31,6 +31,15 @@ Feature: Jenkins
     Then I should be redirected to the Jenkins server page
     And I should see the slaves listing
 
+  Scenario: Starting a shut down slave
+    Given I am in the "Pantry Team" team
+    And I have a jenkins server
+    And I have a jenkins slave
+    And the slave is shut down
+    When I go into Jenkins slave page    
+    And I click "Start"
+    And the slave should be starting
+
   Scenario: Delete a slave
     Given I am in the "Pantry Team" team
     And I have a jenkins server
