@@ -43,6 +43,24 @@ class Aws::Ec2InstancesController < ApplicationController
     end
     render :show
   end
+  
+  def update
+    @ec2_instance = Ec2Instance.find params[:id]
+    if params[:event] == "shutdown_now"
+      if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, { "event" => "shutdown_now" }).change_state
+        flash[:notice] = "Shutting down has started"
+      else
+        flash[:error] = "An error accourred when shutting down"
+      end
+    end
+    
+    respond_to do |format|
+      format.json { render json: @ec2_instance }
+      format.html do
+        redirect_to [:aws, @ec2_instance]
+      end
+    end
+  end
 
   private
 
