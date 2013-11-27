@@ -37,6 +37,10 @@ Given(/^a LDAP user "(.*?)"$/) do |name|
   LdapResource.stub_chain(:new, :find_user_by_name).and_return([{'samaccountname' => [name], 'email' => [name], 'displayname' => [name]}])
 end
 
+Given(/^I am a member of "(.*?)"$/) do |team_name|
+  @team.users << User.first
+end
+
 When(/^I search for "(.*?)"$/) do |search_term|
   input = find('input[type="search"]')
   input.set(search_term)

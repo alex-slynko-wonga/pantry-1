@@ -22,6 +22,7 @@
 .row-fluid
   .span12
     %h4 Jenkins server
+    %p= link_to "Create a new jenkins server", new_jenkins_server_url if @jenkins_server.nil? && @can_create_ec2_instance
     - if @jenkins_server
       %table.table
         %thead
@@ -44,8 +45,6 @@
               %th OS
           = render partial: 'jenkins_instance', collection: @jenkins_slaves
         %h5= link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
-    - else
-      %p= link_to "Create a new jenkins server", new_jenkins_server_url
 
 .row-fluid
   .span12
@@ -61,5 +60,4 @@
         = render partial: 'shared/ec2_instance_row', collection: @ec2_instances
 
     = create_new_ec2_instance(@can_create_ec2_instance)
-    = @con_create_ec2_instance
 

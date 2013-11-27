@@ -7,14 +7,14 @@ Feature: Managing Teams
     Then I should be on team page
     And I should see "TeamName"
     And the team page has the current user
-    And I should see a flash message with "Team created successfully"        
+    And I should see a flash message with "Team created successfully"
     And a new chef environment should be requested
 
   Scenario: Updating existing team
     Given I am in the "TeamName" team with "Test User" user
     And I am on the teams page
     When I update team "TeamName" with name "NewName"
-    And I should see a flash message with "Team updated successfully"    
+    And I should see a flash message with "Team updated successfully"
     And I click "Teams"
     Then I should see "NewName"
 
@@ -47,14 +47,14 @@ Feature: Managing Teams
     Then team should not contain "Test User"
 
   Scenario: Show Create a new jenkins server in the team page
-    Given the "TeamName" team
+    Given I am in the "TeamName" team
     And I am on the teams page
     When I click "TeamName"
     Then I should see "Jenkins server"
     And I should see "Create a new jenkins server"
 
   Scenario: Show the existing jenkins server in the team page
-    Given the "TeamName" team
+    Given I am in the "TeamName" team
     And the team has a Jenkins server
     And I am on the teams page
     When I click "TeamName"

@@ -101,5 +101,11 @@ describe TeamsController do
       get 'show', :id => team.id
       response.should be_success
     end
+    
+    it "sets @can_create_ec2_instance to true" do
+      session[:user_id] = user.id
+      get 'show', :id => team.id
+      assigns(:can_create_ec2_instance).should be_true
+    end
   end
 end

@@ -50,4 +50,8 @@ Feature: Jenkins
     Given I am in the "Pantry Team" team
     And I have a jenkins server
     When I click "Jenkins"
+<<<<<<< HEAD
     Then I should not see "Create a new server"
+=======
+    Then I should not see "Create a new server"
+>>>>>>> 1aaf007... TD-1486
