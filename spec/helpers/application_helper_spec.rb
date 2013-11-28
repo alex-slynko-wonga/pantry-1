@@ -41,14 +41,4 @@ describe ApplicationHelper do
       expect(helper.navbar_link_to("Home", "https://pantry.example.com/")).to eq("<li class=\"active\"><a href=\"https://pantry.example.com/\">Home</a></li>")
     end
   end
-  
-  describe "can?" do
-    it "returns true if :termination is passed and the instance state is 'ready'" do
-      expect(helper.can?(FactoryGirl.build(:ec2_instance, state: 'ready'), :termination)).to be_true
-    end
-
-    it "returns false if :terminated state is passed and the instance state is 'ready'" do
-      expect(helper.can?(FactoryGirl.build(:ec2_instance, state: 'ready'), :terminated)).to be_false
-    end
-  end
 end

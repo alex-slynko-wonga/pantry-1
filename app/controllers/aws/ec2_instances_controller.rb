@@ -36,7 +36,7 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def destroy
     Wonga::Pantry::Ec2Terminator.new(@ec2_instance = Ec2Instance.find(params[:id])).terminate(current_user)
-    if @ec2_instance.state == "terminating"
+    if can?(@ec2_instance, :termination)
       flash[:notice] = "Ec2 Instance deletion request success"
     else
       flash[:error] = "Ec2 Instance deletion request failed: #{@ec2_instance.errors.full_messages.to_sentence}"
