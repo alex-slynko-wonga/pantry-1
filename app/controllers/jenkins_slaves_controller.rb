@@ -30,7 +30,12 @@ class JenkinsSlavesController < ApplicationController
 
     if aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
       flash[:notice] = "Jenkins slave request succeeded."
-      redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
+      Wonga::Pantry::Ec2InstanceState.new(
+        @jenkins_slave.ec2_instance, 
+        current_user, 
+        { 'event' => "ec2_boot" }
+      ).change_state      
+      redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)      
     else
       flash[:error] = "Error: #{@jenkins_slave.errors.full_messages.to_sentence}"
       @user_teams = current_user.teams
@@ -57,7 +62,14 @@ class JenkinsSlavesController < ApplicationController
       if Wonga::Pantry::Ec2InstanceState.new(@jenkins_slave.ec2_instance, @user, { "event" => "start_instance" }).change_state
         flash[:notice] = "Starting instance"
       else
-        flash[:error] = "An error occurred while attempting to start the slave"
+        flash[:error] = "An error occurred when attempting to start the slave"
+      end
+    end
+    if params[:event] == "shutdown_now"
+      if Wonga::Pantry::Ec2InstanceState.new(@jenkins_slave.ec2_instance, @user, { "event" => "start_instance" }).change_state
+        flash[:notice] = "Shutting instance down"
+      else
+        flash[:error] = "An error occurred when attempting to shut the slave down"
       end
     end
 
