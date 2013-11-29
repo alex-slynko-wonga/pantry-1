@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe JenkinsSlavesController do
+  let(:slave_instance) {FactoryGirl.create(:ec2_instance, team: team)}
   let(:jenkins_server) {FactoryGirl.create(:jenkins_server, :bootstrapped, team: team)}
-  let(:jenkins_slave) {FactoryGirl.create(:jenkins_slave, jenkins_server: jenkins_server)}
+  let(:jenkins_slave) {FactoryGirl.create(:jenkins_slave, jenkins_server: jenkins_server, ec2_instance: slave_instance)}
   let(:user) {FactoryGirl.create(:user, team: team)}
   let(:team) {FactoryGirl.create(:team)}
 
@@ -47,7 +48,7 @@ describe JenkinsSlavesController do
 
     context "on success" do
       before(:each) do
-        Wonga::Pantry::AWSUtility.any_instance.stub(:request_jenkins_instance).and_return(true)
+        Wonga::Pantry::SQSSender.any_instance.stub(:send_message)
       end
 
       it "redirects" do
