@@ -71,16 +71,23 @@ describe Aws::Ec2InstancesController do
       terminator.stub(:terminate)
     end
 
-    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
+    let(:ec2_instance_running) { FactoryGirl.create(:ec2_instance, :running, team: team) }
+    let(:ec2_instance_terminated) { FactoryGirl.create(:ec2_instance, :terminated, team: team) }
 
     it "should be success" do
-      delete :destroy, id: ec2_instance.id
+      delete :destroy, id: ec2_instance_running.id
       expect(response).to be_success
     end
 
-    it "terminates instance" do
-      delete :destroy, id: ec2_instance.id
+    it "terminates instance if transition acceptable" do
+      delete :destroy, id: ec2_instance_running.id
       expect(terminator).to have_received(:terminate).with(user)
+    end
+
+    it "shows an error message if transition unacceptable" do
+      delete :destroy, id: ec2_instance_terminated.id 
+      expect(terminator).not_to have_received(:terminate).with(user)
+
     end
   end
   
