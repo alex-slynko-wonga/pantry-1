@@ -1,8 +1,8 @@
 class Wonga::Pantry::Ec2Resource
   def initialize( instance, 
                   user, 
-                  start_topic = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]['start_machine_topic_name']),
-                  stop_topic  = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]['stop_machine_topic_name']) )
+                  start_topic = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]['ec2_instance_start_topic_arn']),
+                  stop_topic  = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]['ec2_instance_stop_topic_arn']) )
     @start_topic      = start_topic
     @stop_topic       = stop_topic
     @ec2_instance     = instance

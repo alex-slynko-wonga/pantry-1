@@ -76,13 +76,34 @@ describe JenkinsSlavesController do
   end
 
   describe "PUT 'update'" do
-    before(:each) do 
-      jenkins_slave.ec2_instance.update_attributes(state: "shutdown")
+    let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource') }
+
+    context "starting instance" do
+      before(:each) do 
+        jenkins_slave.ec2_instance.update_attributes(state: "shutdown")
+        Wonga::Pantry::Ec2Resource.stub(:new).and_return(ec2_resource)
+        ec2_resource.stub(:start)        
+      end
+      
+      it "initiates starting instance" do
+        put :update, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id, event: 'start_instance'
+        jenkins_slave.ec2_instance.reload.state.should eq("starting")
+        expect(ec2_resource).to have_received(:start)                          
+      end
     end
-    
-    it "initiates starting instance" do
-      put :update, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id, event: 'start_instance'
-      jenkins_slave.ec2_instance.reload.state.should eq("starting")
+
+    context "shutting instance down" do 
+      before(:each) do 
+        jenkins_slave.ec2_instance.update_attributes(state: "ready")
+        Wonga::Pantry::Ec2Resource.stub(:new).and_return(ec2_resource)
+        ec2_resource.stub(:stop)        
+      end
+
+      it "initiates shut down" do 
+        put :update, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id, event: 'shutdown_now'
+        jenkins_slave.ec2_instance.reload.state.should eq("shutting_down")
+        expect(ec2_resource).to have_received(:stop)          
+      end
     end
   end  
   

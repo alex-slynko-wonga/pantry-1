@@ -49,6 +49,7 @@ class Aws::Ec2InstancesController < ApplicationController
     @ec2_instance = Ec2Instance.find params[:id]
     if params[:event] == "shutdown_now"
       if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, { "event" => "shutdown_now" }).change_state
+        Wonga::Pantry::Ec2Resource.new(@ec2_instance, @user).stop          
         flash[:notice] = "Shutting down has started"
       else
         flash[:error] = "An error accourred when shutting down"
@@ -57,6 +58,7 @@ class Aws::Ec2InstancesController < ApplicationController
 
     if params[:event] == "start_instance"
       if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, { "event" => "start_instance" }).change_state
+        Wonga::Pantry::Ec2Resource.new(@ec2_instance, @user).start        
         flash[:notice] = "Starting instance"
       else
         flash[:error] = "An error occurred while attempting to start the instance"
