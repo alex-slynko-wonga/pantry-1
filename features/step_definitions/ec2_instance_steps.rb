@@ -59,9 +59,16 @@ When(/^I shut down an instance$/) do
   click_on "Shut down"
 end
 
-When(/^the instance is shut down$/) do
-  instance = Ec2Instance.last
-  instance.update_attributes(state: "shutdown", booted: "false")
+When(/^the instance is shutdown$/) do
+  @instance = Ec2Instance.last
+  @instance.update_attributes(state: "shutdown", booted: false)
+  @instance.reload  
+end
+
+When(/^the instance is ready$/) do
+  @instance = Ec2Instance.last
+  @instance.update_attributes(state: "ready", booted: true)
+  @instance.reload
 end
 
 Then(/^I should not be able to add a fifth security group$/) do

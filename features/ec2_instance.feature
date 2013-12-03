@@ -55,18 +55,18 @@ Feature: EC2 Instance
   @javascript
   Scenario: Shutting down an instance
     Given I have at least one EC2 in the team
+    And the instance is ready
     When I am on instance page
-    And I shut down an instance
+    When I click "Shut down"
     Then I should see "Shutting down has started"
-    And I should not see "Bootstrapped"
-    And I should not see "Joined to Domain"
-    And I should not see "Status check failed"
-    And I should not see "CPU Utilization"
 
+  @javascript
   Scenario: Starting a shut down instance
     Given I have at least one EC2 in the team
-    And the instance is shut down
+    And the instance is shutdown
     When I am on instance page
     And I click "Start"
     Then I should see "Starting instance"    
     And I should see "Starting"
+
+

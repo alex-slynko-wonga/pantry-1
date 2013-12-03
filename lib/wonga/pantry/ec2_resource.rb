@@ -1,23 +1,29 @@
 class Wonga::Pantry::Ec2Resource
   def initialize( instance, 
                   user, 
-                  start_topic = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]['start_machine_topic_name']),
-                  stop_topic  = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]['stop_machine_topic_name']) )
-    @start_topic      = start_topic
-    @stop_topic       = stop_topic
+                  start_publisher = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]['ec2_instance_start_topic_arn']),
+                  stop_publisher  = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]['ec2_instance_stop_topic_arn']) )
+    @start_publisher  = start_publisher
+    @stop_publisher   = stop_publisher
     @ec2_instance     = instance
     @user             = user 
   end
 
   def stop
     if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, { 'event' => "shutdown_now" }).change_state
-      @stop_topic.publish_message(base_message)
+      @stop_publisher.publish_message(base_message)
+      true
+    else
+      false
     end
   end
 
   def start
     if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, { 'event' => "start_instance" }).change_state
-      @start_topic.publish_message(base_message)
+      @start_publisher.publish_message(base_message)
+      true      
+    else
+      false
     end
   end
 

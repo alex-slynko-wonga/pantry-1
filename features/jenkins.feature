@@ -40,6 +40,15 @@ Feature: Jenkins
     And I click "Start"
     And the slave should be starting
 
+  Scenario: Shutting down a slave
+    Given I am in the "Pantry Team" team
+    And I have a jenkins server
+    And I have a jenkins slave
+    And the instance is ready
+    When I go into Jenkins slave page    
+    And I click "Shut down"
+    Then I should see "Shutting down has started"
+
   Scenario: Delete a slave
     Given I am in the "Pantry Team" team
     And I have a jenkins server

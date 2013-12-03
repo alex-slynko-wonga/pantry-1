@@ -21,6 +21,8 @@
     jenkins_slave_delete_queue_name: <%= @config["aws"]["jenkins_slave_delete_queue_name"] %>
     jenkins_slave_delete_topic_arn: <%= @config["aws"]["jenkins_slave_delete_topic_arn"] %>    
     ec2_instance_delete_topic_arn: <%= @config["aws"]["ec2_instance_delete_topic_arn"] %> 
+    ec2_instance_start_topic_arn: <%= @config["aws"]["ec2_instance_start_topic_arn"] %>
+    ec2_instance_stop_topic_arn: <%= @config["aws"]["ec2_instance_stop_topic_arn"] %>
     windows_admin_password: <%= @config["aws"]["windows_admin_password"] %>
     ebs:
     <% @config['aws']['flavors'].each do |flavor| %>
