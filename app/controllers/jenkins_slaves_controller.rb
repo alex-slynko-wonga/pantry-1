@@ -56,28 +56,6 @@ class JenkinsSlavesController < ApplicationController
     redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
   end
 
-  def update
-    @jenkins_slave = @jenkins_server.jenkins_slaves.find(params[:id])
-    if params[:event] == "start_instance"
-      if Wonga::Pantry::Ec2InstanceState.new(@jenkins_slave.ec2_instance, @user, { "event" => "start_instance" }).change_state
-        Wonga::Pantry::Ec2Resource.new(@jenkins_slave.ec2_instance, @user).start
-        flash[:notice] = "Starting instance"
-      else
-        flash[:error] = "An error occurred when attempting to start the slave"
-      end
-    end
-    if params[:event] == "shutdown_now"
-      if Wonga::Pantry::Ec2InstanceState.new(@jenkins_slave.ec2_instance, @user, { "event" => "shutdown_now" }).change_state
-        Wonga::Pantry::Ec2Resource.new(@jenkins_slave.ec2_instance, @user).stop
-        flash[:notice] = "Shutting instance down"
-      else
-        flash[:error] = "An error occurred when attempting to shut the slave down"
-      end
-    end
-
-    redirect_to jenkins_server_jenkins_slaves_url(@jenkins_slave)
-  end
-
   private
   def load_objects
     @jenkins_server = JenkinsServer.find(params[:jenkins_server_id])

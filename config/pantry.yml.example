@@ -17,6 +17,8 @@ development:
     terminate_queue_name: pantry_wonga_aws-ec2_terminate_command
     jenkins_slave_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-jenkins_slave_delete
     ec2_instance_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn        
+    ec2_instance_start_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_start_command
+    ec2_instance_stop_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_stop_command    
     boot_machine_queue_name: pantry_wonga_aws-ec2_boot_command
     vpc_id: "vpc-00110011"
     security_group_windows: "sg-00110011"
@@ -59,6 +61,8 @@ test:
     terminate_queue_name: pantry_wonga_aws-ec2_terminate_command
     jenkins_slave_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-jenkins_slave_delete    
     ec2_instance_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn    
+    ec2_instance_start_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_start_command
+    ec2_instance_stop_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_stop_command    
     chef_env_create_queue_name: some_queue
     billing_bucket: "some-bucketname"
     vpc_id: "vpc-00110011"

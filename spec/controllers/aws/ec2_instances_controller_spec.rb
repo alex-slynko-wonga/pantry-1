@@ -87,7 +87,6 @@ describe Aws::Ec2InstancesController do
     it "shows an error message if transition unacceptable" do
       delete :destroy, id: ec2_instance_terminated.id 
       expect(terminator).not_to have_received(:terminate).with(user)
-
     end
   end
   
@@ -95,49 +94,45 @@ describe Aws::Ec2InstancesController do
     let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource') }
 
     context "shutting_down" do 
-      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team, state: "ready") }
+      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
 
       before(:each) do
         Wonga::Pantry::Ec2Resource.stub(:new).and_return(ec2_resource)
+        ec2_instance.update_attributes(state: "ready")
         ec2_resource.stub(:stop)
       end
 
       it "initiates shut down using json format" do
         put :update, id: ec2_instance.id, ec2_instance: {}, event: 'shutdown_now', format: 'json'
         response.should be_success
-        JSON.parse(response.body)["state"].should eq("shutting_down")
-        ec2_instance.reload.state.should eq("shutting_down")
         expect(ec2_resource).to have_received(:stop)
       end
       
       it "initiates shut down using html format" do
         put :update, id: ec2_instance.id, event: 'shutdown_now'
         response.should redirect_to [:aws, ec2_instance]
-        ec2_instance.reload.state.should eq("shutting_down")
         expect(ec2_resource).to have_received(:stop)  
       end
     end
 
     context  "starting" do
-    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team, state: "shutdown") }
+      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
 
       before(:each) do
         Wonga::Pantry::Ec2Resource.stub(:new).and_return(ec2_resource)
+        ec2_instance.update_attributes(state: "shutdown")
         ec2_resource.stub(:start)
       end
 
       it "initiates start using json format" do
         put :update, id: ec2_instance.id, ec2_instance: {}, event: 'start_instance', format: 'json'
         response.should be_success
-        JSON.parse(response.body)["state"].should eq("starting")
-        ec2_instance.reload.state.should eq("starting")
         expect(ec2_resource).to have_received(:start)
       end
       
       it "initiates start using html format" do
         put :update, id: ec2_instance.id, event: 'start_instance'
         response.should redirect_to [:aws, ec2_instance]
-        ec2_instance.reload.state.should eq("starting")
         expect(ec2_resource).to have_received(:start)  
       end
 

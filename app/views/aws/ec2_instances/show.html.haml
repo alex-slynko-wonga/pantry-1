@@ -3,7 +3,9 @@
   = render partial: 'shared/ec2_instance', locals: {ec2_instance: @ec2_instance}
   - if can?(@ec2_instance, :shutdown_now)
     = button_to "Shut down", aws_ec2_instance_url(@ec2_instance, "event" => "shutdown_now"), method: :put
+
   - if can?(@ec2_instance, :termination)
     = button_to 'Destroy', [:aws, @ec2_instance], method: :delete, confirm: 'This will permanently delete this instance. Are you sure?'
+    
   - if can?(@ec2_instance, :start_instance) 
     = button_to 'Start', aws_ec2_instance_url(@ec2_instance, "event" => "start_instance"), method: :put
