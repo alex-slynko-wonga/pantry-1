@@ -65,7 +65,7 @@ class Aws::Ec2InstancesController < ApplicationController
     respond_to do |format|
       format.json { render json: @ec2_instance }
       format.html do
-        redirect_to [:aws, @ec2_instance]
+        redirect_to request.referer        
       end
     end
   end

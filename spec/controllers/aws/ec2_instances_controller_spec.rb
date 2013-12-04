@@ -91,11 +91,12 @@ describe Aws::Ec2InstancesController do
   end
   
   describe "PUT 'update'" do
-    let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource') }
+    let(:ec2_resource)    { instance_double('Wonga::Pantry::Ec2Resource') }
+    let(:jenkins_server)  { FactoryGirl.build(:jenkins_server) }
+    let(:jenkins_slave)   { FactoryGirl.build(:jenkins_slave, jenkins_server: jenkins_server, ec2_instance: ec2_instance) }
 
     context "shutting_down" do 
-      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
-
+      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }      
       before(:each) do
         Wonga::Pantry::Ec2Resource.stub(:new).and_return(ec2_resource)
         ec2_instance.update_attributes(state: "ready")
@@ -108,11 +109,19 @@ describe Aws::Ec2InstancesController do
         expect(ec2_resource).to have_received(:stop)
       end
       
-      it "initiates shut down using html format" do
+      it "initiates shut down using html format from instance" do
+        request.env['HTTP_REFERER'] = aws_ec2_instance_url(ec2_instance)
         put :update, id: ec2_instance.id, event: 'shutdown_now'
         response.should redirect_to [:aws, ec2_instance]
         expect(ec2_resource).to have_received(:stop)  
       end
+
+      it "initiates shut down using html format from slave" do
+        request.env['HTTP_REFERER'] = "http://test.host/jenkins_servers/1/jenkins_slaves/1"
+        put :update, id: ec2_instance.id, event: 'shutdown_now'
+        response.should redirect_to "http://test.host/jenkins_servers/1/jenkins_slaves/1"
+        expect(ec2_resource).to have_received(:stop)  
+      end      
     end
 
     context  "starting" do
@@ -131,6 +140,7 @@ describe Aws::Ec2InstancesController do
       end
       
       it "initiates start using html format" do
+        request.env['HTTP_REFERER'] = aws_ec2_instance_url(ec2_instance)        
         put :update, id: ec2_instance.id, event: 'start_instance'
         response.should redirect_to [:aws, ec2_instance]
         expect(ec2_resource).to have_received(:start)  
