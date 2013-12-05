@@ -7,6 +7,10 @@ module Wonga
         ec2_instance[:dns] == false && ec2_instance[:terminated] == true && ec2_instance[:bootstrapped] == false && ec2_instance[:joined] == false && ec2_instance[:protected] != true
       end
 
+      def instance_unprotected
+        self.ec2_instance[:protected] != true 
+      end
+ 
       state_machine :state, :initial => :initial_state do
         event :ec2_boot do
           transition :initial_state => :booting
@@ -29,7 +33,7 @@ module Wonga
         end
 
         event :shutdown_now do
-          transition :ready => :shutting_down
+          transition :ready => :shutting_down, if: :instance_unprotected
         end
 
         event :shutdown do
@@ -45,7 +49,7 @@ module Wonga
         end
 
         event :termination do
-          transition [:ready, :shutdown] => :terminating
+          transition [:ready, :shutdown] => :terminating, if: :instance_unprotected
         end
 
         event :terminated do
