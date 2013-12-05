@@ -44,9 +44,13 @@ describe JenkinsServersController do
   end
 
   describe "POST 'create'" do
+    let(:sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
+    let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', platform_for_ami: 'Lindows') }
+
     context "when AWSUtility process instance" do
       before(:each) do
-        Wonga::Pantry::AWSUtility.any_instance.stub(:request_jenkins_instance).and_return(true)
+        Wonga::Pantry::Ec2Adapter.stub(:new).and_return(adapter)
+        Wonga::Pantry::SQSSender.stub(:new).and_return(sender)
       end
 
       it "redirects to resource" do

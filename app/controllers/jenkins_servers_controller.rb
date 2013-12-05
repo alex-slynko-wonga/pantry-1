@@ -26,6 +26,11 @@ class JenkinsServersController < ApplicationController
     )
     if aws_utility.request_jenkins_instance(attributes, @jenkins_server)
       flash[:notice] = "Jenkins server request succeeded."
+      Wonga::Pantry::Ec2InstanceState.new(
+        @jenkins_server.ec2_instance,
+        current_user,
+        { "event" => "ec2_boot" }
+      ).change_state
       redirect_to @jenkins_server
     else
       flash[:error] = "Jenkins server request failed: #{@jenkins_server.errors.full_messages.to_sentence}"
