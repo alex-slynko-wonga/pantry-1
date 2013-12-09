@@ -17,5 +17,6 @@
 //= require bootstrap-dropdown
 //= require angular
 //= require angular-resource
+//= require turbolinks
 //= require_tree .
 

@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user, :can?
-  protect_from_forgery
+  protect_from_forgery with: :exception
   before_filter :signed_in_user
 
   def current_user
