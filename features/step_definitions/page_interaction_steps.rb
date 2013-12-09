@@ -3,7 +3,7 @@ Then(/^I should see "(.*?)"$/) do |some_text|
 end
 
 Then(/^I should see "(.*?)" after page is updated$/) do |some_text|
-  wait_until(10) do
+  wait_until(5) do
     page.has_content? some_text
   end
 end

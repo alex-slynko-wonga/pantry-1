@@ -57,7 +57,7 @@ class Ec2Instance < ActiveRecord::Base
     self.subnet_id    ||= CONFIG['aws']['default_subnet']
     self.instance_id  ||= "pending"
     self.ip_address   ||= "pending"
-    self.state        ||= Wonga::Pantry::Ec2InstanceState.initial_state
+    Wonga::Pantry::Ec2InstanceMachine.new(self)
   end
 
   def set_start_time

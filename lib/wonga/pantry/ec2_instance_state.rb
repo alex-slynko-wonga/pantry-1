@@ -5,9 +5,7 @@ class Wonga::Pantry::Ec2InstanceState
     @ec2_instance = ec2_instance
     @user = user
     @instance_params = instance_params
-    @state_machine = Wonga::Pantry::Ec2InstanceMachine.new
-    @state_machine.state = ec2_instance.state if ec2_instance.state
-    @state_machine.ec2_instance = @ec2_instance
+    @state_machine = Wonga::Pantry::Ec2InstanceMachine.new(@ec2_instance)
   end
 
   def change_state
@@ -27,10 +25,6 @@ class Wonga::Pantry::Ec2InstanceState
 
   def state
     @state_machine.state
-  end
-
-  def self.initial_state
-    Wonga::Pantry::Ec2InstanceMachine.new.state
   end
 
   private
