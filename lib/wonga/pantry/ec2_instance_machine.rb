@@ -1,10 +1,9 @@
 module Wonga
   module Pantry
     class Ec2InstanceMachine
-      attr_accessor :ec2_instance
-
-      def termination_condition
-        ec2_instance[:dns] == false && ec2_instance[:terminated] == true && ec2_instance[:bootstrapped] == false && ec2_instance[:joined] == false && ec2_instance[:protected] != true
+      def initialize(ec2_instance)
+        @ec2_instance = ec2_instance
+        super()
       end
 
       state_machine :state, :initial => :initial_state do
@@ -29,7 +28,7 @@ module Wonga
         end
 
         event :shutdown_now do
-          transition :ready => :shutting_down
+          transition :ready => :shutting_down, if: :instance_unprotected
         end
 
         event :shutdown do
@@ -45,13 +44,33 @@ module Wonga
         end
 
         event :termination do
-          transition [:ready, :shutdown] => :terminating
+          transition [:ready, :shutdown] => :terminating, if: :instance_unprotected
         end
 
         event :terminated do
           transition :terminating => :terminated, :if => :termination_condition
           transition :terminating => :terminating, unless: :termination_condition
         end
+      end
+
+      def state
+        @ec2_instance.state
+      end
+
+      private
+
+      def state=(val)
+        @ec2_instance.state = val
+      end
+
+      def termination_condition
+        @ec2_instance[:dns] == false && @ec2_instance[:terminated] == true &&
+        @ec2_instance[:bootstrapped] == false && @ec2_instance[:joined] == false && 
+        @ec2_instance[:protected] != true
+      end
+
+      def instance_unprotected
+        @ec2_instance[:protected] != true 
       end
     end
   end

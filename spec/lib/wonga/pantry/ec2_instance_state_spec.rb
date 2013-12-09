@@ -89,12 +89,6 @@ describe Wonga::Pantry::Ec2InstanceState do
     end
   end
 
-  describe "get initial state" do
-    it "returns initial_state" do
-      Wonga::Pantry::Ec2InstanceState.initial_state.should eq("initial_state")
-    end
-  end
-
   describe "get next states" do
     it "returns the states" do
       state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
