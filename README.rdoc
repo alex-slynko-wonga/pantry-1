@@ -4,3 +4,9 @@
 2. Install QT for tests https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
 
 See the wonga wiki for more details.
+
+New Relic:
+
+set 'developer_mode: true' to run new relic in development mode, info are shown here http://localhost:3000/newrelic
+
+DO NOT USE 'developer_mode: true' for production
