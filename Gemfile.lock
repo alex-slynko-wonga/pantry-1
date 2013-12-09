@@ -200,6 +200,7 @@ GEM
     net-ssh-multi (1.1)
       net-ssh (>= 2.1.4)
       net-ssh-gateway (>= 0.99.0)
+    newrelic_rpm (3.7.0.177)
     nokogiri (1.5.10)
     ohai (6.20.0)
       ipaddress
@@ -375,6 +376,7 @@ DEPENDENCIES
   jquery-ui-rails
   launchy
   mysql2
+  newrelic_rpm (~> 3.7.0.177)
   omniauth-ldap
   pry-debugger
   pry-rails

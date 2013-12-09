@@ -22,6 +22,7 @@ gem 'simple_form'
 gem 'rack-ssl'
 gem 'cache_digests'
 gem "state_machine", "~> 1.2.0"
+gem "newrelic_rpm", "~> 3.7.0.177"
 
 group :development do
   gem 'quiet_assets'
