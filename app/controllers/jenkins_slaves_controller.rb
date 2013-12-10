@@ -48,9 +48,9 @@ class JenkinsSlavesController < ApplicationController
     server_fqdn = "#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}"
     
     if Wonga::Pantry::JenkinsSlaveDestroyer.new(@jenkins_slave, server_fqdn, 80, current_user).delete
-      flash[:error] = "Jenkins slave deletion request failed: #{@jenkins_slave.errors.full_messages.to_sentence}"
-    else
       flash[:notice] = "Jenkins slave deletion request succeeded"
+    else
+      flash[:error] = "Jenkins slave deletion request failed: #{@jenkins_slave.errors.full_messages.to_sentence}"
     end
     
     redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
