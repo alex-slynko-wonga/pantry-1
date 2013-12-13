@@ -21,6 +21,7 @@ class Wonga::Pantry::JenkinsSlaveDestroyer
         'jenkins_slave_id'  => @jenkins_slave.id,
         'chef_environment'  => @ec2_instance.chef_environment
       })
+      true
     end
   end
 end

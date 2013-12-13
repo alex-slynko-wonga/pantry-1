@@ -36,7 +36,7 @@ Feature: Jenkins
     And I have a jenkins server
     And I have a jenkins slave
     And the slave is shut down
-    When I go into Jenkins slave page    
+    When I go into Jenkins slave page
     And I click "Start"
     And the slave should be starting
 
@@ -45,7 +45,7 @@ Feature: Jenkins
     And I have a jenkins server
     And I have a jenkins slave
     And the instance is ready
-    When I go into Jenkins slave page    
+    When I go into Jenkins slave page
     And I click "Shut down"
     Then I should see "Shutting down has started"
 
@@ -60,17 +60,15 @@ Feature: Jenkins
     And I click on the jenkins slave
     And I should see "Destroy action sent. This slave is not usable anymore."
 
-    Given I am in the "Pantry Team 2" team
-    And I have a jenkins server
-    And I have a jenkins slave
-    When I go into Jenkins slave page
-    And the jenkins slave is protected
-    Then I should not see "Destroy"
-
     When slave is deleted
     And I click on "Go back to the Jenkins server"
     Then I should not see slave in listing
-    
+
+    Given I have a jenkins slave
+    And the jenkins slave is protected
+    When I go into Jenkins slave page
+    Then I should not see "Destroy"
+
   Scenario: a team can create only one server
     Given I am in the "Pantry Team" team
     And I have a jenkins server

@@ -48,8 +48,8 @@ Feature: EC2 Instance
     Then I should see that instance is destroyed
 
     Given I have at least one EC2 in the team
-    When I am on instance page
     And the instance is protected
+    When I am on instance page
     Then I should not see "Destroy"
 
   @javascript
@@ -66,7 +66,7 @@ Feature: EC2 Instance
     And the instance is shutdown
     When I am on instance page
     And I click "Start"
-    Then I should see "Starting instance"    
+    Then I should see "Starting instance"
     And I should see "Starting"
 
 
