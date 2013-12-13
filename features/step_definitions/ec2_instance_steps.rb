@@ -88,7 +88,7 @@ When(/^an instance is destroyed$/) do
   put "/api/ec2_instances/#{instance.id}", {event: :terminated, dns: false, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
 end
 
-When(/^the instance is protected$/) do
+Given(/^the (?:instance|jenkins slave) is protected$/) do
   instance = Ec2Instance.last
   instance.protected = true
   instance.save
