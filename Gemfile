@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 3.2.16'
 gem 'mysql2'
-gem 'omniauth-ldap'
+gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap'
 
 gem 'strong_parameters'
 gem 'haml-rails'
@@ -23,6 +23,7 @@ gem 'rack-ssl'
 gem 'cache_digests'
 gem "state_machine", "~> 1.2.0"
 gem "newrelic_rpm", "~> 3.7.0.177"
+gem 'net-ldap', github: "ruby-ldap/ruby-net-ldap"
 
 group :development do
   gem 'quiet_assets'

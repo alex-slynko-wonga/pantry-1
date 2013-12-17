@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_many :teams, through: :team_members
 
   def self.from_omniauth(auth)
+    return unless auth['memberof'].include?(CONFIG['omniauth']['ldap_group'])
     find_by_username(auth['samaccountname'][0]) ||
       create_with_ldap(auth)
   end
@@ -31,7 +32,7 @@ class User < ActiveRecord::Base
     self.email ==  'jonathan.galore@example.com' ||
       Array(CONFIG['billing_users']).include?(self.email)
   end
-  
+
   def member_of_team?(team)
     teams.include?(team)
   end

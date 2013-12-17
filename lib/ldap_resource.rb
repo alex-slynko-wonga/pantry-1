@@ -1,19 +1,29 @@
 class LdapResource
-  def find_user_by_name(name)
-    find(Net::LDAP::Filter.eq('sAMAccountName', name) | Net::LDAP::Filter.eq('DisplayName', name))
+  def initialize
+    filter_by_group(CONFIG['omniauth']['ldap_group'])
   end
 
-  def find_user_by_display_name(display_name)
-    find(Net::LDAP::Filter.eq('DisplayName', display_name))
+  def filter_by_name(name)
+    filters << (Net::LDAP::Filter.eq('sAMAccountName', name) | Net::LDAP::Filter.eq('DisplayName', name))
+    self
   end
 
-  def all_users_from_group(group_name)
-    find(Net::LDAP::Filter.eq('memberOf', group_name))
+  def filter_by_group(group_name)
+    filters << Net::LDAP::Filter.eq('memberOf', group_name)
+    self
+  end
+
+  def all(params={})
+    find(params)
   end
 
   private
-  def find(filter, params = {})
-    result = connection.search(params.merge({filter: filter}))
+  def filters
+    @filters ||= []
+  end
+
+  def find(params = {})
+    result = connection.search(params.merge({filter: filters.inject{ |result, filter| result & filter }}))
     result || []
   end
 
