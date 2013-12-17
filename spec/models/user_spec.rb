@@ -3,22 +3,40 @@ require 'spec_helper'
 describe User do
   let(:user_id) { 'some_user_id' }
   let(:user_email) { 'test@example.com' }
-  let(:omniauth_params) { {'samaccountname' => [user_id], 'email' => [user_email], 'displayname' => ['name']} }
 
   describe ".from_omniauth" do
-    context "if user doesn't exist" do
-      it "creates user with id and email" do
-        user = nil
-        expect { user = User.from_omniauth(omniauth_params) }.to change { User.count }.by(1)
-        expect(user.username).to eq(user_id)
+    let(:group) { "CN=Group,OU=Users,DC=example,DC=com" }
+
+    before(:each) do
+      config =  Marshal.load(Marshal.dump(CONFIG))
+      config['omniauth'].merge!(ldap_group: group)
+      stub_const('CONFIG', config)
+    end
+
+    context "when user is not in required LDAP group" do
+      let(:omniauth_params) { {'samaccountname' => [user_id], 'email' => [user_email], 'displayname' => ['name'], 'memberof' => []} }
+
+      it "does nothing" do
+        expect(User.from_omniauth(omniauth_params)).to be_nil
       end
     end
 
-    context "if user exists" do
-      let!(:user) { FactoryGirl.create(:user, username: user_id) }
+    context "when user is in required LDAP group" do
+      let(:omniauth_params) { { 'samaccountname' => [user_id], 'email' => [user_email], 'displayname' => ['name'], 'memberof' => [group] } }
+      context "if user doesn't exist" do
+        it "creates user with id and email" do
+          user = nil
+          expect { user = User.from_omniauth(omniauth_params) }.to change { User.count }.by(1)
+          expect(user.username).to eq(user_id)
+        end
+      end
 
-      it "returns existsing user" do
-        expect(User.from_omniauth(omniauth_params)).to eq(user)
+      context "if user exists" do
+        let!(:user) { FactoryGirl.create(:user, username: user_id) }
+
+        it "returns existing user" do
+          expect(User.from_omniauth(omniauth_params)).to eq(user)
+        end
       end
     end
   end
@@ -33,7 +51,7 @@ describe User do
       subject { User.new(username: user_id) }
 
       it "should be generated from user_name" do
-       expect(subject.email).to eq("#{user_id}@example.com")
+        expect(subject.email).to eq("#{user_id}@example.com")
       end
     end
 
@@ -64,14 +82,14 @@ describe User do
       it { should be_false }
     end
   end
-  
+
   describe "member_of_team?" do
     it "returns true if the user is member of the given team" do
       user = FactoryGirl.create(:user)
       team = FactoryGirl.create(:team, users: [user])
       user.member_of_team?(team).should be_true
     end
-    
+
     it "returns false if the user is not a member of the given team" do
       user = FactoryGirl.create(:user)
       team = FactoryGirl.create(:team, users: [])

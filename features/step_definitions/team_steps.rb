@@ -34,7 +34,7 @@ Given(/^I am on the "(.*?)" page$/) do |arg1|
 end
 
 Given(/^a LDAP user "(.*?)"$/) do |name|
-  LdapResource.stub_chain(:new, :find_user_by_name).and_return([{'samaccountname' => [name], 'email' => [name], 'displayname' => [name]}])
+  LdapResource.stub_chain(:new, :filter_by_name, :all).and_return([{'samaccountname' => [name], 'email' => [name], 'displayname' => [name]}])
 end
 
 Given(/^I am a member of "(.*?)"$/) do |team_name|

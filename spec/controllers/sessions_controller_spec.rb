@@ -9,19 +9,40 @@ describe SessionsController do
 
     let(:user_id) { 2 }
     let(:user) { double(id: user_id) }
-    let(:auth) { double.as_null_object }
+    let(:env) { {'omniauth.auth' => double.as_null_object } }
+    before(:each) do
+      subject.stub(:env).and_return(env)
+    end
 
     it "creates user record" do
       expect(User).to receive(:from_omniauth).and_return(user)
-      subject.stub(:env).and_return({'omniauth.auth' => auth})
       post :create
     end
 
     it "save user id in session" do
       User.stub(:from_omniauth).and_return(user)
-      subject.stub(:env).and_return({'omniauth.auth' => auth})
       post :create
       expect(session[:user_id]).to eq(user_id)
+    end
+
+    context "when contains no info from omniauth" do
+      let(:env) { {} }
+
+      it "redirects back" do
+        post :create
+        expect(response).to be_redirect
+        expect(session[:user_id]).to be_nil
+      end
+    end
+
+    context "when user can't be created" do
+      let(:env) { {'omniauth.auth' => double.as_null_object } }
+      it "redirects back" do
+        User.stub(:from_omniauth)
+        post :create
+        expect(response).to be_redirect
+        expect(session[:user_id]).to be_nil
+      end
     end
   end
 
