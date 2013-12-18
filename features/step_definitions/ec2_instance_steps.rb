@@ -59,6 +59,12 @@ When(/^I select four security groups$/) do
   check('name4')
 end
 
+When(/^the instance belongs to my team$/) do
+  @instance = Ec2Instance.last
+  @instance.team = TeamMember.where(user_id: User.last.id).first.team
+  @instance.reload
+end
+
 When(/^I shut down an instance$/) do
   click_on "Shut down"
 end

@@ -29,6 +29,10 @@ Given(/^I am not in the "(.*?)" team$/) do |team_name|
   @team = FactoryGirl.create(:team, name: team_name)
 end
 
+Given(/^I am not on the appropriate team$/) do
+  User.last.teams.delete(Team.last)
+end
+
 Given(/^I am on the "(.*?)" page$/) do |arg1|
   visit team_url @team
 end

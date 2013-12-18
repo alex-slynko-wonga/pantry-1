@@ -49,6 +49,11 @@ Feature: Jenkins
     And I click "Shut down"
     Then I should see "Shutting down has started"
 
+    Given I have a jenkins slave
+    And I am not on the appropriate team
+    When I go into Jenkins slave page
+    Then I should not see "Shut down"
+
   Scenario: Delete a slave
     Given I am in the "Pantry Team" team
     And I have a jenkins server
@@ -68,6 +73,12 @@ Feature: Jenkins
     And the jenkins slave is protected
     When I go into Jenkins slave page
     Then I should not see "Destroy"
+
+    Given I have a jenkins slave
+    And I am not on the appropriate team
+    When I go into Jenkins slave page
+    Then I should not see "Destroy"
+
 
   Scenario: a team can create only one server
     Given I am in the "Pantry Team" team

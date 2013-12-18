@@ -79,6 +79,7 @@ describe Aws::Ec2InstancesController do
       expect(response).to be_success
     end
 
+
     it "terminates instance if transition acceptable" do
       delete :destroy, id: ec2_instance_running.id
       expect(terminator).to have_received(:terminate).with(user)

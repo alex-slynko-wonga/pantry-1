@@ -52,6 +52,12 @@ Feature: EC2 Instance
     When I am on instance page
     Then I should not see "Destroy"
 
+    Given I have at least one EC2 in the team
+    And I am not in the "Pantry Team" team
+    When I am on instance page
+    Then I should not see "Destroy"
+
+
   @javascript
   Scenario: Shutting down an instance
     Given I have at least one EC2 in the team
@@ -59,6 +65,11 @@ Feature: EC2 Instance
     When I am on instance page
     When I click "Shut down"
     Then I should see "Shutting down has started"
+
+    Given I have at least one EC2 in the team
+    And the instance is ready
+    And I am not in the "Pantry Team" team
+    Then I should not see "Shut Down"
 
   @javascript
   Scenario: Starting a shut down instance

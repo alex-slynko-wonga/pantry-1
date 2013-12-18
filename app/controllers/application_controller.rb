@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :current_user, :can?
+  helper_method :current_user, :can?, :current_user_in_team?
   protect_from_forgery with: :exception
   before_filter :signed_in_user
 
@@ -9,6 +9,10 @@ class ApplicationController < ActionController::Base
 
   def signed_in?
     session[:user_id].present?
+  end
+
+  def current_user_in_team?(team)
+    current_user.teams.include?(team)
   end
 
   def signed_in_user
