@@ -47,7 +47,7 @@ class Aws::Ec2InstancesController < ApplicationController
   
   def update
     @ec2_instance = Ec2Instance.find params[:id]
-    ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, @user) 
+    ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user) 
     if params[:event] == "shutdown_now"
       if ec2_resource.stop
         flash[:notice] = "Shutting down has started"

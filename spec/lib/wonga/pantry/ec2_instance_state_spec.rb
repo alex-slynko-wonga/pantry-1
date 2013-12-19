@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Wonga::Pantry::Ec2InstanceState do
-  let(:ec2_instance) { FactoryGirl.build(:ec2_instance) }
+  let(:team) { FactoryGirl.build(:team) }
+  let(:ec2_instance) { FactoryGirl.build(:ec2_instance, team: team) }
   let(:params) {
     {
       "bootstrapped"  => true,
@@ -10,7 +11,7 @@ describe Wonga::Pantry::Ec2InstanceState do
       "instance_id"   => ec2_instance.id
     }
   }
-  let(:user) { FactoryGirl.create(:user)}
+  let(:user) { FactoryGirl.create(:user, team: team)}
   subject { Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, params) }
 
   describe "bootstrap" do
@@ -63,7 +64,14 @@ describe Wonga::Pantry::Ec2InstanceState do
 
   describe "move from terminating to terminated" do
     it "moves the state" do
-      instance = FactoryGirl.create(:ec2_instance, state: "terminating", dns: false, terminated: true, bootstrapped: false, joined: false)
+      instance = FactoryGirl.create(:ec2_instance, 
+        state:        "terminating", 
+        dns:          false, 
+        terminated:   true, 
+        bootstrapped: false, 
+        joined:       false,
+        team:          team
+      )
       state = Wonga::Pantry::Ec2InstanceState.new(instance, user, {"event" => "terminated"})
       state.change_state.should be_true
     end

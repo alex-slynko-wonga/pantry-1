@@ -49,11 +49,6 @@ Feature: Jenkins
     And I click "Shut down"
     Then I should see "Shutting down has started"
 
-    Given I have a jenkins slave
-    And I am not on the appropriate team
-    When I go into Jenkins slave page
-    Then I should not see "Shut down"
-
   Scenario: Delete a slave
     Given I am in the "Pantry Team" team
     And I have a jenkins server
@@ -74,9 +69,13 @@ Feature: Jenkins
     When I go into Jenkins slave page
     Then I should not see "Destroy"
 
-    Given I have a jenkins slave
-    And I am not on the appropriate team
+  Scenario: Attempting to shut down, destroy another team's slave
+    Given I am not in the "Pantry Team" team
+    And I have a jenkins server    
+    And I have a jenkins slave
+    And the instance is ready
     When I go into Jenkins slave page
+    Then I should not see "Shut down"
     Then I should not see "Destroy"
 
 

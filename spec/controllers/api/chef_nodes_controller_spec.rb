@@ -1,9 +1,13 @@
 require 'spec_helper'
 
 describe Api::ChefNodesController do
+  let(:team) { FactoryGirl.build(:team) }
+  let(:user) { FactoryGirl.build(:user, team: team) }
+
   before(:each) do
     request.headers['X-Auth-Token'] = CONFIG['pantry']['api_key']
     @ec2_instance = instance_double('Ec2Instance', id: 1)
+    @ec2_instance.stub(:user).and_return(user)
     Ec2Instance.stub(:find).with("1").and_return(@ec2_instance)
     @state = instance_double('Wonga::Pantry::Ec2InstanceState')
     Wonga::Pantry::Ec2InstanceState.stub(:new).and_return(@state)
