@@ -9,7 +9,7 @@ describe User do
 
     before(:each) do
       config =  Marshal.load(Marshal.dump(CONFIG))
-      config['omniauth'].merge!(ldap_group: group)
+      config['omniauth'].merge!('ldap_group' => group)
       stub_const('CONFIG', config)
     end
 

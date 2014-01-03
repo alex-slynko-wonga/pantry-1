@@ -11,7 +11,7 @@ describe LdapResource do
 
   before(:each) do
     config =  Marshal.load(Marshal.dump(CONFIG))
-    config['omniauth'].merge!(ldap_group: group)
+    config['omniauth']['ldap_group'] = group
     stub_const('CONFIG', config)
     Net::LDAP.stub(:new).and_return(ldap)
     Net::LDAP::Filter.stub(:eq).with('memberOf', group).and_return(default_filter)
