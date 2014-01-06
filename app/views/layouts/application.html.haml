@@ -12,6 +12,7 @@
         = navbar_link_to("Home", root_url)
         = navbar_link_to("Teams", teams_url)
         = navbar_link_to("Jenkins", jenkins_servers_url)
+        = navbar_link_to("Users", users_url)
         - if current_user.have_billing_access?
           = navbar_link_to("Billing", ec2_instance_costs_url)
         - #TODO: make it better
@@ -19,9 +20,9 @@
           = navbar_link_to("Queues", queues_url)
 
       %ul.nav.pull-right
-        - if current_user.image_url
+        - if pundit_user.image_url
           %li
-            %img{src: current_user.image_url, alt: 'Gravatar'}
+            %img{src: pundit_user.image_url, alt: 'Gravatar' }
         %li
           = link_to 'Log out', logout_url
 

@@ -36,18 +36,20 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def destroy
     @ec2_instance = Ec2Instance.find(params[:id])
-    if can?(@ec2_instance, :termination)
-      Wonga::Pantry::Ec2Terminator.new(@ec2_instance).terminate(current_user)
+    authorize(@ec2_instance)
+    if Wonga::Pantry::Ec2Terminator.new(@ec2_instance).terminate(current_user)
       flash[:notice] = "Ec2 Instance deletion request success"
     else
       flash[:error] = "Ec2 Instance deletion request failed: #{@ec2_instance.errors.full_messages.to_sentence}"
     end
     render :show
   end
-  
+
   def update
     @ec2_instance = Ec2Instance.find params[:id]
-    ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user) 
+    ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user)
+    authorize(@ec2_instance, "#{params[:event]}?")
+
     if params[:event] == "shutdown_now"
       if ec2_resource.stop
         flash[:notice] = "Shutting down has started"
@@ -55,17 +57,17 @@ class Aws::Ec2InstancesController < ApplicationController
         flash[:error] = "An error occurred when shutting down"
       end
     elsif params[:event] == "start_instance"
-      if ec2_resource.start        
+      if ec2_resource.start
         flash[:notice] = "Starting instance"
       else
         flash[:error] = "An error occurred while attempting to start the instance"
       end
     end
-    
+
     respond_to do |format|
       format.json { render json: @ec2_instance }
       format.html do
-        redirect_to request.referer        
+        redirect_to request.referer
       end
     end
   end

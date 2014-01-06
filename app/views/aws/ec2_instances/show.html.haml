@@ -1,11 +1,10 @@
-- cache [:v1, @ec2_instance] do
-  %h1= @ec2_instance.name
-  = render 'shared/ec2_instance', ec2_instance: @ec2_instance
-  - if can?(@ec2_instance, :shutdown_now)
-    = button_to "Shut down", aws_ec2_instance_url(@ec2_instance, "event" => "shutdown_now"), method: :put
+%h1= @ec2_instance.name
+= render 'shared/ec2_instance', ec2_instance: @ec2_instance
+- if policy(@ec2_instance).shutdown_now?
+  = button_to "Shut down", aws_ec2_instance_url(@ec2_instance, "event" => "shutdown_now"), method: :put
 
-  - if can?(@ec2_instance, :termination)
-    = button_to 'Destroy', [:aws, @ec2_instance], method: :delete, data: { confirm: 'This will permanently delete this instance. Are you sure?' }
+- if policy(@ec2_instance).destroy?
+  = button_to 'Destroy', [:aws, @ec2_instance], method: :delete, data: { confirm: 'This will permanently delete this instance. Are you sure?' }
 
-  - if can?(@ec2_instance, :start_instance)
-    = button_to 'Start', aws_ec2_instance_url(@ec2_instance, "event" => "start_instance"), method: :put
+- if policy(@ec2_instance).start_instance?
+  = button_to 'Start', aws_ec2_instance_url(@ec2_instance, "event" => "start_instance"), method: :put

@@ -36,3 +36,8 @@ end
 Then(/^I should not see "([^"]*)" button/) do |name|
   should_not have_button name
 end
+
+When(/^I save record$/) do
+  first(:xpath, "//input[@name='commit']").click
+end
+

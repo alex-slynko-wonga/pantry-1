@@ -24,8 +24,10 @@ gem "newrelic_rpm", "~> 3.7.0.177"
 gem 'net-ldap', github: "ruby-ldap/ruby-net-ldap"
 gem "simple_form", "~> 3.0"
 gem 'turbolinks'
+gem 'pundit', github: 'elabs/pundit'
 
 group :development do
+  gem "spring"
   gem 'quiet_assets'
   gem 'guard-bundler'
   gem 'guard-cucumber'

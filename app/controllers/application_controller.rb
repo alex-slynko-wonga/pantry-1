@@ -1,7 +1,11 @@
 class ApplicationController < ActionController::Base
-  helper_method :current_user, :can?
+  include Pundit
+
+  helper_method :current_user
   protect_from_forgery with: :exception
   before_filter :signed_in_user
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
@@ -15,14 +19,17 @@ class ApplicationController < ActionController::Base
     session['requested_url'] = request.url
     redirect_to '/auth/ldap', notice: "Please sign in." unless signed_in?
   end
-  
-  def can?(ec2_instance, meth)
-    unless current_user.teams.include?(ec2_instance.team)
-      return false
-    end        
-    delegated_method = "can_#{meth}?"
-    state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance)
-    state.state_machine.respond_to?(delegated_method) ? state.state_machine.send(delegated_method) : false
+
+  def pundit_user
+    user = User.where(username: params[:test_user]).first if current_user.role == "superadmin" && params[:test_user]
+    user || current_user
+  end
+
+  private
+
+  def user_not_authorized
+    flash[:error] = "You are not authorized to perform this action."
+    redirect_to root_path
   end
 end
 
