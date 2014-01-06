@@ -1,6 +1,10 @@
 class User < ActiveRecord::Base
+  ROLES = %w( business_admin superadmin team_admin developer)
+
   has_many :team_members
   has_many :teams, through: :team_members
+  validates :role, presence: true, inclusion: ROLES
+  before_validation :set_role, on: :create
 
   def self.from_omniauth(auth)
     return unless auth['memberof'].include?(CONFIG['omniauth']['ldap_group'])
@@ -35,5 +39,10 @@ class User < ActiveRecord::Base
 
   def member_of_team?(team)
     teams.include?(team)
+  end
+
+  private
+  def set_role
+    self.role ||= 'developer'
   end
 end
