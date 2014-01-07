@@ -26,8 +26,7 @@ Given(/^(I am in )?the "(.*?)" team(?: with "(.*?)" user)?$/) do |include_logged
 end
 
 Given(/^I am not in the "(.*?)" team$/) do |team_name|
-  @team = FactoryGirl.create(:team)  
-  User.last.teams.delete(Team.where(name: team_name))
+  @team = FactoryGirl.create(:team, name: team_name)
 end
 
 Given(/^I am on the "(.*?)" page$/) do |arg1|
@@ -69,14 +68,6 @@ Then(/^team should (not )?contain "(.*?)"$/) do |not_contains, name|
   end
 end
 
-Given(/^the team has a Jenkins server$/) do
-  @team.should be_true
-  @jenkins_server = FactoryGirl.create(:jenkins_server,
-                                       team: @team,
-                                       ec2_instance: FactoryGirl.create(:ec2_instance, bootstrapped: true)
-  )
-end
-
 Then(/^I should see the Jenkins server name$/) do
   page.should have_content @jenkins_server.ec2_instance.name
 end
@@ -87,13 +78,6 @@ end
 
 Then(/^I should see the url of the Jenkins server$/) do
   page.should have_selector("a[href='http://#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}']")
-end
-
-Given(/^I have at least one EC2 in the team$/) do
-  @team = FactoryGirl.create(:team)
-  user = User.first
-  @team.users << user
-  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team)
 end
 
 When(/^I am on the team page$/) do

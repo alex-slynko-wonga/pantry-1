@@ -70,9 +70,15 @@ Feature: EC2 Instance
     Then I should see "Starting instance"
     And I should see "Starting"
 
-  Scenario: Attempting to shut down, destroy another team's instance
+  @javascript
+  Scenario: Attempting to shut down or destroy another team's instances
     Given I have at least one EC2 in the team
     And the instance is ready
-    And I am not in the "Pantry Team" team
-    Then I should not see "Shut Down"
-    Then I should not see "Destroy"
+    And I am on instance page
+    Then I should see "Shut down" button
+    And I should see "Destroy" button
+
+    When the instance does not belong to my team
+    And I am on instance page    
+    Then I should not see "Shut down" button
+    And I should not see "Destroy" button
