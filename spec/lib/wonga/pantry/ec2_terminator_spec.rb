@@ -9,11 +9,11 @@ describe Wonga::Pantry::Ec2Terminator do
 
   context "#terminate" do
     let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true)}
-    
+
     before(:each) do
       Wonga::Pantry::Ec2InstanceState.stub(:new).with(ec2_instance, user, { 'event' => "termination" }).and_return(ec2_instance_state)
     end
-    
+
     it "changes state" do
       subject.terminate(user)
       expect(Wonga::Pantry::Ec2InstanceState).to have_received(:new)
@@ -26,7 +26,7 @@ describe Wonga::Pantry::Ec2Terminator do
 
     context "when machine can not be terminated" do
       let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: false)}
-      
+
       it "does nothing" do
         subject.terminate(user)
         expect(sns_publisher).to_not have_received(:publish_message)
@@ -38,6 +38,7 @@ describe Wonga::Pantry::Ec2Terminator do
       it "does nothing" do
         expect(Wonga::Pantry::Ec2InstanceState).to_not receive(:new)
         user.teams = []
+        user.team_members = []
         subject.terminate(user)
         expect(sns_publisher).to_not have_received(:publish_message)
       end

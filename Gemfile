@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2.16'
+gem 'rails', '~> 4.0.0'
 gem 'mysql2'
 gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap'
 
-gem 'strong_parameters'
 gem 'haml-rails'
 gem 'chef','~> 11.8.0'
 gem 'aws-sdk', '~> 1.25.0'
@@ -18,12 +17,13 @@ gem 'jquery-ui-rails'
 gem 'bootstrap-sass', '~> 2.3.2'
 gem 'angularjs-rails', '~> 1.0.8'
 gem 'rabl'
-gem 'simple_form'
 gem 'rack-ssl'
 gem 'cache_digests'
 gem "state_machine", "~> 1.2.0"
 gem "newrelic_rpm", "~> 3.7.0.177"
 gem 'net-ldap', github: "ruby-ldap/ruby-net-ldap"
+gem "simple_form", "~> 3.0"
+gem 'turbolinks'
 
 group :development do
   gem 'quiet_assets'
@@ -43,7 +43,7 @@ group :test do
   gem 'chef-zero'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
-  gem 'rspec-fire'
+  gem 'rspec-fire', '~> 1.3.0'
   gem 'simplecov', require: false
   gem 'simplecov-rcov', require: false
   gem 'timecop'

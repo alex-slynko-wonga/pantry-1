@@ -19,11 +19,11 @@ describe Wonga::Pantry::JenkinsSlaveDestroyer do
       "chef_environment"=>ec2_instance.chef_environment
     }
   }
-  
+
   before(:each) do
     Wonga::Pantry::Ec2InstanceState.stub(:new).with(ec2_instance, user, { 'event' => "termination" }).and_return(ec2_instance_state)
   end
-  
+
   context "#destroy" do
     it "sends message via SQS" do
       subject.delete

@@ -42,10 +42,14 @@ end
 
 When(/^an instance is created with ip "(.*?)"$/) do |ip|
   instance = Ec2Instance.last
-  put "/api/ec2_instances/#{instance.id}", {booted: true, ip_address: ip, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
-  put "/api/ec2_instances/#{instance.id}", {joined: true, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
-  put "/api/ec2_instances/#{instance.id}", {event: :create_dns_record, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
-  put "/api/ec2_instances/#{instance.id}", {bootstrapped: true, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{instance.id}", {booted: true, ip_address: ip, format: :json}
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{instance.id}", {joined: true, format: :json}
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{instance.id}", {event: :create_dns_record, format: :json}
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{instance.id}", {bootstrapped: true, format: :json}
 end
 
 When(/^I select four security groups$/) do
@@ -81,11 +85,15 @@ end
 
 When(/^an instance is destroyed$/) do
   instance = Ec2Instance.last
-  put "/api/ec2_instances/#{instance.id}", {terminated: true, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
-  delete "/api/chef_nodes/#{instance.id}", { format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key'] }
-  put "/api/ec2_instances/#{instance.id}", {joined: false, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{instance.id}", {terminated: true, format: :json}
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  delete "/api/chef_nodes/#{instance.id}", { format: :json}
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{instance.id}", {joined: false, format: :json}
   expect(instance.reload.state).to_not eq('terminated')
-  put "/api/ec2_instances/#{instance.id}", {event: :terminated, dns: false, format: :json}, { 'X-Auth-Token' => CONFIG['pantry']['api_key']}
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{instance.id}", {event: :terminated, dns: false, format: :json}
 end
 
 Given(/^the (?:instance|jenkins slave) is protected$/) do

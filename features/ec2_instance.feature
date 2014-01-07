@@ -68,5 +68,3 @@ Feature: EC2 Instance
     And I click "Start"
     Then I should see "Starting instance"
     And I should see "Starting"
-
-
