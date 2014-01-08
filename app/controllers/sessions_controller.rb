@@ -2,6 +2,7 @@ class SessionsController < ApplicationController
   force_ssl if: :ssl_needed
 
   skip_before_filter :signed_in_user, only: :create
+  skip_before_action :verify_authenticity_token
 
   def new
     redirect_to '/auth/ldap'
@@ -21,6 +22,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
+    session['requested_url'] = nil
     redirect_to '/auth/ldap', notice: "Signed out!"
   end
 
