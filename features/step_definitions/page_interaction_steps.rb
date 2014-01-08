@@ -28,3 +28,11 @@ end
 Then(/^I should see a flash message with "(.*?)"$/) do |arg1|
   page.should have_selector ".alert-message", text: arg1
 end
+
+Then(/^I should see "([^"]*)" button/) do |name|
+  should have_button name
+end
+
+Then(/^I should not see "([^"]*)" button/) do |name|
+  should_not have_button name
+end

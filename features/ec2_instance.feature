@@ -52,6 +52,7 @@ Feature: EC2 Instance
     When I am on instance page
     Then I should not see "Destroy"
 
+
   @javascript
   Scenario: Shutting down an instance
     Given I have at least one EC2 in the team
@@ -68,3 +69,16 @@ Feature: EC2 Instance
     And I click "Start"
     Then I should see "Starting instance"
     And I should see "Starting"
+
+  @javascript
+  Scenario: Attempting to shut down or destroy another team's instances
+    Given I have at least one EC2 in the team
+    And the instance is ready
+    And I am on instance page
+    Then I should see "Shut down" button
+    And I should see "Destroy" button
+
+    When the instance does not belong to my team
+    And I am on instance page    
+    Then I should not see "Shut down" button
+    And I should not see "Destroy" button

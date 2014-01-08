@@ -59,6 +59,12 @@ When(/^I select four security groups$/) do
   check('name4')
 end
 
+When(/^the instance belongs to my team$/) do
+  @instance = Ec2Instance.last
+  @instance.team = TeamMember.where(user_id: User.last.id).first.team
+  @instance.reload
+end
+
 When(/^I shut down an instance$/) do
   click_on "Shut down"
 end
@@ -112,4 +118,17 @@ When(/^instance load is "(.*?)"$/) do |load|
   metrics[:metrics] = [{metric_name: 'CPUUtilization', namespace: 'Test'}]
   statistics = AWS::CloudWatch.new.client.stub_for :get_metric_statistics
   statistics[:datapoints] =  [{timestamp: Time.current, unit: 'Percent', average: load.to_d}]
+end
+
+When(/^the instance does not belong to my team$/) do
+  @team = FactoryGirl.build(:team)
+  @ec2_instance = Ec2Instance.last
+  @ec2_instance.update_attributes({team: @team})
+end
+
+Given(/^I have at least one EC2 in the team$/) do
+  @team = FactoryGirl.create(:team)
+  user = User.first
+  @team.users << user
+  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team)
 end

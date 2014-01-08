@@ -47,6 +47,14 @@ When(/^I click on the jenkins slave$/) do
   click_on @jenkins_slave.id
 end
 
+Given(/^the team has a Jenkins server$/) do
+  @team.should be_true
+  @jenkins_server = FactoryGirl.create(:jenkins_server,
+                                       team: @team,
+                                       ec2_instance: FactoryGirl.create(:ec2_instance, bootstrapped: true)
+  )
+end
+
 When(/^I go into Jenkins slave page$/) do
   visit "/jenkins_servers/#{@jenkins_slave.jenkins_server_id}/jenkins_slaves/#{@jenkins_slave.id}"
 end
@@ -70,3 +78,11 @@ Then(/^I should not see slave in listing$/) do
   expect(page).to_not have_content @jenkins_slave.ec2_instance.name
   expect(page).to_not have_content @jenkins_slave.ec2_instance.ami
 end
+
+When(/^the slave does not belong to my team$/) do
+  @team = FactoryGirl.build(:team)
+  slave = JenkinsSlave.last
+  slave.ec2_instance.update_attributes({team: @team})
+  slave.reload
+end
+
