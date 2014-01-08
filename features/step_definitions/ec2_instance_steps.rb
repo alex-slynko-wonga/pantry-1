@@ -91,10 +91,11 @@ end
 
 When(/^an instance is destroyed$/) do
   instance = Ec2Instance.last
+  user = FactoryGirl.create(:user)
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
   put "/api/ec2_instances/#{instance.id}", {terminated: true, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  delete "/api/chef_nodes/#{instance.id}", { format: :json}
+  delete "/api/chef_nodes/#{instance.id}", { user_id: user.id, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
   put "/api/ec2_instances/#{instance.id}", {joined: false, format: :json}
   expect(instance.reload.state).to_not eq('terminated')

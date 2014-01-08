@@ -11,6 +11,7 @@ class Wonga::Pantry::BootMessage
       flavor:                     @instance.flavor,
       ami:                        @instance.ami,
       team_id:                    @instance.team_id,
+      user_id:                    @instance.user_id,
       subnet_id:                  @instance.subnet_id,
       security_group_ids:         security_group_ids,
       chef_environment:           @instance.chef_environment,
@@ -20,7 +21,7 @@ class Wonga::Pantry::BootMessage
       http_proxy:                 CONFIG["aws"]["http_proxy"],
       windows_set_admin_password: true,
       windows_admin_password:     CONFIG["aws"]["windows_admin_password"],
-      ou: Wonga::Pantry::ActiveDirectoryOU.new(@instance).ou,
+      ou:                         Wonga::Pantry::ActiveDirectoryOU.new(@instance).ou,
       block_device_mappings:      block_device_mappings,
       protected:                  @instance.protected?
     }
