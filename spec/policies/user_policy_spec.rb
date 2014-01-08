@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe UserPolicy do
-  permission :edit? do
+  permission :edit?, :see_queues? do
     context "for superadmin" do
       subject { UserPolicy.new(User.new(role: 'superadmin'), User.new) }
 
