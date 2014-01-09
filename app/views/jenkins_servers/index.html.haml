@@ -7,4 +7,4 @@
 
 .row
   .span12
-    = render partial: 'listing', locals: { jenkins_servers: @jenkins_servers, user_teams: @user_teams, current_team: @current_team }
+    = render 'listing', jenkins_servers: @jenkins_servers, user_teams: @user_teams, current_team: @current_team

@@ -2,6 +2,6 @@
 
 = link_to "Go back to master server ##{@jenkins_server.id}", jenkins_server_path(@jenkins_server)
 |
-= link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
+= link_to_new_slave(@jenkins_server)
 
 = render partial: 'shared/jenkins_index', locals: { jenkins_instances: @jenkins_slaves, jenkins_server: @jenkins_server }
