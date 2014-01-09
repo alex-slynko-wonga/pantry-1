@@ -29,3 +29,8 @@ When(/^I proceed to "(.*?)" page$/) do |page_name|
   link.click
 end
 
+When(/^I proceed to "(.*?)" user page$/) do |name|
+  click_on "Users"
+  click_on name
+end
+

@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
 
   has_many :team_members
   has_many :teams, through: :team_members
+  has_many :ec2_instances
+
   validates :role, presence: true, inclusion: ROLES
   before_validation :set_role, on: :create
 

@@ -3,10 +3,16 @@
   %thead
     %tr
       %th #
-      %th Username
+      %th Name
       %th Email
+      - if policy(current_user).edit?
+        %th Role
+        %th
   - @users.each_with_index do |user, index|
     %tr
       %td= index + 1
-      %td= link_to user.username, user_url(user.id)
+      %td= link_to user.name, user_url(user)
       %td= user.email
+      - if policy(user).edit?
+        %td= user.role.humanize
+        %td= link_to "Edit", edit_user_url(user)

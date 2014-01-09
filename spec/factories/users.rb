@@ -8,7 +8,7 @@ FactoryGirl.define do
     username "MyString"
     role 'developer'
 
-    after(:build) do |user, evaluator|
+    callback(:after_build, :after_stub) do |user, evaluator|
       user.teams << evaluator.team if evaluator.team
     end
   end

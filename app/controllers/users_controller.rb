@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   def index
     @users = User.all
- 
+
     respond_to do |format|
       format.html  # index.html.erb
       format.json  { render :json => @users }
@@ -9,14 +9,17 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
-    @ec2_instances = Ec2Instance.where(user_id:params[:id])
+    @user = User.includes(:ec2_instances).find(params[:id])
+  end
+
+  def edit
+    authorize(@user = User.find(params[:id]))
   end
 
   def update
-    @user = User.find(params[:id])
-    @user.username = params[:username]
-    @user.save
+    authorize(@user = User.find(params[:id]))
+    @user.role = params[:user][:role]
+
     respond_to do |format|
       if @user.save
         format.html { redirect_to(@user,
