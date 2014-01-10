@@ -22,7 +22,6 @@
 .row-fluid
   .span12
     %h4 Jenkins server
-    %p= link_to "Create a new jenkins server", new_jenkins_server_url if @jenkins_server.nil? && @can_create_ec2_instance
     - if @jenkins_server
       %table.table
         %thead
@@ -33,7 +32,7 @@
             %th OS
             %th URL
           = render partial: 'jenkins_instance', collection: [@jenkins_server]
-      %h5= link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
+      %h5= link_to_new_slave(@jenkins_server)
       - if @jenkins_slaves && @jenkins_slaves.size > 0
         %h4 Jenkins slaves
         %table.table
@@ -44,7 +43,9 @@
               %th Status
               %th OS
           = render partial: 'jenkins_instance', collection: @jenkins_slaves
-        %h5= link_to "Create a new slave", new_jenkins_server_jenkins_slave_path(@jenkins_server)
+        %h5= link_to_new_slave(@jenkins_server)
+    - elsif policy(@team.build_jenkins_server).create?
+      %p= link_to "Create a new jenkins server", new_jenkins_server_url
 
 .row-fluid
   .span12

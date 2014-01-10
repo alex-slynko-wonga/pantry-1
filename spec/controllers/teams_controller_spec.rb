@@ -25,7 +25,7 @@ describe TeamsController do
       assigns(:team).name.should == 'TeamName'
       assigns(:team).description.should == 'TeamDescription'
     end
-    
+
     it "creates a team without selecting a user" do
       session[:user_id] = FactoryGirl.create(:user).id
       expect{ post :create, team_params }.to change(Team, :count).by(1)
@@ -100,12 +100,6 @@ describe TeamsController do
       session[:user_id] = user.id
       get 'show', :id => team.id
       response.should be_success
-    end
-    
-    it "sets @can_create_ec2_instance to true" do
-      session[:user_id] = user.id
-      get 'show', :id => team.id
-      assigns(:can_create_ec2_instance).should be_true
     end
   end
 end

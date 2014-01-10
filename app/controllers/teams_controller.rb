@@ -16,7 +16,7 @@ class TeamsController < ApplicationController
       flash[:notice] = "Team created successfully"
       redirect_to @team
     else
-      flash[:error] = "Team creation failed: #{@team.errors.full_messages.to_sentence}"      
+      flash[:error] = "Team creation failed: #{@team.errors.full_messages.to_sentence}"
       render :new
     end
   end
@@ -29,7 +29,6 @@ class TeamsController < ApplicationController
     @jenkins_server = @team.jenkins_server
     @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance) if @jenkins_server
     @ec2_instances = @team.ec2_instances
-    @can_create_ec2_instance = current_user.member_of_team?(@team)
   end
 
   def edit
@@ -39,9 +38,9 @@ class TeamsController < ApplicationController
     @team.users = users
     if @team.update_attributes(team_params)
       redirect_to @team
-      flash[:notice] = "Team updated successfully"      
+      flash[:notice] = "Team updated successfully"
     else
-      flash[:error] = "Team update failed: #{@team.errors.full_messages.to_sentence}"            
+      flash[:error] = "Team update failed: #{@team.errors.full_messages.to_sentence}"
       render :edit
     end
   end
@@ -67,7 +66,7 @@ class TeamsController < ApplicationController
   def team_params
     params.require(:team).permit(:name, :description)
   end
-  
+
   def check_permission
     flash[:error] = 'Permission denied: you cannot change this team.' and redirect_to root_url unless current_user.member_of_team?(@team)
   end
