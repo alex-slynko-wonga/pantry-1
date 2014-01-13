@@ -1,5 +1,6 @@
 class Ec2InstanceCostsController < ApplicationController
   def index
+    authorize(Ec2InstanceCost)
     respond_to do |format|
       format.json do
         @costs = costs.costs_per_team
@@ -10,7 +11,7 @@ class Ec2InstanceCostsController < ApplicationController
       end
     end
   end
-  
+
   def show
     respond_to do |format|
       format.json do
