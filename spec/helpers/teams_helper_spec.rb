@@ -11,16 +11,6 @@ describe TeamsHelper do
     end
   end
 
-  describe "os_image" do 
-    it "displays the link" do 
-      expect(helper.create_new_ec2_instance(true)).to include "Launch New Instance"
-    end
-
-    it "does not display the link" do 
-      helper.create_new_ec2_instance(false).should be_nil
-    end
-  end
-
   describe ".can_add_server?" do
     it "is true when team has no jenkins server" do
       expect(helper).to be_can_add_server(Team.new)
