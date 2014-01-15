@@ -56,6 +56,22 @@ module Wonga
         config.middleware.insert_before 0, Rack::SSL, :exclude => proc { |env| !env['REQUEST_URI']['/auth/ldap'] }
       end
 
+      # Configure logger if attributes present
+      if CONFIG['pantry']['log']
+        case CONFIG['pantry']['log']['logger']
+        when "syslog"
+          require 'syslogger'
+          facility = Syslog.const_get("LOG_#{CONFIG['pantry']['log']['log_facility'].upcase}")
+          config.logger = Syslogger.new(CONFIG['pantry']['log']['app_name'],
+                                        Syslog::LOG_PID | Syslog::LOG_CONS,
+                                        facility)
+        when "file"
+          if CONFIG['pantry']['log']['log_file']
+            config.logger = CONFIG['pantry']['log']['log_file']
+          end
+        end
+      end
+
       config.generators do |g|
         g.view_specs false
       end

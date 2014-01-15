@@ -49,5 +49,18 @@
     api_key: <%= @config['pantry']['api_key'] %>
     default_ou: <%= @config['pantry']['default_ou'] %>
     domain: <%= @config['pantry']['domain'] %>
+    <% if @config['pantry']['log'] %>
+    log:
+      app_name: <%= @config['pantry']['log']['app_name'] || "pantry" %>
+      logger: <%= @config['pantry']['log']['logger'] || "file" %>
+      <% case @config['pantry']['log']['logger']
+      when "file" %>
+        <% if @config['pantry']['log']['log_file'] %>
+      log_file: <%= @config['pantry']['log']['log_file']) %>
+        <% end %>
+      <% when "syslog" %>
+      log_facility: <%= @config['pantry']['log']['log_facility'] || "syslog" %>
+      <% end %>
+    <% end %>
     webapp:
       ssl_enabled: <%= @config['webapp']['ssl_enabled'] %>
