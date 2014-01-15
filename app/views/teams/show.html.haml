@@ -60,5 +60,7 @@
             %th OS
         = render partial: 'shared/ec2_instance_row', collection: @ec2_instances
 
-    = create_new_ec2_instance(@can_create_ec2_instance)
+    - if policy(@team.ec2_instances.build).create?
+      %h4 EC2 Instance Control
+      %p= link_to "Launch New Instance", new_aws_ec2_instance_url(team_id: params[:id])
 

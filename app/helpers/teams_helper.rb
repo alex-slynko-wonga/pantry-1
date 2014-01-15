@@ -10,8 +10,4 @@ module TeamsHelper
   def can_add_server?(team)
     team && team.jenkins_server.nil?
   end
-
-  def create_new_ec2_instance(show_link)
-    render 'new_ec2_instance_link' if show_link
-  end
 end

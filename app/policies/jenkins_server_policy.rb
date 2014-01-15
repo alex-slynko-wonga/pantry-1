@@ -1,6 +1,6 @@
 class JenkinsServerPolicy < ApplicationPolicy
   def create?
-    (god_mode? || @user.teams.include?(@record.team)) && (@record.team.jenkins_server.nil? || @record.team.jenkins_server.new_record?)
+    (god_mode? || team_member?) && (@record.team.jenkins_server.nil? || @record.team.jenkins_server.new_record?)
   end
 
   class Scope < Struct.new(:user, :scope)

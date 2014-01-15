@@ -41,5 +41,9 @@ class ApplicationPolicy
   def god_mode?
     user.role == 'superadmin'
   end
+
+  def team_member?
+    user.teams.include?(record.team)
+  end
 end
 
