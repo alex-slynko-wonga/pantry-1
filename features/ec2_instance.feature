@@ -21,6 +21,9 @@ Feature: EC2 Instance
     Then I should see "Ready" after page is updated
     And I should see "123.456.7.8"
 
+    When I check my profile page
+    Then I should see machine info
+
   @javascript
   Scenario: Machine status
     Given I have at least one EC2 in the team

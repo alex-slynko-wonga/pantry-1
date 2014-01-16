@@ -126,3 +126,7 @@ Given(/^I have at least one EC2 in the team$/) do
 
   @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team)
 end
+
+Then(/^I should see machine info$/) do
+  expect(page).to have_text(Ec2Instance.last.name)
+end
