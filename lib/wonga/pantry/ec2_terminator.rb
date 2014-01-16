@@ -7,18 +7,19 @@ class Wonga::Pantry::Ec2Terminator
   def terminate(user)
     return unless user.teams.include?(@ec2_instance.team)
     if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, user, { 'event' => "termination" }).change_state
-      @sns.publish_message(termination_message)
+      @sns.publish_message(termination_message(user))
       true
     end
   end
 
   private
-  def termination_message
+  def termination_message(user)
     {
       :hostname      => @ec2_instance.name,
       :domain        => @ec2_instance.domain,
       :instance_id   => @ec2_instance.instance_id,
-      :id            => @ec2_instance.id
+      :id            => @ec2_instance.id,
+      :user_id       => user.id
     }
   end
 end
