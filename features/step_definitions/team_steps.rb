@@ -25,14 +25,6 @@ Given(/^(I am in )?the "(.*?)" team(?: with "(.*?)" user)?$/) do |include_logged
   user = FactoryGirl.create(:user, name: user_name, team: @team) if user_name
 end
 
-Given(/^I am not in the "(.*?)" team$/) do |team_name|
-  @team = FactoryGirl.create(:team, name: team_name)
-end
-
-Given(/^I am on the "(.*?)" page$/) do |arg1|
-  visit team_url @team
-end
-
 Given(/^a LDAP user "(.*?)"$/) do |name|
   LdapResource.stub_chain(:new, :filter_by_name, :all).and_return([{'samaccountname' => [name], 'email' => [name], 'displayname' => [name]}])
 end

@@ -9,7 +9,6 @@ class Wonga::Pantry::JenkinsSlaveDestroyer
   end
 
   def delete
-    return unless @user.teams.include?(@ec2_instance.team)
     if Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, { 'event' => "termination" }).change_state
       @sns.publish_message({
         'server_ip'         => @server_ip,

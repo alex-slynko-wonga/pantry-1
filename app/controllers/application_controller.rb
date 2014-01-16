@@ -25,6 +25,9 @@ class ApplicationController < ActionController::Base
     user || current_user
   end
 
+  def human_errors(model)
+    model.errors.full_messages.to_sentence
+  end
   private
 
   def user_not_authorized

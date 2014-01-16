@@ -7,7 +7,7 @@ Then(/^I should be on team page$/) do
 end
 
 Given(/^I am on the teams page$/) do
-  visit "/teams"
+  click_on "Teams"
 end
 
 When(/^I am still on \w+ page$/) do
@@ -32,5 +32,9 @@ end
 When(/^I proceed to "(.*?)" user page$/) do |name|
   click_on "Users"
   click_on name
+end
+
+Given(/^I am on the "(.*?)" team page$/) do |arg1|
+  visit team_url @team
 end
 

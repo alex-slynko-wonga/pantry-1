@@ -16,7 +16,7 @@ class TeamsController < ApplicationController
       flash[:notice] = "Team created successfully"
       redirect_to @team
     else
-      flash[:error] = "Team creation failed: #{@team.errors.full_messages.to_sentence}"
+      flash[:error] = "Team creation failed: #{human_errors(@team)}"
       render :new
     end
   end
@@ -32,15 +32,17 @@ class TeamsController < ApplicationController
   end
 
   def edit
+    authorize(@team)
   end
 
   def update
+    authorize(@team)
     @team.users = users
     if @team.update_attributes(team_params)
       redirect_to @team
       flash[:notice] = "Team updated successfully"
     else
-      flash[:error] = "Team update failed: #{@team.errors.full_messages.to_sentence}"
+      flash[:error] = "Team update failed: #{human_errors(@team)}"
       render :edit
     end
   end

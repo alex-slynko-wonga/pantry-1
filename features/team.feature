@@ -19,10 +19,9 @@ Feature: Managing Teams
     Then I should see "NewName"
 
   Scenario: Updating existing team when the user is not in it
-    Given I am not in the "TeamName" team
-    And I am on the "TeamName" page
-    When I click on "Edit this team"
-    Then I should see "Permission denied"
+    Given the "TeamName" team
+    And I am on the "TeamName" team page
+    Then I should not see "Edit this team"
 
   @javascript
   Scenario: Adding an user to the team
