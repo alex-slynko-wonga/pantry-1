@@ -20,4 +20,4 @@
           %th Address
           %th Status
           %th OS
-          = render 'shared/ec2_instance_row', collection: @user.ec2_instances
+          = render partial: 'shared/ec2_instance_row', collection: @user.ec2_instances

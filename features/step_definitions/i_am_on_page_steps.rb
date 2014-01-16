@@ -38,3 +38,6 @@ Given(/^I am on the "(.*?)" team page$/) do |arg1|
   visit team_url @team
 end
 
+When(/^I check my profile page$/) do
+  visit user_path User.first
+end
