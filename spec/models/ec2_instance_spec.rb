@@ -32,7 +32,7 @@ describe Ec2Instance do
     it "should be invalid when is different from domain in config" do
       subject.domain = "wrong-domain.com"
       expect(subject).to be_invalid
-      expect(subject).to have(1).error_on(:domain)
+      expect(subject.error_on(:domain).size).to eq(1)
     end
   end
 
@@ -47,7 +47,7 @@ describe Ec2Instance do
     it "returns a default value if the state is nil" do
       instance = FactoryGirl.build(:ec2_instance, state: nil)
       instance.save(validate: false) # say we have a dodgy state, i.e. nil
-      instance.human_status.should eq("Initial state")
+      expect(instance.human_status).to eq("Initial state")
     end
   end
 
@@ -88,7 +88,7 @@ describe Ec2Instance do
         "ip_address"=>"pending",
         "state"=>nil
       }
-      Ec2Instance.new(params).state.should eq("initial_state")
+      expect(Ec2Instance.new(params).state).to eq("initial_state")
     end
   end
 end

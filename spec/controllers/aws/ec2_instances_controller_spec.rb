@@ -19,12 +19,12 @@ describe Aws::Ec2InstancesController do
   describe "#new" do
     it "returns http success" do
       get "new"
-      response.should be_success
+      expect(response).to be_success
     end
 
     it "sets the team if team_id is given" do
       get "new", team_id: team.id
-      assigns(:ec2_instance).team_id.should == team.id
+      expect(assigns(:ec2_instance).team_id).to eq(team.id)
     end
   end
 
@@ -34,8 +34,8 @@ describe Aws::Ec2InstancesController do
     let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', platform_for_ami: 'Lindows') }
 
     before(:each) do
-      Wonga::Pantry::Ec2Adapter.stub(:new).and_return(adapter)
-      Wonga::Pantry::SQSSender.stub(:new).and_return(sender)
+      allow(Wonga::Pantry::Ec2Adapter).to receive(:new).and_return(adapter)
+      allow(Wonga::Pantry::SQSSender).to receive(:new).and_return(sender)
     end
 
     it "creates an ec2 instance request record" do
@@ -67,8 +67,8 @@ describe Aws::Ec2InstancesController do
     let(:terminator) { instance_double('Wonga::Pantry::Ec2Terminator') }
 
     before(:each) do
-      Wonga::Pantry::Ec2Terminator.stub(:new).and_return(terminator)
-      terminator.stub(:terminate)
+      allow(Wonga::Pantry::Ec2Terminator).to receive(:new).and_return(terminator)
+      allow(terminator).to receive(:terminate)
     end
 
     let(:ec2_instance_running) { FactoryGirl.create(:ec2_instance, :running, team: team) }
@@ -98,9 +98,9 @@ describe Aws::Ec2InstancesController do
     context "shutting_down" do 
       let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
       before(:each) do
-        Wonga::Pantry::Ec2Resource.stub(:new).and_return(ec2_resource)
+        allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
         ec2_instance.update_attributes(state: "ready")
-        ec2_resource.stub(:stop)
+        allow(ec2_resource).to receive(:stop)
       end
 
       it "initiates shut down using json format" do
@@ -112,14 +112,14 @@ describe Aws::Ec2InstancesController do
       it "initiates shut down using html format from instance" do
         request.env['HTTP_REFERER'] = aws_ec2_instance_url(ec2_instance)
         put :update, id: ec2_instance.id, event: 'shutdown_now'
-        response.should redirect_to [:aws, ec2_instance]
+        expect(response).to redirect_to [:aws, ec2_instance]
         expect(ec2_resource).to have_received(:stop)
       end
 
       it "initiates shut down using html format from slave" do
         request.env['HTTP_REFERER'] = "http://test.host/jenkins_servers/1/jenkins_slaves/1"
         put :update, id: ec2_instance.id, event: 'shutdown_now'
-        response.should redirect_to "http://test.host/jenkins_servers/1/jenkins_slaves/1"
+        expect(response).to redirect_to "http://test.host/jenkins_servers/1/jenkins_slaves/1"
         expect(ec2_resource).to have_received(:stop)
       end
     end
@@ -128,21 +128,21 @@ describe Aws::Ec2InstancesController do
       let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
 
       before(:each) do
-        Wonga::Pantry::Ec2Resource.stub(:new).and_return(ec2_resource)
+        allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
         ec2_instance.update_attributes(state: "shutdown")
-        ec2_resource.stub(:start)
+        allow(ec2_resource).to receive(:start)
       end
 
       it "initiates start using json format" do
         put :update, id: ec2_instance.id, ec2_instance: {}, event: 'start_instance', format: 'json'
-        response.should be_success
+        expect(response).to be_success
         expect(ec2_resource).to have_received(:start)
       end
 
       it "initiates start using html format" do
         request.env['HTTP_REFERER'] = aws_ec2_instance_url(ec2_instance)
         put :update, id: ec2_instance.id, event: 'start_instance'
-        response.should redirect_to [:aws, ec2_instance]
+        expect(response).to redirect_to [:aws, ec2_instance]
         expect(ec2_resource).to have_received(:start)  
       end
 

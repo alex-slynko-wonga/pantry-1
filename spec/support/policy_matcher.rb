@@ -43,7 +43,7 @@ module Pundit
         end
 
         def permissions
-          @permissions ||= example.metadata[:permissions]
+          @permissions ||= ::RSpec.current_example.metadata[:permissions]
         end
 
         def check_permission(policy, permissions)

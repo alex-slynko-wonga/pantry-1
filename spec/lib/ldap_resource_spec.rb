@@ -13,9 +13,9 @@ describe LdapResource do
     config =  Marshal.load(Marshal.dump(CONFIG))
     config['omniauth']['ldap_group'] = group
     stub_const('CONFIG', config)
-    Net::LDAP.stub(:new).and_return(ldap)
-    Net::LDAP::Filter.stub(:eq).with('memberOf', group).and_return(default_filter)
-    default_filter.stub(:&).with(filter).and_return(filter)
+    allow(Net::LDAP).to receive(:new).and_return(ldap)
+    allow(Net::LDAP::Filter).to receive(:eq).with('memberOf', group).and_return(default_filter)
+    allow(default_filter).to receive(:&).with(filter).and_return(filter)
   end
 
   it "filters by default group" do
@@ -51,7 +51,7 @@ describe LdapResource do
 
   context "filter with several filters" do
     before(:each) do
-      default_filter.stub(:&).with(default_filter).and_return(default_filter)
+      allow(default_filter).to receive(:&).with(default_filter).and_return(default_filter)
       expect(Net::LDAP::Filter).to receive(:eq).with('memberOf', 'group').and_return(default_filter)
       expect(Net::LDAP::Filter).to receive(:eq).with('sAMAccountName', username).and_return(or_filter)
       expect(Net::LDAP::Filter).to receive(:eq).with('DisplayName', username).and_return(or_filter)

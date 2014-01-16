@@ -8,7 +8,7 @@ describe JenkinsServer do
     it "avoids uninitialized constant JenkinsServer::JenkinsSlave" do
       slave = JenkinsSlave.new
       subject.jenkins_slaves << slave
-      expect(subject).to have(1).jenkins_slave
+      expect(subject.jenkins_slaves.size).to eq(1)
     end
   end
 

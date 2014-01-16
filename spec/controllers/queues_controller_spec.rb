@@ -14,14 +14,14 @@ describe QueuesController do
 
     it "returns http success" do
       get 'index'
-      response.should be_success
+      expect(response).to be_success
     end
   end
 
   describe "GET 'show'" do
     it "returns not found when queue doesn't exist" do
       get 'show', id: 'url'
-      response.should be_not_found
+      expect(response).to be_not_found
     end
 
     context "when given queue exists" do
@@ -30,7 +30,7 @@ describe QueuesController do
       before(:each) do
         queue_info = AWS::SQS.new.client.stub_for(:get_queue_url)
         queue_info[:queue_url] = 'https://test.url'
-        AWS::SQS::Queue.stub(:new).and_return(queue)
+        allow(AWS::SQS::Queue).to receive(:new).and_return(queue)
       end
 
       after(:each) do
@@ -45,7 +45,7 @@ describe QueuesController do
 
       context "when queue has available messages" do
         it "reads queue and sets message" do
-          queue.stub(:visible_messages).and_return(1)
+          allow(queue).to receive(:visible_messages).and_return(1)
           message = double
           expect(queue).to receive(:receive_message).and_return(message)
           get 'show', id: 'url'
@@ -55,7 +55,7 @@ describe QueuesController do
 
       context "when queue has no available messages" do
         it "reads queue and sets message" do
-          queue.stub(:visible_messages).and_return(0)
+          allow(queue).to receive(:visible_messages).and_return(0)
           get 'show', id: 'url'
           expect(assigns(:message)).to eq(nil)
           expect(queue).to_not have_received(:receive_message)
