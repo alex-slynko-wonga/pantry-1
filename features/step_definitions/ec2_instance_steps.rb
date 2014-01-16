@@ -43,13 +43,13 @@ end
 When(/^an instance is created with ip "(.*?)"$/) do |ip|
   instance = Ec2Instance.last
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/ec2_instances/#{instance.id}", {booted: true, ip_address: ip, format: :json}
+  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, booted: true, ip_address: ip, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/ec2_instances/#{instance.id}", {joined: true, format: :json}
+  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, joined: true, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/ec2_instances/#{instance.id}", {event: :create_dns_record, format: :json}
+  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, event: :create_dns_record, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/ec2_instances/#{instance.id}", {bootstrapped: true, format: :json}
+  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, bootstrapped: true, format: :json}
 end
 
 When(/^I select four security groups$/) do
@@ -59,20 +59,10 @@ When(/^I select four security groups$/) do
   check('name4')
 end
 
-When(/^the instance belongs to my team$/) do
-  @instance = Ec2Instance.last
-  @instance.team = TeamMember.where(user_id: User.last.id).first.team
-  @instance.reload
-end
-
-When(/^I shut down an instance$/) do
-  click_on "Shut down"
-end
-
 When(/^the instance is shutdown$/) do
   @instance = Ec2Instance.last
   @instance.update_attributes(state: "shutdown", booted: false)
-  @instance.reload  
+  @instance.reload
 end
 
 When(/^the instance is ready$/) do
@@ -91,16 +81,16 @@ end
 
 When(/^an instance is destroyed$/) do
   instance = Ec2Instance.last
-  user = FactoryGirl.create(:user)
+  user_id = instance.user_id
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/ec2_instances/#{instance.id}", {terminated: true, format: :json}
+  put "/api/ec2_instances/#{instance.id}", {user_id: user_id, terminated: true, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  delete "/api/chef_nodes/#{instance.id}", { user_id: user.id, format: :json}
+  delete "/api/chef_nodes/#{instance.id}", { user_id: user_id, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/ec2_instances/#{instance.id}", {joined: false, format: :json}
+  put "/api/ec2_instances/#{instance.id}", {user_id: user_id, joined: false, format: :json}
   expect(instance.reload.state).to_not eq('terminated')
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/ec2_instances/#{instance.id}", {event: :terminated, dns: false, format: :json}
+  put "/api/ec2_instances/#{instance.id}", {user_id: user_id, event: :terminated, dns: false, format: :json}
 end
 
 Given(/^the (?:instance|jenkins slave) is protected$/) do
@@ -121,15 +111,18 @@ When(/^instance load is "(.*?)"$/) do |load|
   statistics[:datapoints] =  [{timestamp: Time.current, unit: 'Percent', average: load.to_d}]
 end
 
-When(/^the instance does not belong to my team$/) do
-  @team = FactoryGirl.build(:team)
-  @ec2_instance = Ec2Instance.last
-  @ec2_instance.update_attributes({team: @team})
+When(/^an EC2 instance$/) do
+  @ec2_instance = FactoryGirl.create(:ec2_instance)
 end
 
 Given(/^I have at least one EC2 in the team$/) do
-  @team = FactoryGirl.create(:team)
   user = User.first
-  @team.users << user
+  if user.teams.empty?
+    @team = FactoryGirl.create(:team)
+    @team.users << user
+  else
+    @team = user.teams.first
+  end
+
   @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team)
 end

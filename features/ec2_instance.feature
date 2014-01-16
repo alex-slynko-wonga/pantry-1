@@ -72,13 +72,8 @@ Feature: EC2 Instance
 
   @javascript
   Scenario: Attempting to shut down or destroy another team's instances
-    Given I have at least one EC2 in the team
+    Given an EC2 instance
     And the instance is ready
     And I am on instance page
-    Then I should see "Shut down" button
-    And I should see "Destroy" button
-
-    When the instance does not belong to my team
-    And I am on instance page    
     Then I should not see "Shut down" button
     And I should not see "Destroy" button
