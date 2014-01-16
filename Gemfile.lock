@@ -335,6 +335,7 @@ GEM
     stepdown (1.0.0)
       bundler (> 1.0)
       gherkin (~> 2.3)
+    syslogger (1.5.1)
     systemu (2.5.2)
     temple (0.6.7)
     terminal-table (1.4.5)
@@ -410,6 +411,7 @@ DEPENDENCIES
   spring
   state_machine (~> 1.2.0)
   stepdown
+  syslogger
   therubyracer
   thin
   timecop

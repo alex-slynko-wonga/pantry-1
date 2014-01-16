@@ -4,6 +4,7 @@ gem 'rails', '~> 4.0.0'
 gem 'mysql2'
 gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap'
 
+gem 'syslogger'
 gem 'haml-rails'
 gem 'chef','~> 11.8.0'
 gem 'aws-sdk', '~> 1.25.0'
