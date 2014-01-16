@@ -1,6 +1,5 @@
 class TeamsController < ApplicationController
   before_filter :get_team, :only => [:show, :edit, :update]
-  before_filter :check_permission, :only => [:edit, :update]
 
   def new
     @team = Team.new
@@ -67,9 +66,5 @@ class TeamsController < ApplicationController
 
   def team_params
     params.require(:team).permit(:name, :description)
-  end
-
-  def check_permission
-    flash[:error] = 'Permission denied: you cannot change this team.' and redirect_to root_url unless current_user.member_of_team?(@team)
   end
 end
