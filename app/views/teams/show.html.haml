@@ -1,5 +1,6 @@
 %h1 Team #{@team.name}
-%p= link_to "Edit this team", edit_team_url(@team)
+- if policy(@team).edit?
+  %p= link_to "Edit this team", edit_team_url(@team)
 
 .row-fluid
   .span12

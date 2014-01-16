@@ -33,7 +33,7 @@ class JenkinsServersController < ApplicationController
       ).change_state
       redirect_to @jenkins_server
     else
-      flash[:error] = "Jenkins server request failed: #{@jenkins_server.errors.full_messages.to_sentence}"
+      flash[:error] = "Jenkins server request failed: #{human_errors(@jenkins_server)}"
       load_servers
       render :new
     end

@@ -21,7 +21,7 @@ class Aws::Ec2InstancesController < ApplicationController
       flash[:notice] = "Ec2 Instance request succeeded."
       redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
     else
-      flash[:error] = "Ec2 Instance request failed: #{@ec2_instance.errors.full_messages.to_sentence}"
+      flash[:error] = "Ec2 Instance request failed: #{human_errors(@ec2_instance)}"
       render :action => "new"
     end
   end
@@ -40,7 +40,7 @@ class Aws::Ec2InstancesController < ApplicationController
     if Wonga::Pantry::Ec2Terminator.new(@ec2_instance).terminate(current_user)
       flash[:notice] = "Ec2 Instance deletion request success"
     else
-      flash[:error] = "Ec2 Instance deletion request failed: #{@ec2_instance.errors.full_messages.to_sentence}"
+      flash[:error] = "Ec2 Instance deletion request failed: #{human_errors(@ec2_instance)}"
     end
     render :show
   end
@@ -54,13 +54,13 @@ class Aws::Ec2InstancesController < ApplicationController
       if ec2_resource.stop
         flash[:notice] = "Shutting down has started"
       else
-        flash[:error] = "An error occurred when shutting down"
+        flash[:error] = "An error occurred when shutting down.#{human_errors(@ec2_instance)}"
       end
     elsif params[:event] == "start_instance"
       if ec2_resource.start
         flash[:notice] = "Starting instance"
       else
-        flash[:error] = "An error occurred while attempting to start the instance"
+        flash[:error] = "An error occurred while attempting to start the instance. #{human_errors(@ec2_instance)}"
       end
     end
 

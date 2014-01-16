@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Wonga::Pantry::JenkinsSlaveDestroyer do
-  let(:jenkins_slave) { FactoryGirl.create(:jenkins_slave) }
+  let(:jenkins_slave) { FactoryGirl.build(:jenkins_slave) }
   let(:ec2_instance) { jenkins_slave.ec2_instance }
-  let(:user) { FactoryGirl.create(:user, team: jenkins_slave.team) }
+  let(:user) { FactoryGirl.build(:user) }
   subject { described_class.new(jenkins_slave, 'host_name.domain', 80, user, sns_publisher) }
   let(:sns_publisher) { instance_double('Wonga::Pantry::SNSPublisher').as_null_object }
   let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true) }
