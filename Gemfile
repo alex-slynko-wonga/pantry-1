@@ -26,6 +26,7 @@ gem 'net-ldap', github: "ruby-ldap/ruby-net-ldap"
 gem "simple_form", "~> 3.0"
 gem 'turbolinks'
 gem 'pundit', github: 'elabs/pundit'
+gem 'jquery-turbolinks'
 
 group :development do
   gem "spring"
