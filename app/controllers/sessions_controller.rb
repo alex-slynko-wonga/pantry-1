@@ -1,8 +1,9 @@
 class SessionsController < ApplicationController
   force_ssl if: :ssl_needed
 
-  skip_before_filter :signed_in_user, only: :create
+  skip_before_action :signed_in_user
   skip_before_action :verify_authenticity_token
+  before_action :redirect_to_root, except: [:destroy]
 
   def new
     redirect_to '/auth/ldap'
@@ -29,5 +30,9 @@ class SessionsController < ApplicationController
   private
   def ssl_needed
     CONFIG['pantry']['use_ssl']
+  end
+
+  def redirect_to_root
+    redirect_to session['requested_url'] || root_url if current_user
   end
 end
