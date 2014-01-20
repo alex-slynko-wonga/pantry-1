@@ -1,4 +1,4 @@
-%h1 Team #{@team.name}
+%h1= @team.name
 - if policy(@team).edit?
   %p= link_to "Edit this team", edit_team_url(@team)
 

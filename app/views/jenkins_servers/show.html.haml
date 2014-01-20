@@ -1,9 +1,9 @@
 %h1= "#{@team.name}'s jenkins server"
-
+= link_to "Go back to #{@team.name}", @team
 .row-fluid
   .span2
     Request No:
-  .span3= link_to(@ec2_instance.id, "/aws/ec2_instances/#{@ec2_instance.id}")
+  .span3= link_to(@ec2_instance.id, [:aws, @ec2_instance])
 .row-fluid
   .span2
     Machine Size:
