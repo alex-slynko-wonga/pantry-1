@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe AwsCostsController do
-  let(:user) { instance_double('User') }
+  let(:user) { instance_double('User', role: role) }
 
   before(:each) do
     @controller.stub(:current_user).and_return(user)
@@ -11,12 +11,12 @@ describe AwsCostsController do
     before(:each) { get :index }
 
     context "when user has billing access" do
-      let(:user) { instance_double('User', 'have_billing_access?' => true) }
+      let(:role) { 'business_admin' }
       specify { expect(response).to be_success }
     end
 
     context "when user does not have billing access" do
-      let(:user) { instance_double('User', 'have_billing_access?' => false) }
+      let(:role) { 'developer' }
       specify { expect(response).to be_redirect }
     end
   end
@@ -29,7 +29,7 @@ describe AwsCostsController do
     end
 
     context "when user has billing access" do
-      let(:user) { instance_double('User', 'have_billing_access?' => true) }
+      let(:role) { 'business_admin' }
 
       it "returns an attachment" do
         @controller.should_receive(:send_data).and_call_original
@@ -38,7 +38,7 @@ describe AwsCostsController do
     end
 
     context "when user does not have billing access" do
-      let(:user) { instance_double('User', 'have_billing_access?' => false) }
+      let(:role) { 'developer' }
       it "should redirect" do
         @controller.should_not_receive(:send_data).and_call_original
         get :show, id: 'some.csv'
