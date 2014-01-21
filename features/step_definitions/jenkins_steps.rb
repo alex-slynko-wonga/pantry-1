@@ -36,7 +36,7 @@ end
 
 Then(/^the slave should be starting$/) do
   @jenkins_slave = JenkinsSlave.last
-  expect(@jenkins_slave.ec2_instance.state).to eq("starting")  
+  expect(@jenkins_slave.ec2_instance.state).to eq("starting")
 end
 
 When(/^I click on the jenkins slave$/) do
@@ -44,7 +44,6 @@ When(/^I click on the jenkins slave$/) do
 end
 
 Given(/^the team has a Jenkins server$/) do
-  @team.should be_true
   @jenkins_server = FactoryGirl.create(:jenkins_server,
                                        team: @team,
                                        ec2_instance: FactoryGirl.create(:ec2_instance, bootstrapped: true)

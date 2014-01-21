@@ -8,7 +8,7 @@ describe SessionsController do
     end
 
     let(:user_id) { 2 }
-    let(:user) { double(id: user_id) }
+    let(:user) { instance_double(User, id: user_id) }
     let(:env) { {'omniauth.auth' => double.as_null_object } }
     before(:each) do
       allow(subject).to receive(:env).and_return(env)

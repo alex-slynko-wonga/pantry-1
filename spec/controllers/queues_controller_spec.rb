@@ -25,7 +25,7 @@ describe QueuesController do
     end
 
     context "when given queue exists" do
-      let(:queue) { instance_double('AWS::SQS::Queue').as_null_object }
+      let(:queue) { instance_double('AWS::SQS::Queue', visible_messages: 0, url: 'url') }
 
       before(:each) do
         queue_info = AWS::SQS.new.client.stub_for(:get_queue_url)
@@ -58,7 +58,6 @@ describe QueuesController do
           allow(queue).to receive(:visible_messages).and_return(0)
           get 'show', id: 'url'
           expect(assigns(:message)).to eq(nil)
-          expect(queue).to_not have_received(:receive_message)
         end
       end
     end

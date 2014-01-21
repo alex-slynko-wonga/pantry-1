@@ -47,7 +47,6 @@ group :test do
   gem 'chef-zero'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
-  gem 'rspec-fire', github: 'alex-slynko-wonga/rspec-fire'
   gem 'simplecov', require: false
   gem 'simplecov-rcov', require: false
   gem 'timecop'
@@ -59,7 +58,7 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'pry-debugger'
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 2.99.0.beta1'
-  gem 'rspec-core', '~> 2.99.0.beta1'
-  gem 'rspec', '~> 2.99.0.beta1'
+  gem 'rspec-rails', '~> 3.0.0.beta1'
+  gem 'rspec-core', '~> 3.0.0.beta1'
+  gem 'rspec', '~> 3.0.0.beta1'
 end

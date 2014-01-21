@@ -18,27 +18,33 @@ describe JenkinsSlave do
   end
 
   describe "set_ec2_instance_name" do
+    let(:id) { 11 }
+
+    before(:each) do
+      jenkins_slave = instance_double('JenkinsSlave', id: id)
+      allow(JenkinsSlave).to receive(:last).and_return(jenkins_slave)
+    end
+
     it "creates the name using 'agent-' + padding and a counter" do
-      JenkinsSlave.stub_chain(:last, :try).with(:id).and_return(11)
-      subject.valid?
+      expect(subject).to be_valid
       expect(subject.ec2_instance.name).to eq("agent-000000012")
     end
 
-    it "creates a name of 15 characters when the counter returns 11" do
-      JenkinsSlave.stub_chain(:last, :try).with(:id).and_return(1)
-      subject.valid?
-      expect(subject.ec2_instance.name.length).to eq(15)
+    context "when the last id is less than 99999999" do
+      let(:id) { 999999998 }
+
+      it "creates a name of 15 characters when the counter less than 999999999" do
+        expect(subject).to be_valid
+        expect(subject.ec2_instance.name.length).to eq(15)
+      end
     end
 
-    it "creates a name of 15 characters when the counter returns 99999999" do
-      JenkinsSlave.stub_chain(:last, :try).with(:id).and_return(99999999)
-      subject.valid?
-      expect(subject.ec2_instance.name.length).to eq(15)
-    end
+    context "when the last id is more than 99999999" do
+      let(:id) { 999999999 }
 
-    it "creates a name of 15 characters when the counter returns 199999999" do
-      JenkinsSlave.stub_chain(:last, :try).with(:id).and_return(199999999)
-      expect(subject).to be_invalid
+      it "is invalid" do
+        expect(subject).to be_invalid
+      end
     end
   end
 end

@@ -7,7 +7,7 @@ describe JenkinsServerHelper do
     end
 
     context "when user has access to create slave" do
-      let(:policy) { double(create?: true) }
+      let(:policy) { instance_double(JenkinsSlavePolicy, create?: true) }
 
       it "renders link" do
         expect(helper.link_to_new_slave(FactoryGirl.build_stubbed(:jenkins_server))).to match /^<a/
@@ -15,7 +15,7 @@ describe JenkinsServerHelper do
     end
 
     context "when user can't create slave" do
-      let(:policy) { double(create?: false)  }
+      let(:policy) { instance_double(JenkinsSlavePolicy, create?: false)  }
 
       it "renders nothing" do
         expect(helper.link_to_new_slave(JenkinsServer.new)).to be_nil

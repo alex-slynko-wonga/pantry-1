@@ -12,7 +12,7 @@ describe Wonga::Pantry::BootMessage do
     end
 
     it "gets ou from Wonga::Pantry::ActiveDirectoryOU" do
-      Wonga::Pantry::ActiveDirectoryOU.stub_chain(:new, :ou).and_return('test')
+      allow(Wonga::Pantry::ActiveDirectoryOU).to receive(:new).and_return(instance_double('Wonga::Pantry::ActiveDirectoryOU', ou: 'test'))
       expect(subject.boot_message[:ou]).to eq('test')
     end
   end
