@@ -1,7 +1,6 @@
 class AwsCostsController < ApplicationController
-  before_filter :check_rights
-
   def show
+    authorize(Ec2InstanceCost)
     key = "#{params[:id]}.#{params[:format]}"
     begin
       csv = s3.get_object(bucket_name: CONFIG["aws"]["billing_bucket"], key: key)[:data]
@@ -12,6 +11,7 @@ class AwsCostsController < ApplicationController
   end
 
   def index
+    authorize(Ec2InstanceCost)
     @csv_keys = s3.list_objects(bucket_name: CONFIG["aws"]["billing_bucket"])[:contents].map {|i|
       i[:key]
     }
@@ -20,9 +20,5 @@ class AwsCostsController < ApplicationController
   private
   def s3
     AWS::S3::Client.new
-  end
-
-  def check_rights
-    redirect_to root_url unless current_user.have_billing_access?
   end
 end
