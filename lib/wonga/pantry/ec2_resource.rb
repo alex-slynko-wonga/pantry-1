@@ -27,10 +27,11 @@ class Wonga::Pantry::Ec2Resource
 
   def base_message
     {
-      :hostname      => @ec2_instance.name,
-      :domain        => @ec2_instance.domain,
-      :instance_id   => @ec2_instance.instance_id,
-      :id            => @ec2_instance.id
+      hostname:    @ec2_instance.name,
+      domain:      @ec2_instance.domain,
+      instance_id: @ec2_instance.instance_id,
+      id:          @ec2_instance.id,
+      user_id:     @user.id
     }
   end
 end
