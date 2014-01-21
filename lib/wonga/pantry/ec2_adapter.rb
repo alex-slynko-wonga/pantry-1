@@ -1,11 +1,11 @@
 class Wonga::Pantry::Ec2Adapter
   attr_reader :ec2
-  def initialize(ec2 = AWS::EC2.new.client)
-    @ec2 = ec2
+  def initialize
+    @ec2 = AWS::EC2.new
   end
 
   def security_groups
-    ec2.describe_security_groups(
+    ec2.client.describe_security_groups(
         :filters => [ { :name =>"vpc-id",
                         :values => [CONFIG['aws']['vpc_id']] } ]
       )[:security_group_info].map do |group|
@@ -14,7 +14,7 @@ class Wonga::Pantry::Ec2Adapter
   end
 
   def subnets
-    ec2.describe_subnets[:subnet_set].map { |subnet| subnet[:subnet_id] }
+    ec2.subnets.map(&:id)
   end
 
   def flavors
@@ -22,7 +22,7 @@ class Wonga::Pantry::Ec2Adapter
   end
 
    def amis
-     ami_groups = ec2.describe_images({owners: ['self']})[:images_set].group_by do |ami|
+     ami_groups = ec2.client.describe_images({owners: ['self']})[:images_set].group_by do |ami|
        ami[:platform] == "windows" ? 'windows' : 'linux'
      end
 
@@ -34,10 +34,15 @@ class Wonga::Pantry::Ec2Adapter
      end
    end
 
-   def platform_for_ami(ami)
+   def platform_for_ami(ami, all_images)
      return if ami.blank?
-     return unless image = ec2.describe_images({owners: ['self'], image_ids: [ami] })[:images_set][0]
-     platform = image[:platform]
+     images = ec2.images
+     images = images.with_owner('self') unless all_images
+     image = images[ami]
+
+     return unless image.exists?
+     platform = image.platform
+
      platform == "windows" ? 'windows' : 'linux'
    end
 end

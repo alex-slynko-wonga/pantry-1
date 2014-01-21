@@ -7,12 +7,10 @@ class Aws::Ec2InstancesController < ApplicationController
   end
 
   def create
-    platform = @ec2_adapter.platform_for_ami(ec2_instance_params[:ami])
-    @ec2_instance = Ec2Instance.new(
-      ec2_instance_params.merge(
-        {user_id: current_user.id, platform: platform}
-      )
-    )
+    @ec2_instance = Ec2Instance.new(ec2_instance_params.merge({user_id: current_user.id}))
+
+    @ec2_instance.ami = params[:custom_ami] if policy(@ec2_instance).custom_ami? && params[:custom_ami].present?
+    @ec2_instance.platform = @ec2_adapter.platform_for_ami(@ec2_instance.ami, policy(@ec2_instance).custom_ami?)
 
     if @ec2_instance.save
       message = Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message

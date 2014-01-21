@@ -14,7 +14,7 @@ When(/^I am still on \w+ page$/) do
   visit page.current_path
 end
 
-Given(/^I visit ec2 instance new page$/) do
+Given(/^I (?:visit|am on the) ec2 instance new page$/) do
   visit '/aws/ec2_instances/new'
   page.should have_content 'Create EC2 Instance'
 end
@@ -41,3 +41,4 @@ end
 When(/^I check my profile page$/) do
   visit user_path User.first
 end
+

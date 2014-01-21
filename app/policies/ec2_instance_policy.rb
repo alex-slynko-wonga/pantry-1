@@ -15,6 +15,10 @@ class Ec2InstancePolicy < ApplicationPolicy
     (god_mode? || team_member?) && can_move_with_event(:termination?)
   end
 
+  def custom_ami?
+    god_mode?
+  end
+
   private
   def can_move_with_event(event)
     delegated_method = "can_#{event}"

@@ -6,7 +6,6 @@ Feature: EC2 Instance
   Background:
     Given AWS has information about machines
     And queues and topics are configured
-
   @javascript
   Scenario: Creating a new instance
     Given I am in the "teamname" team
@@ -23,6 +22,19 @@ Feature: EC2 Instance
 
     When I check my profile page
     Then I should see machine info
+
+  @javascript
+  Scenario: Creating a new instance with custom AMI
+    Given I am a superadmin
+    And I am in the "Pantry" team
+    And ami-123 "TestWindows" exists in AWS
+    And I am on the ec2 instance new page
+    When I enter all required data for ec2
+    And I entered ami-123 in custom ami field
+    #    Then I should see "TestWindows"
+    When I create machine
+    Then I should see a flash message with "Ec2 Instance request succeeded."
+    And an instance with ami-123 build should start
 
   @javascript
   Scenario: Machine status
