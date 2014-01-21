@@ -7,6 +7,9 @@
   = f.input :run_list, as: :text
 
   = f.input :ami, collection: @ec2_adapter.amis, as: :grouped_select, group_method: :second, group_label_method: :first
+  - if policy(@ec2_instance).custom_ami?
+    = label_tag :custom_ami, 'Custom AMI'
+    = text_field_tag :custom_ami, value: @ec2_instance.ami
 
   = f.input :flavor, collection: @ec2_adapter.flavors
 

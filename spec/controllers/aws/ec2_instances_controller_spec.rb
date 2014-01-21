@@ -53,6 +53,33 @@ describe Aws::Ec2InstancesController do
       expect(adapter).to have_received(:platform_for_ami)
       expect(ec2_instance.platform).to eq('Lindows')
     end
+
+    context "with custom_ami in params" do
+      let(:ec2_instance_params) {
+        { ec2_instance: FactoryGirl.attributes_for(:ec2_instance,
+                                                   name: 'InstanceName',
+                                                   team_id: team.id,
+                                                   user_id: user.id
+                                                  ),
+                                                  custom_ami: custom_ami
+        }
+      }
+      let(:custom_ami) { 'someami' }
+
+      context "when user is authorized to use custom_ami" do
+        let(:user) { FactoryGirl.create(:user, team: team, role: 'superadmin') }
+
+        it "sets custom ami" do
+          post :create, ec2_instance_params
+          expect(ec2_instance.ami).to eq(custom_ami)
+        end
+      end
+
+      it "skipped" do
+        post :create, ec2_instance_params
+        expect(ec2_instance.ami).not_to eq(custom_ami)
+      end
+    end
   end
 
   context "#show" do

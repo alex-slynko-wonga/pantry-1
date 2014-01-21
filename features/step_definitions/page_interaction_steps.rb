@@ -16,6 +16,10 @@ When(/^I click (?:on )?"(.*?)"$/) do |text|
   click_on text
 end
 
+When(/^I create/) do
+  click_on "Create"
+end
+
 When(/^I destroy/) do
   click_on "Destroy"
 end
