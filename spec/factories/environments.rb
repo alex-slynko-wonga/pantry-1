@@ -2,8 +2,10 @@
 
 FactoryGirl.define do
   factory :environment do
-    name "MyText"
-    description "MyText"
-    env_type "MyText"
+    sequence(:name) { |n| "Name#{n}" }
+    description "My description"
+    sequence(:chef_environment) { |n| "env#{n}" }
+    environment_type "standard"
+    team
   end
 end

@@ -1,5 +1,7 @@
 require 'spec_helper'
 
 describe Environment do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "is valid" do
+    expect(FactoryGirl.build(:environment, name: 'env1')).to be_valid
+  end
 end
