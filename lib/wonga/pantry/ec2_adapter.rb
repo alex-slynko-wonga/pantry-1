@@ -21,9 +21,9 @@ class Wonga::Pantry::Ec2Adapter
     CONFIG['aws']['ebs'].keys
   end
 
-   def amis
-     ami_groups = ec2.client.describe_images({owners: ['self']})[:images_set].group_by do |ami|
-       ami[:platform] == "windows" ? 'windows' : 'linux'
+   def amis(filter = {owners: [ 'self' ]})
+     ami_groups = ec2.client.describe_images(filter)[:images_set].group_by do |ami|
+       ami[:platform] ||= 'linux'
      end
 
      ami_groups.map do |os, amis|
@@ -44,6 +44,13 @@ class Wonga::Pantry::Ec2Adapter
      platform = image.platform
 
      platform == "windows" ? 'windows' : 'linux'
+   end
+
+   def get_ami_attributes(ami)
+     return if ami.blank?
+     return unless image = ec2.client.describe_images({image_ids: [ami] })[:images_set][0]
+     image[:platform] ||= 'linux'
+     image
    end
 end
 
