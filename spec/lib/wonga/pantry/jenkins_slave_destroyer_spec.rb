@@ -22,7 +22,7 @@ describe Wonga::Pantry::JenkinsSlaveDestroyer do
   }
 
   before(:each) do
-    Wonga::Pantry::Ec2InstanceState.stub(:new).with(ec2_instance, user, { 'event' => "termination" }).and_return(ec2_instance_state)
+    allow(Wonga::Pantry::Ec2InstanceState).to receive(:new).with(ec2_instance, user, { 'event' => "termination" }).and_return(ec2_instance_state)
   end
 
   context "#destroy" do

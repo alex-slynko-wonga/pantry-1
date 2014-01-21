@@ -18,7 +18,7 @@ shared_examples_for "request_instance" do
   end
 
   it "sets instance_name from jenkins" do
-    jenkins.stub(:instance_name).and_return('test')
+    allow(jenkins).to receive(:instance_name).and_return('test')
     subject.request_jenkins_instance(
       jenkins_params,
       jenkins
@@ -55,19 +55,19 @@ describe Wonga::Pantry::AWSUtility do
     include_examples 'request_instance'
 
     it "sets platform to 'windows'" do
-      subject.jenkins_instance_params(jenkins)[:platform].should == 'windows'
+      expect(subject.jenkins_instance_params(jenkins)[:platform]).to eq('windows')
     end
 
     it "sets jenkins_windows_agent role" do
-      subject.jenkins_instance_params(
+      expect(subject.jenkins_instance_params(
         FactoryGirl.build(:jenkins_slave)
-      )[:run_list].should == "role[jenkins_windows_agent]"
+      )[:run_list]).to eq("role[jenkins_windows_agent]")
     end
 
     it "sets ami-00110011" do
-      subject.jenkins_instance_params(
+      expect(subject.jenkins_instance_params(
         FactoryGirl.build(:jenkins_slave)
-      )[:ami].should == "ami-00110011"
+      )[:ami]).to eq("ami-00110011")
     end
   end
 
@@ -102,11 +102,11 @@ describe Wonga::Pantry::AWSUtility do
       end
 
       it "sets jenkins_linux_server role" do
-        subject.jenkins_instance_params(jenkins)[:run_list].should == "role[jenkins_linux_server]"
+        expect(subject.jenkins_instance_params(jenkins)[:run_list]).to eq("role[jenkins_linux_server]")
       end
 
       it "sets ami-00110010" do
-        subject.jenkins_instance_params(jenkins)[:ami].should == "ami-00110010"
+        expect(subject.jenkins_instance_params(jenkins)[:ami]).to eq("ami-00110010")
       end
     end
   end

@@ -21,7 +21,6 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 Chef::Config[:chef_server_url] = 'http://127.0.0.1:8889'
 RSpec.configure do |config|
-  config.include(RSpec::Fire)
   config.include ChefBuilders
   config.use_transactional_fixtures = true
 

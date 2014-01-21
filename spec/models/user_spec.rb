@@ -44,7 +44,11 @@ describe User do
   describe "#email" do
     context "when user has entered email" do
       subject { User.new(email: user_email) }
-      its(:email) { should == user_email }
+
+      describe '#email' do
+        subject { super().email }
+        it { should == user_email }
+      end
     end
 
     context "when user hasn't entered email" do
@@ -67,7 +71,7 @@ describe User do
 
     context "for jonathan" do
       let(:email) { 'jonathan.galore@example.com' }
-      it { should be_true }
+      it { should be_truthy }
     end
 
     context "for user who allowed in config" do
@@ -75,11 +79,11 @@ describe User do
         stub_const('CONFIG', { 'billing_users' => 'test@example.com' })
       end
 
-      it { should be_true }
+      it { should be_truthy }
     end
 
     context "for any other user" do
-      it { should be_false }
+      it { should be_falsey }
     end
   end
 
@@ -87,13 +91,13 @@ describe User do
     it "returns true if the user is member of the given team" do
       user = FactoryGirl.create(:user)
       team = FactoryGirl.create(:team, users: [user])
-      user.member_of_team?(team).should be_true
+      expect(user.member_of_team?(team)).to be_truthy
     end
 
     it "returns false if the user is not a member of the given team" do
       user = FactoryGirl.create(:user)
       team = FactoryGirl.create(:team, users: [])
-      user.member_of_team?(team).should be_false
+      expect(user.member_of_team?(team)).to be_falsey
     end
   end
 end

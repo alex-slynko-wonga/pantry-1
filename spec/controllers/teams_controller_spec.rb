@@ -12,36 +12,36 @@ describe TeamsController do
     let(:team) { Team.last }
 
     before :each do 
-      Wonga::Pantry::ChefUtility.stub(:new).and_return(chef_utility)
+      allow(Wonga::Pantry::ChefUtility).to receive(:new).and_return(chef_utility)
     end
 
     it "returns http success" do
       post 'create', team_params.merge(users: [user.username, user.name])
-      response.should be_redirect
+      expect(response).to be_redirect
     end
 
     it "creates a team" do
       expect{ post :create, team_params.merge(users: [user.username, user.name]) }.to change(Team, :count).by(1)
-      assigns(:team).name.should == 'TeamName'
-      assigns(:team).description.should == 'TeamDescription'
+      expect(assigns(:team).name).to eq('TeamName')
+      expect(assigns(:team).description).to eq('TeamDescription')
     end
 
     it "creates a team without selecting a user" do
       session[:user_id] = FactoryGirl.create(:user).id
       expect{ post :create, team_params }.to change(Team, :count).by(1)
-      expect(team).to have(1).user
+      expect(team.users.count).to eq(1)
     end
 
     it "creates user and add him to team" do
       expect { post :create, team_params.merge(user_params) }.to change(User, :count).by(1)
-      expect(team).to have(1).user
+      expect(team.users.count).to eq(1)
       expect(team.users.first.username).to eq(username)
     end
 
     it "finds user by its username and adds it to team" do
       user = User.create(username: username)
       expect { post :create, team_params.merge(user_params) }.to_not change(User, :count)
-      expect(team).to have(1).users
+      expect(team.users.count).to eq(1)
       expect(team.users.first).to eq(user)
     end
 
@@ -59,39 +59,39 @@ describe TeamsController do
 
     it "returns http success" do
       put 'update', team_params.merge({id: team.id})
-      response.should be_redirect
+      expect(response).to be_redirect
     end
 
     it "should update a team" do 
       put 'update', team_params.merge({id: team.id})
       team.reload.name
-      team.name.should == 'TeamName'
+      expect(team.name).to eq('TeamName')
     end
 
     it "finds user by its username and adds it to team" do
       expect{put 'update', team_params.merge({id: team.id}).merge(user_params)}.to change(User, :count)
-      expect(team.reload).to have(1).users
+      expect(team.users.size).to eq(1)
       expect(team.users.first.username).to eq(username)
     end
 
     it "finds user by its username and adds it to team" do
       user = FactoryGirl.create(:user, username: username)
       expect { put :update, team_params.merge({id: team.id}).merge(user_params) }.to_not change(User, :count)
-      expect(team.reload).to have(1).user
+      expect(team.users.size).to eq(1)
       expect(team.users.first).to eq(user)
     end
 
     it "removes users from team if they were not in params" do
       team.users << User.create(username: username)
       put 'update', team_params.merge({id: team.id})
-      expect(team).to have(1).users
+      expect(team.users.count).to eq(1)
     end
   end
 
   describe "GET 'index'" do
     it "returns http success" do
       get 'index'
-      response.should be_success
+      expect(response).to be_success
     end
   end
 
@@ -99,7 +99,7 @@ describe TeamsController do
     it "returns http success" do
       session[:user_id] = user.id
       get 'show', :id => team.id
-      response.should be_success
+      expect(response).to be_success
     end
   end
 end

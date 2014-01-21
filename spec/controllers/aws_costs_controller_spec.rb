@@ -4,7 +4,7 @@ describe AwsCostsController do
   let(:user) { instance_double('User', role: role) }
 
   before(:each) do
-    @controller.stub(:current_user).and_return(user)
+    allow(@controller).to receive(:current_user).and_return(user)
   end
 
   describe 'GET #index' do
@@ -32,7 +32,7 @@ describe AwsCostsController do
       let(:role) { 'business_admin' }
 
       it "returns an attachment" do
-        @controller.should_receive(:send_data).and_call_original
+        expect(@controller).to receive(:send_data).and_call_original
         get :show, id: "some.csv"
       end
     end
@@ -40,7 +40,7 @@ describe AwsCostsController do
     context "when user does not have billing access" do
       let(:role) { 'developer' }
       it "should redirect" do
-        @controller.should_not_receive(:send_data).and_call_original
+        expect(@controller).not_to receive(:send_data).and_call_original
         get :show, id: 'some.csv'
         expect(response).to be_redirect
       end

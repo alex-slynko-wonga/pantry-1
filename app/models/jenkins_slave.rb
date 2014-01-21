@@ -7,7 +7,7 @@ class JenkinsSlave < ActiveRecord::Base
   validates :ec2_instance, :jenkins_server, presence: true
   validate :team_should_be_same_as_jenkins_server
 
-  before_validation :set_ec2_instance_name
+  before_validation :set_ec2_instance_name, on: :create
 
   def team
     jenkins_server.try(:team)
@@ -15,7 +15,6 @@ class JenkinsSlave < ActiveRecord::Base
 
   def instance_name
     counter = JenkinsSlave.last.try(:id) || 0
-    errors.add(:ec2_instance, 'There are too many Jenkins Slaves to generate a number lower than 15 characters') and return if counter > 99999999
     "agent-#{"%09d" % (counter + 1)}"
   end
 

@@ -5,7 +5,7 @@ class Ec2Instance < ActiveRecord::Base
   has_many :ec2_instance_costs
   has_many :ec2_instance_logs
 
-  validates :name, uniqueness: { scope: [:terminated] }, if: '!terminated?'
+  validates :name, uniqueness: { scope: [:terminated] }, unless: 'terminated?'
   validates :name, presence: true, length: { maximum: 15 }
   validates :team, presence: true
   validates :user, presence: true

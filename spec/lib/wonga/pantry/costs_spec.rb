@@ -12,16 +12,16 @@ describe Wonga::Pantry::Costs do
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date + 1, ec2_instance: ec2_instance, cost: 50)
       result = subject.costs_per_team.first
-      result.id.should eq team.id
-      result.name.should eq team.name
+      expect(result.id).to eq team.id
+      expect(result.name).to eq team.name
     end
 
     it "returns array of hashes with total costs for all instances" do
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: FactoryGirl.create(:ec2_instance, team: team), cost: 50)
       result = subject.costs_per_team.first
-      result.id.should eq team.id
-      result.name.should eq team.name
+      expect(result.id).to eq team.id
+      expect(result.name).to eq team.name
     end
   end
 
@@ -33,8 +33,8 @@ describe Wonga::Pantry::Costs do
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: FactoryGirl.create(:ec2_instance, team: team), cost: 50)
       result = subject.costs_details_per_team(team.id)
-      result[0].cost.should eq(100)
-      result[1].cost.should eq(50)
+      expect(result[0].cost).to eq(100)
+      expect(result[1].cost).to eq(50)
     end
   end
 
@@ -48,7 +48,7 @@ describe Wonga::Pantry::Costs do
 
       it "is end of current month" do
         bill_date = Date.today.end_of_month
-        Date.stub(:today).and_return(double(end_of_month: bill_date))
+        allow(Date).to receive(:today).and_return(double(end_of_month: bill_date))
         expect(subject.bill_date).to eq(bill_date)
       end
     end

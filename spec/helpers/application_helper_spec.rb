@@ -37,7 +37,7 @@ describe ApplicationHelper do
     end
 
     it "generates li with active class and link if current page is selected" do
-      helper.stub(:current_page?).and_return(true)
+      allow(helper).to receive(:current_page?).and_return(true)
       expect(helper.navbar_link_to("Home", "https://pantry.example.com/")).to eq("<li class=\"active\"><a href=\"https://pantry.example.com/\">Home</a></li>")
     end
   end
