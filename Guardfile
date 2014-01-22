@@ -28,7 +28,6 @@ guard 'rspec' do
   watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
 end
 
-
 guard 'bundler' do
   watch('Gemfile')
   # Uncomment next line if Gemfile contain `gemspec' command
@@ -41,3 +40,4 @@ guard 'migrate' do
 end
 
 ENV["SKIP_COV"] = 'true'
+

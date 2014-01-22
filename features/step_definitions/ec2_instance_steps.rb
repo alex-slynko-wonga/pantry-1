@@ -35,7 +35,7 @@ def fill_in_default_values(name)
   fill_in "Name", with: name
   fill_in "Chef environment", with: 'chef_environment'
   fill_in "Run list", with: 'role[ted]'
-  select 'image_name', from: 'Ami'
+  find(:select, 'Ami').all(:option).last.select_option
   select 't1.micro', from: 'Flavor'
   select '42', from: 'Subnet'
   check('name1')
@@ -44,7 +44,7 @@ end
 Given(/^ami\-(\w+) "(.*?)" exists in AWS$/) do |id, name|
   client = AWS::EC2.new.client
   amis = client.stub_for(:describe_images)
-  amis[:images_set] << { name: name, image_id: "ami-#{id}" }
+  amis[:images_set] = [{ name: name, image_id: "ami-#{id}" }]
   amis[:image_index] = { "ami-#{id}" => {:platform => 'windows'}}
 end
 
@@ -54,6 +54,7 @@ end
 
 When(/^I entered ami\-(\w+) in custom ami field$/) do |id|
   fill_in 'Custom AMI', with: "ami-#{id}"
+  fill_in "Name", with: 'new_instance'
 end
 
 Then(/^an instance (?:with ami\-(\w+) )?build should start$/) do |ami|

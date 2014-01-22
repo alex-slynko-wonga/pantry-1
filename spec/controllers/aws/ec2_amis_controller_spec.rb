@@ -13,7 +13,7 @@ describe Aws::Ec2AmisController do
     let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', get_ami_attributes: ami_attributes) }
 
     before(:each) do
-      Wonga::Pantry::Ec2Adapter.stub(:new).and_return(adapter)
+      allow(Wonga::Pantry::Ec2Adapter).to receive(:new).and_return(adapter)
     end
 
     it "returns nothing for no ami" do
@@ -26,7 +26,7 @@ describe Aws::Ec2AmisController do
       get 'show', id: ami_id, :format => :json
       expect(adapter).to have_received(:get_ami_attributes).with(ami_id)
       expect(response).to be_success
-      response.body.should == ami_attributes.to_json
+      expect(response.body).to eq ami_attributes.to_json
     end
   end
 end
