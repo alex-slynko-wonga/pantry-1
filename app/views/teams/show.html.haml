@@ -64,4 +64,15 @@
     - if policy(@team.ec2_instances.build).create?
       %h4 EC2 Instance Control
       %p= link_to "Launch New Instance", new_aws_ec2_instance_url(team_id: params[:id])
+.row-fluid
+  .span12
+    %h4 Environments
+    - if @environments
+      %table.table
+        %tr
+          %th Name
+          %th Environemnt type
+        = render partial: 'environment', collection: @environments
+    - if policy(@environments.build).create?
+      %p= link_to "Create a new environment", new_team_environment_url(@team)
 
