@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140106114028) do
+ActiveRecord::Schema.define(version: 20140121142504) do
 
   create_table "ec2_instance_costs", force: true do |t|
     t.date     "bill_date"
@@ -60,6 +60,16 @@ ActiveRecord::Schema.define(version: 20140106114028) do
     t.boolean  "dns"
     t.string   "state"
     t.boolean  "protected"
+    t.integer  "environment_id"
+  end
+
+  create_table "environments", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "chef_environment"
+    t.integer  "team_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "jenkins_servers", force: true do |t|

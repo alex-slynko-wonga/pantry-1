@@ -2,8 +2,9 @@ class Ec2Instance < ActiveRecord::Base
   belongs_to :team
   belongs_to :user
   belongs_to :terminated_by, class_name: 'User'
-  has_many :ec2_instance_costs
-  has_many :ec2_instance_logs
+  has_many   :ec2_instance_costs
+  has_many   :ec2_instance_logs
+  belongs_to :environment
 
   validates :name, uniqueness: { scope: [:terminated] }, unless: 'terminated?'
   validates :name, presence: true, length: { maximum: 15 }
