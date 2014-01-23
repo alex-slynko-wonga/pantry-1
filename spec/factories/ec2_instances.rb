@@ -22,11 +22,11 @@ FactoryGirl.define do
       state 'terminated'
     end
 
-    sequence(:name) { |n| "Name#{n}" }
+    sequence(:name) { |n| "InstanceName#{n}" }
     domain CONFIG['pantry']['domain']
     instance_id "MyString"
     platform "Lindows"
-    chef_environment "MyChefEnvironment"
+    environment { FactoryGirl.build(:environment, team: team) }
     run_list "role[ted]\r\nrecipe[ted]\r\nrecipe[ted::something]"
     security_group_ids ["sg-00000001","sg-00000002"]
     ami "i-111111"
@@ -34,5 +34,9 @@ FactoryGirl.define do
     user { FactoryGirl.build(:user, team: team) }
     volume_size 10
     flavor "t1.micro"
+  end
+
+  factory :ci_ec2_instance, parent: :ec2_instance do
+    environment { team.ci_environment || FactoryGirl.build(:ci_environment, team: team) }
   end
 end

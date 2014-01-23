@@ -72,7 +72,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :domain, :chef_environment, :run_list, :platform, :security_group_ids => [])
+    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :domain, :environment_id, :run_list, :platform, :security_group_ids => [])
   end
 
   def initialize_ec2_adapter

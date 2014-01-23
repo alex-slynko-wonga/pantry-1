@@ -3,7 +3,8 @@
 = simple_form_for [:aws, @ec2_instance] do |f|
   = f.input :name
   = f.input :domain
-  = f.input :chef_environment
+  = f.association :environment, collection: Environment.available(current_user)
+
   = f.input :run_list, as: :text
 
   = f.input :ami, collection: @ec2_adapter.amis, as: :grouped_select, group_method: :second, group_label_method: :first
@@ -37,7 +38,7 @@
 
   = f.input :security_group_ids, collection: @ec2_adapter.security_groups, as: 'check_boxes'
 
-  - if current_user.teams.size == 1
+  - if current_user.teams.one?
     = f.hidden_field :team_id, value: current_user.teams.first.id
   - else
     = f.input :team_id, collection: current_user.teams

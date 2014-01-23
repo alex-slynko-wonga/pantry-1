@@ -33,7 +33,7 @@ end
 
 def fill_in_default_values(name)
   fill_in "Name", with: name
-  fill_in "Chef environment", with: 'chef_environment'
+  find(:select, 'Environment').all(:option).last.select_option
   fill_in "Run list", with: 'role[ted]'
   find(:select, 'Ami').all(:option).last.select_option
   select 't1.micro', from: 'Flavor'

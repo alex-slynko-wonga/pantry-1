@@ -9,6 +9,7 @@ Feature: EC2 Instance
   @javascript
   Scenario: Creating a new instance
     Given I am in the "teamname" team
+    And "teamname" team has an "INT" environment
     And I request an instance named "instanceName"
     Then I should see "instanceName"
     And I should see "Booting"
@@ -27,6 +28,7 @@ Feature: EC2 Instance
   Scenario: Creating a new instance with custom AMI
     Given I am a superadmin
     And I am in the "Pantry" team
+    And "Pantry" team has an "INT" environment
     And ami-123 "TestWindows" exists in AWS
     And I am on the ec2 instance new page
     When I enter all required data for ec2

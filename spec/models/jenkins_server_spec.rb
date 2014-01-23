@@ -31,19 +31,22 @@ describe JenkinsServer do
 
   it { should be_valid }
 
-  it "is invalid when team already have a jenkins server" do
-    FactoryGirl.create(:jenkins_server, team: team)
-    expect(subject).to be_invalid
-  end
+  context "when team already have a jenkins server" do
+    let!(:existing_server) { FactoryGirl.create(:jenkins_server, team: team) }
 
-  it "is valid when team's Jenkins server is terminated" do
-    FactoryGirl.create(:jenkins_server, team: team, ec2_instance: FactoryGirl.build(:ec2_instance, :terminated, team: team))
-    expect(subject).to be_valid
-  end
+    it { should be_invalid }
 
-  it "filters terminated instances" do
-    FactoryGirl.create(:jenkins_server, team: team, ec2_instance: FactoryGirl.build(:ec2_instance, :terminated, team: team))
-    expect(JenkinsServer.count).to be_zero
-    expect(JenkinsServer.unscoped.count).to_not be_zero
+    context "which is terminated" do
+      before(:each) do
+        existing_server.ec2_instance.update_attribute(:state, :terminated)
+      end
+
+      it { should be_valid }
+
+      it "filters terminated instances" do
+        expect(JenkinsServer.count).to be_zero
+        expect(JenkinsServer.unscoped.count).to_not be_zero
+      end
+    end
   end
 end

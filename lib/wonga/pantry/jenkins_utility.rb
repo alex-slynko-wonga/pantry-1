@@ -2,8 +2,7 @@ class Wonga::Pantry::JenkinsUtility
   def jenkins_instance_params(jenkins_instance)
     params = {
       flavor:             CONFIG["aws"]["jenkins_flavor"],
-      chef_environment:   jenkins_instance.team.chef_environment[0...63],
-      name: jenkins_instance.instance_name
+      name:               jenkins_instance.instance_name
     }
     security_groups = Array(params['security_group_ids'])
     security_groups << CONFIG["aws"]["security_group_jenkins"]
@@ -27,8 +26,9 @@ class Wonga::Pantry::JenkinsUtility
 
   def request_jenkins_instance(additional_params, jenkins_instance)
     instance_params = jenkins_instance_params(jenkins_instance).merge(additional_params)
-    jenkins_instance.ec2_instance = Ec2Instance.new(instance_params)
-    ec2_resource = Wonga::Pantry::Ec2Resource.new(jenkins_instance.ec2_instance, jenkins_instance.ec2_instance.user)
+    ec2_instance = jenkins_instance.ec2_instance = Ec2Instance.new(instance_params)
+    ec2_instance.environment = ec2_instance.team.ci_environment
+    ec2_resource = Wonga::Pantry::Ec2Resource.new(ec2_instance, ec2_instance.user)
     ec2_resource.boot
   end
 end

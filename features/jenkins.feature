@@ -10,6 +10,7 @@ Feature: Jenkins
   @javascript
   Scenario: Start jenkins server
     Given I am in the "Pantry Team" team
+    And "Pantry Team" team has an "CI" environment
     And I request jenkins server
     Then I should see "Pantry Team's jenkins server"
     And I should see a flash message with "Jenkins server request succeeded."
@@ -18,6 +19,7 @@ Feature: Jenkins
   @javascript
   Scenario: Create Jenkins slave
     Given I am in the "Pantry Team" team
+    And "Pantry Team" team has an "CI" environment
     And I have a jenkins server
     When I click "Jenkins"
     Then I should see the server listing

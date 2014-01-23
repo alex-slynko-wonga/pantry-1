@@ -13,7 +13,7 @@ describe Team do
     end
 
     it "finds team with terminated jenkins_server" do
-      FactoryGirl.create(:jenkins_server, ec2_instance: FactoryGirl.create(:ec2_instance, :terminated, team: subject), team: subject)
+      FactoryGirl.create(:jenkins_server, :terminated, team: subject)
       expect(Team.without_jenkins.count).to eq(1)
     end
   end

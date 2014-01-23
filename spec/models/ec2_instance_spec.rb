@@ -94,6 +94,11 @@ describe Ec2Instance do
     expect(instance).to be_invalid
   end
 
+  it "is invalid when environment is not from current team" do
+    instance = FactoryGirl.build_stubbed(:ec2_instance, environment: Environment.new)
+    expect(instance).to be_invalid
+  end
+
   describe "intial state" do
     it "sets the state to initial_state" do
       params = {

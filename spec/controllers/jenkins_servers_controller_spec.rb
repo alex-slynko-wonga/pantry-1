@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe JenkinsServersController do
   let(:user) { FactoryGirl.create(:user, team: team) }
-  let(:team) { FactoryGirl.create(:team) }
+  let(:team) { FactoryGirl.create(:team, :with_ci_environment) }
 
   before(:each) do
     session[:user_id] = user.id
@@ -69,6 +69,16 @@ describe JenkinsServersController do
       it "assigns the teams to the current user" do
         post :create, jenkins_server: { team_id: team.id }
         expect(assigns(:user_teams).size).to be 1
+      end
+    end
+
+    context "when someone has just created Jenkins Server" do
+      let(:jenkins_utility) { instance_double(Wonga::Pantry::JenkinsUtility, request_jenkins_instance: false) }
+      let(:team) { FactoryGirl.create(:team) }
+
+      it "redirects" do
+        post :create, jenkins_server: { team_id: team.id }
+        expect(response).to be_redirect
       end
     end
   end
