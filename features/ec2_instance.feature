@@ -31,7 +31,7 @@ Feature: EC2 Instance
     And I am on the ec2 instance new page
     When I enter all required data for ec2
     And I entered ami-123 in custom ami field
-    #    Then I should see "TestWindows"
+    Then I should see "TestWindows" after page is updated
     When I create machine
     Then I should see a flash message with "Ec2 Instance request succeeded."
     And an instance with ami-123 build should start
