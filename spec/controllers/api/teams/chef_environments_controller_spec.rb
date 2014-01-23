@@ -5,7 +5,7 @@ describe Api::Teams::ChefEnvironmentsController do
   describe "GET 'create'" do
 
     let(:team) { FactoryGirl.create(:team, chef_environment: nil) }
-    let(:params) { {team_id: team.id, chef_environment: {name: 'env_name'}, format: 'json'} }
+    let(:params) { {team_id: team.id, chef_environment: 'env_name', format: 'json'} }
 
     context "with valid token" do
       before(:each) do
