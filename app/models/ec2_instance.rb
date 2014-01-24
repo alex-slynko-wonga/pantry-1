@@ -2,9 +2,11 @@ class Ec2Instance < ActiveRecord::Base
   belongs_to :team
   belongs_to :user
   belongs_to :terminated_by, class_name: 'User'
+  belongs_to :environment
+  has_one :jenkins_server
+  has_one :jenkins_slave
   has_many   :ec2_instance_costs
   has_many   :ec2_instance_logs
-  belongs_to :environment
 
   validates :name, uniqueness: { scope: [:terminated] }, unless: 'terminated?'
   validates :name, presence: true

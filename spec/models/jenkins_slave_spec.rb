@@ -43,6 +43,7 @@ describe JenkinsSlave do
       let(:id) { 999999999 }
 
       it "is invalid" do
+        subject.ec2_instance.platform = "windows"
         expect(subject).to be_invalid
       end
     end
