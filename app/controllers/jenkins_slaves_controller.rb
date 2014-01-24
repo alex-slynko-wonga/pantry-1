@@ -21,7 +21,7 @@ class JenkinsSlavesController < ApplicationController
   end
 
   def create
-    aws_utility = Wonga::Pantry::AWSUtility.new
+    aws_utility = Wonga::Pantry::JenkinsUtility.new
     @jenkins_slave = JenkinsSlave.new(jenkins_server: @jenkins_server)
     attributes = {
       user_id: current_user.id,

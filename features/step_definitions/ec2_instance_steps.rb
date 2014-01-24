@@ -58,8 +58,8 @@ When(/^I entered ami\-(\w+) in custom ami field$/) do |id|
 end
 
 Then(/^an instance (?:with ami\-(\w+) )?build should start$/) do |ami|
-  expect(AWS::SQS.new.client).to have_received(:send_message) do |*args|
-    expect(args[0][:message_body]).to match(ami) if ami
+  expect(AWS::SNS.new.client).to have_received(:publish) do |*args|
+    expect(args[0][:message]).to match(ami) if ami
   end
 end
 

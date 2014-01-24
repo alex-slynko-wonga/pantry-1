@@ -1,5 +1,5 @@
 class JenkinsSlave < ActiveRecord::Base
-  belongs_to :ec2_instance
+  belongs_to :ec2_instance, inverse_of: :jenkins_slave
   belongs_to :jenkins_server
 
   accepts_nested_attributes_for :ec2_instance

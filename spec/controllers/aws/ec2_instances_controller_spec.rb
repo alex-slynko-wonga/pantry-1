@@ -2,9 +2,13 @@ require 'spec_helper'
 require 'json'
 
 describe Aws::Ec2InstancesController do
+  let(:ec2_resource)    { instance_double('Wonga::Pantry::Ec2Resource') }
   let(:user) { FactoryGirl.create(:user, team: team) }
+  let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team, state: 'ready') }
+
   before(:each) do
     session[:user_id] = user.id
+    allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
   end
 
   let(:team) { FactoryGirl.create(:team) }
@@ -29,29 +33,24 @@ describe Aws::Ec2InstancesController do
   end
 
   describe "POST 'create'" do
-    let(:ec2_instance) { Ec2Instance.last }
-    let(:sender) { instance_double('Wonga::Pantry::SQSSender').as_null_object }
+    let(:ec2_instance) { Ec2Instance.new }
     let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', platform_for_ami: 'Lindows') }
 
     before(:each) do
+      allow(ec2_resource).to receive(:boot)
       allow(Wonga::Pantry::Ec2Adapter).to receive(:new).and_return(adapter)
-      allow(Wonga::Pantry::SQSSender).to receive(:new).and_return(sender)
-    end
-
-    it "creates an ec2 instance request record" do
-      expect{ post :create, ec2_instance_params}.to change(Ec2Instance, :count).by(1)
-      expect(ec2_instance).to_not be_booted
-    end
-
-    it "sends message using SQSSender" do
-      post :create, ec2_instance_params
-      expect(sender).to have_received(:send_message)
+      allow(Ec2Instance).to receive(:new).and_return(ec2_instance)
     end
 
     it "uses ec2 adapter to get os" do
       post :create, ec2_instance_params
       expect(adapter).to have_received(:platform_for_ami)
       expect(ec2_instance.platform).to eq('Lindows')
+    end
+
+    it "uses ec2_resource to boot" do
+      post :create, ec2_instance_params
+      expect(ec2_resource).to have_received(:boot)
     end
 
     context "with custom_ami in params" do
@@ -83,7 +82,6 @@ describe Aws::Ec2InstancesController do
   end
 
   context "#show" do
-    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
     it "should be success" do
       get :show, id: ec2_instance.id
       expect(response).to be_success
@@ -91,42 +89,27 @@ describe Aws::Ec2InstancesController do
   end
 
   context "#destroy" do
-    let(:terminator) { instance_double('Wonga::Pantry::Ec2Terminator') }
-
     before(:each) do
-      allow(Wonga::Pantry::Ec2Terminator).to receive(:new).and_return(terminator)
-      allow(terminator).to receive(:terminate)
+      allow(ec2_resource).to receive(:terminate)
     end
 
-    let(:ec2_instance_running) { FactoryGirl.create(:ec2_instance, :running, team: team) }
-    let(:ec2_instance_terminated) { FactoryGirl.create(:ec2_instance, :terminated, team: team) }
-
     it "should be success" do
-      delete :destroy, id: ec2_instance_running.id
+      delete :destroy, id: ec2_instance.id
       expect(response).to be_success
     end
 
     it "terminates instance if transition acceptable" do
-      delete :destroy, id: ec2_instance_running.id
-      expect(terminator).to have_received(:terminate).with(user)
-    end
-
-    it "shows an error message if transition unacceptable" do
-      delete :destroy, id: ec2_instance_terminated.id 
-      expect(terminator).not_to have_received(:terminate).with(user)
+      delete :destroy, id: ec2_instance.id
+      expect(ec2_resource).to have_received(:terminate)
     end
   end
 
   describe "PUT 'update'" do
     let(:ec2_resource)    { instance_double('Wonga::Pantry::Ec2Resource') }
-    let(:jenkins_server)  { FactoryGirl.build(:jenkins_server) }
-    let(:jenkins_slave)   { FactoryGirl.build(:jenkins_slave, jenkins_server: jenkins_server, ec2_instance: ec2_instance) }
 
     context "shutting_down" do 
-      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
       before(:each) do
         allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
-        ec2_instance.update_attributes(state: "ready")
         allow(ec2_resource).to receive(:stop)
       end
 
@@ -152,11 +135,9 @@ describe Aws::Ec2InstancesController do
     end
 
     context  "starting" do
-      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
-
+      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team, state: 'shutdown') }
       before(:each) do
         allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
-        ec2_instance.update_attributes(state: "shutdown")
         allow(ec2_resource).to receive(:start)
       end
 

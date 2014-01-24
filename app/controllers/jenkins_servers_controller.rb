@@ -19,18 +19,13 @@ class JenkinsServersController < ApplicationController
   end
 
   def create
-    aws_utility = Wonga::Pantry::AWSUtility.new
+    aws_utility = Wonga::Pantry::JenkinsUtility.new
     @jenkins_server = JenkinsServer.new(jenkins_attributes)
     attributes = jenkins_attributes.merge(
       { user_id: current_user.id }
     )
     if aws_utility.request_jenkins_instance(attributes, @jenkins_server)
       flash[:notice] = "Jenkins server request succeeded."
-      Wonga::Pantry::Ec2InstanceState.new(
-        @jenkins_server.ec2_instance,
-        current_user,
-        { "event" => "ec2_boot" }
-      ).change_state
       redirect_to @jenkins_server
     else
       flash[:error] = "Jenkins server request failed: #{human_errors(@jenkins_server)}"

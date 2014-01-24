@@ -17,12 +17,11 @@
     security_group_windows: <%= @config["aws"]["security_group_windows"] %>
     vpc_id:  <%= @config["aws"]["vpc_id"] %>
     chef_env_create_queue_name: <%= @config["aws"]["chef_env_create_queue_name"] %>
-    terminate_queue_name: <%= @config["aws"]["terminate_queue_name"] %>
-    jenkins_slave_delete_queue_name: <%= @config["aws"]["jenkins_slave_delete_queue_name"] %>
-    jenkins_slave_delete_topic_arn: <%= @config["aws"]["jenkins_slave_delete_topic_arn"] %>    
-    ec2_instance_delete_topic_arn: <%= @config["aws"]["ec2_instance_delete_topic_arn"] %> 
+    jenkins_slave_delete_topic_arn: <%= @config["aws"]["jenkins_slave_delete_topic_arn"] %>
+    ec2_instance_delete_topic_arn: <%= @config["aws"]["ec2_instance_delete_topic_arn"] %>
     ec2_instance_start_topic_arn: <%= @config["aws"]["ec2_instance_start_topic_arn"] %>
     ec2_instance_stop_topic_arn: <%= @config["aws"]["ec2_instance_stop_topic_arn"] %>
+    ec2_instance_boot_topic_arn: <%= @config["aws"]["ec2_instance_boot_topic_arn"] %>
     windows_admin_password: <%= @config["aws"]["windows_admin_password"] %>
     ebs:
     <% @config['aws']['flavors'].each do |flavor| %>
