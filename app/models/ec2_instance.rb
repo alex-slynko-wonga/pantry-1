@@ -7,7 +7,9 @@ class Ec2Instance < ActiveRecord::Base
   belongs_to :environment
 
   validates :name, uniqueness: { scope: [:terminated] }, unless: 'terminated?'
-  validates :name, presence: true, length: { maximum: 15 }
+  validates :name, presence: true
+  validates :name, length: { maximum: 15 }, if: 'platform == "windows"'
+  validates :name, length: { maximum: 63 }, if: 'platform == "linux"'
   validates :team, presence: true
   validates :user, presence: true
   validates :domain, presence: true, domain_name: true

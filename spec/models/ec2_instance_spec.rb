@@ -15,9 +15,36 @@ describe Ec2Instance do
     expect(subject).to be_valid
   end
 
-  it "validates name that it is long enough" do
-    subject.name = "1" * 20
-    expect(subject).to be_invalid
+  context "for linux" do
+    subject { FactoryGirl.build(:ec2_instance, platform: 'linux', name: name) }
+
+    context "when name is 63 symbols" do
+      let(:name) { "1"*63 }
+
+      it { should be_valid }
+    end
+
+    context "when name is longer than 64 symbols" do
+      let(:name) { "1"*64 }
+
+      it { should be_invalid }
+    end
+  end
+
+  context "for windows" do
+    subject { FactoryGirl.build(:ec2_instance, platform: 'windows', name: name) }
+
+    context "when name is 15 symbols" do
+      let(:name) { "1"*15 }
+
+      it { should be_valid }
+    end
+
+    context "when name is longer than 15 symbols" do
+      let(:name) { "1"*16 }
+
+      it { should be_invalid }
+    end
   end
 
   context "domain" do

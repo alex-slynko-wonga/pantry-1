@@ -6,7 +6,7 @@ class Wonga::Pantry::AWSUtility
   def jenkins_instance_params(jenkins_instance)
     params = {
       flavor:             CONFIG["aws"]["jenkins_flavor"],
-      chef_environment:   jenkins_instance.team.chef_environment,
+      chef_environment:   jenkins_instance.team.chef_environment[0...63],
       name: jenkins_instance.instance_name
     }
     security_groups = Array(params['security_group_ids'])
