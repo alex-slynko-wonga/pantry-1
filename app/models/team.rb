@@ -3,6 +3,7 @@ class Team < ActiveRecord::Base
   has_many :users, through: :team_members
   has_many :ec2_instances
   has_many :ec2_instance_costs, through: :ec2_instances
+  has_many :environments
   has_one :jenkins_server
 
   validates :name, presence: true, uniqueness: true

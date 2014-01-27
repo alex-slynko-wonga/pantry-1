@@ -28,6 +28,7 @@ class TeamsController < ApplicationController
     @jenkins_server = @team.jenkins_server
     @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance) if @jenkins_server
     @ec2_instances = @team.ec2_instances
+    @environments = @team.environments
   end
 
   def edit

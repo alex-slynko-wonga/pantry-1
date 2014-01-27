@@ -32,6 +32,7 @@ Wonga::Pantry::Application.routes.draw do
 
   resources :teams, except: [:destroy] do
     resources :ec2_instances, controller: "teams/ec2_instances", only: [:index]
+    resources :environments, except: [:index]
   end
 
   resources :ldap_users, only: [:index]
