@@ -1,8 +1,4 @@
-class Wonga::Pantry::AWSUtility
-  def initialize(sqs = Wonga::Pantry::SQSSender.new(CONFIG["aws"]['boot_machine_queue_name']))
-    @sqs = sqs
-  end
-
+class Wonga::Pantry::JenkinsUtility
   def jenkins_instance_params(jenkins_instance)
     params = {
       flavor:             CONFIG["aws"]["jenkins_flavor"],
@@ -32,10 +28,7 @@ class Wonga::Pantry::AWSUtility
   def request_jenkins_instance(additional_params, jenkins_instance)
     instance_params = jenkins_instance_params(jenkins_instance).merge(additional_params)
     jenkins_instance.ec2_instance = Ec2Instance.new(instance_params)
-    if jenkins_instance.save
-      message = Wonga::Pantry::BootMessage.new(jenkins_instance.ec2_instance).boot_message
-      @sqs.send_message(message)
-      true
-    end
-  end 
+    ec2_resource = Wonga::Pantry::Ec2Resource.new(jenkins_instance.ec2_instance, jenkins_instance.ec2_instance.user)
+    ec2_resource.boot
+  end
 end

@@ -12,12 +12,11 @@ class Aws::Ec2InstancesController < ApplicationController
     @ec2_instance.ami = params[:custom_ami] if policy(@ec2_instance).custom_ami? && params[:custom_ami].present?
     @ec2_instance.platform = @ec2_adapter.platform_for_ami(@ec2_instance.ami, policy(@ec2_instance).custom_ami?)
 
-    if @ec2_instance.save
-      message = Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message
-      Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, current_user, { 'event' => "ec2_boot" }).change_state
-      Wonga::Pantry::SQSSender.new(CONFIG["aws"]['boot_machine_queue_name']).send_message(message)
+    ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user)
+
+    if ec2_resource.boot
       flash[:notice] = "Ec2 Instance request succeeded."
-      redirect_to "/aws/ec2_instances/#{@ec2_instance.id}"
+      redirect_to [:aws, @ec2_instance]
     else
       flash[:error] = "Ec2 Instance request failed: #{human_errors(@ec2_instance)}"
       render :action => "new"
@@ -35,7 +34,7 @@ class Aws::Ec2InstancesController < ApplicationController
   def destroy
     @ec2_instance = Ec2Instance.find(params[:id])
     authorize(@ec2_instance)
-    if Wonga::Pantry::Ec2Terminator.new(@ec2_instance).terminate(current_user)
+    if Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user).terminate
       flash[:notice] = "Ec2 Instance deletion request success"
     else
       flash[:error] = "Ec2 Instance deletion request failed: #{human_errors(@ec2_instance)}"

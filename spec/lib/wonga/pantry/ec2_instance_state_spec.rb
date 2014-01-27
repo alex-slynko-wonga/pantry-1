@@ -20,7 +20,7 @@ describe Wonga::Pantry::Ec2InstanceState do
       expect(Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "bootstrap" }).change_state).to be_truthy
     end
   end
-  
+
   describe "store instance variables used in termination_condition" do
     it "stores dns, terminated, bootstrapped, joined" do
       ec2_instance.update_attributes(bootstrapped: true, dns: nil, terminated: nil, joined: nil, state: 'terminating')
@@ -36,21 +36,15 @@ describe Wonga::Pantry::Ec2InstanceState do
     it "persists the state returned by the state machine" do
       state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
       state.change_state
-      expect(state.ec2_instance.reload.state).to eq "booting"
+      expect(ec2_instance.reload.state).to eq "booting"
       ec2_instance.state = "ready"
       state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "termination" })
       state.change_state
-      expect(state.ec2_instance.reload.state).to eq "terminating"
+      expect(ec2_instance.reload.state).to eq "terminating"
     end
   end
 
   describe "request to change the state" do
-    it "changes from initial_state to booting" do
-      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
-      state.change_state
-      expect(state.state).to eq "booting"
-    end
-
     it "returns true if the change of state is successfull" do
       state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
       expect(state.change_state).to be_truthy
@@ -80,10 +74,11 @@ describe Wonga::Pantry::Ec2InstanceState do
   describe "logs" do
     it "stores from_state, event, instance and user when passing an event" do
       state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
-      state.change_state
-      expect(state.ec2_instance.ec2_instance_logs.first.user).to eq(user)
-      expect(state.ec2_instance.ec2_instance_logs.first.from_state).to eq("initial_state")
-      expect(state.ec2_instance).to eq(ec2_instance)
+      expect { state.change_state }.to change(Ec2InstanceLog, :count).by(1)
+      log = Ec2InstanceLog.first
+      expect(log.ec2_instance).to eq(ec2_instance)
+      expect(log.user).to eq(user)
+      expect(log.from_state).to eq("initial_state")
     end
 
     it "doesn't store log if no event has been passed" do

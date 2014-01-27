@@ -65,12 +65,12 @@ module Wonga
 
       def termination_condition
         @ec2_instance[:dns] == false && @ec2_instance[:terminated] == true &&
-        @ec2_instance[:bootstrapped] == false && @ec2_instance[:joined] == false && 
+        @ec2_instance[:bootstrapped] == false && @ec2_instance[:joined] == false &&
         @ec2_instance[:protected] != true
       end
 
       def instance_unprotected
-        @ec2_instance[:protected] != true 
+        @ec2_instance[:protected] != true
       end
     end
   end

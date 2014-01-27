@@ -1,7 +1,8 @@
 class JenkinsServer < ActiveRecord::Base
   belongs_to :team
+  belongs_to :ec2_instance, inverse_of: :jenkins_server
   has_many :jenkins_slaves, -> { where(removed: [false, nil]) }
-  belongs_to :ec2_instance
+
   default_scope -> { eager_load(:ec2_instance).references(:ec2_instance).merge(Ec2Instance.running) }
 
   accepts_nested_attributes_for :ec2_instance

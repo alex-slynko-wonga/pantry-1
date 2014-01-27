@@ -32,6 +32,9 @@ class Ec2Instance < ActiveRecord::Base
   before_create :set_start_time
   before_validation :set_volume_size, on: :create
 
+  accepts_nested_attributes_for :jenkins_server
+  accepts_nested_attributes_for :jenkins_slave
+
   scope :terminated, -> { where(terminated: true) }
   scope :running, -> { where(terminated: [false, nil]) }
 

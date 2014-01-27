@@ -75,9 +75,9 @@ Then(/^I should not see slave in listing$/) do
 end
 
 When(/^the slave does not belong to my team$/) do
-  @team = FactoryGirl.build(:team)
+  @team = FactoryGirl.create(:team)
   slave = JenkinsSlave.last
-  slave.ec2_instance.update_attributes({team: @team})
-  slave.reload
+  slave.ec2_instance.team = @team
+  slave.save(validate: false)
 end
 

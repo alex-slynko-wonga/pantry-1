@@ -1,6 +1,4 @@
 class Wonga::Pantry::Ec2InstanceState
-  attr_accessor :state_machine, :ec2_instance, :user, :instance_params
-
   def initialize(ec2_instance = nil, user = nil, instance_params = nil)
     @ec2_instance = ec2_instance
     @user = user
@@ -21,10 +19,6 @@ class Wonga::Pantry::Ec2InstanceState
       @ec2_instance.ec2_instance_logs.build(from_state: before_state, event: event, user: @user)
       @ec2_instance.save
     end
-  end
-
-  def state
-    @state_machine.state
   end
 
   private

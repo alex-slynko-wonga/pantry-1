@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe AwsCostsController do
-  let(:user) { instance_double('User', role: role) }
+  let(:user) { User.new(role: role) }
 
   before(:each) do
     allow(@controller).to receive(:current_user).and_return(user)

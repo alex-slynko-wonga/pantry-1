@@ -38,10 +38,16 @@ describe JenkinsSlavesController do
   end
 
   describe "POST 'create'" do
-    it "request jenkins instance using AWSUtility" do
-      aws_utility = instance_double(Wonga::Pantry::AWSUtility)
-      allow(Wonga::Pantry::AWSUtility).to receive(:new).and_return(aws_utility)
-      expect(aws_utility).to receive(:request_jenkins_instance) do |arguments, slave|
+    let(:jenkins) { JenkinsSlave.new(jenkins_server_id: jenkins_server.id, id: 42) }
+    let(:jenkins_utility) { instance_double(Wonga::Pantry::JenkinsUtility) }
+
+    before(:each) do
+      allow(Wonga::Pantry::JenkinsUtility).to receive(:new).and_return(jenkins_utility)
+      allow(JenkinsSlave).to receive(:new).and_return(jenkins_slave)
+    end
+
+    it "request jenkins instance using JenkinsUtility" do
+      expect(jenkins_utility).to receive(:request_jenkins_instance) do |arguments, slave|
         expect(slave.jenkins_server_id).to eq jenkins_server.id
         false
       end
@@ -49,21 +55,15 @@ describe JenkinsSlavesController do
     end
 
     context "on success" do
-      before(:each) do
-        allow_any_instance_of(Wonga::Pantry::SQSSender).to receive(:send_message)
-      end
-
+      let(:jenkins_utility) { instance_double(Wonga::Pantry::JenkinsUtility, request_jenkins_instance: true) }
       it "redirects" do
-        allow_any_instance_of(JenkinsSlave).to receive(:id).and_return(42)
         post :create, jenkins_server_id: jenkins_server.id
         expect(response).to be_redirect
       end
     end
 
-    context "when AWSUtility can't process instance" do
-      before(:each) do
-        allow_any_instance_of(Wonga::Pantry::AWSUtility).to receive(:request_jenkins_instance).and_return(false)
-      end
+    context "when JenkinsUtility can't process instance" do
+      let(:jenkins_utility) { instance_double(Wonga::Pantry::JenkinsUtility, request_jenkins_instance: false) }
 
       it "renders new" do
         post :create, jenkins_server_id: jenkins_server.id

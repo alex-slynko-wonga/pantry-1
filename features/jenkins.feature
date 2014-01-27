@@ -71,18 +71,17 @@ Feature: Jenkins
 
   Scenario: Attempting to shut down, destroy another team's slave
     Given I am in the "Pantry Team" team
-    And I have a jenkins server    
+    And I have a jenkins server
     And I have a jenkins slave
     And the instance is ready
     When I go into Jenkins slave page
     Then I should see "Shut down" button
     And I should see "Destroy" button
-    
+
     When the slave does not belong to my team
-    When I go into Jenkins slave page    
+    When I go into Jenkins slave page
     Then I should not see "Shut down" button
     And I should not see "Destroy" button
-
 
   Scenario: a team can create only one server
     Given I am in the "Pantry Team" team
