@@ -3,6 +3,11 @@ require 'spec_helper'
 describe EnvironmentsController do
   let(:team) { FactoryGirl.create(:team) }
   let(:user) { instance_double('User', role: 'developer', teams: [team]).as_null_object }
+  let(:chef_utility) { instance_double('Wonga::Pantry::ChefUtility').as_null_object }
+
+  before :each do
+    allow(Wonga::Pantry::ChefUtility).to receive(:new).and_return(chef_utility)
+  end
 
   before(:each) do
     allow(@controller).to receive(:current_user).and_return(user)
@@ -24,7 +29,7 @@ describe EnvironmentsController do
           name: 'Env 1',
           description: 'Something',
           chef_environment: 'env1',
-          environment_type: Environment::TYPES.first
+          environment_type: 'INT'
         }
       }.to change { Environment.count }.by(1)
     end

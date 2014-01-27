@@ -1,7 +1,8 @@
 When(/^An agent creates a new team named "(.*?)"$/) do |name|
-  sqs_client = AWS::SQS.new.client
-  resp = sqs_client.stub_for(:get_queue_url)
-  resp[:queue_url] = "https://some_url.example.com"
+  @sqs = instance_double('Wonga::Pantry::SQSSender')
+  allow(Wonga::Pantry::SQSSender).to receive(:new).and_return(@sqs)
+  @sqs.stub(:send_message)
+
   click_on 'New Team'
   fill_in('team_name', :with => name)
   fill_in('team_description', :with => "TeamDescription")

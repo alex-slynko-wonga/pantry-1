@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Wonga::Pantry::ChefUtility do
   let(:sqs_sender) { instance_double('Wonga::Pantry::SQSSender') }
-  let(:team) { FactoryGirl.build(:team) }
+  let(:team) { FactoryGirl.create(:team) }
 
   before :each do
     allow(Wonga::Pantry::SQSSender).to receive(:new).and_return(sqs_sender)
@@ -16,7 +16,7 @@ describe Wonga::Pantry::ChefUtility do
         expect(message[:team_id]).to eq(42)
         expect(message).to have_key(:domain)
       end
-      subject.request_chef_environment(team)
+      subject.request_chef_environment(team, team.environments.first)
       expect(sqs_sender).to have_received(:send_message)
     end
   end

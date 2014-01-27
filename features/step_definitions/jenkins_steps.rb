@@ -1,4 +1,5 @@
 Given(/^I request jenkins server$/) do
+  Environment.where(team_id: @team.id).first.update_attributes(chef_environment: 'myenv')
   visit '/jenkins_servers/new'
   click_on 'Create server'
 end
