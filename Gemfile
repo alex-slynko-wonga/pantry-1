@@ -37,6 +37,7 @@ group :development do
   gem 'guard-rspec'
   gem 'thin'
   gem 'bundler-audit'
+  gem 'codesake-dawn', :require=>false
 end
 
 group :test do
