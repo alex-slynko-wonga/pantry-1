@@ -10,7 +10,7 @@ describe JenkinsServerHelper do
       let(:policy) { instance_double(JenkinsSlavePolicy, create?: true) }
 
       it "renders link" do
-        expect(helper.link_to_new_slave(FactoryGirl.build_stubbed(:jenkins_server))).to match /^<a/
+        expect(helper.link_to_new_slave(JenkinsServer.new(id: 1))).to match /^<a/
       end
     end
 

@@ -15,13 +15,14 @@ class Ec2Instance < ActiveRecord::Base
   validates :team, presence: true
   validates :user, presence: true
   validates :domain, presence: true, domain_name: true
-  validates :chef_environment, presence: true
   validates :run_list, presence: true, chef_run_list_format: true
   validates :ami, presence: true
+  validates :environment, presence: true
   validates :volume_size, presence: true
   validates :flavor, presence: true
   validates :security_group_ids, presence: true, security_group_ids_limit: true
   validate  :check_user_team, on: :create
+  validate  :check_environment_team
   validates :state, presence: true
 
   serialize :security_group_ids
@@ -34,9 +35,10 @@ class Ec2Instance < ActiveRecord::Base
 
   accepts_nested_attributes_for :jenkins_server
   accepts_nested_attributes_for :jenkins_slave
+  accepts_nested_attributes_for :environment
 
-  scope :terminated, -> { where(terminated: true) }
-  scope :running, -> { where(terminated: [false, nil]) }
+  scope :terminated, -> { where(state: 'terminated') }
+  scope :running, -> { where.not(state: 'terminated') }
 
   def check_security_group_ids
     self.security_group_ids.reject! { |i| i.empty? } if self.security_group_ids
@@ -89,5 +91,11 @@ class Ec2Instance < ActiveRecord::Base
   def check_user_team
     return unless self.user && self.team
     errors.add(:team_id, "Current user is not in this team.") unless self.user.teams.include?(self.team)
+  end
+
+  def check_environment_team
+    return unless self.team && self.environment
+    errors.add(:environment_id, "Environment is not from this team") unless self.environment.team_id == self.team_id
+    errors.add(:environment_id, "Environment is not ready to be user") if self.environment.chef_environment.blank?
   end
 end

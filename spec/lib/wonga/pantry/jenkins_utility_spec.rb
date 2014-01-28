@@ -16,13 +16,14 @@ shared_examples_for "request_instance" do
       jenkins_params,
       jenkins
     )).to eq(:some_result)
+    expect(jenkins).to be_valid
   end
 end
 
 describe Wonga::Pantry::JenkinsUtility do
   subject { described_class.new }
   let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource') }
-  let(:team) { FactoryGirl.create(:team) }
+  let(:team) { FactoryGirl.create(:team, :with_ci_environment) }
   let(:user) { FactoryGirl.create(:user, team: team) }
   let(:existing_server) { FactoryGirl.create(:jenkins_server, team: team) }
 

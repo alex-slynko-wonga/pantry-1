@@ -6,6 +6,7 @@ class JenkinsSlave < ActiveRecord::Base
 
   validates :ec2_instance, :jenkins_server, presence: true
   validate :team_should_be_same_as_jenkins_server
+  validates_with CIInstanceValidator
 
   before_validation :set_ec2_instance_name, on: :create
 

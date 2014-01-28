@@ -61,7 +61,7 @@ Then(/^I should see the Jenkins server name$/) do
 end
 
 Then(/^I click the server link$/) do
-  click_on @jenkins_server.ec2_instance.name
+  first(:link, @jenkins_server.ec2_instance.name)
 end
 
 Then(/^I should see the url of the Jenkins server$/) do
@@ -76,4 +76,9 @@ Then(/^I should see the a table with the instance$/) do
   page.should have_content @ec2_instance.name
   page.should have_content @ec2_instance.human_status
   page.should have_selector "img[src$='/assets/linux_icon.png']"
+end
+
+Given(/^"(.*?)" team has an (?:"(.*?)" )?environment$/) do |team_name, environment_type|
+  @team = Team.where(name: team_name).first
+  FactoryGirl.create(:environment, environment_type: environment_type, team: @team)
 end

@@ -10,6 +10,7 @@ class JenkinsServer < ActiveRecord::Base
   validates :team, presence: true
   validates :ec2_instance, presence: true
   validate :team_cannot_own_multiple_servers, on: :create
+  validates_with CIInstanceValidator
 
   def instance_name
     self.team.jenkins_host_name

@@ -12,11 +12,13 @@ describe Aws::Ec2InstancesController do
   end
 
   let(:team) { FactoryGirl.create(:team) }
+  let(:environment) { FactoryGirl.create(:environment, team: team) }
   let(:ec2_instance_params) {
     { ec2_instance: FactoryGirl.attributes_for(:ec2_instance,
                                               name: 'InstanceName',
                                               team_id: team.id,
-                                              user_id: user.id
+                                              user_id: user.id,
+                                              environment_id: environment.id
                                              )}
   }
 
@@ -58,7 +60,8 @@ describe Aws::Ec2InstancesController do
         { ec2_instance: FactoryGirl.attributes_for(:ec2_instance,
                                                    name: 'InstanceName',
                                                    team_id: team.id,
-                                                   user_id: user.id
+                                                   user_id: user.id,
+                                                   environment_id: environment.id
                                                   ),
                                                   custom_ami: custom_ami
         }

@@ -5,5 +5,9 @@ FactoryGirl.define do
     sequence(:name) { |n| "TeamName#{n}" }
     description "MyString"
     chef_environment { name.parameterize }
+
+    trait :with_ci_environment do
+      ci_environment
+    end
   end
 end

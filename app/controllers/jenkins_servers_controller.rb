@@ -29,8 +29,7 @@ class JenkinsServersController < ApplicationController
       redirect_to @jenkins_server
     else
       flash[:error] = "Jenkins server request failed: #{human_errors(@jenkins_server)}"
-      load_servers
-      render :new
+      render :new if load_servers
     end
   end
 
@@ -51,7 +50,8 @@ class JenkinsServersController < ApplicationController
     @user_teams = current_user.teams.with_environment.without_jenkins
     if @user_teams.empty?
       flash[:error] = "You cannot create a server because you do not belong to this team"
-      redirect_to jenkins_servers_path and return
+      redirect_to jenkins_servers_path and return false
     end
+    true
   end
 end

@@ -14,7 +14,7 @@ class Wonga::Pantry::BootMessage
       user_id:                    @instance.user_id,
       subnet_id:                  @instance.subnet_id,
       security_group_ids:         security_group_ids,
-      chef_environment:           @instance.chef_environment,
+      chef_environment:           @instance.environment.chef_environment,
       run_list:                   @instance.run_list.split("\r\n"),
       aws_key_pair_name:          CONFIG["aws"]["key_pair_name"],
       platform:                   @instance.platform,

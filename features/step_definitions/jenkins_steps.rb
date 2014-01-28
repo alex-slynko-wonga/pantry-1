@@ -4,11 +4,11 @@ Given(/^I request jenkins server$/) do
 end
 
 Given(/^I have a jenkins server$/) do
-  @jenkins_server = FactoryGirl.create(:jenkins_server, ec2_instance: FactoryGirl.create(:ec2_instance, :bootstrapped, team: @team), team: @team)
+  @jenkins_server = FactoryGirl.create(:jenkins_server, :bootstrapped, team: @team)
 end
 
 Given(/^I have a jenkins slave$/) do
-  @jenkins_slave = FactoryGirl.create(:jenkins_slave, ec2_instance: FactoryGirl.create(:ec2_instance, :bootstrapped, team: @team), jenkins_server: @jenkins_server)
+  @jenkins_slave = FactoryGirl.create(:jenkins_slave, :bootstrapped, jenkins_server: @jenkins_server)
 end
 
 When(/^I click on the server ID$/) do
@@ -45,13 +45,9 @@ end
 
 Given(/^the team has a Jenkins server$/) do
   @jenkins_server = FactoryGirl.create(:jenkins_server,
-                                       team: @team,
-                                       ec2_instance: FactoryGirl.create(:ec2_instance, bootstrapped: true)
+                                       :bootstrapped,
+                                       team: @team
   )
-end
-
-When(/^I go into Jenkins slave page$/) do
-  visit "/jenkins_servers/#{@jenkins_slave.jenkins_server_id}/jenkins_slaves/#{@jenkins_slave.id}"
 end
 
 When(/^I request new slave$/) do
@@ -65,7 +61,7 @@ end
 
 Given(/^the slave is shut down$/) do
   @jenkins_slave ||= JenkinsSlave.last
-  @jenkins_slave.ec2_instance.update_attributes(state: "shutdown", booted: false)
+  @jenkins_slave.ec2_instance.update_attributes(state: "shutdown")
 end
 
 Then(/^I should not see slave in listing$/) do
