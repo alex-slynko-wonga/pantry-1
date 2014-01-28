@@ -11,7 +11,7 @@ class Environment < ActiveRecord::Base
   validates :environment_type, inclusion: { in: TYPES }, presence: true
   validates :team, uniqueness: { scope: :environment_type, if: "environment_type == 'CI'" }, presence: true
 
-  scope :available, -> (user) { where.not(chef_environment: nil).where(team_id: user.team_ids) }
+  scope :available, ->(user) { where.not(chef_environment: nil).where(team_id: user.team_ids) }
 
   accepts_nested_attributes_for :team
 end
