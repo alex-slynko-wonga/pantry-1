@@ -33,8 +33,7 @@ describe Wonga::Pantry::Costs do
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: FactoryGirl.create(:ec2_instance, team: team), cost: 50)
       result = subject.costs_details_per_team(team.id)
-      expect(result[0].cost).to eq(100)
-      expect(result[1].cost).to eq(50)
+      expect(result.map(&:cost)).to match_array([50,100])
     end
   end
 
