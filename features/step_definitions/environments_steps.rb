@@ -1,12 +1,36 @@
 When(/^I request team environment$/) do
-  fill_in 'environment_name', with: 'Env 1'
+  Environment.delete_all
+  sqs_client = AWS::SQS.new.client
   fill_in 'environment_description', with: 'Environment for ...'
-  fill_in 'environment_chef_environment', with: 'env1'
-  select('INT', from: 'environment_environment_type')
-  click_button 'Create Environment'
 end
 
-Then(/^I should see the team environment in team page$/) do
-  expect(page).to have_content('Env 1')
-  expect(page).to have_content('INT')
+When(/^I select "(.*?)" as environment type$/) do |env_type|
+  select(env_type, from: 'environment_environment_type')
+end
+
+When(/^name it as "(.*?)"$/) do |name|
+  fill_in 'environment_name', with: name
+end
+
+When(/^I save it$/) do
+  sqs_client = AWS::SQS.new.client
+  @sqs = instance_double('Wonga::Pantry::SQSSender')
+  allow(Wonga::Pantry::SQSSender).to receive(:new).and_return(@sqs)
+  @sqs.stub(:send_message)
+
+  click_button 'Create Environment'
+  Environment.last.update_attributes(chef_environment: 'ours') # simulate that the daemon updates the chef_environment
+end
+
+
+When(/^the environment is created$/) do
+  expect( @environment_counter + 1 ).to eq(Environment.count)
+end
+
+When(/^I request new ec2 instance$/) do
+  click_link 'Launch New Instance'
+end
+
+Then(/^I should be able to choose "(.*?)"  from list of environemnts$/) do |env_type|
+  select(env_type, from: 'Environment')
 end

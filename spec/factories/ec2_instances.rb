@@ -38,5 +38,6 @@ FactoryGirl.define do
 
   factory :ci_ec2_instance, parent: :ec2_instance do
     environment { team.ci_environment || FactoryGirl.build(:ci_environment, team: team) }
+    after(:build) { |instance| instance.environment.chef_environment ||= instance.name }
   end
 end

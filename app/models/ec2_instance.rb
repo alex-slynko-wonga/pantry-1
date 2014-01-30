@@ -96,6 +96,6 @@ class Ec2Instance < ActiveRecord::Base
   def check_environment_team
     return unless self.team && self.environment
     errors.add(:environment_id, "Environment is not from this team") unless self.environment.team_id == self.team_id
-    errors.add(:environment_id, "Environment is not ready to be user") if self.environment.chef_environment.blank?
+    errors.add(:environment_id, "Environment is not ready to be used") if self.environment.chef_environment.blank?
   end
 end

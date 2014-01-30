@@ -1,6 +1,5 @@
 = simple_form_for [@team, @environment] do |f|
   = f.input :name
   = f.input :description, as: :text
-  = f.input :chef_environment
   = f.input :environment_type, collection: Environment::TYPES
   = f.button :submit

@@ -7,9 +7,9 @@ describe Environment do
   it { should be_valid }
 
   it "allows only one CI environment_type per team" do
-    env = FactoryGirl.create(:environment, team: team, environment_type: 'CI')
     expect(FactoryGirl.build(:environment, team: team, environment_type: 'CI')).to be_invalid
-    expect(env).to be_valid
+    team.ci_environment.chef_environment = 'chef_env'
+    expect(team.ci_environment).to be_valid
   end
 
   context ".available" do

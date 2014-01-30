@@ -8,7 +8,15 @@ class EnvironmentsController < ApplicationController
   def create
     @environment = @team.environments.build(environment_parameters)
     authorize(@environment)
-    @environment.save ? redirect_to(@team) : render('new')
+    if @environment.save
+      chef_utility = Wonga::Pantry::ChefUtility.new
+      chef_utility.request_chef_environment(@team, @environment)
+      flash[:notice] = "Environment created"
+      redirect_to(@team)
+    else
+      flash[:error] = "Environment creation failed: #{human_errors(@environment)}"
+      render('new')
+    end
   end
 
   private

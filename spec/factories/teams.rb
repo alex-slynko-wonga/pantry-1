@@ -4,10 +4,9 @@ FactoryGirl.define do
   factory :team do
     sequence(:name) { |n| "TeamName#{n}" }
     description "MyString"
-    chef_environment { name.parameterize }
 
     trait :with_ci_environment do
-      ci_environment
+      after(:create) { |team| team.ci_environment.update_attribute(:chef_environment, team.name) }
     end
   end
 end

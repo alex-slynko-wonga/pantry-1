@@ -3,7 +3,9 @@
 = simple_form_for [:aws, @ec2_instance] do |f|
   = f.input :name
   = f.input :domain
-  = f.association :environment, collection: Environment.available(current_user)
+  = f.association :environment,
+                  collection: Environment.available(current_user),
+                  label_method: ->(obj) { "#{obj.name}(#{obj.environment_type})" }
 
   = f.input :run_list, as: :text
 
