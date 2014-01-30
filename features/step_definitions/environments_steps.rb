@@ -1,36 +1,31 @@
-When(/^I request team environment$/) do
-  Environment.delete_all
-  sqs_client = AWS::SQS.new.client
-  fill_in 'environment_description', with: 'Environment for ...'
+Then(/^a new (\w*) ?chef environment should be requested$/) do |env_type|
+  expect(AWS::SQS.new.client).to have_received(:send_message) do |message|
+    expect(JSON.parse(message[:message_body])['environment_type']).to eq(env_type) if env_type.present?
+  end
 end
 
 When(/^I select "(.*?)" as environment type$/) do |env_type|
-  select(env_type, from: 'environment_environment_type')
+  select(env_type, from: 'Environment type')
 end
 
 When(/^name it as "(.*?)"$/) do |name|
-  fill_in 'environment_name', with: name
+  fill_in 'Name', with: name
 end
 
-When(/^I save it$/) do
-  sqs_client = AWS::SQS.new.client
-  @sqs = instance_double('Wonga::Pantry::SQSSender')
-  allow(Wonga::Pantry::SQSSender).to receive(:new).and_return(@sqs)
-  @sqs.stub(:send_message)
-
+When(/^I save environment$/) do
   click_button 'Create Environment'
-  Environment.last.update_attributes(chef_environment: 'ours') # simulate that the daemon updates the chef_environment
 end
 
-
-When(/^the environment is created$/) do
-  expect( @environment_counter + 1 ).to eq(Environment.count)
+When(/^environment is created$/) do
+  environment = Environment.last
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/teams/#{environment.team_id}/chef_environments/#{environment.id}", { environment_name: environment.name, chef_environment: environment.name, format: :json}
 end
 
 When(/^I request new ec2 instance$/) do
   click_link 'Launch New Instance'
 end
 
-Then(/^I should be able to choose "(.*?)"  from list of environemnts$/) do |env_type|
+Then(/^I should be able to choose "(.*?)" from list of environments$/) do |env_type|
   select(env_type, from: 'Environment')
 end

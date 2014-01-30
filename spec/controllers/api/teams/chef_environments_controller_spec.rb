@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Api::Teams::ChefEnvironmentsController do
 
-  describe "GET 'create'" do
+  describe "PUT 'update'" do
 
-    let(:team) { FactoryGirl.create(:team, chef_environment: nil) }
-    let(:params) { {team_id: team.id, chef_environment: 'env_name', format: 'json'} }
+    let(:environment) { FactoryGirl.create(:environment, chef_environment: nil) }
+    let(:params) { {team_id: environment.team_id, id: environment.id, chef_environment: 'env_name', format: 'json'} }
 
     context "with valid token" do
       before(:each) do
@@ -13,19 +13,19 @@ describe Api::Teams::ChefEnvironmentsController do
       end
 
       it "saves chef_environment" do
-        post 'create', params
-        expect(team.reload.chef_environment).to eq('env_name')
+        put 'update', params
+        expect(environment.reload.chef_environment).to eq('env_name')
       end
 
       it "returns http success" do
-        post 'create', params
-        expect(response.status).to eq 201
+        put 'update', params
+        expect(response.status).to eq 204
       end
     end
 
     context "without token" do
       it "returns 404" do
-        post 'create', params
+        put 'update', params
         expect(response.status).to eq 404
       end
     end
