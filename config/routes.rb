@@ -7,9 +7,10 @@ Wonga::Pantry::Application.routes.draw do
     resources :ec2_instances, only: [:update]
     resources :jenkins_slaves, only: [:update]
     resources :costs, only: [:create]
+    resources :teams, only: [] do
+      resources :chef_environments, controller: "teams/chef_environments", only: [:update]
+    end
   end
-
-  post '/api/teams/:team_id/chef_environments', :to => 'api/teams/chef_environments#create'
 
   resources :ec2_instances, only: [:show] do
     get 'aws_status', on: :member

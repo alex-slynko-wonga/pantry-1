@@ -1,5 +1,4 @@
 Feature: Managing Teams
-  @chef-zero
   Scenario: Adding a new Team
     Given I am on the teams page
     And queues and topics are configured
@@ -8,7 +7,7 @@ Feature: Managing Teams
     And I should see "TeamName"
     And the team page has the current user
     And I should see a flash message with "Team created successfully"
-    And a new chef environment should be requested
+    And a new CI chef environment should be requested
 
   Scenario: Updating existing team
     Given I am in the "TeamName" team with "Test User" user
