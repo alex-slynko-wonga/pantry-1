@@ -21,7 +21,7 @@ class Wonga::Pantry::Ec2Resource
     change('termination', sns)
   end
 
-  def boot(sns = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]["ec2_instance_delete_topic_arn"]))
+  def boot(sns = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]["ec2_instance_boot_topic_arn"]))
     change('ec2_boot', sns, Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message)
   end
 
