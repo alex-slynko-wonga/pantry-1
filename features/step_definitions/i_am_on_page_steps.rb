@@ -35,7 +35,7 @@ When(/^I proceed to "(.*?)" user page$/) do |name|
 end
 
 Given(/^I am on the "(.*?)" team page$/) do |arg1|
-  visit team_url @team
+  visit team_path @team
 end
 
 When(/^I check my profile page$/) do
@@ -44,8 +44,4 @@ end
 
 When(/^I go into Jenkins slave page$/) do
   visit "/jenkins_servers/#{@jenkins_slave.jenkins_server_id}/jenkins_slaves/#{@jenkins_slave.id}"
-end
-
-When(/^I back to team page$/) do
-  visit team_path(Team.last)
 end

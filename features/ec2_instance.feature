@@ -64,7 +64,7 @@ Feature: EC2 Instance
     And I am still on instance page
     Then I should see that instance is destroyed
 
-    When I back to team page
+    When I am on the team page
     Then I should not see machine info
 
     Given I have at least one EC2 in the team
