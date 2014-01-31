@@ -1,5 +1,5 @@
 %h1 Jenkins Slaves
-= link_to @team.name, @team
+= link_to @jenkins_server.team.name, @jenkins_server.team
 
 = link_to "Go back to master server ##{@jenkins_server.id}", jenkins_server_path(@jenkins_server)
 |
