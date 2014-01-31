@@ -45,3 +45,7 @@ end
 When(/^I go into Jenkins slave page$/) do
   visit "/jenkins_servers/#{@jenkins_slave.jenkins_server_id}/jenkins_slaves/#{@jenkins_slave.id}"
 end
+
+When(/^I back to team page$/) do
+  visit team_path(Team.last)
+end

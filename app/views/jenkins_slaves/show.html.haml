@@ -2,7 +2,7 @@
 
 = link_to "Go back to the Jenkins server", jenkins_server_jenkins_slaves_path(@jenkins_server)
 |
-= link_to "Go back to #{@jenkins_server.team}", @jenkins_server.team
+= link_to "Go back to #{@jenkins_server.team.name}", @jenkins_server.team
 
 = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 

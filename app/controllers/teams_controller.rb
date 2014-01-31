@@ -26,8 +26,8 @@ class TeamsController < ApplicationController
 
   def show
     @jenkins_server = @team.jenkins_server
-    @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance) if @jenkins_server
-    @ec2_instances = @team.ec2_instances
+    @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance).references(:ec2_instance).merge(Ec2Instance.running) if @jenkins_server
+    @ec2_instances = @team.ec2_instances.running
     @environments = @team.environments
   end
 
