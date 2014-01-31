@@ -26,9 +26,7 @@ Then(/^I should see the slaves listing$/) do
   expect(page).to have_content @jenkins_slave.ec2_instance.name
   expect(page).to have_content @jenkins_slave.ec2_instance.ami
   expect(page).to have_content @jenkins_slave.ec2_instance.instance_id
-  expect(page).to have_content @jenkins_slave.ec2_instance.bootstrapped
-  expect(page).to have_content @jenkins_slave.ec2_instance.booted
-  expect(page).to have_content @jenkins_slave.ec2_instance.joined
+  expect(page).to have_content @jenkins_slave.ec2_instance.human_status
 end
 
 Then(/^I should be redirected to the Jenkins server page$/) do

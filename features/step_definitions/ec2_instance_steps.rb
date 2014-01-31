@@ -75,7 +75,7 @@ end
 When(/^an instance is created with ip "(.*?)"$/) do |ip|
   instance = Ec2Instance.last
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, booted: true, ip_address: ip, format: :json}
+  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, event: :ec2_booted, ip_address: ip, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
   put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, joined: true, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
@@ -93,7 +93,7 @@ end
 
 When(/^the instance is shutdown$/) do
   @instance = Ec2Instance.last
-  @instance.update_attributes(state: "shutdown", booted: false)
+  @instance.update_attributes(state: "shutdown")
   @instance.reload
 end
 
@@ -119,7 +119,7 @@ end
 
 When(/^the instance is ready$/) do
   @instance = Ec2Instance.last
-  @instance.update_attributes(state: "ready", booted: true)
+  @instance.update_attributes(state: "ready")
   @instance.reload
 end
 

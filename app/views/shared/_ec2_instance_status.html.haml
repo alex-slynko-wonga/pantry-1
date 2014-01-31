@@ -13,7 +13,6 @@
     .span2
       .current_step
         = ec2_instance.human_status
-      #spinner
   - if ec2_instance.human_status == 'Ready'
     %div{"ng-controller" => "Ec2InstanceCtrl", "ng-init" => "getAwsStatus()", "id" => "Ec2InstanceCtrl", "data-instance-id" => ec2_instance.instance_id}
       .row-fluid

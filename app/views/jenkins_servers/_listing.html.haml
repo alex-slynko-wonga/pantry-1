@@ -1,14 +1,14 @@
 %div{"ng-controller" => "JenkinsServersCtrl", "ng-init" => "getInstances()"}
   - if current_team
     %span{'id' => 'single_team_id', 'data-team_id' => current_team.id}
-      Current team: 
+      Current team:
       = link_to current_team.name, current_team
   - else
     %select{:id => "change_team_id", :name => "change_team_id", "ng-change" => "getInstances()", "ng-model" => "team_id"}
       %option{:value => ""}
       = user_teams.each do |team|
         %option{:value => team.id}= team.name
-      
+
   %table.table
     %thead
       %tr
@@ -17,16 +17,12 @@
         %th Name
         %th ImageID
         %th Groups
-        %th bootstrapped
-        %th Booted
-        %th Joined
+        %th State
     %tr{"ng-repeat" => "instance in instances"}
-      %td 
+      %td
         %a{:href => "/jenkins_servers/{{instance.id}}"} {{instance.id}}
       %td {{instance.ec2_instance.id}}
       %td {{instance.ec2_instance.name}}
       %td {{instance.ec2_instance.ami}}
       %td {{instance.ec2_instance.security_group_ids}}
-      %td {{instance.ec2_instance.bootstrapped}}
-      %td {{instance.ec2_instance.booted}}
-      %td {{instance.ec2_instance.joined}}
+      %td {{instance.ec2_instance.human_status}}
