@@ -1,8 +1,9 @@
 %h1 Jenkins Slaves
-= link_to @jenkins_server.team.name, @jenkins_server.team
 
 = link_to "Go back to master server ##{@jenkins_server.id}", jenkins_server_path(@jenkins_server)
 |
 = link_to_new_slave(@jenkins_server)
+|
+= link_to "Go back to #{@jenkins_server.team.name}", @jenkins_server.team
 
 = render 'shared/jenkins_index', jenkins_instances: @jenkins_slaves, jenkins_server: @jenkins_server
