@@ -6,8 +6,8 @@ gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap'
 
 gem 'syslogger'
 gem 'haml-rails'
-gem 'chef','~> 11.8.0'
-gem 'aws-sdk', '~> 1.25.0'
+gem 'chef','>= 11.8.0'
+gem 'aws-sdk', '>= 1.25.0'
 
 gem 'sass-rails'
 gem 'coffee-rails'
@@ -20,10 +20,10 @@ gem 'angularjs-rails', '~> 1.0.8'
 gem 'rabl'
 gem 'rack-ssl'
 gem 'cache_digests'
-gem "state_machine", "~> 1.2.0"
-gem "newrelic_rpm", "~> 3.7.0.177"
+gem "state_machine"
+gem "newrelic_rpm", "~> 3.7"
 gem 'net-ldap', github: "ruby-ldap/ruby-net-ldap"
-gem "simple_form", "~> 3.0"
+gem "simple_form"
 gem 'turbolinks'
 gem 'pundit', github: 'elabs/pundit'
 gem 'jquery-turbolinks'
@@ -37,13 +37,13 @@ group :development do
   gem 'guard-rspec'
   gem 'thin'
   gem 'bundler-audit'
-  gem 'codesake-dawn', :require=>false
+  gem 'codesake-dawn', require: false
 end
 
 group :test do
   # gem 'selenium-webdriver' # uncomment if you want to use @selenium in you cucmber tests
   gem 'launchy'
-  gem 'brakeman', :require => false
+  gem 'brakeman', require: false
   gem 'capybara-webkit'
   gem 'chef-zero'
   gem 'cucumber-rails', require: false
