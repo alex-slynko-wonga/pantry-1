@@ -7,8 +7,8 @@ describe Wonga::Pantry::BootMessage do
 
   describe "#boot_message" do
     it "splits run list and make it into array" do
-      instance.run_list = "test\r\nsecond"
-      expect(subject.boot_message[:run_list]).to eq(['test', 'second'])
+      instance.run_list = "test\r\nsecond,third"
+      expect(subject.boot_message[:run_list]).to eq(['test', 'second', 'third'])
     end
 
     it "gets ou from Wonga::Pantry::ActiveDirectoryOU" do
