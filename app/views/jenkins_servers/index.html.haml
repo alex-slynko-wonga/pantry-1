@@ -1,6 +1,8 @@
 %h1
   Jenkins Servers
-  = " assigned to #{@current_team.name}" if params[:team_id]
+  - if @current_team
+    assigned to
+    = link_to @current_team.name, @current_team
 - if can_add_server?(@current_team)
   .row
     .span12= link_to "Create a new server", new_jenkins_server_path
