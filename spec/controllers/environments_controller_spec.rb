@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe EnvironmentsController do
   let(:team) { FactoryGirl.create(:team) }
-  let(:user) { instance_double('User', role: 'developer', teams: [team]).as_null_object }
+  let(:user) { User.new(role: 'developer', teams: [team]) }
   let(:chef_utility) { instance_double('Wonga::Pantry::ChefUtility').as_null_object }
 
   before :each do
