@@ -40,7 +40,7 @@ Feature: Managing Teams
     Given I am in the "TeamName" team with "Test User" user
     And I am on the teams page
     When I click on "Edit"
-    And click on remove cross
+    And I click on remove cross near "Test User"
     And save team
     Then team should not contain "Test User"
 
