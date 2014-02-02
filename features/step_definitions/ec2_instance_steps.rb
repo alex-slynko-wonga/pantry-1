@@ -23,6 +23,13 @@ Given(/^queues and topics are configured$/) do
   resp = sqs_client.stub_for(:get_queue_url)
   resp[:queue_url] = "https://some_url.example.com"
   sqs_client.stub(:send_message).and_return(AWS::Core::Response.new)
+  config = CONFIG.deep_dup
+  config['aws']["ec2_instance_stop_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_stop_topic_arn"
+  config['aws']["ec2_instance_start_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_start_topic_arn"
+  config['aws']["ec2_instance_delete_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_delete_topic_arn"
+  config['aws']["ec2_instance_boot_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn"
+  config['aws']["jenkins_slave_delete_topic_arn"] = "arn:aws:sns:eu-west-1:9:jenkins_slave_delete_topic_arn"
+  stub_const('CONFIG', config)
 end
 
 Given(/^I request an instance named "(.*?)"$/) do |name|
@@ -58,8 +65,8 @@ When(/^I entered ami\-(\w+) in custom ami field$/) do |id|
 end
 
 Then(/^an instance (?:with ami\-(\w+) )?build should start$/) do |ami|
-  expect(AWS::SNS.new.client).to have_received(:publish) do |*args|
-    expect(args[0][:message]).to match(ami) if ami
+  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: "arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn")) do |args|
+    expect(args[:message]).to match(ami) if ami
   end
 end
 
@@ -86,6 +93,26 @@ When(/^the instance is shutdown$/) do
   @instance = Ec2Instance.last
   @instance.update_attributes(state: "shutdown", booted: false)
   @instance.reload
+end
+
+Then(/^shut down request should be sent$/) do
+  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: "arn:aws:sns:eu-west-1:9:ec2_instance_stop_topic_arn"))
+end
+
+When(/^machine is shut down$/) do
+  instance = Ec2Instance.last
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, event: :shutdown, format: :json}
+end
+
+Then(/^start request should be sent$/) do
+  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_start_topic_arn'))
+end
+
+When(/^machine is started$/) do
+  instance = Ec2Instance.last
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, event: :started, format: :json}
 end
 
 When(/^the instance is ready$/) do
