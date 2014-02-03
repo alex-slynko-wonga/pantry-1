@@ -4,20 +4,17 @@ FactoryGirl.define do
   factory :ec2_instance do
     trait :bootstrapped do
       bootstrapped true
-      booted true
       joined true
       state 'ready'
     end
 
     trait :running do
       bootstrapped true
-      booted true
       joined true
       state 'ready'
     end
 
     trait :terminated do
-      terminated_by { self.user }
       terminated true
       state 'terminated'
     end

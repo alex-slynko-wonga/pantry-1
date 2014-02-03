@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140122142358) do
+ActiveRecord::Schema.define(version: 20140131183212) do
 
   create_table "ec2_instance_costs", force: true do |t|
     t.date     "bill_date"
@@ -38,24 +38,19 @@ ActiveRecord::Schema.define(version: 20140122142358) do
     t.string   "instance_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
-    t.datetime "start_time"
-    t.datetime "end_time"
     t.integer  "team_id"
     t.integer  "user_id"
     t.string   "ami"
     t.string   "flavor"
-    t.boolean  "booted"
     t.boolean  "bootstrapped"
     t.boolean  "joined"
     t.string   "subnet_id"
     t.string   "security_group_ids"
     t.string   "domain"
-    t.string   "chef_environment"
     t.string   "run_list"
     t.string   "platform"
     t.integer  "volume_size"
     t.boolean  "terminated"
-    t.integer  "terminated_by_id"
     t.string   "ip_address"
     t.boolean  "dns"
     t.string   "state"

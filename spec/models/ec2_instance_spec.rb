@@ -104,21 +104,15 @@ describe Ec2Instance do
       params = {
         "name"=>"NameInitialState",
         "instance_id"=>"MyString",
-        "team_id"=>nil,
         "ami"=>"i-111111",
         "flavor"=>"t1.micro",
-        "booted"=>nil,
-        "bootstrapped"=>nil,
-        "joined"=>nil,
         "subnet_id"=>"subnet-00110011",
         "security_group_ids"=>["sg-00000001", "sg-00000002", "sg-00110010"],
         "domain"=>"example.com",
-        "chef_environment"=>"InitialStateEnvironment",
         "run_list"=>"role[ted]\r\nrecipe[ted]\r\nrecipe[ted::something]",
         "platform"=>"Lindows",
         "volume_size"=>10,
-        "ip_address"=>"pending",
-        "state"=>nil
+        "ip_address"=>"pending"
       }
       expect(Ec2Instance.new(params).state).to eq("initial_state")
     end

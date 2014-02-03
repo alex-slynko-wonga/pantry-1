@@ -1,7 +1,6 @@
 class Ec2Instance < ActiveRecord::Base
   belongs_to :team
   belongs_to :user
-  belongs_to :terminated_by, class_name: 'User'
   belongs_to :environment
   has_one :jenkins_server
   has_one :jenkins_slave
@@ -30,7 +29,6 @@ class Ec2Instance < ActiveRecord::Base
   before_validation :set_platform_security_group_id
   after_initialize :init, on: :create
   before_validation :check_security_group_ids
-  before_create :set_start_time
   before_validation :set_volume_size, on: :create
 
   accepts_nested_attributes_for :jenkins_server
@@ -48,19 +46,6 @@ class Ec2Instance < ActiveRecord::Base
     state ? state.humanize : "Initial state"
   end
 
-  def progress
-    return 100 if bootstrapped && joined
-    if bootstrapped
-      40
-    elsif joined
-      60
-    elsif booted
-      20
-    else
-      0
-    end
-  end
-
   private
   def init
     self.domain       ||= CONFIG['pantry']['domain']
@@ -68,10 +53,6 @@ class Ec2Instance < ActiveRecord::Base
     self.instance_id  ||= "pending"
     self.ip_address   ||= "pending"
     Wonga::Pantry::Ec2InstanceMachine.new(self)
-  end
-
-  def set_start_time
-    self.start_time = Time.current
   end
 
   def set_volume_size

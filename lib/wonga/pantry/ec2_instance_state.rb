@@ -25,9 +25,7 @@ class Wonga::Pantry::Ec2InstanceState
   def prepare_params
     return @instance_params["event"].to_sym if @instance_params["event"]
 
-    if @instance_params["booted"]
-      :ec2_booted
-    elsif @instance_params["bootstrapped"]
+    if @instance_params["bootstrapped"]
       :bootstrap
     elsif @instance_params.key?("joined")
       @instance_params["joined"] && @instance_params["joined"] != 'false'  ? :add_to_domain : :terminated
