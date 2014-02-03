@@ -1,4 +1,4 @@
-- cache [:v1, ec2_instance] do
+- cache [:v2, ec2_instance] do
   .row-fluid
     .span2
       Requested by user:
@@ -24,6 +24,6 @@
   - if ec2_instance.protected?
     .row-fluid
       .span2 This machine is protected 
-  #ec2instance_status{'data-url' => ec2_instance_url(ec2_instance)}
-    #ec2instance_status_content
-      = render 'shared/ec2_instance_status', ec2_instance: ec2_instance
+#ec2instance_status{'data-url' => ec2_instance_url(ec2_instance)}
+  #ec2instance_status_content
+    = render 'shared/ec2_instance_status', ec2_instance: ec2_instance

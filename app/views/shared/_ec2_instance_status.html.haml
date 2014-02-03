@@ -1,4 +1,4 @@
-- cache [:v3, ec2_instance] do
+- cache [:v4, ec2_instance] do
   .row-fluid
     .span2
       Instance ID:
@@ -30,3 +30,9 @@
   - else
     :javascript
         Ec2InstanceRequestStatusPoller.poll();
+
+- if policy(@ec2_instance).shutdown_now?
+  = button_to "Shut down", aws_ec2_instance_url(@ec2_instance, "event" => "shutdown_now"), method: :put
+
+- if policy(@ec2_instance).start_instance?
+  = button_to 'Start', aws_ec2_instance_url(@ec2_instance, "event" => "start_instance"), method: :put

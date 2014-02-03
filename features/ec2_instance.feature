@@ -67,11 +67,11 @@ Feature: EC2 Instance
     When I am on the team page
     Then I should not see machine info
 
+  Scenario: Destroying an protected instance
     Given I have at least one EC2 in the team
     And the instance is protected
     When I am on instance page
     Then I should not see "Destroy"
-
 
   @javascript
   Scenario: Shutting down an instance
@@ -79,16 +79,18 @@ Feature: EC2 Instance
     And the instance is ready
     When I am on instance page
     When I click "Shut down"
-    Then I should see "Shutting down has started"
+    Then I should see a flash message with "Shutting down has started"
+    And shut down request should be sent
+    When machine is shut down
+    Then I should see "Shutdown" after page is updated
 
-  @javascript
-  Scenario: Starting a shut down instance
-    Given I have at least one EC2 in the team
-    And the instance is shutdown
-    When I am on instance page
-    And I click "Start"
-    Then I should see "Starting instance"
+    When I click "Start"
+    Then I should see a flash message with "Starting instance"
     And I should see "Starting"
+    And start request should be sent
+
+    When machine is started
+    Then I should see "Ready" after page is updated
 
   @javascript
   Scenario: Attempting to shut down or destroy another team's instances

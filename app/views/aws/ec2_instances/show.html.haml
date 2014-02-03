@@ -1,11 +1,7 @@
 %h1= @ec2_instance.name
 = link_to "Go back to #{@ec2_instance.team.name}", @ec2_instance.team
 = render 'shared/ec2_instance', ec2_instance: @ec2_instance
-- if policy(@ec2_instance).shutdown_now?
-  = button_to "Shut down", aws_ec2_instance_url(@ec2_instance, "event" => "shutdown_now"), method: :put
 
 - if policy(@ec2_instance).destroy?
   = button_to 'Destroy', [:aws, @ec2_instance], method: :delete, data: { confirm: 'This will permanently delete this instance. Are you sure?' }
 
-- if policy(@ec2_instance).start_instance?
-  = button_to 'Start', aws_ec2_instance_url(@ec2_instance, "event" => "start_instance"), method: :put
