@@ -4,6 +4,7 @@ class Wonga::Pantry::BootMessage
   end
 
   def boot_message
+    raise unless @instance.persisted?
     {
       pantry_request_id:          @instance.id,
       instance_name:              @instance.name,
