@@ -127,6 +127,10 @@ Then(/^I should see that instance is destroyed$/) do
   expect(page.text).to include('Terminated')
 end
 
+Then(/^I should not see machine info$/) do
+  expect(page).not_to have_text(Ec2Instance.last.name)
+end
+
 When(/^instance load is "(.*?)"$/) do |load|
   metrics = AWS::CloudWatch.new.client.stub_for(:list_metrics)
   metrics[:metrics] = [{metric_name: 'CPUUtilization', namespace: 'Test'}]
@@ -134,7 +138,7 @@ When(/^instance load is "(.*?)"$/) do |load|
   statistics[:datapoints] =  [{timestamp: Time.current, unit: 'Percent', average: load.to_d}]
 end
 
-When(/^an EC2 instance$/) do
+Given(/^an EC2 instance$/) do
   @ec2_instance = FactoryGirl.create(:ec2_instance)
 end
 

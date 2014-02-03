@@ -2,7 +2,7 @@ class JenkinsSlavesController < ApplicationController
   before_filter :load_objects
 
   def index
-    @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance)
+    @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance).references(:ec2_instance).merge(Ec2Instance.not_terminated)
 
     respond_to do |format|
       format.html

@@ -38,7 +38,7 @@ class Ec2Instance < ActiveRecord::Base
   accepts_nested_attributes_for :environment
 
   scope :terminated, -> { where(state: 'terminated') }
-  scope :running, -> { where.not(state: 'terminated') }
+  scope :not_terminated, -> { where.not(state: 'terminated') }
 
   def check_security_group_ids
     self.security_group_ids.reject! { |i| i.empty? } if self.security_group_ids

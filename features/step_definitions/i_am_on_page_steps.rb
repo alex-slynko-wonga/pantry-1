@@ -35,7 +35,7 @@ When(/^I proceed to "(.*?)" user page$/) do |name|
 end
 
 Given(/^I am on the "(.*?)" team page$/) do |arg1|
-  visit team_url @team
+  visit team_path @team
 end
 
 When(/^I check my profile page$/) do
