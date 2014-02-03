@@ -22,7 +22,7 @@ class Wonga::Pantry::Ec2Resource
   end
 
   def boot(sns = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]["ec2_instance_boot_topic_arn"]))
-    change('ec2_boot', sns, Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message)
+    @ec2_instance.valid? && change('ec2_boot', sns, Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message)
   end
 
   def change(event, publisher, message=base_message)

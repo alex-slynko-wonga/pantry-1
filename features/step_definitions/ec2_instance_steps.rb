@@ -66,7 +66,9 @@ end
 
 Then(/^an instance (?:with ami\-(\w+) )?build should start$/) do |ami|
   expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: "arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn")) do |args|
-    expect(args[:message]).to match(ami) if ami
+    message = JSON.parse(JSON.parse(args[:message])['default'])
+    expect(message['ami']).to match(ami) if ami
+    expect(message["block_device_mappings"]).to be_all{|hash| hash['ebs']['volume_size'].present?}
   end
 end
 
