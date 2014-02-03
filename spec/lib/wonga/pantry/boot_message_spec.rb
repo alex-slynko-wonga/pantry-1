@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Wonga::Pantry::BootMessage do
-  let(:instance) { FactoryGirl.build(:ec2_instance) }
+  let(:instance) { FactoryGirl.build_stubbed(:ec2_instance) }
 
   subject { described_class.new(instance) }
 
@@ -14,6 +14,13 @@ describe Wonga::Pantry::BootMessage do
     it "gets ou from Wonga::Pantry::ActiveDirectoryOU" do
       allow(Wonga::Pantry::ActiveDirectoryOU).to receive(:new).and_return(instance_double('Wonga::Pantry::ActiveDirectoryOU', ou: 'test'))
       expect(subject.boot_message[:ou]).to eq('test')
+    end
+
+    context "when instance is not saved" do
+      let(:instance) { Ec2Instance.new }
+      it "raise exception" do
+        expect { subject.boot_message }.to raise_exception
+      end
     end
   end
 end

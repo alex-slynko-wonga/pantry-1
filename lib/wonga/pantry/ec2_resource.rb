@@ -21,8 +21,11 @@ class Wonga::Pantry::Ec2Resource
     change('termination', sns)
   end
 
-  def boot(sns = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]["ec2_instance_boot_topic_arn"]))
-    @ec2_instance.valid? && change('ec2_boot', sns, Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message)
+  def boot(publisher = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]["ec2_instance_boot_topic_arn"]))
+    if state_machine('ec2_boot').change_state
+      publisher.publish_message(Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message)
+      true
+    end
   end
 
   def change(event, publisher, message=base_message)
