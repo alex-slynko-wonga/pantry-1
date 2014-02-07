@@ -20,6 +20,7 @@ Feature: EC2 Instance
     When an instance is created with ip "123.456.7.8"
     Then I should see "Ready" after page is updated
     And I should see "123.456.7.8"
+    And I should see "INT"
 
     When I check my profile page
     Then I should see machine info
@@ -99,3 +100,4 @@ Feature: EC2 Instance
     And I am on instance page
     Then I should not see "Shut down" button
     And I should not see "Destroy" button
+

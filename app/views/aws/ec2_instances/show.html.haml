@@ -1,5 +1,9 @@
 %h1= @ec2_instance.name
 = link_to "Go back to #{@ec2_instance.team.name}", @ec2_instance.team
+
+%h5
+  Environment
+  = @ec2_instance.environment.human_name
 = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
 - if policy(@ec2_instance).destroy?

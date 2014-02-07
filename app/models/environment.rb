@@ -15,4 +15,8 @@ class Environment < ActiveRecord::Base
   scope :available, ->(user) { where.not(chef_environment: nil).where(team_id: user.team_ids) }
 
   accepts_nested_attributes_for :team
+
+  def human_name
+    "#{self.name} (#{self.environment_type})"
+  end
 end
