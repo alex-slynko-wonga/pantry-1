@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Wonga::Pantry::Ec2InstanceMachine do
-  let(:ec2_instance) { FactoryGirl.build(:ec2_instance) }             
+  let(:ec2_instance) { FactoryGirl.build(:ec2_instance) }
 
   subject { described_class.new(ec2_instance) }
 
@@ -44,7 +44,7 @@ describe Wonga::Pantry::Ec2InstanceMachine do
   end
 
   describe "shut down an instance" do
-    context "instance not protected" do 
+    context "instance not protected" do
       let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: false, state: 'ready') }
 
       it "starts the shut down process" do
@@ -62,14 +62,14 @@ describe Wonga::Pantry::Ec2InstanceMachine do
       end
     end
 
-    context "instance is protected" do 
+    context "instance is protected" do
       let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: true, state: 'ready') }
 
       it "does not start the shut down process" do
-        expect(subject.can_shutdown_now?).to be_falsey
-        subject.shutdown_now
-        expect(subject).not_to be_shutting_down
-        expect(subject).to_not be_can_shutdown_now        
+        expect(subject.can_termination?).to be_falsey
+        subject.termination
+        expect(subject).not_to be_terminating
+        expect(subject).to_not be_can_termination
       end
     end
   end
@@ -114,17 +114,16 @@ describe Wonga::Pantry::Ec2InstanceMachine do
       end
     end
 
-    context "instance is protected" do 
+    context "instance is protected" do
       let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: true, state: 'ready') }
 
       it "should not put the instance to terminated" do
-
         expect(subject).to_not be_can_termination
       end
     end
   end
 
-    def move_status(transitions)
-      transitions.each {|t| subject.fire_state_event(t)}
-    end
+  def move_status(transitions)
+    transitions.each {|t| subject.fire_state_event(t)}
   end
+end

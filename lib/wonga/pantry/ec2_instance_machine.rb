@@ -28,7 +28,7 @@ module Wonga
         end
 
         event :shutdown_now do
-          transition :ready => :shutting_down, if: :instance_unprotected
+          transition :ready => :shutting_down
         end
 
         event :shutdown do
@@ -50,6 +50,14 @@ module Wonga
         event :terminated do
           transition :terminating => :terminated, :if => :termination_condition
           transition :terminating => :terminating, unless: :termination_condition
+        end
+
+        event :resize do
+          transition [:ready, :shutdown, :shutting_down] => :resizing
+        end
+
+        event :resized do
+          transition :resizing => :starting
         end
       end
 
