@@ -1,20 +1,21 @@
-%h1= "#{@team.name}'s jenkins server"
-= link_to "Go back to #{@team.name}", @team
-.row-fluid
-  .span2
-    Request No:
-  .span3= link_to(@ec2_instance.id, [:aws, @ec2_instance])
-.row-fluid
-  .span2
-    Machine Size:
-  .span3= @ec2_instance.flavor
-.row-fluid
-  .span2
-    URL:
-  .span3= link_to_instance(@ec2_instance)
+%div{"ng-controller" => "Ec2InstanceCtrl", "data-instance-id" => @ec2_instance.instance_id}
+  %h1= "#{@team.name}'s jenkins server"
+  = link_to "Go back to #{@team.name}", @team
+  .row-fluid
+    .span2
+      Request No:
+    .span3= link_to(@ec2_instance.id, [:aws, @ec2_instance])
+  .row-fluid
+    .span2
+      Machine Size:
+    .span3= @ec2_instance.flavor
+  .row-fluid
+    .span2
+      URL:
+    .span3= link_to_instance(@ec2_instance)
 
-= render 'shared/ec2_instance', ec2_instance: @ec2_instance
+  = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
-%h4= link_to_new_slave(@jenkins_server)
+  %h4= link_to_new_slave(@jenkins_server)
 
-= render 'shared/jenkins_index', jenkins_instances: @jenkins_slaves, jenkins_server: @jenkins_server
+  = render 'shared/jenkins_index', jenkins_instances: @jenkins_slaves, jenkins_server: @jenkins_server

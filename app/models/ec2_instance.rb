@@ -23,6 +23,8 @@ class Ec2Instance < ActiveRecord::Base
   validate  :check_user_team, on: :create
   validate  :check_environment_team
   validates :state, presence: true
+  validates :ip_address, presence: true, if: :was_booted?
+  validates :instance_id, presence: true, if: :was_booted?
 
   serialize :security_group_ids
 
@@ -43,15 +45,13 @@ class Ec2Instance < ActiveRecord::Base
   end
 
   def human_status
-    state ? state.humanize : "Initial state"
+    state.humanize
   end
 
   private
   def init
     self.domain       ||= CONFIG['pantry']['domain']
     self.subnet_id    ||= CONFIG['aws']['default_subnet']
-    self.instance_id  ||= "pending"
-    self.ip_address   ||= "pending"
     Wonga::Pantry::Ec2InstanceMachine.new(self)
   end
 
@@ -78,5 +78,9 @@ class Ec2Instance < ActiveRecord::Base
     return unless self.team && self.environment
     errors.add(:environment_id, "Environment is not from this team") unless self.environment.team_id == self.team_id
     errors.add(:environment_id, "Environment is not ready to be used") if self.environment.chef_environment.blank?
+  end
+
+  def was_booted?
+    state != 'initial_state' && state != 'booting'
   end
 end

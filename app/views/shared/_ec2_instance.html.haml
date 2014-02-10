@@ -1,4 +1,4 @@
-- cache [:v2, ec2_instance] do
+- cache [:v3, ec2_instance] do
   .row-fluid
     .span2
       Requested by user:
@@ -20,7 +20,9 @@
     .span2= ec2_instance.ami
   .row-fluid
     .span2 Type:
-    .span2= ec2_instance.flavor
+    .span2
+      -# if policy(ec2_instance).change_machine?
+      = ec2_instance.flavor
   - if ec2_instance.protected?
     .row-fluid
       .span2 This machine is protected

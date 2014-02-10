@@ -7,7 +7,7 @@ class Ec2InstancesController < ApplicationController
     @ec2_instance = Ec2Instance.find params[:id]
     respond_to do |format|
       format.html { render layout: false }
-      format.json { render json: @ec2_instance }
+      format.json { render }
     end
   end
 end

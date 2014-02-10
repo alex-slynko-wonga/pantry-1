@@ -75,7 +75,7 @@ end
 When(/^an instance is created with ip "(.*?)"$/) do |ip|
   instance = Ec2Instance.last
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, event: :ec2_booted, ip_address: ip, format: :json}
+  put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, event: :ec2_booted, ip_address: ip, instance_id: 'i-12345', format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
   put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, joined: true, format: :json}
   header 'X-Auth-Token', CONFIG['pantry']['api_key']

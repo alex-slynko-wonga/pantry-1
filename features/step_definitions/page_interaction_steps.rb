@@ -1,10 +1,14 @@
 Then(/^I should see "(.*?)"$/) do |some_text|
-  expect(page.text).to include(some_text)
+  expect(page).to have_content(some_text)
 end
 
 Then(/^I should see "(.*?)" after page is updated$/) do |some_text|
-  wait_until(5) do
-    page.has_content? some_text
+  begin
+    wait_until(5) do
+      page.has_content? some_text
+    end
+  rescue Timeout::Error
+    expect(page).to have_content(some_text)
   end
 end
 

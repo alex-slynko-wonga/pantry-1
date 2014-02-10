@@ -69,6 +69,7 @@ Feature: Jenkins
     When I go into Jenkins slave page
     Then I should not see "Destroy"
 
+  @javascript
   Scenario: Attempting to shut down, destroy another team's slave
     Given I am in the "Pantry Team" team
     And I have a jenkins server
