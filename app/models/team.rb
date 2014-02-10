@@ -16,7 +16,7 @@ class Team < ActiveRecord::Base
   after_create :create_ci_environment
 
   def jenkins_host_name
-    self.ci_environment.chef_environment[0...63]
+    self.name.parameterize.gsub('_', '-').gsub('--', '-')[0..62]
   end
 
   private

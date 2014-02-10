@@ -13,10 +13,8 @@ describe JenkinsServer do
   end
 
   describe "#instance_name" do
-    let(:team) { Team.new }
-
     it "gets instance_name from the chef environment" do
-      expect(subject.instance_name).to eq(team.ci_environment.chef_environment)
+      expect(subject.instance_name).to eq(team.name.parameterize.gsub('_', '-').gsub('--', '-')[0..62])
     end
   end
 
