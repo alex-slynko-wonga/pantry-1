@@ -11,6 +11,7 @@ describe Ec2InstancePolicy do
     context "when machine is ready" do
       it { should permit(:destroy?) }
       it { should permit(:shutdown_now?) }
+      it { should permit(:resize?) }
       it { should_not permit(:start_instance?) }
     end
 
@@ -20,6 +21,7 @@ describe Ec2InstancePolicy do
       it { should_not permit(:destroy?) }
       it { should_not permit(:shutdown_now?) }
       it { should_not permit(:start_instance?) }
+      it { should_not permit(:resize?) }
     end
 
     context "when machine is shut down" do
@@ -27,6 +29,7 @@ describe Ec2InstancePolicy do
 
       it { should permit(:destroy?) }
       it { should_not permit(:shutdown_now?) }
+      it { should permit(:resize?) }
       it { should permit(:start_instance?) }
     end
   end
@@ -37,6 +40,7 @@ describe Ec2InstancePolicy do
     context "when machine is ready" do
       it { should permit(:destroy?) }
       it { should permit(:shutdown_now?) }
+      it { should permit(:resize?) }
       it { should_not permit(:start_instance?) }
     end
 
@@ -45,6 +49,7 @@ describe Ec2InstancePolicy do
 
       it { should_not permit(:destroy?) }
       it { should_not permit(:shutdown_now?) }
+      it { should_not permit(:resize?) }
       it { should_not permit(:start_instance?) }
     end
 
@@ -53,6 +58,7 @@ describe Ec2InstancePolicy do
 
       it { should permit(:destroy?) }
       it { should_not permit(:shutdown_now?) }
+      it { should permit(:resize?) }
       it { should permit(:start_instance?) }
     end
   end
@@ -63,6 +69,7 @@ describe Ec2InstancePolicy do
     it { should_not permit(:destroy?) }
     it { should_not permit(:shutdown_now?) }
     it { should_not permit(:start_instance?) }
+    it { should_not permit(:resize?) }
   end
 end
 

@@ -20,6 +20,7 @@ development:
     ec2_instance_start_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_start_command
     ec2_instance_stop_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_stop_command
     ec2_instance_boot_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
+    ec2_instance_resize_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
     vpc_id: "vpc-00110011"
     security_group_windows: "sg-00110011"
     security_group_linux: "sg-00110010"
@@ -63,6 +64,7 @@ test:
     ec2_instance_start_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_start_command
     ec2_instance_stop_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_stop_command
     ec2_instance_boot_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
+    ec2_instance_resize_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
     chef_env_create_queue_name: some_queue
     billing_bucket: "some-bucketname"
     vpc_id: "vpc-00110011"

@@ -7,6 +7,51 @@ describe Wonga::Pantry::Ec2Resource do
   let(:stop_sns)      { instance_double('Wonga::Pantry::SNSPublisher').as_null_object }
   subject             { described_class.new(ec2_instance, user, start_sns, stop_sns)}
 
+  context "#resize" do
+    let(:sns_publisher) { instance_double('Wonga::Pantry::SNSPublisher', publish_message: true) }
+    let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true)}
+    let(:size) { 'm1.small' }
+
+    before(:each) do
+      allow(Wonga::Pantry::Ec2InstanceState).to receive(:new).with(ec2_instance, user, { 'event' => "resize" }).and_return(ec2_instance_state)
+    end
+
+    it "changes state" do
+      subject.resize(size, sns_publisher)
+      expect(Wonga::Pantry::Ec2InstanceState).to have_received(:new)
+    end
+
+    it "sends message via SNS" do
+      subject.resize(size, sns_publisher)
+      expect(sns_publisher).to have_received(:publish_message).with(hash_including(flavor: size))
+    end
+
+    context "when machine can not be resized" do
+      let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: false)}
+      let(:sns_publisher) { instance_double('Wonga::Pantry::SNSPublisher') }
+
+      it "does nothing" do
+        subject.resize(size, sns_publisher)
+        expect(Wonga::Pantry::Ec2InstanceState).to have_received(:new)
+      end
+    end
+
+    context "when size is not in config" do
+      let(:sns_publisher) { instance_double('Wonga::Pantry::SNSPublisher') }
+
+      before(:each) do
+        config = Marshal.load(Marshal.dump(CONFIG))
+        config['aws']['ebs'] = {}
+        stub_const('CONFIG', config)
+      end
+
+      it "does nothing" do
+        subject.resize(size, sns_publisher)
+        expect(Wonga::Pantry::Ec2InstanceState).to_not have_received(:new)
+      end
+    end
+  end
+
   context "#terminate" do
     let(:sns_publisher) { instance_double('Wonga::Pantry::SNSPublisher').as_null_object }
     let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true)}

@@ -22,6 +22,7 @@
     ec2_instance_start_topic_arn: <%= @config["aws"]["ec2_instance_start_topic_arn"] %>
     ec2_instance_stop_topic_arn: <%= @config["aws"]["ec2_instance_stop_topic_arn"] %>
     ec2_instance_boot_topic_arn: <%= @config["aws"]["ec2_instance_boot_topic_arn"] %>
+    ec2_instance_resize_topic_arn: <%= @config["aws"]["ec2_instance_resize_topic_arn"] %>
     windows_admin_password: <%= @config["aws"]["windows_admin_password"] %>
     ebs:
     <% @config['aws']['flavors'].each do |flavor| %>

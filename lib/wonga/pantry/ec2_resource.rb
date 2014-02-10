@@ -28,6 +28,11 @@ class Wonga::Pantry::Ec2Resource
     end
   end
 
+  def resize(size, sns = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]["ec2_instance_resize_topic_arn"]))
+    @ec2_instance.errors.add(:flavor, "not supported") and return unless CONFIG['aws']['ebs'].key?(size)
+    change('resize', sns, base_message.merge(flavor: size))
+  end
+
   def change(event, publisher, message=base_message)
     if state_machine(event).change_state
       publisher.publish_message(message)

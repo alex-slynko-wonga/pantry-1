@@ -7,7 +7,7 @@ class Wonga::Pantry::Ec2InstanceState
   end
 
   def change_state
-    ["terminated", "bootstrapped", "dns", "joined", "ip_address", "instance_id"].each do |key|
+    ["terminated", "bootstrapped", "dns", "joined", "ip_address", "instance_id", "flavor"].each do |key|
       @ec2_instance[key] = @instance_params[key] if @instance_params.key?(key)
     end
 

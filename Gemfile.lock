@@ -9,13 +9,6 @@ GIT
       rubyntlm (~> 0.1.1)
 
 GIT
-  remote: git://github.com/elabs/pundit.git
-  revision: e7541c47f375a69e31b5488263b659b840456397
-  specs:
-    pundit (0.2.2)
-      activesupport (>= 3.0.0)
-
-GIT
   remote: git://github.com/ruby-ldap/ruby-net-ldap.git
   revision: bbef82f22494864f5c0e53d4dffb21cead3fc274
   specs:
@@ -166,7 +159,7 @@ GEM
     debugger-ruby_core_source (1.3.1)
     diff-lcs (1.2.5)
     docile (1.1.3)
-    domain_name (0.5.15)
+    domain_name (0.5.16)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
     eventmachine (1.0.3)
@@ -301,6 +294,8 @@ GEM
     ptools (1.2.2)
     puma (1.6.3)
       rack (~> 1.2)
+    pundit (0.2.2)
+      activesupport (>= 3.0.0)
     pyu-ruby-sasl (0.0.3.3)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
@@ -468,7 +463,7 @@ DEPENDENCIES
   omniauth-ldap!
   pry-debugger
   pry-rails
-  pundit!
+  pundit
   quiet_assets
   rabl
   rack-ssl
