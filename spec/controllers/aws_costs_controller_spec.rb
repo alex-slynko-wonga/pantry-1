@@ -32,7 +32,9 @@ describe AwsCostsController do
       let(:role) { 'business_admin' }
 
       it "returns an attachment" do
-        expect(@controller).to receive(:send_data).and_call_original
+        expect(@controller).to receive(:send_data) do |params|
+          @controller.render(text: 'test')
+        end
         get :show, id: "some.csv"
       end
     end
@@ -40,7 +42,7 @@ describe AwsCostsController do
     context "when user does not have billing access" do
       let(:role) { 'developer' }
       it "should redirect" do
-        expect(@controller).not_to receive(:send_data).and_call_original
+        expect(@controller).not_to receive(:send_data)
         get :show, id: 'some.csv'
         expect(response).to be_redirect
       end
