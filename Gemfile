@@ -29,7 +29,7 @@ gem 'pundit', github: 'elabs/pundit'
 gem 'jquery-turbolinks'
 
 group :development do
-  gem "spring"
+  gem 'spring'
   gem 'quiet_assets'
   gem 'guard-bundler'
   gem 'guard-cucumber'
