@@ -22,6 +22,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "InstanceName#{n}" }
     domain CONFIG['pantry']['domain']
     instance_id "MyString"
+    ip_address "MyString"
     platform "Lindows"
     environment { FactoryGirl.build(:environment, team: team) }
     run_list "role[ted]\r\nrecipe[ted]\r\nrecipe[ted::something]"

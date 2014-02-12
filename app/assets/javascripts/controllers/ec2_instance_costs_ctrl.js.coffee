@@ -18,7 +18,7 @@
     costs = $resource("/ec2_instance_costs?date=:date", date: $scope.date).query ->
       $scope.total_pantry_costs = (costs.reduce ((total, cost) -> total + parseFloat(cost.costs)), 0).toFixed(2)
       $scope.costs = costs
-  
+
   $scope.showDetails = (team_id, name)->
     $scope.team_id = team_id
     $scope.name = name

@@ -70,12 +70,6 @@ describe Ec2Instance do
         expect(subject.human_status).to eq(human_name)
       end
     end
-
-    it "returns a default value if the state is nil" do
-      instance = FactoryGirl.build(:ec2_instance, state: nil)
-      instance.save(validate: false) # say we have a dodgy state, i.e. nil
-      expect(instance.human_status).to eq("Initial state")
-    end
   end
 
   it "should be invalid without run_list" do

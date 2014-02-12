@@ -66,7 +66,7 @@ Then(/^I should see the url of the Jenkins server$/) do
 end
 
 When(/^I am on the team page$/) do
-  visit team_url @team
+  visit team_path @team
 end
 
 Then(/^I should see the a table with the instance$/) do

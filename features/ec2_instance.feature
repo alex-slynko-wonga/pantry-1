@@ -13,7 +13,6 @@ Feature: EC2 Instance
     And I request an instance named "instanceName"
     Then I should see "instanceName"
     And I should see "Booting"
-    And I should see "pending"
     And I should see a flash message with "Ec2 Instance request succeeded."
     And an instance build should start
 
