@@ -59,6 +59,12 @@ class Aws::Ec2InstancesController < ApplicationController
       else
         flash[:error] = "An error occurred while attempting to start the instance. #{human_errors(@ec2_instance)}"
       end
+    elsif params[:event] == "resize"
+      if ec2_resource.resize(params[:ec2_instance][:flavor])
+        flash[:notice] = "Starting instance"
+      else
+        flash[:error] = "An error occurred while attempting to start the instance. #{human_errors(@ec2_instance)}"
+      end
     end
 
     respond_to do |format|

@@ -25,7 +25,7 @@ gem "newrelic_rpm", "~> 3.7"
 gem 'net-ldap', github: "ruby-ldap/ruby-net-ldap"
 gem "simple_form"
 gem 'turbolinks'
-gem 'pundit', github: 'elabs/pundit'
+gem 'pundit'
 gem 'jquery-turbolinks'
 
 group :development do

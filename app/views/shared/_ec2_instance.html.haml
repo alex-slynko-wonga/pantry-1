@@ -1,4 +1,4 @@
-- cache [:v3, ec2_instance] do
+- cache [:v5, ec2_instance] do
   .row-fluid
     .span2
       Requested by user:
@@ -18,14 +18,47 @@
   .row-fluid
     .span2 AMI:
     .span2= ec2_instance.ami
-  .row-fluid
+  .row-fluid{data: {ng_hide: 'editing', ng_init: 'editing=false'}}
     .span2 Type:
-    .span2
-      -# if policy(ec2_instance).change_machine?
+    .span2{data: {ng_click: 'editing = policy.resize', ng_bind: 'ec2_instance.flavor'}}
       = ec2_instance.flavor
+  .row-fluid{data: {ng_show: 'editing'}}
+    = simple_form_for [:aws, ec2_instance], data: {ng_submit: 'editing = false'} do |f|
+      = hidden_field_tag 'event', 'resize'
+      = f.input :flavor, collection: CONFIG['aws']['ebs'].keys
+      %p.text-warning
+        Instance will be stopped to resize
+      = f.submit "Resize"
+
   - if ec2_instance.protected?
     .row-fluid
       .span2 This machine is protected
-#ec2instance_status{'data-url' => ec2_instance_url(ec2_instance)}
-  #ec2instance_status_content
-    = render 'shared/ec2_instance_status', ec2_instance: ec2_instance
+
+  .row-fluid{data: { instance_id: @ec2_instance.instance_id, ec2_instance_id: @ec2_instance.id}}
+    .span2
+      Instance ID:
+    .span2{data_instance_id: 'ec2_instance.instance_id'}
+      = ec2_instance.instance_id
+  .row-fluid
+    .span2
+      IP address:
+    .span2{data_ng_bind: 'ec2_instance.ip_address'}
+      = ec2_instance.ip_address
+  .row-fluid
+    .span2
+      Current Step:
+    .span2{data_ng_bind: 'ec2_instance.human_status'}
+      = ec2_instance.human_status
+  .aws_info{'ng-show' => 'ec2_instance.human_status == "Ready"'}
+    .row-fluid
+      .span2
+        Status check failed:
+      .span2{data_ng_bind: 'ec2_instance_status.status_check_failed'}
+    .row-fluid
+      .span2
+        CPU Utilization:
+      .span2{data_ng_bind: 'ec2_instance_status.cpu_utilization'}
+
+  = button_to "Shut down", aws_ec2_instance_url(@ec2_instance, "event" => "shutdown_now"), method: :put, data: {'ng-show' => 'policy.shutdown_now'}
+
+  = button_to 'Start', aws_ec2_instance_url(@ec2_instance, "event" => "start_instance"), method: :put, data: {'ng-show' => 'policy.start_instance'}

@@ -28,6 +28,7 @@ Given(/^queues and topics are configured$/) do
   config['aws']["ec2_instance_start_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_start_topic_arn"
   config['aws']["ec2_instance_delete_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_delete_topic_arn"
   config['aws']["ec2_instance_boot_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn"
+  config['aws']["ec2_instance_resize_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_resize_topic_arn"
   config['aws']["jenkins_slave_delete_topic_arn"] = "arn:aws:sns:eu-west-1:9:jenkins_slave_delete_topic_arn"
   stub_const('CONFIG', config)
 end
@@ -128,7 +129,7 @@ Then(/^I should not be able to add a fifth security group$/) do
 end
 
 Then(/^instance destroying process should start$/) do
-  expect(AWS::SNS.new.client).to have_received(:publish)
+  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_delete_topic_arn'))
 end
 
 When(/^an instance is destroyed$/) do
@@ -171,7 +172,7 @@ Given(/^an EC2 instance$/) do
   @ec2_instance = FactoryGirl.create(:ec2_instance)
 end
 
-Given(/^I have at least one EC2 in the team$/) do
+Given(/^I have (?:an|(\w+)) EC2 instance in the team$/) do |size|
   user = User.first
   if user.teams.empty?
     @team = FactoryGirl.create(:team)
@@ -180,9 +181,27 @@ Given(/^I have at least one EC2 in the team$/) do
     @team = user.teams.first
   end
 
-  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team)
+  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team, flavor: size|| 'm1.small')
 end
 
 Then(/^I should see machine info$/) do
   expect(page).to have_text(Ec2Instance.last.name)
+end
+
+When(/^I click on instance size$/) do
+  find(:xpath,"//div[contains(text(),'#{@ec2_instance.flavor}')]").click
+end
+
+When(/^I set (.*) as new size$/) do |size|
+  select size, from: 'Flavor'
+  click_on "Resize"
+end
+
+Then(/^request for resize should be sent$/) do
+  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_resize_topic_arn'))
+end
+
+When(/^machine is resized with "(.*?)"$/) do |size|
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  put "/api/ec2_instances/#{@ec2_instance.id}", { user_id: @ec2_instance.user_id, event: :resized, flavor: size, format: :json}
 end

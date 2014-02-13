@@ -40,7 +40,7 @@ Feature: EC2 Instance
 
   @javascript
   Scenario: Machine status
-    Given I have at least one EC2 in the team
+    Given I have an EC2 instance in the team
     And instance load is "2.42"
     When I am on instance page
     Then I should see "2.42" after page is updated
@@ -53,7 +53,7 @@ Feature: EC2 Instance
 
   @javascript
   Scenario: Destroying an instance
-    Given I have at least one EC2 in the team
+    Given I have an EC2 instance in the team
     When I am on instance page
     And I destroy an instance
     Then I should see "Terminating"
@@ -68,14 +68,14 @@ Feature: EC2 Instance
     Then I should not see machine info
 
   Scenario: Destroying an protected instance
-    Given I have at least one EC2 in the team
+    Given I have an EC2 instance in the team
     And the instance is protected
     When I am on instance page
     Then I should not see "Destroy"
 
   @javascript
   Scenario: Shutting down an instance
-    Given I have at least one EC2 in the team
+    Given I have an EC2 instance in the team
     And the instance is ready
     When I am on instance page
     When I click "Shut down"
@@ -99,4 +99,20 @@ Feature: EC2 Instance
     And I am on instance page
     Then I should not see "Shut down" button
     And I should not see "Destroy" button
+
+  @javascript
+  Scenario: Resize machine
+    Given I have small EC2 instance in the team
+    When I am on instance page
+    And I click on instance size
+    And I set m1.large as new size
+    Then I should see "Resizing" after page is updated
+    Then request for resize should be sent
+    But I should not see "m1.large"
+
+    When machine is resized with "m1.large"
+    Then I should see "m1.large" after page is updated
+
+    When machine is started
+    Then I should see "Ready" after page is updated
 

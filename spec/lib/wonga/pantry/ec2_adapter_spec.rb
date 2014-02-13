@@ -2,11 +2,12 @@ require 'spec_helper'
 
 describe Wonga::Pantry::Ec2Adapter do
   subject { described_class.new }
+
   let(:client) { AWS::EC2.new.client }
 
-    after(:each) do
-      client.instance_variable_set(:@stubs, {})
-    end
+  after(:each) do
+    client.instance_variable_set(:@stubs, {})
+  end
 
   context "#platform_for_ami" do
     it "finds image and gets platform from it" do

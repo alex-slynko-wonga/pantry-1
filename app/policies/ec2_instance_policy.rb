@@ -19,6 +19,10 @@ class Ec2InstancePolicy < ApplicationPolicy
     god_mode?
   end
 
+  def resize?
+    (god_mode? || team_member?) && can_move_with_event(:resize?)
+  end
+
   private
   def can_move_with_event(event)
     delegated_method = "can_#{event}"
