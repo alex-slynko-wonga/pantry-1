@@ -72,7 +72,7 @@ describe Wonga::Pantry::Ec2InstanceState do
       end
     end
 
-    context "if event didn't fired" do
+    context "if event didn't fire" do
       before(:each) do
         allow(machine).to receive(:fire_events).and_return(false)
       end

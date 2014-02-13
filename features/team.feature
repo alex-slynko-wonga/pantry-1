@@ -58,7 +58,6 @@ Feature: Managing Teams
     When I click "TeamName"
     Then I should see "Jenkins server"
     And I should see the Jenkins server name
-    When I click the server link
     And I should see the url of the Jenkins server
 
   Scenario: Show EC2 instances in the team page

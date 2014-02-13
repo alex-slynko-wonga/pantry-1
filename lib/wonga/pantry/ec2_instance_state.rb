@@ -12,6 +12,11 @@ class Wonga::Pantry::Ec2InstanceState
     end
 
     event = prepare_params
+
+    unless event
+      @ec2_instance.errors.add(:base, "Event is not provided")
+    end
+
     before_state = @ec2_instance.state
 
     if event && @state_machine.fire_events(event)

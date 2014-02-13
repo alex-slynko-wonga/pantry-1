@@ -82,26 +82,28 @@ describe Wonga::Pantry::Ec2Resource do
   end
 
   context "#stop" do
-    before(:each) do 
-      ec2_instance.state = "ready"
+    let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true)}
+
+    before(:each) do
+      expect(Wonga::Pantry::Ec2InstanceState).to receive(:new).with(ec2_instance, user, { 'event' => "shutdown_now" }).and_return(ec2_instance_state)
     end
 
     it "sends a stop message via sns publisher" do
-      allow(stop_sns).to receive(:publish_message)
+      expect(stop_sns).to receive(:publish_message)
       expect(subject.stop).to be_truthy
-      expect(ec2_instance.state).to eq("shutting_down")
     end
   end
 
   context "#start" do
+    let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true)}
+
     before(:each) do
-      ec2_instance.state = "shutdown"
+      expect(Wonga::Pantry::Ec2InstanceState).to receive(:new).with(ec2_instance, user, { 'event' => "start_instance" }).and_return(ec2_instance_state)
     end
 
     it "sends a start message via sns publisher" do
-      allow(start_sns).to receive(:publish_message)
+      expect(start_sns).to receive(:publish_message)
       expect(subject.start).to be_truthy
-      expect(ec2_instance.state).to eq("starting")
     end
   end
 end

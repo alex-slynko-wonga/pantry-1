@@ -46,7 +46,7 @@ describe JenkinsServersController do
   describe "POST 'create'" do
     before(:each) do
       allow(Wonga::Pantry::JenkinsUtility).to receive(:new).and_return(jenkins_utility)
-      allow(JenkinsServer).to receive(:new).and_return(JenkinsServer.new(id: 42))
+      allow(JenkinsServer).to receive(:new).and_return(JenkinsServer.new(id: 42, team_id: team.id))
     end
 
     context "when JenkinsUtility process instance" do

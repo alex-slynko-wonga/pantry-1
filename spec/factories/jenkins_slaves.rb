@@ -5,8 +5,8 @@ FactoryGirl.define do
     ec2_instance { FactoryGirl.build(:ci_ec2_instance, team: jenkins_server.team) }
     jenkins_server
 
-    trait :bootstrapped do
-      ec2_instance { FactoryGirl.build(:ci_ec2_instance, :bootstrapped, team: jenkins_server.team) }
+    trait :running do
+      ec2_instance { FactoryGirl.build(:ci_ec2_instance, :running, team: jenkins_server.team) }
     end
   end
 end

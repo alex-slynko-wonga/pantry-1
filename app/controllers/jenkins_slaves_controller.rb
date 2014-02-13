@@ -22,11 +22,12 @@ class JenkinsSlavesController < ApplicationController
 
   def create
     aws_utility = Wonga::Pantry::JenkinsUtility.new
-    @jenkins_slave = JenkinsSlave.new(jenkins_server: @jenkins_server)
+    @jenkins_slave = @jenkins_server.jenkins_slaves.build
     attributes = {
       user_id: current_user.id,
       team: @jenkins_server.team
     }
+    authorize(@jenkins_slave)
 
     if aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
       flash[:notice] = "Jenkins slave request succeeded."
@@ -59,6 +60,5 @@ class JenkinsSlavesController < ApplicationController
   private
   def load_objects
     @jenkins_server = JenkinsServer.find(params[:jenkins_server_id])
-    redirect_to @jenkins_server and return unless @jenkins_server.ec2_instance.bootstrapped?
   end
 end
