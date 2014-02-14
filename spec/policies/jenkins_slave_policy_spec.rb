@@ -5,7 +5,7 @@ describe JenkinsSlavePolicy do
   permissions :create? do
 
     context "when jenkins server is ready" do
-      let(:jenkins_server) { FactoryGirl.build(:jenkins_server, :bootstrapped) }
+      let(:jenkins_server) { FactoryGirl.build(:jenkins_server, :running) }
 
       context "for superadmin" do
         let(:user) { User.new(role: 'superadmin') }

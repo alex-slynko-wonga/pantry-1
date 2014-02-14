@@ -18,12 +18,12 @@ describe Api::Ec2InstancesController do
       end
 
       it "updates an instance" do
-        expect(@state).to receive(:change_state)
+        expect(@state).to receive(:change_state!)
         put :update, id: 45, user_id: 1, terminated: true, format: 'json'
       end
 
       it "returns http success" do
-        allow(@state).to receive(:change_state)
+        allow(@state).to receive(:change_state!)
         put :update, id: 45, user_id: 1, terminated: true, format: 'json', test: false
         expect(response).to be_success
       end

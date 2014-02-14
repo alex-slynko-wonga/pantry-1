@@ -5,11 +5,11 @@ Given(/^I request jenkins server$/) do
 end
 
 Given(/^I have a jenkins server$/) do
-  @jenkins_server = FactoryGirl.create(:jenkins_server, :bootstrapped, team: @team)
+  @jenkins_server = FactoryGirl.create(:jenkins_server, :running, team: @team)
 end
 
 Given(/^I have a jenkins slave$/) do
-  @jenkins_slave = FactoryGirl.create(:jenkins_slave, :bootstrapped, jenkins_server: @jenkins_server)
+  @jenkins_slave = FactoryGirl.create(:jenkins_slave, :running, jenkins_server: @jenkins_server)
 end
 
 When(/^I click on the server ID$/) do
@@ -44,7 +44,7 @@ end
 
 Given(/^the team has a Jenkins server$/) do
   @jenkins_server = FactoryGirl.create(:jenkins_server,
-                                       :bootstrapped,
+                                       :running,
                                        team: @team
   )
 end

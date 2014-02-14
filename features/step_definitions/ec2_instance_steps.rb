@@ -92,12 +92,6 @@ When(/^I select four security groups$/) do
   check('name4')
 end
 
-When(/^the instance is shutdown$/) do
-  @instance = Ec2Instance.last
-  @instance.update_attributes(state: "shutdown")
-  @instance.reload
-end
-
 Then(/^shut down request should be sent$/) do
   expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: "arn:aws:sns:eu-west-1:9:ec2_instance_stop_topic_arn"))
 end

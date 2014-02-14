@@ -2,27 +2,21 @@
 
 FactoryGirl.define do
   factory :ec2_instance do
-    trait :bootstrapped do
-      bootstrapped true
-      joined true
-      state 'ready'
-    end
-
     trait :running do
-      bootstrapped true
-      joined true
+      instance_id "MyString"
+      ip_address "MyString"
       state 'ready'
     end
 
     trait :terminated do
+      instance_id "MyString"
+      ip_address "MyString"
       terminated true
       state 'terminated'
     end
 
     sequence(:name) { |n| "InstanceName#{n}" }
     domain CONFIG['pantry']['domain']
-    instance_id "MyString"
-    ip_address "MyString"
     platform "Lindows"
     environment { FactoryGirl.build(:environment, team: team) }
     run_list "role[ted]\r\nrecipe[ted]\r\nrecipe[ted::something]"

@@ -1,102 +1,110 @@
 require 'spec_helper'
 
+shared_examples_for "changes state" do
+  before(:each) do
+    allow(ec2_instance).to receive(:save).and_return(true)
+    allow(machine).to receive(:fire_events).and_return(true)
+  end
+
+  it "saves user and event to log" do
+    subject
+    log = ec2_instance.ec2_instance_logs[-1]
+    expect(log.user).to eq(user)
+    expect(log.event).to eq(:some_event)
+  end
+
+  it "saves instance" do
+    subject
+    expect(ec2_instance).to have_received(:save)
+  end
+
+  it "change additional attributes" do
+    subject
+    expect(ec2_instance).to be_bootstrapped
+    expect(ec2_instance).to be_joined
+    expect(ec2_instance.instance_id).to be_present
+  end
+end
+
+shared_examples_for "doesn't change state" do
+  it "doesn't save instance" do
+    expect(ec2_instance).not_to receive(:save)
+    subject
+  end
+
+  it "doesn't log" do
+    subject
+    expect(ec2_instance.ec2_instance_logs).to be_blank
+  end
+end
+
 describe Wonga::Pantry::Ec2InstanceState do
-  let(:team) { FactoryGirl.build(:team) }
-  let(:ec2_instance) { FactoryGirl.build(:ec2_instance, team: team) }
+  let(:ec2_instance) { FactoryGirl.build_stubbed(:ec2_instance) }
   let(:params) {
     {
       "bootstrapped"  => true,
       "joined"        => true,
-      "booted"        => true,
-      "instance_id"   => ec2_instance.id
+      "instance_id"   => ec2_instance.id,
+      "event"         => "some_event"
     }
   }
-  let(:user) { FactoryGirl.create(:user, team: team)}
-  subject { Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, params) }
+  let(:user) { FactoryGirl.build_stubbed(:user) }
+  let(:machine) { instance_double('Wonga::Pantry::Ec2InstanceMachine') }
+  subject(:state) { Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, params) }
+
+  before(:each) do
+    allow(Wonga::Pantry::Ec2InstanceMachine).to receive(:new).and_return(machine)
+  end
 
   describe "bootstrap" do
-    it "changes to bootstrap" do
-      ec2_instance.update_attributes(state: "dns_record_created", bootstrapped: false)
-      expect(Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "bootstrap" }).change_state).to be_truthy
+  end
+
+  describe "#change_state" do
+    subject { state.change_state }
+    include_examples "changes state" do
+      context "for old event formats" do
+        let(:params) { { "bootstrapped" => true } }
+
+        it "processes" do
+          subject
+          expect(machine).to have_received(:fire_events).with(:bootstrap)
+        end
+      end
+    end
+
+    context "if event didn't fire" do
+      before(:each) do
+        allow(machine).to receive(:fire_events).and_return(false)
+      end
+      include_examples "doesn't change state"
+    end
+
+    context "if event is missing" do
+      let(:params) { { } }
+
+      include_examples "doesn't change state"
     end
   end
 
-  describe "store instance variables used in termination_condition" do
-    it "stores dns, terminated, bootstrapped, joined" do
-      ec2_instance.update_attributes(bootstrapped: true, dns: nil, terminated: nil, joined: nil, state: 'terminating')
-      Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { 'event' => 'terminated', "bootstrapped" => false, "dns" => true, "terminated" => true, "joined" => true }).change_state
-      expect(ec2_instance.reload.bootstrapped).to be_falsey
-      expect(ec2_instance.reload.dns).to be_truthy
-      expect(ec2_instance.reload.terminated).to be_truthy
-      expect(ec2_instance.reload.joined).to be_truthy
-    end
-  end
+  describe "#change_state!" do
+    subject { state.change_state! }
+    include_examples "changes state"
+    context "if event didn't fired" do
+      before(:each) do
+        allow(machine).to receive(:fire_events).and_return(false)
+      end
 
-  describe "persist the state" do
-    it "persists the state returned by the state machine" do
-      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
-      state.change_state
-      expect(ec2_instance.reload.state).to eq "booting"
-      ec2_instance.state = "ready"
-      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "termination" })
-      state.change_state
-      expect(ec2_instance.reload.state).to eq "terminating"
-    end
-  end
-
-  describe "request to change the state" do
-    it "returns true if the change of state is successfull" do
-      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
-      expect(state.change_state).to be_truthy
+      it "raise exception" do
+        expect { subject }.to raise_exception
+      end
     end
 
-    it "returns false if the change of state fails" do
-      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "terminated" })
-      expect(state.change_state).to be_falsey
-    end
-  end
+    context "if event is missing" do
+      let(:params) { { } }
 
-  describe "move from terminating to terminated" do
-    it "moves the state" do
-      instance = FactoryGirl.create(:ec2_instance, 
-        state:        "terminating", 
-        dns:          false, 
-        terminated:   true, 
-        bootstrapped: false, 
-        joined:       false,
-        team:          team
-      )
-      state = Wonga::Pantry::Ec2InstanceState.new(instance, user, {"event" => "terminated"})
-      expect(state.change_state).to be_truthy
-    end
-  end
-
-  describe "logs" do
-    it "stores from_state, event, instance and user when passing an event" do
-      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
-      expect { state.change_state }.to change(Ec2InstanceLog, :count).by(1)
-      log = Ec2InstanceLog.first
-      expect(log.ec2_instance).to eq(ec2_instance)
-      expect(log.user).to eq(user)
-      expect(log.from_state).to eq("initial_state")
-    end
-
-    it "doesn't store log if no event has been passed" do
-      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { })
-      expect { state.change_state }.to_not change(Ec2InstanceLog, :count)
-    end
-
-    it "doesn't store log if state can't be changed" do
-      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "add_to_domain" })
-      expect { state.change_state }.to_not change(Ec2InstanceLog, :count)
-    end
-  end
-
-  describe "get next states" do
-    it "returns the states" do
-      state = Wonga::Pantry::Ec2InstanceState.new(ec2_instance, user, { "event" => "ec2_boot" })
-      state.change_state
-      expect { state.can_ec2_booted? }.to be_truthy
+      it "raise exception" do
+        expect { subject }.to raise_exception
+      end
     end
   end
 end

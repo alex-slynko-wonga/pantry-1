@@ -4,7 +4,7 @@ require 'json'
 describe Aws::Ec2InstancesController do
   let(:ec2_resource)    { instance_double('Wonga::Pantry::Ec2Resource') }
   let(:user) { FactoryGirl.create(:user, team: team) }
-  let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team, state: 'ready') }
+  let(:ec2_instance) { FactoryGirl.create(:ec2_instance, :running, team: team) }
 
   before(:each) do
     session[:user_id] = user.id
@@ -138,7 +138,7 @@ describe Aws::Ec2InstancesController do
     end
 
     context  "starting" do
-      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team, state: 'shutdown') }
+      let(:ec2_instance) { FactoryGirl.create(:ec2_instance, :running, team: team, state: 'shutdown') }
       before(:each) do
         allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
         allow(ec2_resource).to receive(:start)
