@@ -12,7 +12,7 @@ class Wonga::Pantry::JenkinsUtility
       params.merge(
         ami: CONFIG["aws"]["jenkins_linux_ami"],
         run_list: CONFIG["aws"]["jenkins_linux_server_role"],
-        platform: '',
+        platform: 'linux',
         protected: true
       )
     else

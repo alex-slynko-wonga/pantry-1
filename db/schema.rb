@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140131183212) do
+ActiveRecord::Schema.define(version: 20140218140426) do
 
   create_table "ec2_instance_costs", force: true do |t|
     t.date     "bill_date"

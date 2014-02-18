@@ -25,6 +25,7 @@ class Ec2Instance < ActiveRecord::Base
   validates :state, presence: true
   validates :ip_address, presence: true, if: :was_booted?
   validates :instance_id, presence: true, if: :was_booted?
+  validates :platform, presence: true
 
   serialize :security_group_ids
 
