@@ -1,5 +1,5 @@
 class Environment < ActiveRecord::Base
-  TYPES = ["CI", "INT", "RC", "STG", "WIP"]
+  TYPES = ["CI", "INT", "RC", "STG", "WIP", "CUSTOM"]
 
   has_many :ec2_instances
   belongs_to :team

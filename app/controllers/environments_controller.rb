@@ -2,7 +2,7 @@ class EnvironmentsController < ApplicationController
   before_filter :get_team
 
   def new
-    @environment = Environment.new(team_id: @team.id)
+    @environment = @team.environments.build
   end
 
   def create
