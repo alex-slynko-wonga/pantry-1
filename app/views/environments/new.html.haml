@@ -3,5 +3,5 @@
 = simple_form_for [@team, @environment] do |f|
   = f.input :name
   = f.input :description, as: :text
-  = f.input :environment_type, collection: Environment::TYPES
+  = f.input :environment_type, collection: policy(@environment).permitted_types, include_blank: false
   = f.button :submit
