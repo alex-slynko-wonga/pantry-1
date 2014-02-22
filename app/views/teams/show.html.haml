@@ -75,4 +75,20 @@
         = render partial: 'environment', collection: @environments
     - if policy(@environments.build).create?
       %p= link_to "Create a new environment", new_team_environment_url(@team)
+- if policy(@team).deactivate?
+  %button.button.close{data: {toggle: 'modal', target: '.deactivate_modal'}} Deactivate
+  .deactivate_modal.modal.fade{tabindex: -1, role: 'dialog', aria_labelledby: "Deactivate Team #{@team.name}", aria_hidden: true}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{data: {dismiss: 'modal'}, aria_hidden: true}
+            &times;
+          %h4.modal-title= "Deactivate #{@team.name}"
+        .modal-body
+          %p.text-warning
+            Deactivation will hide team and make impossible to create instances in it
+          = label_tag :confirm, "Please confirm with team name"
+          = text_field_tag :confirm, "",data: {confirmation: @team.name}
+        .modal_footer
+          = button_to "Confirm", deactivate_team_url(@team)
 

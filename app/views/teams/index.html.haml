@@ -1,3 +1,5 @@
+- if policy(Team).see_inactive_teams?
+  %h3= link_to "Inactive Teams", teams_url(inactive: true)
 %table.table
   %thead
     %tr

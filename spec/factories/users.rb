@@ -12,4 +12,8 @@ FactoryGirl.define do
       user.teams << evaluator.team if evaluator.team
     end
   end
+
+  factory :superadmin, parent: :user do
+    role 'superadmin'
+  end
 end

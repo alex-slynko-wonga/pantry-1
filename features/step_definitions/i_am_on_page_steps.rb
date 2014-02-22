@@ -44,6 +44,12 @@ When(/^I check my profile page$/) do
   visit user_path User.first
 end
 
+When(/^I am on the team page$/) do
+  visit root_path
+  click_on "Teams"
+  click_on @team.name
+end
+
 When(/^I go into Jenkins slave page$/) do
   visit "/jenkins_servers/#{@jenkins_slave.jenkins_server_id}/jenkins_slaves/#{@jenkins_slave.id}"
 end

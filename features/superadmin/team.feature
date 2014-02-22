@@ -4,13 +4,15 @@ Feature: Managing Teams
   To help other people
   I want to manage their teams
 
+  Background:
+    Given I am a superadmin
+
   @javascript
   Scenario: Managing team users
     Given the "TeamName" team with "Test User" user
     And a LDAP user "Test Ldap User"
-    And I am a superadmin
     And I am on the "TeamName" team page
-    When I click on "Edit"
+    When I click on "Edit this team"
     And I click on remove cross near "Test User"
     And I search for "Test"
     Then I should see dropdown with "Test Ldap User"
@@ -19,3 +21,17 @@ Feature: Managing Teams
     And save team
     Then team should contain "Test Ldap User"
     And team should not contain "Test User"
+
+  @javascript
+  Scenario: Deactivate team
+    Given the "TeamName" team
+    And queues and topics are configured
+    And I am on the "TeamName" team page
+    When I deactivate current team
+    And confirm it with "TeamName"
+
+    When I am on the teams page
+    Then I should not see "TeamName"
+
+    When I click on "Inactive Teams"
+    Then I should see "TeamName"
