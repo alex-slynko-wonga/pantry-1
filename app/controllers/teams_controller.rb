@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  before_filter :get_team, :only => [:show, :edit, :update]
+  before_action :get_team, :only => [:show, :edit, :update, :deactivate]
 
   def new
     @team = Team.new
@@ -22,6 +22,7 @@ class TeamsController < ApplicationController
 
   def index
     @teams = Team.all
+    @teams = @teams.inactive if params[:inactive] && policy(Team).see_inactive_teams?
   end
 
   def show
@@ -45,6 +46,13 @@ class TeamsController < ApplicationController
       flash[:error] = "Team update failed: #{human_errors(@team)}"
       render :edit
     end
+  end
+
+  def deactivate
+    authorize(@team)
+    @team.update_attributes(disabled: true)
+    flash[:notice] = "Team #{@team.name} deactivated"
+    redirect_to teams_url
   end
 
   private

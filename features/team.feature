@@ -5,7 +5,7 @@ Feature: Managing Teams
     When An agent creates a new team named "TeamName"
     Then I should be on team page
     And I should see "TeamName"
-    And the team page has the current user
+    And the team page has my info
     And I should see a flash message with "Team created successfully"
     And a new CI chef environment should be requested
 
@@ -40,7 +40,7 @@ Feature: Managing Teams
     Given I am in the "TeamName" team with "Test User" user
     And I am on the teams page
     When I click on "Edit"
-    And click on remove cross
+    And I click on remove cross near "Test User"
     And save team
     Then team should not contain "Test User"
 
@@ -65,3 +65,7 @@ Feature: Managing Teams
     When I am on the team page
     Then I should see the a table with the instance
 
+  Scenario: Inactive teams
+    Given the "TeamName" team is inactive
+    And I am on the teams page
+    Then I should not see "TeamName"

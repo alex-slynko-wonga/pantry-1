@@ -28,9 +28,8 @@ When(/^I destroy/) do
   click_on "Destroy"
 end
 
-When(/^click on remove cross$/) do
-  first('i.icon-remove').click
-  find('i.icon-remove').click
+When(/^I click on remove cross near "(.*?)"$/) do |value|
+  find(:xpath, "//div/input[@value='#{value}']/../i[@class='icon-remove']").click
 end
 
 Then(/^I should see a flash message with "(.*?)"$/) do |arg1|

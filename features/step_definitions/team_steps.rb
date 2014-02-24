@@ -5,12 +5,18 @@ When(/^An agent creates a new team named "(.*?)"$/) do |name|
   click_button("Submit")
 end
 
-Then(/^the team page has the current user$/) do
+Then(/^the team page has my info$/) do
   page.should have_content User.last.name
+end
+
+Given(/^the "(.*?)" team is inactive$/) do |name|
+  team = Team.where(name: name).first || FactoryGirl.create(:team, name: name)
+  team.update_attribute(:disabled, true)
 end
 
 Given(/^I update team "(.*?)" with name "(.*?)"$/) do |oldname, newname|
   visit '/teams'
+  click_on oldname
   click_on 'Edit'
   fill_in('team_name', :with => newname)
   click_button("Submit")
@@ -59,10 +65,6 @@ end
 
 Then(/^I should see the url of the Jenkins server$/) do
   page.should have_selector("a[href='http://#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}']")
-end
-
-When(/^I am on the team page$/) do
-  visit team_path @team
 end
 
 Then(/^I should see the a table with the instance$/) do

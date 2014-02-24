@@ -3,8 +3,8 @@ class Team < ActiveRecord::Base
   has_many :users, through: :team_members
   has_many :ec2_instances
   has_many :ec2_instance_costs, through: :ec2_instances
-  has_one  :jenkins_server
   has_many :environments
+  has_one  :jenkins_server
   has_one :ci_environment, -> { where environment_type: 'CI' }, class_name: 'Environment'
 
   validates :name, presence: true, uniqueness: true
@@ -13,6 +13,9 @@ class Team < ActiveRecord::Base
   scope :with_environment, -> { joins(:environments).where.not(environments: {chef_environment: nil}) }
   scope :without_jenkins, -> { joins('LEFT OUTER JOIN jenkins_servers on jenkins_servers.team_id = teams.id').joins('LEFT OUTER JOIN ec2_instances on ec2_instances.id = jenkins_servers.ec2_instance_id').where('ec2_instances.terminated = 1  or jenkins_servers.id is null') }
 
+  default_scope -> { where('disabled' => [nil, false]).order(:name) }
+  # FIXME with 4.1
+  scope :inactive, -> { unscoped.where(disabled: true).order(:name) }
   after_create :create_ci_environment
 
   def jenkins_host_name

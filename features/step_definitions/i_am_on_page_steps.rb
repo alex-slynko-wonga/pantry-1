@@ -34,12 +34,20 @@ When(/^I proceed to "(.*?)" user page$/) do |name|
   click_on name
 end
 
-Given(/^I am on the "(.*?)" team page$/) do |arg1|
-  visit team_path @team
+Given(/^I am on the "(.*?)" team page$/) do |team_name|
+  visit root_path
+  click_on "Teams"
+  click_on team_name
 end
 
 When(/^I check my profile page$/) do
   visit user_path User.first
+end
+
+When(/^I am on the team page$/) do
+  visit root_path
+  click_on "Teams"
+  click_on @team.name
 end
 
 When(/^I go into Jenkins slave page$/) do

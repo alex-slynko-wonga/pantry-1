@@ -2,10 +2,12 @@ Feature: As a manager
          To keep company effective
          I need to know cost of each instance
 
+  Background:
+    Given I am a business_admin
+
   @javascript
   Scenario: Teams costs
-    Given I am a business_admin
-    And I have a "Alpha" team
+    Given I have a "Alpha" team
     And "Alpha" team has an instance which costs 40 dollars for "November 2013"
     And "Alpha" team has an instance which costs 50 dollars for "December 2013"
     And I have a "Beta" team

@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require jquery.ui.autocomplete
 //= require bootstrap-alert
+//= require bootstrap-modal
 //= require bootstrap-dropdown
 //= require angular
 //= require angular-resource

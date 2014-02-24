@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 20140218140426) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.string   "chef_environment"
+    t.boolean  "disabled"
   end
 
   create_table "total_costs", force: true do |t|
