@@ -50,9 +50,14 @@ class TeamsController < ApplicationController
 
   def deactivate
     authorize(@team)
-    @team.update_attributes(disabled: true)
-    flash[:notice] = "Team #{@team.name} deactivated"
-    redirect_to teams_url
+    if params[:confirm] == @team.name
+      @team.update_attributes(disabled: true)
+      flash[:notice] = "Team #{@team.name} deactivated"
+      redirect_to teams_url
+    else
+      flash[:error] = "Confirmation is not provided"
+      redirect_to @team
+    end
   end
 
   private
