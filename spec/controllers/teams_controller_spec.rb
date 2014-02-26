@@ -105,10 +105,20 @@ describe TeamsController do
 
   describe "POST 'deactivate'" do
     let(:user) { FactoryGirl.create(:superadmin) }
-    it "deactivates team" do
-      session[:user_id] = user.id
-      post 'deactivate', :id => team.id
-      expect(team.reload).to be_disabled
+    context "when confirmed" do
+      it "deactivates team" do
+        session[:user_id] = user.id
+        post 'deactivate', id: team.id, confirm: team.name
+        expect(team.reload).to be_disabled
+      end
+    end
+
+    context "without confirmation" do
+      it "does nothing" do
+        session[:user_id] = user.id
+        post 'deactivate', id: team.id
+        expect(team.reload).not_to be_disabled
+      end
     end
   end
 end

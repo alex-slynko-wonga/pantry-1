@@ -1,5 +1,4 @@
 $ ->
-  $('input[data-confirmation]').on('keyup', ->
-    $(@).next('input[type=submit]').disabled = $(@).value == $(@).data('confirmation')
-  )
+  $('input[data-confirmation]').on 'keyup', ->
+    $(@).parents('form').find('input[type=submit]').prop('disabled', $(@).val() != $(@).data('confirmation'))
 
