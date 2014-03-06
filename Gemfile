@@ -6,7 +6,6 @@ gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap'
 
 gem 'syslogger'
 gem 'haml-rails'
-gem 'chef','>= 11.8.0'
 gem 'aws-sdk', '>= 1.25.0'
 
 gem 'sass-rails'
@@ -34,7 +33,7 @@ group :development do
   gem 'guard-bundler'
   gem 'guard-cucumber'
   gem 'guard-migrate'
-  gem 'guard-rspec'
+  gem 'guard-rspec', '4.2.7'
   gem 'thin'
   gem 'bundler-audit'
   gem 'codesake-dawn', require: false
@@ -45,7 +44,6 @@ group :test do
   gem 'launchy'
   gem 'brakeman', require: false
   gem 'capybara-webkit'
-  gem 'chef-zero'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
   gem 'simplecov', require: false
@@ -59,7 +57,7 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'pry-debugger'
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 3.0.0.beta1'
-  gem 'rspec-core', '~> 3.0.0.beta1'
-  gem 'rspec', '~> 3.0.0.beta1'
+  gem 'rspec-rails', '3.0.0.beta1'
+  gem 'rspec-core', '3.0.0.beta1'
+  gem 'rspec', '3.0.0.beta1'
 end
