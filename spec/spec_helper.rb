@@ -11,7 +11,6 @@ end
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
-require 'chef_zero/server'
 AWS.stub!
 AWS.config(sqs_verify_checksums: false)
 
@@ -19,9 +18,7 @@ AWS.config(sqs_verify_checksums: false)
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
-Chef::Config[:chef_server_url] = 'http://127.0.0.1:8889'
 RSpec.configure do |config|
-  config.include ChefBuilders
   config.use_transactional_fixtures = true
 
   # If true, the base class of anonymous controllers will be inferred
@@ -35,10 +32,6 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
-  config.before(:each) do
-    ChefZero::SingleServer.instance.clean
-  end
-  
   config.before(:each, type: :controller) do
     session[:user_id] = 1
   end
