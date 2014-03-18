@@ -5,38 +5,21 @@ describe User do
   let(:user_email) { 'test@example.com' }
 
   describe ".from_omniauth" do
-    let(:group) { "CN=Group,OU=Users,DC=example,DC=com" }
-
-    before(:each) do
-      config =  Marshal.load(Marshal.dump(CONFIG))
-      config['omniauth'].merge!('ldap_group' => group)
-      stub_const('CONFIG', config)
-    end
-
-    context "when user is not in required LDAP group" do
-      let(:omniauth_params) { {'samaccountname' => [user_id], 'email' => [user_email], 'displayname' => ['name'], 'memberof' => []} }
-
-      it "does nothing" do
-        expect(User.from_omniauth(omniauth_params)).to be_nil
+    let(:omniauth_params) { { 'samaccountname' => [user_id], 'mail' => [user_email], 'displayname' => ['name'] } }
+    context "if user doesn't exist" do
+      it "creates user with id and mail" do
+        user = nil
+        expect { user = User.from_omniauth(omniauth_params) }.to change { User.count }.by(1)
+        expect(user.username).to eq(user_id)
+        expect(user.email).to eq(user_email)
       end
     end
 
-    context "when user is in required LDAP group" do
-      let(:omniauth_params) { { 'samaccountname' => [user_id], 'email' => [user_email], 'displayname' => ['name'], 'memberof' => [group] } }
-      context "if user doesn't exist" do
-        it "creates user with id and email" do
-          user = nil
-          expect { user = User.from_omniauth(omniauth_params) }.to change { User.count }.by(1)
-          expect(user.username).to eq(user_id)
-        end
-      end
+    context "if user exists" do
+      let!(:user) { FactoryGirl.create(:user, username: user_id) }
 
-      context "if user exists" do
-        let!(:user) { FactoryGirl.create(:user, username: user_id) }
-
-        it "returns existing user" do
-          expect(User.from_omniauth(omniauth_params)).to eq(user)
-        end
+      it "returns existing user" do
+        expect(User.from_omniauth(omniauth_params)).to eq(user)
       end
     end
   end
