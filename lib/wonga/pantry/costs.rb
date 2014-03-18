@@ -6,9 +6,9 @@ class Wonga::Pantry::Costs
   end
 
   def costs_per_team
-    Team.joins(:ec2_instance_costs).
+    Team.unscoped.joins(:ec2_instance_costs).
       where(ec2_instance_costs: { bill_date: @bill_date }).
-      select('teams.id, teams.name, SUM(ec2_instance_costs.cost) as costs').
+      select('teams.id, teams.name, SUM(ec2_instance_costs.cost) as costs, teams.disabled').
       order('teams.name').
       group('teams.id, teams.name').to_a
   end
