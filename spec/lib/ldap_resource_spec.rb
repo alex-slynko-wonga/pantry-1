@@ -14,19 +14,19 @@ describe LdapResource do
     config['omniauth']['ldap_group'] = group
     stub_const('CONFIG', config)
     allow(Net::LDAP).to receive(:new).and_return(ldap)
-    allow(Net::LDAP::Filter).to receive(:eq).with('memberOf', group).and_return(default_filter)
+    allow(Net::LDAP::Filter).to receive(:ex).with('memberOf:1.2.840.113556.1.4.1941', group).and_return(default_filter)
     allow(default_filter).to receive(:&).with(filter).and_return(filter)
   end
 
   it "filters by default group" do
     subject
-    expect(Net::LDAP::Filter).to have_received(:eq).with('memberOf', group)
+    expect(Net::LDAP::Filter).to have_received(:ex).with('memberOf:1.2.840.113556.1.4.1941', group)
   end
 
   context "#filter_by_group" do
     it "searches using Net::LDAP" do
       expect(ldap).to receive(:search).with(filter: filter).and_return([record])
-      expect(Net::LDAP::Filter).to receive(:eq).with('memberOf', 'group').and_return(filter)
+      expect(Net::LDAP::Filter).to receive(:ex).with('memberOf:1.2.840.113556.1.4.1941', 'group').and_return(filter)
       expect(subject.filter_by_group('group').all).to eql [record]
     end
   end
@@ -52,7 +52,7 @@ describe LdapResource do
   context "filter with several filters" do
     before(:each) do
       allow(default_filter).to receive(:&).with(default_filter).and_return(default_filter)
-      expect(Net::LDAP::Filter).to receive(:eq).with('memberOf', 'group').and_return(default_filter)
+      expect(Net::LDAP::Filter).to receive(:ex).with('memberOf:1.2.840.113556.1.4.1941', 'group').and_return(default_filter)
       expect(Net::LDAP::Filter).to receive(:eq).with('sAMAccountName', username).and_return(or_filter)
       expect(Net::LDAP::Filter).to receive(:eq).with('DisplayName', username).and_return(or_filter)
     end

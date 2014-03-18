@@ -9,7 +9,7 @@ class LdapResource
   end
 
   def filter_by_group(group_name)
-    filters << Net::LDAP::Filter.eq('memberOf', group_name)
+    filters << Net::LDAP::Filter.ex('memberOf:1.2.840.113556.1.4.1941', group_name)
     self
   end
 

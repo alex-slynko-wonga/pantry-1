@@ -9,7 +9,6 @@ class User < ActiveRecord::Base
   before_validation :set_role, on: :create
 
   def self.from_omniauth(auth)
-    return unless auth['memberof'].include?(CONFIG['omniauth']['ldap_group'])
     find_by_username(auth['samaccountname'][0]) ||
       create_with_ldap(auth)
   end
@@ -18,7 +17,7 @@ class User < ActiveRecord::Base
     create! do |user|
       user.username = auth['samaccountname'][0]
       user.name = auth['displayname'][0]
-      user.email = auth['email'][0] if auth['email']
+      user.email = auth['mail'][0] if auth['mail']
     end
   end
 
