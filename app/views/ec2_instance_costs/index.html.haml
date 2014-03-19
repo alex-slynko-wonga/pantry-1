@@ -1,4 +1,4 @@
-%div{"ng-controller" => "Ec2InstanceCostsCtrl", "ng-init" => "getCosts()", "data-bill_dates" => @available_dates, "id" => "Ec2InstanceCostsCtrl"}
+%div{"ng-controller" => "Ec2InstanceCostsCtrl", "ng-init" => "getCosts()", "data-bill_dates" => @available_dates, "id" => "Ec2InstanceCostsCtrl", "data-no-turbolink" => "true"}
   .row-fluid
     .span12
       %h1 Billing for {{dateUI}}
@@ -11,7 +11,7 @@
           %tr
             %th Team
             %th Costs
-            %th 
+            %th
         %tbody
           %tr{"ng-repeat" => "cost in costs"}
             %td
