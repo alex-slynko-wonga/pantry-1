@@ -23,6 +23,19 @@ describe Wonga::Pantry::Costs do
       expect(result.id).to eq team.id
       expect(result.name).to eq team.name
     end
+
+    context "when team is disabled" do
+      before(:each) do
+        team.update_attribute(:disabled, true)
+      end
+
+      it "returns array of hashes with total costs" do
+        FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
+        result = subject.costs_per_team.first
+        expect(result.id).to eq team.id
+        expect(result.name).to eq team.name
+      end
+    end
   end
 
   describe "#costs_details_per_team" do

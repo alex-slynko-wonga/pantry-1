@@ -1,3 +1,3 @@
 collection @costs
 
-attributes :id, :name, :costs
+attributes :id, :name, :costs, :disabled

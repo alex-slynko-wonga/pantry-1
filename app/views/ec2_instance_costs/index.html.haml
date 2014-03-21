@@ -15,11 +15,13 @@
         %tbody
           %tr{"ng-repeat" => "cost in costs"}
             %td
-              %a{:href => "/teams/{{cost.id}}"} {{cost.name}}
+              %a{:href => "/teams/{{cost.id}}", data: { ng_hide: "cost.disabled"}} {{cost.name}}
+              %div{ data: { ng_show: "cost.disabled"}} {{cost.name}} (inactive)
             %td ${{cost.costs}}
             %td
-              %a{"id" => "details_{{cost.id}}","href" => "/ec2_instance_costs/#", "ng-click" => "showDetails(cost.id, cost.name)", "title" => "Open details"}
+              %a{"id" => "details_{{cost.id}}","href" => "", "ng-click" => "showDetails(cost.id, cost.name, cost.disabled)", "title" => "Open details"}
                 Details for {{cost.name}}
+                {{ cost.disabled | conditionalText :"(inactive)"}}
                 %i.icon-chevron-right
 
           %tr.warning
@@ -40,9 +42,10 @@
                 %td
     .span5
       %div{"ng-show" => "team_id"}
-        %h3 Details for team {{name}}
+        %h3
+          Details for team {{name}}
+          {{ disabled | conditionalText :"(inactive)"}}
         %p {{render_estimated}}
-
         %table.table.details
           %thead
             %tr
