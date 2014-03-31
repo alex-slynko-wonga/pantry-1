@@ -1,7 +1,6 @@
 class Wonga::Pantry::JenkinsUtility
   def jenkins_instance_params(jenkins_instance)
     params = {
-      flavor:             CONFIG["aws"]["jenkins_flavor"],
       name:               jenkins_instance.instance_name
     }
     security_groups = Array(params['security_group_ids'])
@@ -12,6 +11,7 @@ class Wonga::Pantry::JenkinsUtility
       params.merge(
         ami: CONFIG["aws"]["jenkins_linux_ami"],
         run_list: CONFIG["aws"]["jenkins_linux_server_role"],
+        flavor: CONFIG["aws"]["jenkins_server_flavor"],
         platform: 'linux',
         protected: true
       )
@@ -19,6 +19,7 @@ class Wonga::Pantry::JenkinsUtility
       params.merge(
         ami: CONFIG["aws"]["jenkins_windows_ami"],
         run_list: CONFIG["aws"]["jenkins_windows_agent_role"],
+        flavor: CONFIG["aws"]["jenkins_windows_agent_flavor"],
         platform: 'windows'
       )
     end

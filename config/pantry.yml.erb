@@ -3,9 +3,9 @@
     queue_prefix: <%= @config["aws"]["queue_prefix"] %>
     billing_bucket: <%= @config["aws"]["billing_bucket"] %>
     default_subnet: <%= @config["aws"]["default_subnet"] %>
-    flavor: <%= @config["aws"]["flavor"] %>
     http_proxy: <%= @config["aws"]["http_proxy"] %>
-    jenkins_flavor: <%= @config["aws"]["jenkins_flavor"] %>
+    jenkins_server_flavor: <%= @config["aws"]["jenkins_server_flavor"] %>
+    jenkins_windows_agent_flavor: <%= @config["aws"]["jenkins_windows_agent_flavor"] %>
     jenkins_linux_ami: <%= @config["aws"]["jenkins_linux_ami"] %>
     jenkins_linux_server_role: <%= @config["aws"]["jenkins_linux_server_role"] %>
     jenkins_windows_agent_role: <%= @config["aws"]["jenkins_windows_agent_role"] %>
