@@ -37,6 +37,7 @@ group :development do
   gem 'thin'
   gem 'bundler-audit'
   gem 'codesake-dawn', require: false
+  gem 'letter_opener'
 end
 
 group :test do

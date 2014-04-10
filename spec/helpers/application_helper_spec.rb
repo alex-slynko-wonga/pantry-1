@@ -7,9 +7,16 @@ describe ApplicationHelper do
       expect(helper.link_to_instance(instance)).to eq "<a href=\"http://#{instance.name}.#{instance.domain}\" target=\"_blank\">http://#{instance.name}.#{instance.domain}</a>"
     end
 
-    it "returns url of instance" do
+    it "returns url of instance if instance is not ready" do
       instance = FactoryGirl.build(:ec2_instance)
       expect(helper.link_to_instance(instance)).to eq "http://#{instance.name}.#{instance.domain}"
+    end
+  end
+
+  describe "#instance_canonical_url" do
+    it "returns url to ec2_instance" do
+      instance = FactoryGirl.build(:ec2_instance)
+      expect(helper.instance_canonical_url(instance)).to eq "http://#{instance.name}.#{instance.domain}"
     end
   end
 

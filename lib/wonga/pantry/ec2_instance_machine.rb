@@ -1,6 +1,8 @@
 module Wonga
   module Pantry
     class Ec2InstanceMachine
+      attr_reader :ec2_instance
+
       def initialize(ec2_instance)
         @ec2_instance = ec2_instance
         super()
@@ -58,6 +60,10 @@ module Wonga
 
         event :resized do
           transition :resizing => :starting
+        end
+
+        after_transition on: :bootstrap do |machine, state|
+          Ec2Notifications.machine_created(machine.ec2_instance).deliver
         end
       end
 

@@ -1,6 +1,4 @@
 development:
-  allowed_users:
-    - 'your.email@example.com'
   omniauth:
     title: "Pantry LDAP Login"
     host: "ldap.example.com"
@@ -26,7 +24,7 @@ development:
     security_group_linux: "sg-00110010"
     security_group_jenkins: "sg-00110012"
     key_pair_name: "aws-ssh-keypair"
-    http_proxy: "http://proxy.example.com:8080"
+    http_proxy: ""
     windows_admin_password: "secreat_password"
     jenkins_server_flavor: "t1.micro"
     jenkins_windows_agent_flavor: "t1.micro"
@@ -46,6 +44,12 @@ development:
     api_key: "00110011-0011-0011-0011-001100110011"
     webapp:
       ssl_enabled: false
+  mailer:
+    host: "localhost:3000"
+    default_options:
+      from: pantry@example.com
+      reply_to: pantry@example.com
+      bcc: pantry@example.com
 test:
   omniauth:
     title: "Pantry LDAP Login"
@@ -73,7 +77,7 @@ test:
     security_group_linux: "sg-00110010"
     security_group_jenkins: "sg-00110012"
     key_pair_name: "aws-ssh-keypair"
-    http_proxy: "http://proxy.example.com:8080"
+    http_proxy: ""
     windows_admin_password: "secreat_password"
     jenkins_server_flavor: "t1.micro"
     jenkins_windows_agent_flavor: "t1.micro"
@@ -93,3 +97,9 @@ test:
     api_key: "00110011-0011-0011-0011-001100110011"
     webapp:
       ssl_enabled: false
+  mailer:
+    host: "example.com"
+    default_options:
+      from: pantry@example.com
+      reply_to: pantry@example.com
+      bcc: pantry@example.com

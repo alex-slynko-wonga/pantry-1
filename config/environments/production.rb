@@ -57,4 +57,7 @@ Wonga::Pantry::Application.configure do
   config.assets.css_compressor = :sass
   config.assets.compile = false
   config.assets.digest = true
+
+  config.action_mailer.delivery_method = CONFIG["mailer"]["delivery_method"].to_sym
+  config.action_mailer.smtp_options = CONFIG["mailer"]["smtp_options"].symbolize_keys if CONFIG["mailer"]["smtp_options"]
 end
