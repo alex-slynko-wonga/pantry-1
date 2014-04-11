@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.0.0'
+gem 'rails', '~> 4.1.0'
 gem 'mysql2'
 gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap', branch: 'newer_ldap'
 
@@ -23,10 +23,7 @@ gem "state_machine"
 gem "newrelic_rpm", "~> 3.7"
 gem 'net-ldap', github: "ruby-ldap/ruby-net-ldap"
 gem "simple_form"
-gem 'turbolinks'
 gem 'pundit'
-gem 'jquery-turbolinks'
-gem 'sprockets', '2.11.0'
 
 group :development do
   gem 'quiet_assets'

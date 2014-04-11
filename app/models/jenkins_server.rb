@@ -5,8 +5,6 @@ class JenkinsServer < ActiveRecord::Base
 
   default_scope -> { eager_load(:ec2_instance).references(:ec2_instance).merge(Ec2Instance.not_terminated) }
 
-  accepts_nested_attributes_for :ec2_instance
-
   validates :team, presence: true
   validates :ec2_instance, presence: true
   validate :team_cannot_own_multiple_servers, on: :create
