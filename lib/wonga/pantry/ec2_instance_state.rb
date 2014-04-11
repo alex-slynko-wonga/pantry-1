@@ -21,7 +21,10 @@ class Wonga::Pantry::Ec2InstanceState
 
     if event && @state_machine.fire_events(event)
       @ec2_instance.ec2_instance_logs.build(from_state: before_state, event: event, user: @user)
-      @ec2_instance.save
+      if @ec2_instance.save
+        @state_machine.callback
+        true
+      end
     end
   end
 

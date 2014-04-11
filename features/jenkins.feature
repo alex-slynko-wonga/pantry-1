@@ -76,7 +76,7 @@ Feature: Jenkins
     And I have a jenkins slave
     And the instance is ready
     When I go into Jenkins slave page
-    Then I should see "Shut down" button
+    Then I should see "Shut down" button after page is updated
     And I should see "Destroy" button
 
     When the slave does not belong to my team

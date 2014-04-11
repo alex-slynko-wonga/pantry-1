@@ -2,11 +2,11 @@ class JenkinsSlave < ActiveRecord::Base
   belongs_to :ec2_instance, inverse_of: :jenkins_slave
   belongs_to :jenkins_server
 
-  accepts_nested_attributes_for :ec2_instance
-
   validates :ec2_instance, :jenkins_server, presence: true
   validate :team_should_be_same_as_jenkins_server
   validates_with CIInstanceValidator
+
+  accepts_nested_attributes_for :ec2_instance
 
   before_validation :set_ec2_instance_name, on: :create
 

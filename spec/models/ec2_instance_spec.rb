@@ -89,7 +89,7 @@ describe Ec2Instance do
   end
 
   it "is invalid when environment is not from current team" do
-    instance = FactoryGirl.build_stubbed(:ec2_instance, environment: Environment.new)
+    instance = FactoryGirl.build(:ec2_instance, environment: Environment.new)
     expect(instance).to be_invalid
   end
 

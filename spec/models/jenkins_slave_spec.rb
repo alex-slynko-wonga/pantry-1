@@ -26,7 +26,7 @@ describe JenkinsSlave do
     end
 
     it "creates the name using 'agent-' + padding and a counter" do
-      expect(subject).to be_valid
+      expect(subject.ec2_instance).to be_valid
       expect(subject.ec2_instance.name).to eq("agent-000000012")
     end
 
@@ -34,7 +34,7 @@ describe JenkinsSlave do
       let(:id) { 999999998 }
 
       it "creates a name of 15 characters when the counter less than 999999999" do
-        expect(subject).to be_valid
+        expect(subject.ec2_instance).to be_valid
         expect(subject.ec2_instance.name.length).to eq(15)
       end
     end
@@ -44,7 +44,7 @@ describe JenkinsSlave do
 
       it "is invalid" do
         subject.ec2_instance.platform = "windows"
-        expect(subject).to be_invalid
+        expect(subject.ec2_instance).to be_invalid
       end
     end
   end

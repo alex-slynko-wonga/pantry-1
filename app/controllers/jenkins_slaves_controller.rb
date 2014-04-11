@@ -31,11 +31,6 @@ class JenkinsSlavesController < ApplicationController
 
     if aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
       flash[:notice] = "Jenkins slave request succeeded."
-      Wonga::Pantry::Ec2InstanceState.new(
-        @jenkins_slave.ec2_instance,
-        current_user,
-        { 'event' => "ec2_boot" }
-      ).change_state
       redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
     else
       flash[:error] = "Error: #{human_errors(@jenkins_slave)}"

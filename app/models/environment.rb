@@ -6,9 +6,8 @@ class Environment < ActiveRecord::Base
 
   delegate :name, to: :team, prefix: true
 
-  validates_uniqueness_of :name, scope: :team_id
+  validates :name, uniqueness: { scope: :team_id }, presence: true
   validates :chef_environment, uniqueness: { scope: :team_id, if: 'chef_environment'}, presence: {on: :update}
-  validates_presence_of :name
   validates :environment_type, inclusion: { in: TYPES }, presence: true
   validates :team, uniqueness: { scope: :environment_type, if: "environment_type == 'CI'" }, presence: true
 
