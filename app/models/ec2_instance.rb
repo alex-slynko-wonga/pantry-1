@@ -21,6 +21,8 @@ class Ec2Instance < ActiveRecord::Base
   validates :flavor, presence: true
   validates :security_group_ids, presence: true, security_group_ids_limit: true
   validate  :check_user_team, on: :create
+  validate  :jenkins_slave_is_ok, on: :create
+  validate  :jenkins_server_is_ok, on: :create
   validate  :check_environment_team, on: :create
   validates :state, presence: true
   validates :ip_address, presence: true, if: :was_booted?
@@ -34,8 +36,6 @@ class Ec2Instance < ActiveRecord::Base
   before_validation :check_security_group_ids
   before_validation :set_volume_size, on: :create
 
-  accepts_nested_attributes_for :jenkins_server
-  accepts_nested_attributes_for :jenkins_slave
 
   scope :terminated, -> { where(state: 'terminated') }
   scope :not_terminated, -> { where.not(state: 'terminated') }
@@ -82,5 +82,15 @@ class Ec2Instance < ActiveRecord::Base
 
   def was_booted?
     state != 'initial_state' && state != 'booting'
+  end
+
+  def jenkins_server_is_ok
+    return unless jenkins_server
+    errors.add(:jenkins_server, jenkins_server.errors.full_messages.to_sentence) if jenkins_server.invalid?
+  end
+
+  def jenkins_slave_is_ok
+    return unless jenkins_slave
+    errors.add(:jenkins_slave, jenkins_slave.errors.full_messages.to_sentence) if jenkins_slave.invalid?
   end
 end
