@@ -28,12 +28,11 @@ gem 'pundit'
 gem 'jquery-turbolinks'
 
 group :development do
-  gem 'spring'
   gem 'quiet_assets'
   gem 'guard-bundler'
   gem 'guard-cucumber'
   gem 'guard-migrate'
-  gem 'guard-rspec', '4.2.7'
+  gem 'guard-rspec', '4.2.6'
   gem 'thin'
   gem 'bundler-audit'
   gem 'codesake-dawn', require: false
@@ -55,6 +54,8 @@ group :test do
 end
 
 group :test, :development do
+  gem 'spring-commands-rspec'
+  gem 'spring-commands-cucumber'
   gem 'factory_girl_rails'
   gem 'pry-debugger'
   gem 'pry-rails'

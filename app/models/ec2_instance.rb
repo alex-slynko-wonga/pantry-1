@@ -21,7 +21,7 @@ class Ec2Instance < ActiveRecord::Base
   validates :flavor, presence: true
   validates :security_group_ids, presence: true, security_group_ids_limit: true
   validate  :check_user_team, on: :create
-  validate  :check_environment_team
+  validate  :check_environment_team, on: :create
   validates :state, presence: true
   validates :ip_address, presence: true, if: :was_booted?
   validates :instance_id, presence: true, if: :was_booted?
@@ -36,7 +36,6 @@ class Ec2Instance < ActiveRecord::Base
 
   accepts_nested_attributes_for :jenkins_server
   accepts_nested_attributes_for :jenkins_slave
-  accepts_nested_attributes_for :environment
 
   scope :terminated, -> { where(state: 'terminated') }
   scope :not_terminated, -> { where.not(state: 'terminated') }

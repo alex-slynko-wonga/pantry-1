@@ -63,12 +63,21 @@ module Wonga
         end
 
         after_transition on: :bootstrap do |machine, state|
-          Ec2Notifications.machine_created(machine.ec2_instance).deliver
+          mail = Ec2Notifications.machine_created(machine.ec2_instance)
+          machine.callback = lambda { mail.deliver }
         end
       end
 
       def state
         @ec2_instance.state
+      end
+
+      def callback
+        @callback.call if @callback
+      end
+
+      def callback=(value)
+        @callback = value
       end
 
       private
