@@ -8,6 +8,7 @@ class Ec2Instance < ActiveRecord::Base
   has_many   :ec2_instance_logs
 
   validates :name, uniqueness: { scope: [:terminated] }, unless: 'terminated?'
+  validate :winbind_compatibility, unless:'terminated?'
   validates :name, presence: true
   validates :name, length: { maximum: 15 }, if: 'platform == "windows"'
   validates :name, length: { maximum: 63 }, if: 'platform == "linux"'
@@ -92,5 +93,14 @@ class Ec2Instance < ActiveRecord::Base
   def jenkins_slave_is_ok
     return unless jenkins_slave
     errors.add(:jenkins_slave, jenkins_slave.errors.full_messages.to_sentence) if jenkins_slave.invalid?
+  end
+
+  def winbind_compatibility
+    return unless name
+    return unless name.size > 15 # otherwise use Rails uniqueness validation
+
+    if Ec2Instance.where("name like ?", name[0, 14] + '%').where.not(id: id).not_terminated.exists?
+      errors.add(:name, "The first 15 characters (#{name[0, 14]}) are not unique. This constraint is required to join the Active Directory")
+    end
   end
 end

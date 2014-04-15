@@ -9,19 +9,25 @@ describe Ec2Instance do
   end
 
   it "doesn't validate name if older instance was destroyed" do
-    old_instance = FactoryGirl.create(:ec2_instance, name: subject.name)
+    old_instance = FactoryGirl.create(:ec2_instance, :running, name: subject.name)
     expect(subject).to be_invalid
-    old_instance.update_attribute(:terminated, true)
+    old_instance.update_attributes(terminated: true, state: 'terminated')
     expect(subject).to be_valid
   end
 
   context "for linux" do
-    subject { FactoryGirl.build(:ec2_instance, platform: 'linux', name: name) }
+    subject { FactoryGirl.build(:ec2_instance, :running, platform: 'linux', name: name) }
 
     context "when name is 63 symbols" do
       let(:name) { "1"*63 }
 
       it { should be_valid }
+
+      it "is invalid if the first 15 characters are not unique" do
+        subject.save!
+        new_instance = FactoryGirl.build(:ec2_instance, name: name[0..15])
+        expect(new_instance).to be_invalid
+      end
     end
 
     context "when name is longer than 64 symbols" do
