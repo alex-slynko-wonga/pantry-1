@@ -17,6 +17,13 @@
           = navbar_link_to("Billing", ec2_instance_costs_url)
         - if policy(current_user).see_queues?
           = navbar_link_to("Queues", queues_url)
+        - if policy(current_user).admin?
+          %li.dropdown
+            %a{:href => "#", :class => "dropdown-toggle", "data-toggle" => "dropdown"}
+              Admin
+              %b.caret
+            %ul.dropdown-menu
+              = navbar_link_to("Maintenance", '#')
 
       %ul.nav.pull-right
         - if pundit_user.image_url
