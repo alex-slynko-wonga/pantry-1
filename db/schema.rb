@@ -11,7 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140218140426) do
+ActiveRecord::Schema.define(version: 20140417104121) do
+
+  create_table "admin_maintenance_windows", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "message"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.boolean  "enabled"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "ec2_instance_costs", force: true do |t|
     t.date     "bill_date"

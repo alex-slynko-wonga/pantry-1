@@ -1,0 +1,24 @@
+%h1 Maintenance Windows
+
+%table.table
+  %thead
+    %th Name
+    %th Description
+    %th Message
+    %th Start
+    %th End
+    %th Enabled
+
+  %tbody
+    - @admin_maintenance_windows.each do |admin_maintenance_window|
+      %tr
+        %td= link_to admin_maintenance_window.name, edit_admin_maintenance_window_path(admin_maintenance_window)
+        %td= admin_maintenance_window.description
+        %td= admin_maintenance_window.message
+        %td= admin_maintenance_window.start_at
+        %td= admin_maintenance_window.end_at
+        %td= admin_maintenance_window.enabled
+
+%br
+
+= link_to 'New Maintenance Window', new_admin_maintenance_window_path

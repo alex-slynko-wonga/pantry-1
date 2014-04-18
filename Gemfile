@@ -26,6 +26,7 @@ gem "simple_form"
 gem 'turbolinks'
 gem 'pundit'
 gem 'jquery-turbolinks'
+gem 'sprockets', '2.11.0'
 
 group :development do
   gem 'quiet_assets'
