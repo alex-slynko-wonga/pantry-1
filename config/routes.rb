@@ -1,4 +1,8 @@
 Wonga::Pantry::Application.routes.draw do
+  namespace :admin do
+    resources :maintenance_windows
+  end
+
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   get "ec2_instance_costs/index"
 

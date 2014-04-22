@@ -1,0 +1,10 @@
+= simple_form_for(@admin_maintenance_window) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :description
+    = f.input :message
+    = f.input :enabled
+
+  = f.submit "Save"
