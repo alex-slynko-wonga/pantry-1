@@ -42,6 +42,10 @@ class ApplicationPolicy
     user.role == 'superadmin'
   end
 
+  def maintenance_mode?
+    Admin::MaintenanceWindow.active.exists?
+  end
+
   def team_member?
     user.teams.include?(record.team)
   end

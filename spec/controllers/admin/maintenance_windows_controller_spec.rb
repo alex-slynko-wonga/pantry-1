@@ -20,11 +20,11 @@ require 'spec_helper'
 
 describe Admin::MaintenanceWindowsController do
 
-  # This should return the minimal set of attributes required to create a valid
   # Admin::MaintenanceWindow. As you add validations to Admin::MaintenanceWindow, be sure to
   # adjust the attributes here as well.
   let(:some_admin) { FactoryGirl.create :superadmin }
-  let(:valid_attributes) { { "name" => "MyString", "description" => "MyDescription", "message" => "MyMessage", "user" => some_admin } }
+  let(:valid_attributes) { { "name" => "MyString", "description" => "MyDescription", "message" => "MyMessage" } }
+  let(:maintenance_window) { FactoryGirl.create(:admin_maintenance_window) }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -33,7 +33,7 @@ describe Admin::MaintenanceWindowsController do
 
   describe "GET index" do
     it "assigns all admin_maintenance_windows as @admin_maintenance_windows" do
-      maintenance_window = FactoryGirl.create(:admin_maintenance_window, user: some_admin)
+      maintenance_window = FactoryGirl.create(:admin_maintenance_window)
       get :index, {}, valid_session
       expect(assigns(:admin_maintenance_windows)).to eq([maintenance_window])
     end
@@ -48,7 +48,6 @@ describe Admin::MaintenanceWindowsController do
 
   describe "GET edit" do
     it "assigns the requested admin_maintenance_window as @admin_maintenance_window" do
-      maintenance_window = Admin::MaintenanceWindow.create! valid_attributes
       get :edit, {:id => maintenance_window.to_param}, valid_session
       expect(assigns(:admin_maintenance_window)).to eq(maintenance_window)
     end
@@ -75,16 +74,16 @@ describe Admin::MaintenanceWindowsController do
     end
 
     describe "with invalid params" do
+      before(:each) do
+        expect_any_instance_of(Admin::MaintenanceWindow).to receive(:save).and_return(false)
+      end
+
       it "assigns a newly created but unsaved admin_maintenance_window as @admin_maintenance_window" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Admin::MaintenanceWindow.any_instance.stub(:save).and_return(false)
         post :create, {:admin_maintenance_window => { "name" => "invalid value" }}, valid_session
         expect(assigns(:admin_maintenance_window)).to be_a_new(Admin::MaintenanceWindow)
       end
 
       it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Admin::MaintenanceWindow.any_instance.stub(:save).and_return(false)
         post :create, {:admin_maintenance_window => { "name" => "invalid value" }}, valid_session
         expect(response).to render_template("new")
       end
@@ -94,7 +93,6 @@ describe Admin::MaintenanceWindowsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested admin_maintenance_window" do
-        maintenance_window = Admin::MaintenanceWindow.create! valid_attributes
         # Assuming there are no other admin_maintenance_windows in the database, this
         # specifies that the Admin::MaintenanceWindow created on the previous line
         # receives the :update_attributes message with whatever params are
@@ -104,31 +102,27 @@ describe Admin::MaintenanceWindowsController do
       end
 
       it "assigns the requested admin_maintenance_window as @admin_maintenance_window" do
-        maintenance_window = Admin::MaintenanceWindow.create! valid_attributes
         put :update, {:id => maintenance_window.to_param, :admin_maintenance_window => valid_attributes}, valid_session
         expect(assigns(:admin_maintenance_window)).to eq(maintenance_window)
       end
 
       it "redirects to the index of admin_maintenance_windows" do
-        maintenance_window = Admin::MaintenanceWindow.create! valid_attributes
         put :update, {:id => maintenance_window.to_param, :admin_maintenance_window => valid_attributes}, valid_session
         expect(response).to redirect_to(admin_maintenance_windows_url)
       end
     end
 
     describe "with invalid params" do
+      before(:each) do
+        expect_any_instance_of(Admin::MaintenanceWindow).to receive(:save).and_return(false)
+      end
+
       it "assigns the admin_maintenance_window as @admin_maintenance_window" do
-        maintenance_window = Admin::MaintenanceWindow.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Admin::MaintenanceWindow.any_instance.stub(:save).and_return(false)
         put :update, {:id => maintenance_window.to_param, :admin_maintenance_window => { "name" => "invalid value" }}, valid_session
         expect(assigns(:admin_maintenance_window)).to eq(maintenance_window)
       end
 
       it "re-renders the 'edit' template" do
-        maintenance_window = Admin::MaintenanceWindow.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Admin::MaintenanceWindow.any_instance.stub(:save).and_return(false)
         put :update, {:id => maintenance_window.to_param, :admin_maintenance_window => { "name" => "invalid value" }}, valid_session
         expect(response).to render_template("edit")
       end

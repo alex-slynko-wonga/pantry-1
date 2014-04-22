@@ -11,6 +11,8 @@ class Admin::MaintenanceWindow < ActiveRecord::Base
   validates :user, presence: true
   validate :window_re_enable
 
+  scope :active, -> { where(enabled: true) }
+
   private
   def window_start_on_enable
     if start_at.blank? && end_at.blank? && enabled?
@@ -33,7 +35,7 @@ class Admin::MaintenanceWindow < ActiveRecord::Base
   def window_single_active
     return unless enabled
 
-    if active_window = Admin::MaintenanceWindow.where(enabled: true).where.not(id: id).first
+    if active_window = Admin::MaintenanceWindow.active.where.not(id: id).first
       errors.add(:name, "Only one active Maintenance Window allowed. #{active_window.name} is enabled.")
     end
   end

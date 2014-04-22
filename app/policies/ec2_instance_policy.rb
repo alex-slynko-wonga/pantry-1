@@ -1,6 +1,6 @@
 class Ec2InstancePolicy < ApplicationPolicy
   def create?
-    god_mode? || team_member?
+    god_mode? || (team_member? && !maintenance_mode?)
   end
 
   def shutdown_now?

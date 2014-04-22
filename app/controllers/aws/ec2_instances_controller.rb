@@ -4,6 +4,8 @@ class Aws::Ec2InstancesController < ApplicationController
   def new
     @ec2_instance = Ec2Instance.new
     @ec2_instance.team_id = params[:team_id] unless params[:team_id].blank?
+    @ec2_instance.team ||= current_user.teams.first
+    authorize @ec2_instance
   end
 
   def create

@@ -3,7 +3,7 @@ class Admin::MaintenanceWindowsController < Admin::AdminController
 
   # GET /admin/maintenance_windows
   def index
-    @admin_maintenance_windows = Admin::MaintenanceWindow.order(:enabled).reverse_order.all
+    @admin_maintenance_windows = Admin::MaintenanceWindow.order(:enabled).reverse_order
   end
 
   # GET /admin/maintenance_windows/new
