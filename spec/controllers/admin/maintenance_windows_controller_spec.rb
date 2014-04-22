@@ -23,8 +23,7 @@ describe Admin::MaintenanceWindowsController do
   # This should return the minimal set of attributes required to create a valid
   # Admin::MaintenanceWindow. As you add validations to Admin::MaintenanceWindow, be sure to
   # adjust the attributes here as well.
-  #let(:some_admin) { FactoryGirl.create :superadmin }
-  some_admin = FactoryGirl.create :superadmin
+  let(:some_admin) { FactoryGirl.create :superadmin }
   let(:valid_attributes) { { "name" => "MyString", "description" => "MyDescription", "message" => "MyMessage", "user" => some_admin } }
 
   # This should return the minimal set of values that should be in the session
