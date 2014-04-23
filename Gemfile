@@ -2,11 +2,11 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.0.0'
 gem 'mysql2'
-gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap'
+gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap', branch: 'newer_ldap'
 
 gem 'syslogger'
 gem 'haml-rails'
-gem 'aws-sdk', '>= 1.25.0'
+gem 'aws-sdk', '~> 1.25'
 
 gem 'sass-rails'
 gem 'coffee-rails'

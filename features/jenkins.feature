@@ -6,19 +6,19 @@ Feature: Jenkins
   Background:
     Given AWS has information about machines
     And queues and topics are configured
+    And I am in the "Pantry Team" team
+    And CI environment is ready
 
   @javascript
   Scenario: Start jenkins server
-    Given I am in the "Pantry Team" team
-    And I request jenkins server
+    Given I request jenkins server
     Then I should see "Pantry Team's jenkins server"
     And I should see a flash message with "Jenkins server request succeeded."
     And an instance build should start
 
   @javascript
   Scenario: Create Jenkins slave
-    Given I am in the "Pantry Team" team
-    And I have a jenkins server
+    Given I have a jenkins server
     When I click "Jenkins"
     Then I should see the server listing
     When I click on the server ID
@@ -32,8 +32,7 @@ Feature: Jenkins
     And I should see the slaves listing
 
   Scenario: Starting a shut down slave
-    Given I am in the "Pantry Team" team
-    And I have a jenkins server
+    Given I have a jenkins server
     And I have a jenkins slave
     And the slave is shut down
     When I go into Jenkins slave page
@@ -41,8 +40,7 @@ Feature: Jenkins
     And the slave should be starting
 
   Scenario: Shutting down a slave
-    Given I am in the "Pantry Team" team
-    And I have a jenkins server
+    Given I have a jenkins server
     And I have a jenkins slave
     And the instance is ready
     When I go into Jenkins slave page
@@ -50,8 +48,7 @@ Feature: Jenkins
     Then I should see "Shutting down has started"
 
   Scenario: Delete a slave
-    Given I am in the "Pantry Team" team
-    And I have a jenkins server
+    Given I have a jenkins server
     And I have a jenkins slave
     When I go into Jenkins slave page
     And I destroy Jenkins slave
@@ -71,8 +68,7 @@ Feature: Jenkins
 
   @javascript
   Scenario: Attempting to shut down, destroy another team's slave
-    Given I am in the "Pantry Team" team
-    And I have a jenkins server
+    Given I have a jenkins server
     And I have a jenkins slave
     And the instance is ready
     When I go into Jenkins slave page
@@ -85,7 +81,6 @@ Feature: Jenkins
     And I should not see "Destroy" button
 
   Scenario: a team can create only one server
-    Given I am in the "Pantry Team" team
-    And I have a jenkins server
+    Given I have a jenkins server
     When I click "Jenkins"
     Then I should not see "Create a new server"

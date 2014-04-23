@@ -6,6 +6,7 @@ FactoryGirl.define do
     description "MyText"
     message "MyString"
     enabled false
+    user
 
     trait :enabled do
       enabled true

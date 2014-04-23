@@ -15,6 +15,14 @@ describe JenkinsSlavePolicy do
       context "for user who is from team which created jenkins_server" do
         let(:user) { FactoryGirl.build(:user, team: jenkins_server.team) }
         it { should permit(:create?) }
+
+        context "when site in active maintenance mode" do
+          before(:each) do
+            FactoryGirl.create(:admin_maintenance_window, :enabled)
+          end
+
+          it { should_not permit(:create?) }
+        end
       end
 
       context "for custom user" do
@@ -31,5 +39,4 @@ describe JenkinsSlavePolicy do
     end
   end
 end
-
 

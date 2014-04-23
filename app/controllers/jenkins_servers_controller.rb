@@ -14,8 +14,9 @@ class JenkinsServersController < ApplicationController
   end
 
   def new
-    @jenkins_server = JenkinsServer.new
-    load_servers
+    return unless load_servers
+    @jenkins_server = JenkinsServer.new(team: @user_teams.first)
+    authorize @jenkins_server
   end
 
   def create

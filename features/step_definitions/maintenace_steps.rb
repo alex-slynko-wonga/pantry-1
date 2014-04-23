@@ -19,3 +19,6 @@ end
 Then(/^site should not be in maintenance mode$/) do
 end
 
+Given(/^site in "(.*?)" maintenance mode$/) do |message|
+  FactoryGirl.create(:admin_maintenance_window, :enabled, message: message)
+end

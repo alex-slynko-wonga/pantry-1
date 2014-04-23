@@ -48,7 +48,8 @@ Feature: EC2 Instance
 
   @javascript
   Scenario: Cannot select more than four security groups
-    Given I visit ec2 instance new page
+    Given I am in the "Pantry" team
+    And I visit ec2 instance new page
     When I select four security groups
     Then I should not be able to add a fifth security group
 

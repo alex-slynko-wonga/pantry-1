@@ -199,3 +199,10 @@ When(/^machine is resized with "(.*?)"$/) do |size|
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
   put "/api/ec2_instances/#{@ec2_instance.id}", { user_id: @ec2_instance.user_id, event: :resized, flavor: size, format: :json}
 end
+
+Then(/^I should not be able to create EC2 Instance$/) do
+  visit "/aws/ec2_instances/new"
+  expect(page.current_path).to eq "/"
+  visit "/jenkins_servers/new"
+  expect(page.current_path).to eq "/"
+end
