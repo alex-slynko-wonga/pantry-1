@@ -68,32 +68,27 @@ describe JenkinsSlavesController do
         post :create, jenkins_server_id: jenkins_server.id
         expect(response).to render_template('new')
       end
-
-      it "assigns the teams to the current user" do
-        post :create, jenkins_server_id: jenkins_server.id
-        expect(assigns(:user_teams).size).to be 1
-      end
     end
   end
-  
+
   describe "DELETE 'destroy'" do
     let(:destroyer) { instance_double('Wonga::Pantry::JenkinsSlaveDestroyer') }
-    
+
     before(:each) do
       allow(Wonga::Pantry::JenkinsSlaveDestroyer).to receive(:new).and_return(destroyer)
       allow(destroyer).to receive(:delete)
     end
-    
+
     it "find the jenkins slave" do
       delete :destroy, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id
       expect(assigns(:jenkins_slave)).to be_truthy
     end
-    
+
     it "should redirect to the list of slaves" do
       delete :destroy, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id
       expect(response).to redirect_to jenkins_server_jenkins_slaves_url(jenkins_server)
     end
-    
+
     it "deletes the slave record" do
       expect(destroyer).to receive(:delete)
       delete :destroy, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id
