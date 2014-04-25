@@ -16,8 +16,8 @@ class JenkinsSlavesController < ApplicationController
   end
 
   def new
-    @jenkins_slave = JenkinsSlave.new
-    @user_teams = current_user.teams
+    @jenkins_slave = @jenkins_server.jenkins_slaves.build
+    authorize(@jenkins_slave)
   end
 
   def create
@@ -34,7 +34,6 @@ class JenkinsSlavesController < ApplicationController
       redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
     else
       flash[:error] = "Error: #{human_errors(@jenkins_slave)}"
-      @user_teams = current_user.teams
       render :new
     end
   end

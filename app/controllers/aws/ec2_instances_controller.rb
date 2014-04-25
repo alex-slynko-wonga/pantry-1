@@ -15,6 +15,8 @@ class Aws::Ec2InstancesController < ApplicationController
     @ec2_instance.platform = @ec2_adapter.platform_for_ami(@ec2_instance.ami, policy(@ec2_instance).custom_ami?)
 
     ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user)
+    @ec2_instance.team ||= current_user.teams.first
+    authorize @ec2_instance
 
     if ec2_resource.boot
       flash[:notice] = "Ec2 Instance request succeeded."

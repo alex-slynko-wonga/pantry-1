@@ -1,9 +1,9 @@
 .row
-	.span12
-		%h1 Create a new Jenkins Slave for your team
+  .span12
+    %h1 Create a new Jenkins Slave for your team
 
 = form_for [@jenkins_server, @jenkins_slave] do |f|
-	%fieldset
-	.control-group
-		= f.label @jenkins_server.team.name
-	= f.submit "Create slave", {:class => "btn"}
+  %fieldset
+    .control-group
+      = f.label @jenkins_server.team.name
+  = f.submit "Create slave", {:class => "btn"}
