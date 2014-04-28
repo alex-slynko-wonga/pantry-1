@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   protect_from_forgery with: :exception
-  before_filter :signed_in_user
+  before_action :signed_in_user
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
@@ -28,6 +28,7 @@ class ApplicationController < ActionController::Base
   def human_errors(model)
     model.errors.full_messages.to_sentence
   end
+
   private
 
   def user_not_authorized

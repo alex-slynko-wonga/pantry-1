@@ -14,9 +14,11 @@ When(/^I finish maintenance "(.*?)"$/) do |name|
 end
 
 Then(/^site should be in maintenance mode$/) do
+  expect(page).to have_selector ".alert-block", text: "Maintenance Mode Active"
 end
 
 Then(/^site should not be in maintenance mode$/) do
+  expect(page).not_to have_selector ".alert-block", text: "Maintenance Mode Active"
 end
 
 Given(/^site in "(.*?)" maintenance mode$/) do |message|
