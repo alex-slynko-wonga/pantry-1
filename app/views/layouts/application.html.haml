@@ -23,7 +23,7 @@
               Admin
               %b.caret
             %ul.dropdown-menu
-              = navbar_link_to("Maintenance", '#')
+              = navbar_link_to("Maintenance", admin_maintenance_windows_url)
 
       %ul.nav.pull-right
         - if pundit_user.image_url
@@ -31,11 +31,17 @@
             %img{src: pundit_user.image_url, alt: 'Gravatar' }
         %li
           = link_to 'Log out', logout_url
+  - if window = get_active_maintenance_window
+    .alert-block.alert.alert-warning
+      %div{:class => "text-center"}
+        %strong{:class => "text-error"}= "Maintenance Mode Active - New Requests Disabled"
+        .text-warning= "Reason: #{window.message}"
+        .text-warning= "Started: #{window.start_at}"
 
   .container
-    - unless flash.empty?
-      %div{:class => ["alert-message", flash_class(flash.first.first)]}
+    - flash.each do |message|
+      %div{:class => ["alert-message", flash_class(message.first)]}
         %button{:type => "button", :class => "close", "data-dismiss" => "alert"} &times;
-        = flash.first.try(:last)
+        = message.try(:last)
     = yield
 
