@@ -1,12 +1,13 @@
 Given(/^AWS has information about machines$/) do
   client = AWS::EC2.new.client
   security_groups = client.stub_for(:describe_security_groups)
+
   security_groups[:security_group_info] = [
-    { group_name: 'name1', group_id: '1' },
-    { group_name: 'name2', group_id: '2' },
-    { group_name: 'name3', group_id: '3' },
-    { group_name: 'name4', group_id: '4' },
-    { group_name: 'name5', group_id: '5' }
+    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}APIServer-001122334455", group_id: '1' },
+    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}WebServer-001122334455", group_id: '2' },
+    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}GraphiteServer-001122334455", group_id: '3' },
+    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}JavaServer-001122334455", group_id: '4' },
+    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}PHPServer-001122334455", group_id: '5' }
   ]
   subnets = client.stub_for(:describe_subnets)
   subnets[:subnet_set] = [ { subnet_id: '42' } ]
@@ -46,7 +47,7 @@ def fill_in_default_values(name)
   find(:select, 'Ami').all(:option).last.select_option
   select 't1.micro', from: 'Flavor'
   select '42', from: 'Subnet'
-  check('name1')
+  check("#{CONFIG['pantry']['security_groups_prefix']}APIServer-001122334455")
 end
 
 Given(/^ami\-(\w+) "(.*?)" exists in AWS$/) do |id, name|
@@ -86,10 +87,10 @@ When(/^an instance is created with ip "(.*?)"$/) do |ip|
 end
 
 When(/^I select four security groups$/) do
-  check('name1')
-  check('name2')
-  check('name3')
-  check('name4')
+  check("#{CONFIG['pantry']['security_groups_prefix']}APIServer-001122334455")
+  check("#{CONFIG['pantry']['security_groups_prefix']}WebServer-001122334455")
+  check("#{CONFIG['pantry']['security_groups_prefix']}GraphiteServer-001122334455")
+  check("#{CONFIG['pantry']['security_groups_prefix']}JavaServer-001122334455")
 end
 
 Then(/^shut down request should be sent$/) do
@@ -119,7 +120,7 @@ When(/^the instance is ready$/) do
 end
 
 Then(/^I should not be able to add a fifth security group$/) do
-  expect{ check('name5') }.to raise_error # because it is grayed out
+  expect{ check("#{CONFIG['pantry']['security_groups_prefix']}PHPServer-001122334455") }.to raise_error # because it is grayed out (fifth check box)
 end
 
 Then(/^instance destroying process should start$/) do

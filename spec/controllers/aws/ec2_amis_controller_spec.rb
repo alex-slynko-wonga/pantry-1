@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'json'
 
 describe Aws::Ec2AmisController do
+  let(:user) { instance_double("User", id: 1) }
   let(:ami_id) { "ami-01010101" }
   let(:ami_attributes) {
     {
@@ -13,7 +14,8 @@ describe Aws::Ec2AmisController do
     let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', get_ami_attributes: ami_attributes) }
 
     before(:each) do
-      allow(Wonga::Pantry::Ec2Adapter).to receive(:new).and_return(adapter)
+      allow(Wonga::Pantry::Ec2Adapter).to receive(:new).with(user).and_return(adapter)
+      allow(User).to receive(:find).and_return(user)
     end
 
     it "returns nothing for no ami" do
