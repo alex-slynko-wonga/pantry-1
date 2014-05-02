@@ -86,7 +86,7 @@ class Aws::Ec2InstancesController < ApplicationController
   end
 
   def initialize_ec2_adapter
-    @ec2_adapter = Wonga::Pantry::Ec2Adapter.new
+    @ec2_adapter = Wonga::Pantry::Ec2Adapter.new(current_user)
   end
 end
 

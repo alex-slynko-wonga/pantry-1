@@ -1,16 +1,20 @@
 class Wonga::Pantry::Ec2Adapter
   attr_reader :ec2
-  def initialize
+
+  def initialize(user = nil)
     @ec2 = AWS::EC2.new
+    @ec2_adapter_policy = Ec2AdapterPolicy.new(user)
   end
 
   def security_groups
-    ec2.client.describe_security_groups(
+    groups = ec2.client.describe_security_groups(
         :filters => [ { :name =>"vpc-id",
                         :values => [CONFIG['aws']['vpc_id']] } ]
       )[:security_group_info].map do |group|
         [ group[:group_name], group[:group_id] ]
       end.sort
+
+    @ec2_adapter_policy.show_all_security_groups? ? groups : groups.select {|g| !!(g.first =~ /\A#{CONFIG['pantry']['security_groups_prefix']}([a-zA-Z0-9])+-([A-Z0-9]{12,13})\Z/)}
   end
 
   def subnets
