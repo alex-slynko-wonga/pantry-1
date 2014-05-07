@@ -1,5 +1,6 @@
 class Wonga::Pantry::Ec2Adapter
   attr_reader :ec2
+  SECURITY_GROUPS_REGEX = /\A#{CONFIG['pantry']['security_groups_prefix']}([a-zA-Z0-9])+-([A-Z0-9]{12,13})\Z/
 
   def initialize(user = nil)
     @ec2 = AWS::EC2.new
@@ -14,7 +15,8 @@ class Wonga::Pantry::Ec2Adapter
         [ group[:group_name], group[:group_id] ]
       end.sort
 
-    @ec2_adapter_policy.show_all_security_groups? ? groups : groups.select {|g| !!(g.first =~ /\A#{CONFIG['pantry']['security_groups_prefix']}([a-zA-Z0-9])+-([A-Z0-9]{12,13})\Z/)}
+    groups.select! {|(name, _)| name[SECURITY_GROUPS_REGEX] } unless @ec2_adapter_policy.show_all_security_groups?
+    groups.delete_if {|(_, id)| id == CONFIG['aws']['security_group_linux'] || id == CONFIG['aws']['security_group_windows']}
   end
 
   def subnets
