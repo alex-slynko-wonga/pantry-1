@@ -108,4 +108,27 @@ describe Wonga::Pantry::Ec2Adapter do
       end
     end
   end
+
+  describe "#subnets" do
+    let(:subnets) { double(map: []) }
+
+    before(:each) do
+      expect(subject.ec2).to receive(:subnets).and_return(subnets)
+    end
+
+    context "when superadmin" do
+      let(:role) { 'superadmin' }
+      it "returns all subnets" do
+        expect(subnets).not_to receive(:filter).with("tag:Network", "Private*")
+        subject.subnets
+      end
+    end
+
+    context "when developer" do
+      it "returns filtered subnets" do
+        expect(subnets).to receive(:filter).with("tag:Network", "Private*").and_return(subnets)
+        subject.subnets
+      end
+    end
+  end
 end

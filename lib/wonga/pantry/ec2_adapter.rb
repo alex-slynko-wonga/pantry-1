@@ -18,7 +18,11 @@ class Wonga::Pantry::Ec2Adapter
   end
 
   def subnets
-    ec2.subnets.map(&:id)
+    if @ec2_adapter_policy.show_all_subnets?
+      ec2.subnets
+    else
+      ec2.subnets.filter("tag:Network", "Private*")
+    end.map{|s| [s.tags["Name"], s.id]}
   end
 
   def flavors
