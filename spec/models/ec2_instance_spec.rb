@@ -15,6 +15,11 @@ describe Ec2Instance do
     expect(subject).to be_valid
   end
 
+  it "doesn't validate name if contains spaces" do
+    subject.name = "my instance"
+    expect(subject).to be_invalid
+  end
+
   context "for linux" do
     subject { FactoryGirl.build(:ec2_instance, :running, platform: 'linux', name: name) }
 
