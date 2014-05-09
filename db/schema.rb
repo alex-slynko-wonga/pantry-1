@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140417104121) do
+ActiveRecord::Schema.define(version: 20140509104742) do
 
   create_table "admin_maintenance_windows", force: true do |t|
     t.string   "name"
@@ -21,6 +21,15 @@ ActiveRecord::Schema.define(version: 20140417104121) do
     t.datetime "end_at"
     t.boolean  "enabled"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "amis", force: true do |t|
+    t.string   "name",       null: false
+    t.string   "platform",   null: false
+    t.string   "ami_id",     null: false
+    t.boolean  "hidden"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
