@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140509104742) do
+ActiveRecord::Schema.define(version: 20140509135254) do
 
   create_table "admin_maintenance_windows", force: true do |t|
     t.string   "name"
