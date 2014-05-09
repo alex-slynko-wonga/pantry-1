@@ -58,12 +58,12 @@ Given(/^ami\-(\w+) "(.*?)" exists in AWS$/) do |id, name|
 end
 
 When(/^I enter all required data for ec2$/) do
-  fill_in_default_values('new_instance')
+  fill_in_default_values('new-instance')
 end
 
 When(/^I entered ami\-(\w+) in custom ami field$/) do |id|
   fill_in 'Custom AMI', with: "ami-#{id}"
-  fill_in "Name", with: 'new_instance'
+  fill_in "Name", with: 'new-instance'
 end
 
 Then(/^an instance (?:with ami\-(\w+) )?build should start$/) do |ami|
