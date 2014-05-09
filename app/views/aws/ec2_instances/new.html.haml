@@ -1,7 +1,7 @@
 %h1 Create EC2 Instance
 
 = simple_form_for [:aws, @ec2_instance] do |f|
-  = f.input :name
+  = f.input :name, hint: 'must start with a letter, only alphanumeric and hyphen characters are accepted'
   = f.input :domain
   = f.association :environment,
                   collection: Environment.available(current_user),

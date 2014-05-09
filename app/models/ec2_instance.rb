@@ -12,6 +12,7 @@ class Ec2Instance < ActiveRecord::Base
   validates :name, presence: true
   validates :name, length: { maximum: 15 }, if: 'platform == "windows"'
   validates :name, length: { maximum: 63 }, if: 'platform == "linux"'
+  validate  :name_rfc1123
   validates :team, presence: true
   validates :user, presence: true
   validates :domain, presence: true, domain_name: true
@@ -40,6 +41,11 @@ class Ec2Instance < ActiveRecord::Base
 
   scope :terminated, -> { where(state: 'terminated') }
   scope :not_terminated, -> { where.not(state: 'terminated') }
+
+  def name_rfc1123
+    hostname_regex = /\A[a-zA-Z]+[a-zA-Z0-9-]*[a-zA-Z0-9]+\Z/
+    errors.add(:name, "Only alphanumeric and hyphens are allowed (see rfc1123)") unless name && name[hostname_regex]
+  end
 
   def check_security_group_ids
     self.security_group_ids.reject! { |i| i.empty? } if self.security_group_ids

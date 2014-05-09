@@ -24,7 +24,7 @@ class Wonga::Pantry::Ec2Adapter
       ec2.subnets
     else
       ec2.subnets.filter("tag:Network", "Private*")
-    end.map{|s| [s.tags["Name"], s.id]}
+    end.map{|s| [s.tags["Name"] || s.id, s.id]}
   end
 
   def flavors
