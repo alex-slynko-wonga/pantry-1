@@ -33,5 +33,5 @@ Feature: Managing Teams
     When I am on the teams page
     Then I should not see "TeamName"
 
-    When I click on "Inactive Teams"
+    When I click on "show only inactive teams"
     Then I should see "TeamName"
