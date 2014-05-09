@@ -43,7 +43,7 @@ class Ec2Instance < ActiveRecord::Base
   scope :not_terminated, -> { where.not(state: 'terminated') }
 
   def name_rfc1123
-    hostname_regex = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
+    hostname_regex = /\A[a-zA-Z]+[a-zA-Z0-9-]*[a-zA-Z0-9]+\Z/
     errors.add(:name, "Only alphanumeric and hyphens are allowed (see rfc1123)") unless name && name[hostname_regex]
   end
 

@@ -24,7 +24,7 @@ describe Ec2Instance do
     subject { FactoryGirl.build(:ec2_instance, :running, platform: 'linux', name: name) }
 
     context "when name is 63 symbols" do
-      let(:name) { "1"*63 }
+      let(:name) { "a" + "1"*62 }
 
       it { should be_valid }
 
@@ -36,7 +36,7 @@ describe Ec2Instance do
     end
 
     context "when name is longer than 64 symbols" do
-      let(:name) { "1"*64 }
+      let(:name) { "a" + "1"*64 }
 
       it { should be_invalid }
     end
@@ -46,13 +46,13 @@ describe Ec2Instance do
     subject { FactoryGirl.build(:ec2_instance, platform: 'windows', name: name) }
 
     context "when name is 15 symbols" do
-      let(:name) { "1"*15 }
+      let(:name) { "a" + "1"*14 }
 
       it { should be_valid }
     end
 
     context "when name is longer than 15 symbols" do
-      let(:name) { "1"*16 }
+      let(:name) { "a" + "1"*15 }
 
       it { should be_invalid }
     end
