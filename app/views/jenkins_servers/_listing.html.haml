@@ -1,4 +1,4 @@
-%div{"ng-controller" => "JenkinsServersCtrl", "ng-init" => "getInstances()"}
+%div{"ng-controller" => "JenkinsServersCtrl", "ng-init" => "getInstances()", "data-no-turbolink" => true}
   - if current_team
     %span{'id' => 'single_team_id', 'data-team_id' => current_team.id}
       Current team:

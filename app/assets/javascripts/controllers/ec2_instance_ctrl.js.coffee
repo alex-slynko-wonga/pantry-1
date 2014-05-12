@@ -22,7 +22,7 @@
     setTimeout getDetails, $scope.retryGetDetails
 
   getAwsStatus = ->
-    info = $resource('/ec2_instances/:ec2_instance_id/aws_status').get({ec2_instance_id: $scope.ec2_instance_instance_id }, ->
+    info = $resource('/ec2_instances/:ec2_instance_id/aws_status.json').get({ec2_instance_id: $scope.ec2_instance_instance_id }, ->
       $scope.ec2_instance_status = info
     )
     $scope.aws_status_timeout_id = setTimeout getAwsStatus, 300000

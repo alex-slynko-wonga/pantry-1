@@ -2,7 +2,12 @@ class Aws::Ec2AmisController < ApplicationController
   before_filter :initialize_ec2_adapter, only: [:show]
 
   def show
-    @ami = @ec2_adapter.get_ami_attributes(params[:id])
+    begin
+      @ami = @ec2_adapter.get_ami_attributes(params[:id])
+    rescue AWS::EC2::Errors::InvalidAMIID::NotFound => e
+      raise ActiveRecord::RecordNotFound
+    end
+
     respond_to do |format|
       format.html
       format.json { render json: @ami }

@@ -19,7 +19,7 @@ describe Aws::Ec2AmisController do
     end
 
     it "returns nothing for no ami" do
-      get 'show', id: "", :format => :json
+      get 'show', id: "ami-0101", :format => :json
       expect(adapter).to have_received(:get_ami_attributes)
       expect(response).to be_success
     end
@@ -31,4 +31,5 @@ describe Aws::Ec2AmisController do
       expect(response.body).to eq ami_attributes.to_json
     end
   end
+
 end

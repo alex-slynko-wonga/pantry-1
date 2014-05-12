@@ -1,6 +1,9 @@
 class Ec2InstancesController < ApplicationController
   def aws_status
     @ec2_instance_status = Ec2InstanceStatus.find(params[:id])
+    respond_to do |format|
+      format.json { render }
+    end
   end
 
   def show
