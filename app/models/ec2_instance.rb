@@ -33,7 +33,7 @@ class Ec2Instance < ActiveRecord::Base
 
   serialize :security_group_ids
 
-  before_validation :set_platform_security_group_id
+  before_validation :set_platform_security_group_id, on: :create
   after_initialize :init, on: :create
   before_validation :check_security_group_ids
   before_validation :set_volume_size, on: :create
@@ -53,6 +53,16 @@ class Ec2Instance < ActiveRecord::Base
 
   def human_status
     state.humanize
+  end
+
+  def update_info(ec2_instance_info=nil)
+    return if self.terminated?
+    updater = Wonga::Pantry::Ec2InstanceUpdateInfo.new(self,ec2_instance_info)
+    # Phase1: update attributes
+    attr = updater.update_attributes
+    # Phase2: Determine state change(s) needed, if any
+    state = updater.update_state
+    (attr && state)
   end
 
   private

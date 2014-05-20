@@ -45,8 +45,12 @@ module Wonga
           transition :starting => :ready
         end
 
+        event :out_of_band_cleanup do
+          transition all - [:terminating, :terminated]  => :terminating, if: :instance_unprotected
+        end
+
         event :termination do
-          transition [:ready, :shutdown] => :terminating, if: :instance_unprotected
+          transition [ :ready, :shutting_down, :shutdown, :starting, :resizing ] => :terminating, if: :instance_unprotected
         end
 
         event :terminated do
