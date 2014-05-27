@@ -19,6 +19,8 @@
 //= require bootstrap-dropdown
 //= require angular
 //= require angular-resource
-//= require turbolinks
+//= require angular_app
+//= require_tree ./factories/
+//= require_tree ./controllers/
 //= require_tree .
 

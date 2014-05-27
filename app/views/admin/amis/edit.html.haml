@@ -1,0 +1,5 @@
+%h1
+  Edit AMI
+  %span{id: 'edit_ami_id'}= @ami.ami_id
+= render 'form'
+= button_to "Delete AMI", admin_ami_url(id: @ami.id), method: :delete, data: { confirm: "Are you sure?" }
