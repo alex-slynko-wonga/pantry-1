@@ -53,7 +53,7 @@ Wonga::Pantry::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.assets.js_compressor = Uglifier.new(:mangle => false)
+  config.assets.js_compressor = :uglifier
   config.assets.css_compressor = :sass
   config.assets.compile = false
   config.assets.digest = true
