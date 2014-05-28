@@ -9,6 +9,7 @@
   .navbar
     .navbar-inner
       %ul.nav
+        %li= image_tag 'wonga-logo.png', class: "wonga-logo"
         = navbar_link_to("Home", root_url)
         = navbar_link_to("Teams", teams_url)
         = navbar_link_to("Jenkins", jenkins_servers_url)
