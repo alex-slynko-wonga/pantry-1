@@ -12,7 +12,13 @@ When(/^I enter a valid ami ID$/) do
 end
 
 Then(/^I should see the AMI details on the right$/) do
-  expect(page.text).to include "General information"
+  begin
+    wait_until(5) do
+      page.has_content? "General information"
+    end
+  rescue Timeout::Error
+    expect(page.text).to include "General information"
+  end
   expect(page.text).to include "Devices"
   expect(page.text).to include "Tags"
 end
