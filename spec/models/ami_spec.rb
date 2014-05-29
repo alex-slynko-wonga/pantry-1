@@ -1,5 +1,7 @@
 require 'spec_helper'
 
 describe Ami do
-  it { expect(FactoryGirl.build(:ami)).to be_valid }
+  subject { FactoryGirl.build(:ami) }
+
+  it { should be_valid }
 end

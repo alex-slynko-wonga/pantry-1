@@ -11,30 +11,58 @@ describe Wonga::Pantry::Ec2Adapter do
     client.instance_variable_set(:@stubs, {})
   end
 
+  context "#amis" do
+    it "returns list for select with visible images" do
+      win_ami = FactoryGirl.create(:ami, platform: 'windows')
+      linux_ami = FactoryGirl.create(:ami, platform: 'linux')
+      amis = subject.amis
+      windows = amis["windows"].first
+      linux = amis["linux"].first
+      expect(windows[0]).to eq win_ami.name
+      expect(windows[1]).to eq win_ami.ami_id
+      expect(linux[0]).to eq linux_ami.name
+      expect(linux[1]).to eq linux_ami.ami_id
+    end
+
+    it "returns list with visible images" do
+      FactoryGirl.create(:ami, platform: 'linux')
+      FactoryGirl.create(:ami, hidden: true, platform: 'linux')
+      amis = subject.amis
+      expect(amis["linux"].size).to eq 1
+    end
+
+    context "for superadmin" do
+      let(:role) { 'superadmin' }
+      it "returns list with all images" do
+        FactoryGirl.create(:ami, platform: 'linux')
+        FactoryGirl.create(:ami, hidden: true, platform: 'linux')
+        amis = subject.amis
+        expect(amis["linux"].size).to eq 2
+      end
+    end
+  end
+
   context "#platform_for_ami" do
     it "finds image and gets platform from it" do
       images = client.stub_for(:describe_images)
       images[:images_set] = [{:platform => 'windows'}]
       images[:image_index] = { 'test' => {:platform => 'windows'}}
-      expect(subject.platform_for_ami('test', false)).to eq('windows')
+      expect(subject.platform_for_ami('test')).to eq('windows')
     end
 
     it "returns nil if image can't be found" do
-      expect(subject.platform_for_ami('test', false)).to be_nil
+      expect(subject.platform_for_ami('test')).to be_nil
     end
 
     it "returns nil if ami is not provided" do
-      images = client.stub_for(:describe_images)
-      images[:images_set] = [{:platform => 'windows'}]
-      images[:image_index] = { 'test' => {:platform => 'windows'}}
-      expect(subject.platform_for_ami(nil, false)).to be_nil
+      expect(subject.platform_for_ami(nil)).to be_nil
     end
 
     it "returns linux if ami has no platform parameter" do
       images = client.stub_for(:describe_images)
       images[:images_set] = [{ }]
       images[:image_index] = { 'test' => {}}
-      expect(subject.platform_for_ami('test', false)).to eq('linux')
+      expect(subject.platform_for_ami('test')).to eq('linux')
     end
   end
 

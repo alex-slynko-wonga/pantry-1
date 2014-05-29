@@ -2,9 +2,9 @@
 
 FactoryGirl.define do
   factory :ami do
-    name "MyAMI"
-    platform "linux"
-    ami_id "ami-x26d79d3"
+    sequence(:name) { |n| "AMI #{n}" }
+    platform 'linux'
+    sequence(:ami_id) { |n| "ami-1234a#{n}" }
     hidden false
   end
 end

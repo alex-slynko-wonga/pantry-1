@@ -1,3 +1,7 @@
+Given(/^I am on the AMIs page$/) do
+  visit admin_amis_path
+end
+
 Given(/^I am on root page$/) do
   visit '/'
 end
@@ -7,7 +11,7 @@ Then(/^I should be on team page$/) do
 end
 
 Given(/^I am on the teams page$/) do
-  click_on "Teams"
+  click_on 'Teams'
 end
 
 When(/^I am still on \w+ page$/) do
@@ -30,13 +34,13 @@ When(/^I proceed to "(.*?)" page$/) do |page_name|
 end
 
 When(/^I proceed to "(.*?)" user page$/) do |name|
-  click_on "Users"
+  click_on 'Users'
   click_on name
 end
 
 Given(/^I am on the "(.*?)" team page$/) do |team_name|
   visit root_path
-  click_on "Teams"
+  click_on 'Teams'
   click_on team_name
 end
 
@@ -46,7 +50,7 @@ end
 
 When(/^I am on the team page$/) do
   visit root_path
-  click_on "Teams"
+  click_on 'Teams'
   click_on @team.name
 end
 
