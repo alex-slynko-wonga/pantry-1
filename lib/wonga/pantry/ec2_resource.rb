@@ -21,6 +21,10 @@ class Wonga::Pantry::Ec2Resource
     change('termination', sns)
   end
 
+  def out_of_band_cleanup(sns = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]["ec2_instance_delete_topic_arn"]))
+    change('out_of_band_cleanup', sns)
+  end
+
   def boot(publisher = Wonga::Pantry::SNSPublisher.new(CONFIG["aws"]["ec2_instance_boot_topic_arn"]))
     if state_machine('ec2_boot').change_state
       publisher.publish_message(Wonga::Pantry::BootMessage.new(@ec2_instance).boot_message)
@@ -47,12 +51,13 @@ class Wonga::Pantry::Ec2Resource
   end
 
   def base_message
+    user_id = @user.id if @user
     {
       hostname:    @ec2_instance.name,
       domain:      @ec2_instance.domain,
       instance_id: @ec2_instance.instance_id,
       id:          @ec2_instance.id,
-      user_id:     @user.id
+      user_id:     user_id
     }
   end
 end
