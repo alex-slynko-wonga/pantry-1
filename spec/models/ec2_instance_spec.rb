@@ -123,50 +123,62 @@ describe Ec2Instance do
         subject { FactoryGirl.create(:ec2_instance, :running, instance_id: "i-00001111", protected: false) }
 
         context "if instance-id exists in AWS" do
-            before(:each) do
-              hash = AWS::EC2.new.client.stub_for(:describe_instances)
-              hash[:instance_index] = {
-                aws_instance.instance_id => {
-                  :instance_id => aws_instance.instance_id,
-                  :image_id => aws_instance.image,
-                  :instance_state => {
-                    :code => aws_instance.status_code,
-                    :name => aws_instance.status.to_s
-                  },
-                  :instance_type => aws_instance.instance_type,
-                  :ip_address => aws_instance.ip_address,
-                  :platform => aws_instance.platform,
-                  :private_ip_address => aws_instance.private_ip_address,
-                  :subnet_id => aws_instance.subnet_id,
-                  :vpc_id => aws_instance.vpc_id
-                }
+          before(:each) do
+            describe_instances_hash = AWS::EC2.new.client.stub_for(:describe_instances)
+            describe_instances_hash[:instance_index] = {
+              aws_instance.instance_id => {
+                :group_set => aws_instance.security_groups.map { |sg|
+                  {
+                    :group_name => sg.name,
+                    :group_id => sg.security_group_id
+                  }
+                },
+                :instance_id => aws_instance.instance_id,
+                :image_id => aws_instance.image,
+                :instance_state => {
+                  :code => aws_instance.status_code,
+                  :name => aws_instance.status.to_s
+                },
+                :api_termination_disabled? => aws_instance.api_termination_disabled?,
+                :disable_api_termination => aws_instance.api_termination_disabled?,
+                :instance_type => aws_instance.instance_type,
+                :ip_address => aws_instance.ip_address,
+                :platform => aws_instance.platform,
+                :private_ip_address => aws_instance.private_ip_address,
+                :subnet_id => aws_instance.subnet_id,
+                :vpc_id => aws_instance.vpc_id
               }
-            end
+            }
+            describe_instance_attributes_hash = AWS::EC2.new.client.stub_for(:describe_instance_attribute)
+            describe_instance_attributes_hash[:disable_api_termination] = { value: aws_instance.api_termination_disabled?}
+          end
 
           after(:each) do
-            hash = AWS::EC2.new.client.stub_for(:describe_instances)
-            hash[:instance_index] = {}
-            hash[:reservation_set] = {}
+            describe_instance_attribute_hash = AWS::EC2.new.client.stub_for(:describe_instance_attribute)
+            describe_instance_attribute_hash.clear
+            describe_instances_hash = AWS::EC2.new.client.stub_for(:describe_instances)
+            describe_instances_hash[:instance_index] = {}
+            describe_instances_hash[:reservation_set] = {}
           end
 
           context "and AWS have no changes" do
-            let(:aws_instance) { aws_ec2_mocker_build_instance(status: :stopped,
-                                                               status_code: 80,
-                                                               instance_id: "i-00001111",
-                                                               instance_type: "m0.tiny",
-                                                               api_termination_disabled?: true,
-                                                               security_groups: [aws_ec2_mocker_build_sg(security_group_id: "sg-00000303"),
-                                                                                 aws_ec2_mocker_build_sg(security_group_id: "sg-00000404")],
-                                                               private_ip_address: "192.168.168.192") }
+            let(:aws_instance) { aws_ec2_mocker_build_instance(status: :running,
+                                                               status_code: 16,
+                                                               security_groups: subject.security_group_ids.map { |id| aws_ec2_mocker_build_sg(security_group_id: id) },
+                                                               instance_type: subject.flavor,
+                                                               api_termination_disabled?: subject.protected,
+                                                               private_ip_address: subject.ip_address) }
+
             it "runs successfully" do
               expect(subject.update_info).to eq true
+              expect(subject).to_not receive(:save)
             end
           end
 
           context "and AWS has different info" do
             let(:aws_instance) { aws_ec2_mocker_build_instance(status: :stopped,
                                                                status_code: 80,
-                                                               instance_id: "IgnoreMe",
+                                                               instance_id: subject.instance_id,
                                                                instance_type: "m0.tiny",
                                                                api_termination_disabled?: true,
                                                                security_groups: [aws_ec2_mocker_build_sg(security_group_id: "sg-00000303"),
@@ -174,27 +186,27 @@ describe Ec2Instance do
                                                                private_ip_address: "192.168.168.192") }
 
             it "updates state" do
-              subject.update_info(aws_instance)
+              subject.update_info
               expect(subject.state).to eq("shutdown")
             end
 
             it "updates security_group_ids" do
-              subject.update_info(aws_instance)
+              subject.update_info
               expect(subject.security_group_ids).to eq(["sg-00000303", "sg-00000404"])
             end
 
             it "updates ip_address" do
-              subject.update_info(aws_instance)
+              subject.update_info
               expect(subject.ip_address).to eq(aws_instance.private_ip_address)
             end
 
             it "updates flavor" do
-              subject.update_info(aws_instance)
+              subject.update_info
               expect(subject.flavor).to eq(aws_instance.instance_type)
             end
 
             it "updates protected" do
-              subject.update_info(aws_instance)
+              subject.update_info
               expect(subject.protected).to eq(aws_instance.api_termination_disabled?)
             end
           end
@@ -202,9 +214,11 @@ describe Ec2Instance do
 
         context "if instance-id does not exist in AWS" do
           before(:each) do
-            hash = AWS::EC2.new.client.stub_for(:describe_instances)
-            hash[:instance_index] = {}
-            hash[:reservation_set] = {}
+            describe_instance_attribute_hash = AWS::EC2.new.client.stub_for(:describe_instance_attribute)
+            describe_instance_attribute_hash.clear
+            describe_instances_hash = AWS::EC2.new.client.stub_for(:describe_instances)
+            describe_instances_hash[:instance_index] = {}
+            describe_instances_hash[:reservation_set] = {}
           end
 
           it "returns true" do
@@ -216,54 +230,54 @@ describe Ec2Instance do
 
     context "info provided" do
       subject { FactoryGirl.create(:ec2_instance, :running, instance_id: "i-00001112", protected: false) }
-        context "and AWS have no changes" do
-          let(:aws_instance) { aws_ec2_mocker_build_instance(status: :running,
-                                                             status_code: 16,
-                                                             security_groups: subject.security_group_ids.map { |id| aws_ec2_mocker_build_sg(security_group_id: id) },
-                                                             instance_type: subject.flavor,
-                                                             api_termination_disabled?: subject.protected,
-                                                             private_ip_address: subject.ip_address) }
+      context "and AWS have no changes" do
+        let(:aws_instance) { aws_ec2_mocker_build_instance(status: :running,
+                                                           status_code: 16,
+                                                           security_groups: subject.security_group_ids.map { |id| aws_ec2_mocker_build_sg(security_group_id: id) },
+                                                           instance_type: subject.flavor,
+                                                           api_termination_disabled?: subject.protected,
+                                                           private_ip_address: subject.ip_address) }
 
-          it "runs successfully" do
-            expect(subject.update_info).to eq true
-          end
+        it "runs successfully" do
+          expect(subject.update_info).to eq true
+        end
+      end
+
+      context "and AWS has different info" do
+        let(:aws_instance) { aws_ec2_mocker_build_instance(status: :stopped,
+                                                           status_code: 80,
+                                                           instance_id: "IgnoreMe",
+                                                           instance_type: "m0.tiny",
+                                                           api_termination_disabled?: true,
+                                                           security_groups: [aws_ec2_mocker_build_sg(security_group_id: "sg-00000303"),
+                                                                             aws_ec2_mocker_build_sg(security_group_id: "sg-00000404")],
+                                                           private_ip_address: "192.168.168.192") }
+
+        it "updates state" do
+          subject.update_info(aws_instance)
+          expect(subject.state).to eq("shutdown")
         end
 
-        context "and AWS has different info" do
-          let(:aws_instance) { aws_ec2_mocker_build_instance(status: :stopped,
-                                                             status_code: 80,
-                                                             instance_id: "IgnoreMe",
-                                                             instance_type: "m0.tiny",
-                                                             api_termination_disabled?: true,
-                                                             security_groups: [aws_ec2_mocker_build_sg(security_group_id: "sg-00000303"),
-                                                                               aws_ec2_mocker_build_sg(security_group_id: "sg-00000404")],
-                                                             private_ip_address: "192.168.168.192") }
-
-          it "updates state" do
-            subject.update_info(aws_instance)
-            expect(subject.state).to eq("shutdown")
-          end
-
-          it "updates security_group_ids" do
-            subject.update_info(aws_instance)
-            expect(subject.security_group_ids).to eq(["sg-00000303", "sg-00000404"])
-          end
-
-          it "updates ip_address" do
-            subject.update_info(aws_instance)
-            expect(subject.ip_address).to eq(aws_instance.private_ip_address)
-          end
-
-          it "updates flavor" do
-            subject.update_info(aws_instance)
-            expect(subject.flavor).to eq(aws_instance.instance_type)
-          end
-
-          it "updates protected" do
-            subject.update_info(aws_instance)
-            expect(subject.protected).to eq(aws_instance.api_termination_disabled?)
-          end
+        it "updates security_group_ids" do
+          subject.update_info(aws_instance)
+          expect(subject.security_group_ids).to eq(["sg-00000303", "sg-00000404"])
         end
+
+        it "updates ip_address" do
+          subject.update_info(aws_instance)
+          expect(subject.ip_address).to eq(aws_instance.private_ip_address)
+        end
+
+        it "updates flavor" do
+          subject.update_info(aws_instance)
+          expect(subject.flavor).to eq(aws_instance.instance_type)
+        end
+
+        it "updates protected" do
+          subject.update_info(aws_instance)
+          expect(subject.protected).to eq(aws_instance.api_termination_disabled?)
+        end
+      end
     end
   end
 end
