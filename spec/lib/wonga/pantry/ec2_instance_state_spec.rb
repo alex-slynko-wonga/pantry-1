@@ -12,6 +12,7 @@ shared_examples_for "changes state" do
     log = ec2_instance.ec2_instance_logs[-1]
     expect(log.user).to eq(user)
     expect(log.event).to eq(:some_event)
+    expect(log.updates).to eq(ec2_instance.changes)
   end
 
   it "saves instance" do
@@ -34,8 +35,8 @@ shared_examples_for "doesn't change state" do
   end
 
   it "doesn't log" do
+    expect(ec2_instance.ec2_instance_logs).not_to receive(:build)
     subject
-    expect(ec2_instance.ec2_instance_logs).to be_blank
   end
 end
 
@@ -69,6 +70,7 @@ describe Wonga::Pantry::Ec2InstanceState do
         it "processes" do
           subject
           expect(machine).to have_received(:fire_events).with(:bootstrap)
+          expect(ec2_instance.ec2_instance_logs.last.updates).to eq(ec2_instance.changes)
         end
       end
     end
@@ -77,6 +79,7 @@ describe Wonga::Pantry::Ec2InstanceState do
       before(:each) do
         allow(machine).to receive(:fire_events).and_return(false)
       end
+
       include_examples "doesn't change state"
     end
 

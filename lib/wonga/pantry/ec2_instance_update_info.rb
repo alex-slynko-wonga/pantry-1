@@ -9,6 +9,7 @@ class Wonga::Pantry::Ec2InstanceUpdateInfo
     return false unless aws_ec2_instance_booted?
     @ec2_instance.attributes = map_ec2_attributes
     if @ec2_instance.changed?
+      @ec2_instance.ec2_instance_logs.build(updates: @ec2_instance.changes, user: nil)
       @ec2_instance.save
     end
     true
@@ -21,6 +22,7 @@ class Wonga::Pantry::Ec2InstanceUpdateInfo
       status = @aws_ec2_instance_info.status.to_s
 
       if @state_machine.fire_events(transition.event)
+        @ec2_instance.ec2_instance_logs.build(from_state: before_state, event: transition.event.to_s, updates: @ec2_instance.changes, user: nil)
         if @ec2_instance.save
           @state_machine.callback
         end
