@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140509135254) do
+ActiveRecord::Schema.define(version: 20140603155444) do
 
   create_table "admin_maintenance_windows", force: true do |t|
     t.string   "name"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 20140509135254) do
     t.integer  "user_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.text     "updates"
   end
 
   create_table "ec2_instances", force: true do |t|
