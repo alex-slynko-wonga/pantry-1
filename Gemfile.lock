@@ -48,6 +48,7 @@ GEM
     angularjs-rails (1.2.16)
     arel (5.0.1.20140414130214)
     ast (2.0.0)
+    awesome_print (1.1.0)
     aws-sdk (1.41.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
@@ -389,6 +390,7 @@ PLATFORMS
 
 DEPENDENCIES
   angularjs-rails (~> 1.2.16)
+  awesome_print
   aws-sdk (~> 1.25)
   bootstrap-sass (~> 2.3.2)
   brakeman

@@ -52,6 +52,7 @@ group :test do
 end
 
 group :test, :development do
+  gem 'awesome_print'
   gem 'spring-commands-rspec'
   gem 'spring-commands-cucumber'
   gem 'factory_girl_rails'
