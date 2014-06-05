@@ -2,13 +2,6 @@ module AwsEc2Mocker
 
   def aws_ec2_mocker_build_instance(attributes)
     instance_double(AWS::EC2::Instance, default_ec2_instance_attributes.merge(attributes))
-    #instance = instance_double(AWS::EC2::Instance, default_ec2_instance_attributes.merge(attributes))
-    #if attributes.has_key?(:tags)
-    #  binding.pry
-    #  attributes[:tags].each { |tag_k,tag_v| instance.tags[tag_k] = tag_v }
-      #aws_ec2_mocker_build_tag(key: tag_k, resource: instance, value: tag_v) }
-    #end
-    #instance
   end
 
   def aws_ec2_mocker_build_sg(attributes)
