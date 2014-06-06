@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Api::Ec2InstancesController do
-  describe "#create" do
+  describe "#update" do
     let(:team) { FactoryGirl.build(:team) }
     let(:user) { FactoryGirl.build(:user, team: team) }
 

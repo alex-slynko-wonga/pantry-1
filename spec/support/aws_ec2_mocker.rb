@@ -8,7 +8,11 @@ module AwsEc2Mocker
     instance_double(AWS::EC2::SecurityGroup, default_sg_attributes.merge(attributes))
   end
 
-  def aws_ec2_mocker_volume(attributes)
+  def aws_ec2_mocker_build_tag(attributes)
+    instance_double(AWS::EC2::Tag, default_tag_attributes.merge(attributes))
+  end
+
+  def aws_ec2_mocker_build_volume(attributes)
     instance_double(AWS::EC2::Volume, default_volume_attributes.merge(attributes))
   end
 
@@ -52,6 +56,14 @@ module AwsEc2Mocker
       description: "A fake sg",
       owner_id: "fakeownerid",
       vpc_id: "fakevpc"
+    }
+  end
+
+  def default_tag_attributes
+    {
+      key: nil,
+      resource: nil,
+      value: nil
     }
   end
 

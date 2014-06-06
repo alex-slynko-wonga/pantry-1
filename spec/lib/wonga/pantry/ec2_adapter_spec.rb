@@ -64,8 +64,8 @@ describe Wonga::Pantry::Ec2Adapter do
 
   describe "#security_groups" do
     let(:security_groups) {
-      [["ExampleVPC-SecurityGroupAPIServer-001122334455", "sg-00000002"],
-       ["ExampleVPC-SecurityGroupArtifactory", "sg-00000001"],
+      [["ExampleVPC-SecurityGroupArtifactory", "sg-00000001"],
+       ["ExampleVPC-SecurityGroupAPIServer-001122334455", "sg-00000002"],
        ["awseb-e-0123456789-stack-AWSEBLoadBalancerSecurityGroup-001122334455",
         "sg-00000003"],
        ["default", "sg-00000000"]]
