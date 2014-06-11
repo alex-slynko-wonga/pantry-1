@@ -1,29 +1,13 @@
 Given(/^AWS has information about machines$/) do
-  client = AWS::EC2.new.client
-  security_groups = client.stub_for(:describe_security_groups)
-
-  security_groups[:security_group_info] = [
-    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}APIServer-001122334455", group_id: '1' },
-    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}WebServer-001122334455", group_id: '2' },
-    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}GraphiteServer-001122334455", group_id: '3' },
-    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}JavaServer-001122334455", group_id: '4' },
-    { group_name: "#{CONFIG['pantry']['security_groups_prefix']}PHPServer-001122334455", group_id: '5' }
-  ]
-  subnets = client.stub_for(:describe_subnets)
-  subnets[:subnet_set] = [ { subnet_id: '42' } ]
-  amis = client.stub_for(:describe_images)
-  amis[:images_set] = [ { name: 'image_name', image_id: 'i-121111' } ]
-  amis[:image_index] = { 'i-121111' => {:platform => 'windows'}}
+  stub_security_groups
+  stub_subnets
+  ami = FactoryGirl.create(:ami)
+  stub_ami_info(ami.ami_id)
 end
 
 Given(/^queues and topics are configured$/) do
-  sns_client = AWS::SNS.new.client
-  sns_client.stub(:publish).and_return(AWS::Core::Response.new)
-
-  sqs_client = AWS::SQS.new.client
-  resp = sqs_client.stub_for(:get_queue_url)
-  resp[:queue_url] = "https://some_url.example.com"
-  sqs_client.stub(:send_message).and_return(AWS::Core::Response.new)
+  stub_sns
+  stub_sqs
   config = CONFIG.deep_dup
   config['aws']["ec2_instance_stop_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_stop_topic_arn"
   config['aws']["ec2_instance_start_topic_arn"] = "arn:aws:sns:eu-west-1:9:ec2_instance_start_topic_arn"
@@ -48,13 +32,6 @@ def fill_in_default_values(name)
   select 't1.micro', from: 'Flavor'
   select '42', from: 'Subnet'
   check("#{CONFIG['pantry']['security_groups_prefix']}APIServer-001122334455")
-end
-
-Given(/^ami\-(\w+) "(.*?)" exists in AWS$/) do |id, name|
-  client = AWS::EC2.new.client
-  amis = client.stub_for(:describe_images)
-  amis[:images_set] = [{ name: name, image_id: "ami-#{id}" }]
-  amis[:image_index] = { "ami-#{id}" => {:platform => 'windows'}}
 end
 
 When(/^I enter all required data for ec2$/) do

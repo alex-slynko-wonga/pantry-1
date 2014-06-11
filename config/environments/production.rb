@@ -60,4 +60,8 @@ Wonga::Pantry::Application.configure do
 
   config.action_mailer.delivery_method = CONFIG["mailer"]["delivery_method"].to_sym
   config.action_mailer.smtp_options = CONFIG["mailer"]["smtp_options"].symbolize_keys if CONFIG["mailer"]["smtp_options"]
+
+  if CONFIG['pantry']['webapp']['ssl_enabled']
+    config.middleware.insert_before 0, Rack::SSL, :exclude => proc { |env| !env['REQUEST_URI']['/auth/ldap'] }
+  end
 end

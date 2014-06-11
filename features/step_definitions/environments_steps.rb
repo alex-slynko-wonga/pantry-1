@@ -12,14 +12,10 @@ When(/^name it as "(.*?)"$/) do |name|
   fill_in 'Name', with: name
 end
 
-When(/^I save environment$/) do
-  click_button 'Create Environment'
-end
-
 When(/^environment is created$/) do
   environment = Environment.last
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/teams/#{environment.team_id}/chef_environments/#{environment.id}", { environment_name: environment.name, chef_environment: environment.name, format: :json}
+  put "/api/teams/#{environment.team_id}/chef_environments/#{environment.id}",  environment_name: environment.name, chef_environment: environment.name, format: :json
 end
 
 When(/^I request new ec2 instance$/) do

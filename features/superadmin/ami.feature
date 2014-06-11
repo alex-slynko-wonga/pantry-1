@@ -5,30 +5,33 @@ Feature: Manage AMIs
   Background:
     Given I am a superadmin
 
-
   @javascript
-  Scenario: Create a new AMI
+  Scenario: Managing AMI
     Given I am on the AMIs page
-    And AWS has information about machines
-    When I click 'New AMI'
-    And I enter a valid ami ID
+    And I am in the "test" team
+    And ami-12111111 "TestWindows" exists in AWS
+    When I click on "New AMI"
+    And I enter "ami-12111111" in ami field
     Then I should see the AMI details on the right
 
-    When I save the AMI as hidden
-    Then I should see the hidden AMI in the AMIs listing
+    When I save the AMI
+    Then "TestWindows" AMI should be available for instance creation
 
-  @javascript
-  Scenario: Change AMI name and make it not hidden
-    Given I am editing an existing AMI
-    And I change the name
-    And I make it not hidden
-    And I save it
-    Then I should see the changed name
-    And It should not be hidden
+    And I change the "TestWindows" AMI name to "Test"
+    Then "Test" AMI should be available for instance creation
+
+  Scenario: Hide an AMI
+    Given "Test" AMI
+    When I hide the "Test" AMI
+
+    Given I am a developer
+    And I am in the "test" team
+    Then "Test" AMI should not be available for instance creation
 
   @javascript
   Scenario: Delete an AMI
-    Given I am editing an existing AMI
-    When I click "Delete AMI"
-    Then I should not see the AMI in the AMIs listing
+    Given "Test" AMI
+    And I am in the "test" team
+    When I delete "Test" AMI
+    Then "Test" AMI should not be available for instance creation
 

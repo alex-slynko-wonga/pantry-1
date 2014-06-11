@@ -1,5 +1,5 @@
 class Aws::Ec2InstancesController < ApplicationController
-  before_filter :initialize_ec2_adapter, only: [:new, :create]
+  before_action :initialize_ec2_adapter, only: [:new, :create]
 
   def new
     @ec2_instance = Ec2Instance.new
@@ -10,9 +10,13 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def create
     @ec2_instance = Ec2Instance.new(ec2_instance_params.merge({user_id: current_user.id}))
+    if policy(@ec2_instance).custom_ami? && params[:custom_ami].present?
+      @ec2_instance.ami = params[:custom_ami]
+    elsif @ec2_instance.ami && !policy_scope(Ami).where(ami_id: @ec2_instance.ami).exists?
+      @ec2_instance.ami = nil
+    end
 
-    @ec2_instance.ami = params[:custom_ami] if policy(@ec2_instance).custom_ami? && params[:custom_ami].present?
-    @ec2_instance.platform = @ec2_adapter.platform_for_ami(@ec2_instance.ami, policy(@ec2_instance).custom_ami?)
+    @ec2_instance.platform = @ec2_adapter.platform_for_ami(@ec2_instance.ami)
 
     ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user)
     @ec2_instance.team ||= current_user.teams.first
@@ -89,4 +93,3 @@ class Aws::Ec2InstancesController < ApplicationController
     @ec2_adapter = Wonga::Pantry::Ec2Adapter.new(current_user)
   end
 end
-

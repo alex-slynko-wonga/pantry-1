@@ -1,62 +1,43 @@
-.row-fluid{'ng-controller' => 'AmisCtrl'}
+.row-fluid{data: { ng_controller: 'AmisCtrl', ng_init: "setAmi('#{@ami.ami_id}', '#{@ami.name}', '#{@ami.platform}')"}}
   .span3
-    %h3 AMI search
-    %form{"ng-submit" => "#{@angular_action}()", "ng-init" => "setAmi('#{@ami.ami_id}')", "name" => "form", "novalidate" => true}
-      .control-group.string.required.ami_id
-        %label.string.required.control-label{"for" => "ami_id"}
-          %abbr{title: "required"}
-            *
-          AMI ID
-        .controls
-          %input.string.required{"type" => "search", "ng-model" => "Ami.ami_id", "placeholder" => "search for amis", "ng-keyup" => "getAmiInfo()", "maxlength" => "12", "name" => "ami_id", "id" => "ami_id"}
-          %span.help-inline {{ errors.ami_id.join(', ') }}
-      .control-group.string.required.name
-        %label.string.required.control-label{"for" => "name"}
-          %abbr{title: "required"}
-            *
-          Name
-        .controls
-          %input.string.required{"type" => "text", "ng-model" => "Ami.name", "name" => "name", "id" => "name"}
-          %span.help-inline {{ errors.name.join(', ') }}
-      .control-group.string.hidden
-        %label.string.control-label{"for" => "hidden"} Hidden
-        .controls
-          %input.string{"type" => "checkbox", "ng-model" => "Ami.hidden", "name" => "hidden", "id" => "hidden"}
-      .control-group.string.required.platform
-        %label.string.required.control-label{"for" => "platform"}
-          %abbr{title: "required"}
-            *
-          Platform
-        .controls
-          %input.string.required{"type" => "text", "ng-model" => "Ami.platform", "readonly" => true, "name" => "platform", "id" => "platform"}
-      %input{"name" => "commit", "id" => "commit", "type" => "submit", "value" => "Submit"}
+    = simple_form_for [:admin, @ami] do |f|
+      .form-inputs
+        = f.input :ami_id, label: 'AMI id', input_html: { maxlength: 12, data: { ng_model: 'ami.ami_id', ng_change: 'getAmiInfo()' }}
+        = f.input :name, input_html: {data: { ng_model: 'ami.name' }}
+        = f.hidden_field :platform, data: { ng_value: 'ami.platform' }
+        = f.input :hidden, inline_label: true, label: false
+
+      = f.submit
   .span9
-    %div{"ng-show" => "!ami.name && (ami_id.length > 0)"}
+    %div{"ng-show" => "!ami.name && (ami.ami_id.length > 0)"}
       .span4.label.label-warning AMI {{ami_id}} not found
-    %div{ "ng-show" => "ami.name"}
-      %h3 AMI info for {{ami_id}}
+    %div{ "ng-show" => "aws_ami.name"}
+      %h3 AMI info for {{ami.ami_id}}
       .span5
         %h4 General information
         %ul
-          %li Name: {{ami.name}}
-          %li ID: {{ami.image_id}}
-          %li Platform: {{ami.platform}}
-          %li Description: {{ami.description}}
-          %li Root device type: {{ami.root_device_type}}
-          %li Root deivce name: {{ami.root_device_name}}
-          %li Hypervisor: {{ami.hypervisor}}
-          %li Virtualization type: {{ami.virtualization_type}}
-          %li Architecture: {{ami.architecture}}
-          %li State: {{ami.imgae_state}}
-          %li Public {{ami.is_public}}
-          %li Image ID {{ami.image_owner_id}}
+          %li Name: {{aws_ami.name}}
+          %li
+            OS:
+            = image_tag 'win_icon.png', title: 'Windows', data: {ng_show: 'aws_ami.platform == "windows"'}
+            = image_tag 'linux_icon.png', title: 'Linux', data: {ng_show: 'aws_ami.platform == "linux"'}
+          %li ID: {{aws_ami.image_id}}
+          %li Description: {{aws_ami.description}}
+          %li Root device type: {{aws_ami.root_device_type}}
+          %li Root deivce name: {{aws_ami.root_device_name}}
+          %li Hypervisor: {{aws_ami.hypervisor}}
+          %li Virtualization type: {{aws_ami.virtualization_type}}
+          %li Architecture: {{aws_ami.architecture}}
+          %li State: {{aws_ami.image_state}}
+          %li Public {{aws_ami.is_public}}
+          %li Image ID {{aws_ami.image_owner_id}}
         %h4 Tags
-        %ul{"ng-repeat" => "tag in ami.tag_set"}
+        %ul{"ng-repeat" => "tag in aws_ami.tag_set"}
           %li Key: {{tag.key}}
           %li Value: {{tag.value}}
       .span4
         %h4 Devices
-        %ul{"ng-repeat" => "device in ami.block_device_mapping"}
+        %ul{"ng-repeat" => "device in aws_ami.block_device_mapping"}
           %li Device name: {{device.device_name}}
           %li Snapshot id: {{device.ebs.snapshot_id}}
           %li Volume size: {{device.ebs.volume_size}}
