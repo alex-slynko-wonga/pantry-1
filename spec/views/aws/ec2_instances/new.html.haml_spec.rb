@@ -8,6 +8,7 @@ describe 'aws/ec2_instances/new.html.haml' do
 
   before(:each) do
     assign(:ec2_instance, ec2_instance)
+    allow(RSpec::Mocks.configuration).to receive(:verify_partial_doubles?) # FIXME: load helpers into view
     allow(view).to receive(:current_user).and_return(user)
     expect(Environment).to receive(:available).and_return([environment])
     assign(:ec2_adapter, ec2_adapter)

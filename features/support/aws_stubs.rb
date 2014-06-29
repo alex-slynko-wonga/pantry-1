@@ -29,12 +29,12 @@ end
 
 def stub_sns
   sns_client = AWS::SNS.new.client
-  sns_client.stub(:publish).and_return(AWS::Core::Response.new)
+  allow(sns_client).to receive(:publish).and_return(AWS::Core::Response.new)
 end
 
 def stub_sqs
   sqs_client = AWS::SQS.new.client
   resp = sqs_client.stub_for(:get_queue_url)
   resp[:queue_url] = 'https://some_url.example.com'
-  sqs_client.stub(:send_message).and_return(AWS::Core::Response.new)
+  allow(sqs_client).to receive(:send_message).and_return(AWS::Core::Response.new)
 end

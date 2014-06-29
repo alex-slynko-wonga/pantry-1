@@ -7,7 +7,7 @@ Given(/^I am on root page$/) do
 end
 
 Then(/^I should be on team page$/) do
-  current_url.should =~ /teams/
+  expect(current_url).to match /teams/
 end
 
 Given(/^I am on the teams page$/) do
@@ -20,7 +20,7 @@ end
 
 Given(/^I (?:visit|am on the) ec2 instance new page$/) do
   visit '/aws/ec2_instances/new'
-  page.should have_content 'Create EC2 Instance'
+  expect(page).to have_content 'Create EC2 Instance'
 end
 
 When(/^I am on instance page$/) do

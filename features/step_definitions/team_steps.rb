@@ -6,7 +6,7 @@ When(/^An agent creates a new team named "(.*?)"$/) do |name|
 end
 
 Then(/^the team page has my info$/) do
-  page.should have_content User.last.name
+  expect(page).to have_content User.last.name
 end
 
 Given(/^the "(.*?)" team is inactive$/) do |name|
@@ -29,7 +29,7 @@ Given(/^(I am in )?the "(.*?)" team(?: with "(.*?)" user)?$/) do |include_logged
 end
 
 Given(/^a LDAP user "(.*?)"$/) do |name|
-  LdapResource.stub_chain(:new, :filter_by_name, :all).and_return([{'samaccountname' => [name], 'email' => [name], 'displayname' => [name]}])
+  allow(LdapResource).to receive_message_chain(:new, :filter_by_name, :all).and_return([{'samaccountname' => [name], 'email' => [name], 'displayname' => [name]}])
 end
 
 When(/^I search for "(.*?)"$/) do |search_term|
@@ -60,17 +60,17 @@ Then(/^team should (not )?contain "(.*?)"$/) do |not_contains, name|
 end
 
 Then(/^I should see the Jenkins server name$/) do
-  page.should have_content @jenkins_server.ec2_instance.name
+  expect(page).to have_content @jenkins_server.ec2_instance.name
 end
 
 Then(/^I should see the url of the Jenkins server$/) do
-  page.should have_selector("a[href='http://#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}']")
+  expect(page).to have_selector("a[href='http://#{@jenkins_server.ec2_instance.name}.#{@jenkins_server.ec2_instance.domain}']")
 end
 
 Then(/^I should see the a table with the instance$/) do
-  page.should have_content @ec2_instance.name
-  page.should have_content @ec2_instance.human_status
-  page.should have_selector "img[src$='/assets/linux_icon.png']"
+  expect(page).to have_content @ec2_instance.name
+  expect(page).to have_content @ec2_instance.human_status
+  expect(page).to have_selector "img[src$='/assets/linux_icon.png']"
 end
 
 Given(/^"(.*?)" team has an (?:"(.*?)" )?environment$/) do |team_name, environment_type|

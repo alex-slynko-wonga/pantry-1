@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Ec2InstanceCostsController do
+describe Ec2InstanceCostsController, type: :controller do
 
   describe "GET 'index'" do
     before(:each) do

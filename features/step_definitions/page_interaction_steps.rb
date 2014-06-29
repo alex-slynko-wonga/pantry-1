@@ -30,15 +30,15 @@ When(/^I click on remove cross near "(.*?)"$/) do |value|
 end
 
 Then(/^I should see a flash message with "(.*?)"$/) do |arg1|
-  page.should have_selector '.alert-message', text: arg1
+  expect(page).to have_selector '.alert-message', text: arg1
 end
 
 Then(/^I should see "([^"]*)" button/) do |name|
-  should have_button name
+  expect(page).to have_button name
 end
 
 Then(/^I should not see "([^"]*)" button/) do |name|
-  should_not have_button name
+  expect(page).not_to have_button name
 end
 
 When(/^I save/) do

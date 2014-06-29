@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ApplicationHelper do
+describe ApplicationHelper, type: :helper do
   describe "#link_to_instance" do
     it "returns link to instance" do
       instance = FactoryGirl.build(:ec2_instance, state: 'ready')
