@@ -3,14 +3,14 @@
 %table.table
   %thead
     %tr
-      %th #
+      %th ID
       %th Name
       %th Description
       %th Date Added
       %th
-    - @teams.each_with_index do |team, index|
+    - @teams.each do |team|
       %tr
-        %td= index + 1
+        %td= team.id
         %td= link_to team.name, team
         %td= team.description
         %td= l team.created_at, format: :long
