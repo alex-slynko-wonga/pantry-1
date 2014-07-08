@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in_user
-    session['requested_url'] = request.url
+    session['requested_url'] = request.url if request.get? && !request.xhr? && params['format'] != 'json'
     redirect_to '/auth/ldap', notice: "Please sign in." unless signed_in?
   end
 
