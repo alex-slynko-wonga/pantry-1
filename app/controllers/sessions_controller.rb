@@ -33,6 +33,11 @@ class SessionsController < ApplicationController
   end
 
   def redirect_to_root
-    redirect_to session['requested_url'] || root_url if current_user
+    if current_user
+      page = session['requested_url'] || root_url
+      page = root_url if page['/auth']
+      session['requested_url'] = nil
+      redirect_to page
+    end
   end
 end

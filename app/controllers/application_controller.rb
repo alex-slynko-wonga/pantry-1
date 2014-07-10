@@ -16,7 +16,9 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in_user
-    session['requested_url'] = request.url if request.get? && !request.xhr? && params['format'] != 'json'
+    if http_get? && !auth_request?
+      session['requested_url'] = request.url
+    end
     redirect_to '/auth/ldap', notice: "Please sign in." unless signed_in?
   end
 
@@ -34,6 +36,14 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     flash[:error] = "You are not authorized to perform this action."
     redirect_to root_path
+  end
+
+  def http_get?
+    request.get? && !request.xhr? && params['format'] != 'json'
+  end
+
+  def auth_request?
+    request.fullpath['/auth/']
   end
 end
 
