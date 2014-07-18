@@ -99,14 +99,14 @@ describe Wonga::Pantry::Ec2Adapter do
        ["default", "sg-00000000"]]
     }
 
+    before(:each) do
+      allow(client).to receive_message_chain(:describe_security_groups, :[], :map, :sort).and_return(security_groups)
+    end
+
     it "calls describe_security_groups on the client" do
       subject.security_groups
       expect(client).to have_received(:describe_security_groups)
         .with(:filters => [ { :name =>"vpc-id", :values => [CONFIG['aws']['vpc_id']] } ])
-    end
-
-    before(:each) do
-      client.stub_chain(:describe_security_groups, :[], :map, :sort).and_return(security_groups)
     end
 
     context "when superadmin" do

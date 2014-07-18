@@ -12,9 +12,39 @@ unless ENV["SKIP_COV"]
     SimpleCov::Formatter::RcovFormatter
   ]
 end
-require 'cucumber/rails'
-require 'cucumber/rspec/doubles'
+require 'rspec/core'
+require 'rspec/expectations'
 
+RSpec.configure do |rspec|
+  rspec.expose_dsl_globally = false
+
+  rspec.mock_with :rspec do |mocks|
+    mocks.syntax = [:expect]
+  end
+
+  rspec.expect_with :rspec do |expectations|
+    expectations.syntax = [:expect]
+  end
+end
+
+require 'cucumber/rails'
+[Cucumber::Rails::World, ActionDispatch::Integration::Session].each do |klass|
+  klass.class_eval do
+    include RSpec::Core::MockingAdapters::RSpec
+  end
+end
+require 'cucumber/rails/rspec'
+Before do
+  RSpec::Mocks.setup
+end
+
+After do
+  begin
+    RSpec::Mocks.verify
+  ensure
+    RSpec::Mocks.teardown
+  end
+end
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
 # selectors in your step definitions to use the XPath syntax.

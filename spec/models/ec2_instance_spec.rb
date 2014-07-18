@@ -70,7 +70,7 @@ describe Ec2Instance do
     it "should be invalid when is different from domain in config" do
       subject.domain = "wrong-domain.com"
       expect(subject).to be_invalid
-      expect(subject.error_on(:domain).size).to eq(1)
+      expect(subject.errors[:domain].size).to eq(1)
     end
   end
 

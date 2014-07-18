@@ -22,23 +22,23 @@ module Pundit
           if actions.present?
             "permit #{Pundit::RSpec.action_sentence(actions)}"
           else
-            "be permitted"
+            'be permitted'
           end
         end
 
-        failure_message_for_should do |actual|
+        failure_message do |_actual|
           if actions.present?
             "expected to permit #{Pundit::RSpec.action_sentence(@not_permitted)}"
           else
-            "expected to be permitted"
+            'expected to be permitted'
           end
         end
 
-        failure_message_for_should_not do |actual|
+        failure_message_when_negated do |_actual|
           if actions.present?
             "expected not to permit #{Pundit::RSpec.action_sentence(@permitted)} "
           else
-            "expected not to be permitted"
+            'expected not to be permitted'
           end
         end
 
@@ -56,10 +56,10 @@ module Pundit
 
     module DSL
       def permissions(*list, &block)
-        describe("#{Pundit::RSpec.action_sentence(list)}", :permissions => list, :caller => caller) { instance_eval(&block) }
+        describe("#{Pundit::RSpec.action_sentence(list)}", permissions: list, caller: caller) { instance_eval(&block) }
       end
 
-      alias :permission :permissions
+      alias_method :permission, :permissions
     end
 
     module PolicyExampleGroup
@@ -75,7 +75,5 @@ module Pundit
 end
 
 RSpec.configure do |config|
-  config.include Pundit::RSpec::PolicyExampleGroup, :type => :policy, :example_group => {
-    :file_path => /spec\/policies/
-  }
+  config.include Pundit::RSpec::PolicyExampleGroup, type: :policy, file_path: /spec\/policies/
 end
