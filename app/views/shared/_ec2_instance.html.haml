@@ -1,4 +1,4 @@
-- cache [:v5, ec2_instance] do
+- cache [:v6, ec2_instance] do
   .row-fluid
     .span2
       Requested by user:
@@ -10,16 +10,17 @@
   .row-fluid
     .span2
       Name:
-    .span2= ec2_instance.name
+    .span2= "#{ec2_instance.name}.#{ec2_instance.domain}"
   .row-fluid
     .span2
-      Domain:
-    .span2= ec2_instance.domain
+      Status:
+    .span2{data_ng_bind: 'ec2_instance.human_status'}
+      = ec2_instance.human_status
   .row-fluid
     .span2 AMI:
     .span2= ec2_instance.ami
   .row-fluid{data: {ng_hide: 'editing', ng_init: 'editing=false'}}
-    .span2 Type:
+    .span2 Flavor:
     .span2{data: {ng_click: 'editing = policy.resize', ng_bind: 'ec2_instance.flavor'}}
       = ec2_instance.flavor
   .row-fluid{data: {ng_show: 'editing'}}
@@ -46,9 +47,9 @@
       = ec2_instance.ip_address
   .row-fluid
     .span2
-      Current Step:
-    .span2{data_ng_bind: 'ec2_instance.human_status'}
-      = ec2_instance.human_status
+      Environment:
+    .span2{data_ng_bind: 'ec2_instance.ip_address'}
+      = ec2_instance.environment.human_name
   .aws_info{'ng-show' => 'ec2_instance.human_status == "Ready"'}
     .row-fluid
       .span2
