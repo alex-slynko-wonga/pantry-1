@@ -126,6 +126,9 @@ end
 
 Then(/^I should see that instance is destroyed$/) do
   expect(page).to have_no_button('Destroy')
+  wait_until(5) do
+    page.has_content? 'Terminated'
+  end
   expect(page.text).to include('Terminated')
 end
 

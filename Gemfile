@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.1.0'
+gem 'rails', '~> 4.1.6'
 gem 'mysql2'
 gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap', branch: 'newer_ldap'
 
@@ -19,45 +19,47 @@ gem 'angularjs-rails', '~> 1.2'
 gem 'rabl'
 gem 'rack-ssl'
 gem 'cache_digests'
-gem "state_machine"
-gem "newrelic_rpm", "~> 3.7"
-gem 'net-ldap', github: "ruby-ldap/ruby-net-ldap"
-gem "simple_form"
+gem 'state_machine'
+gem 'newrelic_rpm', '~> 3.7'
+gem 'net-ldap', github: 'ruby-ldap/ruby-net-ldap'
+gem 'simple_form'
 gem 'pundit'
 
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'quiet_assets'
+  gem 'bundler-audit', require: false
+  gem 'codesake-dawn', require: false
   gem 'guard-bundler'
-  gem 'guard-cucumber'
+  gem 'guard-cucumber', github: 'QuickbridgeLtd/guard-cucumber', branch: 'new_cucumber'
   gem 'guard-migrate'
   gem 'guard-rspec', '>= 4.2.6'
-  gem 'thin'
-  gem 'bundler-audit'
-  gem 'codesake-dawn', require: false
   gem 'letter_opener'
+  gem 'quiet_assets'
+  gem 'thin'
 end
 
 group :test do
   # gem 'selenium-webdriver' # uncomment if you want to use @selenium in you cucmber tests
-  gem 'launchy'
-  gem 'brakeman', require: false
+  gem 'brakeman', '~> 2.6', require: false
   gem 'capybara-webkit'
-  gem 'cucumber-rails', require: false
+  gem 'cucumber'
+  gem 'cucumber-rails', '>= 1.4.1', require: false
   gem 'database_cleaner'
+  gem 'launchy'
   gem 'simplecov', require: false
   gem 'simplecov-rcov', require: false
+  gem 'stepdown', require: false
+  gem 'therubyracer', require: 'v8'
   gem 'timecop'
-  gem "therubyracer", require: 'v8'
-  gem "stepdown", require: false
 end
 
 group :test, :development do
   gem 'awesome_print'
-  gem 'spring-commands-rspec'
-  gem 'spring-commands-cucumber'
   gem 'factory_girl_rails'
   gem 'pry-rails'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.0.0'
+  gem 'rubocop'
+  gem 'spring-commands-cucumber'
+  gem 'spring-commands-rspec'
 end
