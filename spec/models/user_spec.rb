@@ -4,10 +4,11 @@ describe User do
   let(:user_id) { 'some_user_id' }
   let(:user_email) { 'test@example.com' }
 
-  describe ".from_omniauth" do
+  describe '.from_omniauth' do
     let(:omniauth_params) { { 'samaccountname' => [user_id], 'mail' => [user_email], 'displayname' => ['name'] } }
+
     context "if user doesn't exist" do
-      it "creates user with id and mail" do
+      it 'creates user with id and mail' do
         user = nil
         expect { user = User.from_omniauth(omniauth_params) }.to change { User.count }.by(1)
         expect(user.username).to eq(user_id)
@@ -15,72 +16,32 @@ describe User do
       end
     end
 
-    context "if user exists" do
+    context 'if user exists' do
       let!(:user) { FactoryGirl.create(:user, username: user_id) }
 
-      it "returns existing user" do
-        expect(User.from_omniauth(omniauth_params)).to eq(user)
+      it 'returns existing user' do
+        expect { expect(User.from_omniauth(omniauth_params)).to eq(user) }.not_to change { User.count }
       end
     end
   end
 
-  describe "#email" do
-    context "when user has entered email" do
-      subject { User.new(email: user_email) }
+  describe '#email' do
+    context 'when user has entered email' do
+      subject { User.new(email: user_email).email }
 
-      describe '#email' do
-        subject { super().email }
-        it { should == user_email }
-      end
+      it { is_expected.to eq user_email }
     end
 
     context "when user hasn't entered email" do
-      subject { User.new(username: user_id) }
+      subject { User.new(username: user_id).email }
 
-      it "should be generated from user_name" do
-        expect(subject.email).to eq("#{user_id}@example.com")
+      it 'should be generated from user_name' do
+        is_expected.to eq("#{user_id}@example.com")
       end
     end
 
-    it "returns lowercase email" do
+    it 'returns lowercase email' do
       expect(User.new(email: 'Test@example.com').email).to eq('test@example.com')
-    end
-  end
-
-  describe "#have_billing_access?" do
-    let(:user) { User.new(email: email) }
-    subject { user.have_billing_access? }
-    let(:email) { 'test@example.com' }
-
-    context "for jonathan" do
-      let(:email) { 'jonathan.galore@example.com' }
-      it { should be_truthy }
-    end
-
-    context "for user who allowed in config" do
-      before(:each) do
-        stub_const('CONFIG', { 'billing_users' => 'test@example.com' })
-      end
-
-      it { should be_truthy }
-    end
-
-    context "for any other user" do
-      it { should be_falsey }
-    end
-  end
-
-  describe "member_of_team?" do
-    it "returns true if the user is member of the given team" do
-      user = FactoryGirl.create(:user)
-      team = FactoryGirl.create(:team, users: [user])
-      expect(user.member_of_team?(team)).to be_truthy
-    end
-
-    it "returns false if the user is not a member of the given team" do
-      user = FactoryGirl.create(:user)
-      team = FactoryGirl.create(:team, users: [])
-      expect(user.member_of_team?(team)).to be_falsey
     end
   end
 end

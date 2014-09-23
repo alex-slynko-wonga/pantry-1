@@ -1,5 +1,5 @@
 class Wonga::Pantry::ChefUtility
-  def initialize()
+  def initialize
     @sqs = Wonga::Pantry::SQSSender.new(CONFIG['aws']['chef_env_create_queue_name'])
   end
 
@@ -16,6 +16,7 @@ class Wonga::Pantry::ChefUtility
       environment_description: environment.description,
       environment_type:        environment.environment_type,
       domain:                  CONFIG['pantry']['domain'],
+      users:                   team.users.map(&:username)
     }
   end
 end

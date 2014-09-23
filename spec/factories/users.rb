@@ -5,7 +5,7 @@ FactoryGirl.define do
     ignore do
       team nil
     end
-    username "MyString"
+    sequence(:username) { |n| "User#{n}" }
     role 'developer'
 
     callback(:after_build, :after_stub) do |user, evaluator|
