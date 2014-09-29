@@ -2,20 +2,25 @@ Feature: Managing Teams
   Scenario: Adding a new Team
     Given I am on the teams page
     And queues and topics are configured
-    When An agent creates a new team named "TeamName"
+    When An agent creates a new team named "TeamName" with product "TeamProduct" and region "TeamRegion"
     Then I should be on team page
     And I should see "TeamName"
     And the team page has my info
     And I should see a flash message with "Team created successfully"
     And a new CI chef environment should be requested
+    And I click "Teams"
+    And I should see "TeamProduct"
+    And I should see "TeamRegion"
 
   Scenario: Updating existing team
     Given I am in the "TeamName" team with "Test User" user
     And I am on the teams page
-    When I update team "TeamName" with name "NewName"
+    When I update team "TeamName" with name "NewName" and product "NewProduct" and region "NewRegion"
     And I should see a flash message with "Team updated successfully"
     And I click "Teams"
     Then I should see "NewName"
+    And I should see "NewProduct"
+    And I should see "NewRegion"
 
   Scenario: Updating existing team when the user is not in it
     Given the "TeamName" team

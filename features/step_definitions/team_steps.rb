@@ -1,6 +1,8 @@
-When(/^An agent creates a new team named "(.*?)"$/) do |name|
+When(/^An agent creates a new team named "(.*?)" with product "(.*?)" and region "(.*?)"$/) do |name, product, region|
   click_on 'New Team'
   fill_in('team_name', :with => name)
+  fill_in('team_product', :with => product)
+  fill_in('team_region', :with => region)
   fill_in('team_description', :with => "TeamDescription")
   click_button("Submit")
 end
@@ -14,11 +16,13 @@ Given(/^the "(.*?)" team is inactive$/) do |name|
   team.update_attribute(:disabled, true)
 end
 
-Given(/^I update team "(.*?)" with name "(.*?)"$/) do |oldname, newname|
+Given(/^I update team "(.*?)" with name "(.*?)" and product "(.*?)" and region "(.*?)"$/) do |oldname, newname, product, region|
   visit '/teams'
   click_on oldname
   click_on 'Edit'
   fill_in('team_name', :with => newname)
+  fill_in('team_product', :with => product)
+  fill_in('team_region', :with => region)
   click_button("Submit")
 end
 
