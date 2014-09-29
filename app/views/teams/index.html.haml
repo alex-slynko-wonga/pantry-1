@@ -5,6 +5,8 @@
     %tr
       %th ID
       %th Name
+      %th Product
+      %th Region
       %th Description
       %th Date Added
       %th
@@ -12,6 +14,8 @@
       %tr
         %td= team.id
         %td= link_to team.name, team
+        %td= team.product
+        %td= team.region
         %td= team.description
         %td= l team.created_at, format: :long
         %td= link_to 'Edit', edit_team_url(team)

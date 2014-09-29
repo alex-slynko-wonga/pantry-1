@@ -4,7 +4,7 @@ describe TeamsController do
   let(:chef_utility) { instance_double('Wonga::Pantry::ChefUtility').as_null_object }
   let(:team) { FactoryGirl.create(:team) }
   let(:user) { FactoryGirl.create(:user, team: team) }
-  let(:team_params) { {team: FactoryGirl.attributes_for(:team, name: 'TeamName', description: 'TeamDescription')} }
+  let(:team_params) { {team: FactoryGirl.attributes_for(:team, name: 'TeamName', product: 'TeamProduct', region: 'TeamRegion', description: 'TeamDescription')} }
   let(:user_params) { { users: [username, "Test User"] } }
   let(:username) { 'test.user' }
 
@@ -23,6 +23,8 @@ describe TeamsController do
     it "creates a team" do
       expect{ post :create, team_params.merge(users: [user.username, user.name]) }.to change(Team, :count).by(1)
       expect(assigns(:team).name).to eq('TeamName')
+      expect(assigns(:team).product).to eq('TeamProduct')
+      expect(assigns(:team).region).to eq('TeamRegion')
       expect(assigns(:team).description).to eq('TeamDescription')
     end
 
@@ -66,6 +68,10 @@ describe TeamsController do
       put 'update', team_params.merge({id: team.id})
       team.reload.name
       expect(team.name).to eq('TeamName')
+      team.reload.product
+      expect(team.product).to eq('TeamProduct')
+      team.reload.region
+      expect(team.region).to eq('TeamRegion')
     end
 
     it "finds user by its username and adds it to team" do
