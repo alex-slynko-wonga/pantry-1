@@ -26,7 +26,7 @@ module Wonga
         end
 
         event :bootstrap do
-          transition :dns_record_created => :ready
+          transition [ :dns_record_created , :ready ] => :ready
         end
 
         event :shutdown_now do
@@ -66,7 +66,7 @@ module Wonga
           transition :resizing => :starting
         end
 
-        after_transition on: :bootstrap do |machine, state|
+        after_transition :dns_record_created => :ready do |machine, state|
           mail = Ec2Notifications.machine_created(machine.ec2_instance)
           machine.callback = lambda { mail.deliver }
         end

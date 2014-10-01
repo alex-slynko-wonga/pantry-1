@@ -80,6 +80,16 @@ When(/^machine is shut down$/) do
   put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, event: :shutdown, format: :json}
 end
 
+When (/^I receive "(.*?)" event$/) do |name|
+  instance = Ec2Instance.last
+  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  @response = put "/api/ec2_instances/#{instance.id}", { user_id: instance.user_id, event: name, format: :json}
+end
+
+Then (/^server should respond with success$/) do
+  expect(@response.status.to_s).to eq('204') # 204 No Content - http status code
+end
+
 Then(/^start request should be sent$/) do
   expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_start_topic_arn'))
 end

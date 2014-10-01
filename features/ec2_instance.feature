@@ -27,6 +27,13 @@ Feature: EC2 Instance
     Then I should see machine info
 
   @javascript
+  Scenario: Bootstrapping event
+    Given I have an EC2 instance in the team
+    And the instance is ready
+    When I receive "bootstrap" event
+    Then server should respond with success
+
+  @javascript
   Scenario: Machine status
     Given I have an EC2 instance in the team
     And instance load is "2.42"
