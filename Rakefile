@@ -4,12 +4,14 @@
 require 'rubocop/rake_task'
 require File.expand_path('../config/application', __FILE__)
 
-desc 'Run RuboCop'
-RuboCop::RakeTask.new(:rubocop) do |task|
-  # only show the files with failures
-  task.formatters = ['files']
-  # don't abort rake on failure
-  task.fail_on_error = true
+if Rails.env.test? || Rails.env.development?
+  desc 'Run RuboCop'
+  RuboCop::RakeTask.new(:rubocop) do |task|
+    # only show the files with failures
+    task.formatters = ['files']
+    # don't abort rake on failure
+    task.fail_on_error = true
+  end
 end
 
 Wonga::Pantry::Application.load_tasks
