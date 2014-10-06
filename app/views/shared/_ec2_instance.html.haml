@@ -48,7 +48,7 @@
   .row-fluid
     .span2
       Environment:
-    .span2{data_ng_bind: 'ec2_instance.ip_address'}
+    .span2{data_ng_bind: 'ec2_instance.environment.human_name'}
       = ec2_instance.environment.human_name
   .aws_info{'ng-show' => 'ec2_instance.human_status == "Ready"'}
     .row-fluid

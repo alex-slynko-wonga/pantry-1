@@ -10,7 +10,7 @@ Feature: EC2 Instance
   @javascript
   Scenario: Creating a new instance
     Given I am in the "teamname" team
-    And "teamname" team has an "INT" environment
+    And "teamname" team has an "INT" environment "TEST"
     And I request an instance named "instanceName"
     Then I should see "instanceName"
     And I should see "Booting"
@@ -20,7 +20,7 @@ Feature: EC2 Instance
     When an instance is created with ip "123.456.7.8"
     Then I should see "Ready" after page is updated
     And I should see "123.456.7.8"
-    And I should see "INT"
+    And I should see "TEST (INT)"
     And I should receive email
 
     When I check my profile page
@@ -112,3 +112,4 @@ Feature: EC2 Instance
     When machine is started
     Then I should see "Ready" after page is updated
 
+	
