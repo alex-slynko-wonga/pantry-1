@@ -59,6 +59,7 @@
             %th Name
             %th Status
             %th OS
+            %th Environment
         = render partial: 'shared/ec2_instance_row', collection: @ec2_instances
 
     - if policy(@team.ec2_instances.build).create?
