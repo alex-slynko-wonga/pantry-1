@@ -9,8 +9,9 @@ class Ec2Instance < ActiveRecord::Base
 
   validates :name, uniqueness: { scope: [:terminated] }, unless: 'terminated?'
   validate :winbind_compatibility, unless:'terminated?'
-  validates :name, presence: true
-  validates :name, length: { maximum: 15 }, if: 'platform == "windows"'
+  validates :name, presence: true   
+  validates :platform, presence: true
+  validates :name, length: { maximum: 14, too_long: "Name must be <= 14 characters for MSDTC in Windows platform" }, if: 'platform == "windows"', on: :create
   validates :name, length: { maximum: 63 }, if: 'platform == "linux"'
   validate  :name_rfc1123
   validates :team, presence: true
@@ -29,7 +30,6 @@ class Ec2Instance < ActiveRecord::Base
   validates :state, presence: true
   validates :ip_address, presence: true, if: :was_booted?
   validates :instance_id, presence: true, if: :was_booted?
-  validates :platform, presence: true
 
   serialize :security_group_ids
 
@@ -37,7 +37,6 @@ class Ec2Instance < ActiveRecord::Base
   after_initialize :init, on: :create
   before_validation :check_security_group_ids
   before_validation :set_volume_size, on: :create
-
 
   scope :terminated, -> { where(state: 'terminated') }
   scope :not_terminated, -> { where.not(state: 'terminated') }

@@ -16,7 +16,7 @@ class JenkinsSlave < ActiveRecord::Base
 
   def instance_name
     counter = JenkinsSlave.last.try(:id) || 0
-    "agent-#{"%09d" % (counter + 1)}"
+    "agent-#{"%08d" % (counter + 1)}"
   end
 
   private

@@ -45,14 +45,14 @@ describe Ec2Instance do
   context "for windows" do
     subject { FactoryGirl.build(:ec2_instance, platform: 'windows', name: name) }
 
-    context "when name is 15 symbols" do
-      let(:name) { "a" + "1"*14 }
+    context "when name is 14 symbols" do
+      let(:name) { "a" + "1"*13 }
 
       it { should be_valid }
     end
 
-    context "when name is longer than 15 symbols" do
-      let(:name) { "a" + "1"*15 }
+    context "when name is longer than 14 symbols" do
+      let(:name) { "a" + "1"*14 }
 
       it { should be_invalid }
     end
