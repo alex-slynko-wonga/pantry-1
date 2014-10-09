@@ -25,3 +25,8 @@ end
 Then(/^I should be able to choose "(.*?)" from list of environments$/) do |env_type|
   select(env_type, from: 'Environment')
 end
+
+Given(/^"(.*?)" team has an (?:"(.*?)" )?environment with name "(.*?)"$/) do |team_name, environment_type, environment_name|
+  @team = Team.where(name: team_name).first
+  FactoryGirl.create(:environment, environment_type: environment_type, team: @team, name: environment_name)
+end

@@ -10,7 +10,7 @@ Feature: EC2 Instance
   @javascript
   Scenario: Creating a new instance
     Given I am in the "teamname" team
-    And "teamname" team has an "INT" environment "TEST"
+    And "teamname" team has an "INT" environment with name "TEST"
     And I request an instance named "instanceName"
     Then I should see "instanceName"
     And I should see "Booting"
@@ -27,6 +27,30 @@ Feature: EC2 Instance
     Then I should see machine info
 
   @javascript
+  Scenario: Creating a new instance without team_id
+    Given I am in the "first" team
+    And "first" team has an "INT" environment with name "custom1"
+    And I am in the "second" team
+    And "second" team has an "WIP" environment with name "custom2"
+    When I request an EC2 instance
+    And I select "custom1" environment
+    Then I should see "Team: first" after page is updated
+    When I select "custom2" environment
+    Then  I should see "Team: second" after page is updated
+    But I should not be able to select environment "first CI"
+
+  @javascript
+  Scenario: Creating a new instance for specific team
+    Given I am in the "first" team
+    And "first" team has an "INT" environment with name "custom1"
+    And I am in the "second" team
+    And "second" team has an "WIP" environment with name "custom2"
+    When I request an EC2 instance for team "first"
+    And I select "custom1" environment
+    Then I should see "Team: first"
+    But I should not be able to select environment "custom2"
+    And I should not be able to select environment "first CI"
+
   Scenario: Bootstrapping event
     Given I have an EC2 instance in the team
     And the instance is ready

@@ -11,7 +11,7 @@ Feature: EC2 Instance
   @javascript
   Scenario: Creating a new instance with custom AMI
     Given I am in the "Pantry" team
-    And "Pantry" team has an "INT" environment "TEST"
+    And "Pantry" team has an "INT" environment with name "TEST"
     And ami-123 "TestWindows" exists in AWS
     And I am on the ec2 instance new page
     When I enter all required data for ec2

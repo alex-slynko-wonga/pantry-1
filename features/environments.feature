@@ -14,4 +14,4 @@ Feature: Multiple environments
     Then a new chef environment should be requested
     When environment is created
     When I request new ec2 instance
-    Then I should be able to choose "Ours(WIP)" from list of environments
+    Then I should be able to choose "Ours" from list of environments

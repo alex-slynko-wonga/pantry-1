@@ -24,6 +24,24 @@ Given(/^I request an instance named "(.*?)"$/) do |name|
   click_on 'Create'
 end
 
+When(/^I request an EC2 instance$/) do
+  visit '/aws/ec2_instances/new'
+end
+
+When(/^I request an EC2 instance for team "(.*?)"$/) do |team_name|
+  @team = Team.where(name: team_name).first
+  visit '/aws/ec2_instances/new?team_id=' + @team.id.to_s
+end
+
+When(/^I select "(.*?)" environment$/) do |environment_name|
+  find(:select, 'Environment').find(:option, environment_name).select_option
+  find(:select, 'Environment').click
+end
+
+Then(/^I should not be able to select environment "(.*?)"$/) do |environment_name|
+  expect(find(:select, 'Environment').all(:option).collect(&:text)).to_not include(environment_name)
+end
+
 def fill_in_default_values(name)
   fill_in "Name", with: name
   find(:select, 'Environment').all(:option).last.select_option

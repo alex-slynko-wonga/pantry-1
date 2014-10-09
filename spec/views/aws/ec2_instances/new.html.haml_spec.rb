@@ -2,21 +2,37 @@ require 'spec_helper'
 
 describe 'aws/ec2_instances/new.html.haml' do
   let(:ec2_instance) { Ec2Instance.new }
-  let(:user) { FactoryGirl.build_stubbed(:user, team: FactoryGirl.build_stubbed(:team)) }
+  let(:team) { FactoryGirl.build_stubbed(:team) }
+  let(:user) { FactoryGirl.build_stubbed(:user, team: team) }
   let(:environment) { FactoryGirl.build_stubbed(:environment) }
+  let(:environments) { [environment.name] }
+  let(:grouped_environments) { {'Pantry'=>[[environment.name, "2"]]}}
   let(:ec2_adapter) { instance_double(Wonga::Pantry::Ec2Adapter, amis: [['windows', ['ami-123']]], flavors: ['flavor'], subnets: ['subnet'], security_groups: ['group']) }
 
   before(:each) do
     assign(:ec2_instance, ec2_instance)
     allow(RSpec::Mocks.configuration).to receive(:verify_partial_doubles?) # FIXME: load helpers into view
     allow(view).to receive(:current_user).and_return(user)
-    expect(Environment).to receive(:available).and_return([environment])
     assign(:ec2_adapter, ec2_adapter)
+    assign(:environments, environments)
+    assign(:grouped_environments, grouped_environments)
     expect(view).to receive(:policy).and_return(instance_double(Ec2InstancePolicy, custom_ami?: false))
   end
 
-  it "shows only allowed enviroments" do
-    render
-    expect(response).to include(environment.name)
+  context "when team_name is exist" do
+    it "fill environments for specific team" do
+      assign(:team_name, team.name)
+      render
+      expect(response).to include(environments.first)
+      expect(response).to include("Team: " + team.name)
+    end
+  end
+
+  context "when team_name is empty" do
+    it "fill all environments" do
+      render
+      expect(response).to include(grouped_environments.first[0])
+      expect(response).to include(environments.first)
+    end
   end
 end

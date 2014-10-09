@@ -1,5 +1,5 @@
 class Aws::Ec2InstancesController < ApplicationController
-  before_action :initialize_ec2_adapter, only: [:new, :create]
+  before_action :initialize_ec2_adapter, :initialize_environments, only: [:new, :create]
 
   def new
     @ec2_instance = Ec2Instance.new
@@ -14,6 +14,12 @@ class Aws::Ec2InstancesController < ApplicationController
       @ec2_instance.ami = params[:custom_ami]
     elsif @ec2_instance.ami && !policy_scope(Ami).where(ami_id: @ec2_instance.ami).exists?
       @ec2_instance.ami = nil
+    end
+
+    if @ec2_instance.environment
+      @ec2_instance.team_id = @ec2_instance.environment.team_id
+    else
+      @ec2_instance.team_id = params[:team_id]
     end
 
     @ec2_instance.platform = @ec2_adapter.platform_for_ami(@ec2_instance.ami)
@@ -86,10 +92,20 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :team_id, :user_id, :ami, :flavor, :subnet_id, :domain, :environment_id, :run_list, :platform, :security_group_ids => [])
+    params.require(:ec2_instance).permit(:name, :user_id, :ami, :flavor, :subnet_id, :domain, :environment_id, :run_list, :platform, :security_group_ids => [])
   end
 
   def initialize_ec2_adapter
     @ec2_adapter = Wonga::Pantry::Ec2Adapter.new(current_user)
+  end
+
+  def initialize_environments
+    @environments = policy_scope(Environment)
+    if params[:team_id]
+      @environments.where!(team_id: params[:team_id]).order(:name)
+      @team_name = Team.find(params[:team_id]).name
+    else
+      @grouped_environments = @environments.group_by_team_name
+    end
   end
 end
