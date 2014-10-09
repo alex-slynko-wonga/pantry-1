@@ -7,8 +7,7 @@
 
   = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
-  - if policy(@ec2_instance).destroy?
-    = button_to 'Destroy', [@jenkins_server, @jenkins_slave], method: :delete, data: { confirm: 'This will permanently delete this instance. Are you sure?' }
+  = button_to 'Destroy', [@jenkins_server, @jenkins_slave], method: :delete, data: { confirm: 'This will permanently delete this instance. Are you sure?', 'ng-show' => 'policy.destroy'}
 
   - if @ec2_instance.state == "terminating"
     %p Destroy action sent. This slave is not usable anymore.
