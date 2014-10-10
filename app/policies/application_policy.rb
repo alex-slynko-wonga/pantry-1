@@ -11,7 +11,7 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(:id => record.id).exists?
+    scope.where(id: record.id).exists?
   end
 
   def create?
@@ -50,11 +50,10 @@ class ApplicationPolicy
     user.teams.include?(record.team)
   end
 
-  def as_json(params = nil)
+  def as_json(_params = nil)
     public_methods(false).select { |name| name[/\?$/] }.each_with_object({}) do |name, hash|
       result = public_send(name)
       hash[name[0..-2].to_sym] = result if result
     end
   end
 end
-
