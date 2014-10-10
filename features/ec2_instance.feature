@@ -32,15 +32,22 @@ Feature: EC2 Instance
     When I check my profile page
     Then I should see machine info
 
-  @javascript
+    @javascript
     Scenario: Creating a new instance for different teams
       Given the "test1" team
-      And I am in the "test2" team
       When I am on the "test1" team page
       Then I should not see "Launch New Instance"
 
-      When I am on the "test2" team page
-      Then I should see "Launch New Instance"
+  @javascript
+  Scenario: Create an instance with additional drive
+    Given I am in the "teamname" team
+    And "teamname" team has an "INT" environment with name "TEST"
+    And I am on the ec2 instance new page
+    When I enter all required data for ec2
+    And I fill in 200 for additional drive
+    When I create machine
+    Then I should see a flash message with "Ec2 Instance request succeeded."
+    And build of instance with 200 GB additional drive started
 
   @javascript
   Scenario: Creating a new instance without team_id
@@ -80,12 +87,12 @@ Feature: EC2 Instance
     And I should not see "Flavor"
     And I should not see "Subnet"
     And I should not see "Security group ids"
-    When I click on "Create"
+    When I create machine
     Then I should see "Instance role: MyInstanceRole"
 
   @javascript
   Scenario: Cannot select disabled instance role
-    Given "MyInstanceRole" instance role is disabled
+    Given disabled "MyInstanceRole" instance role
     And I am in the "TeamName" team
     And "TeamName" team has an "INT" environment with name "TEST"
     When I request an EC2 instance

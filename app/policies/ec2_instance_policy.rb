@@ -24,6 +24,10 @@ class Ec2InstancePolicy < ApplicationPolicy
     god_mode?
   end
 
+  def custom_volume?
+    god_mode?
+  end
+
   def resize?
     (god_mode? || team_member?) && can_move_with_event(:resize?)
   end

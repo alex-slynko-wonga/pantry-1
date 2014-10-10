@@ -8,7 +8,7 @@ When(/^confirm it(?: with "(.*?)")?$/) do |value|
     has_button?('Confirm')
   end
   click_on 'Confirm'
-  wait_until(8) do
+  wait_until(10) do
     has_xpath?('//div[contains(@class,"alert-success")]')
   end
 end

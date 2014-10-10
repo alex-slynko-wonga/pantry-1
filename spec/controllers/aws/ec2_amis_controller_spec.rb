@@ -32,6 +32,17 @@ RSpec.describe Aws::Ec2AmisController, type: :controller do
       end
     end
 
+    context 'when pantry id is used' do
+      let!(:ami) { FactoryGirl.create(:ami, ami_id: ami_id) }
+
+      it 'uses ami model to get ami parameters' do
+        get 'show', id: ami.id, format: :json, use_pantry_id: true
+        expect(adapter).to have_received(:get_ami_attributes).with(ami_id)
+        expect(response).to be_success
+        expect(JSON.parse(response.body)).to eq ami_attributes
+      end
+    end
+
     it 'returns info for an ami' do
       get 'show', id: ami_id, format: :json
       expect(adapter).to have_received(:get_ami_attributes).with(ami_id)

@@ -44,14 +44,16 @@ class Wonga::Pantry::BootMessage
   end
 
   def block_device_mappings(instance)
-    [
+    instance.ec2_volumes.map do |volume|
       {
-        device_name: '/dev/sda1',
+        device_name: volume.device_name,
         ebs: {
-          volume_size: instance.volume_size,
+          volume_size: volume.size,
+          snapshot: volume.snapshot,
+          volume_type: volume.volume_type,
           delete_on_termination: true
         }
       }
-    ]
+    end
   end
 end

@@ -5,7 +5,7 @@
   = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
   = button_to 'Destroy', [:aws, @ec2_instance], method: :delete,
-    data: { confirm: 'This will permanently delete this instance. Are you sure?', ng_show: 'policy.destroy' }, class: 'btn btn-danger'
+    data: { confirm: 'This will permanently delete this instance. Are you sure?', ng_if: 'policy.destroy' }, class: 'btn btn-danger'
 
   - if @history_log
     .row-fluid

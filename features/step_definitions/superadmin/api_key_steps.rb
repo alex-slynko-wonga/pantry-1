@@ -6,8 +6,8 @@ end
 
 Then(/^I should see the "(.*?)" key details$/) do |name|
   api_key = ApiKey.where(name: name).first
-  expect(page.text).to include(name)
-  expect(page.text).to include(api_key.key)
+  expect(page).to have_text(name)
+  expect(page).to have_text(api_key.key)
 end
 
 Given(/^"(.*?)" api key$/) do |name|

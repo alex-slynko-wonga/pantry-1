@@ -23,6 +23,7 @@
 //= require dataTables/jquery.dataTables
 //= require datatables_integration
 //= require jquery.visible
+//= require_tree ./models/
 //= require_tree ./factories/
 //= require_tree ./directives/
 //= require_tree ./controllers/

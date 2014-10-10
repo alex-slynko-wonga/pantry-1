@@ -7,6 +7,7 @@ Feature: Manage InstanceRoles
     Given AWS has information about machines
     And I am a superadmin
 
+  @javascript
   Scenario: Managing instance roles
     Given I am on the InstanceRoles page
     When I click on "New Instance Role"
@@ -30,7 +31,7 @@ Feature: Manage InstanceRoles
     But I should not be able to choose "linux" ami
 
   Scenario: Enabling an instance role
-    Given "TestRole" instance role
+    Given disabled "TestRole" instance role
     And I am on the InstanceRoles page
     When I click on "TestRole"
     And I enable the role

@@ -284,4 +284,19 @@ RSpec.describe Ec2Instance, type: :model do
       end
     end
   end
+
+  context '#dup' do
+    [:running, :terminated].each do |instance_state|
+      context "for #{instance_state} instance" do
+        subject { FactoryGirl.build_stubbed(:ec2_instance, instance_state).dup }
+
+        [:instance_id, :created_at, :updated_at, :user_id, :bootstrapped, :joined, :terminated, :ip_address, :dns, :state].each do |attribute|
+          it "skips #{attribute}" do
+            expect(subject[attribute]).to be nil
+            expect(subject.attributes[attribute]).to be nil
+          end
+        end
+      end
+    end
+  end
 end

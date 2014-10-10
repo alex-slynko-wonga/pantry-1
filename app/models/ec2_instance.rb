@@ -9,6 +9,7 @@ class Ec2Instance < ActiveRecord::Base
   has_one :jenkins_slave
   has_many :ec2_instance_costs
   has_many :ec2_instance_logs
+  has_many :ec2_volumes, inverse_of: :ec2_instance
 
   validates :ami, presence: true
   validates :domain, presence: true, domain_name: true
@@ -26,6 +27,7 @@ class Ec2Instance < ActiveRecord::Base
   validates :state, presence: true
   validates :team, presence: true
   validates :user, presence: true
+  validates :ec2_volumes, presence: true, on: :create
 
   validate :check_environment_team, on: :create
   validate :jenkins_server_is_ok, on: :create
@@ -34,6 +36,8 @@ class Ec2Instance < ActiveRecord::Base
 
   serialize :security_group_ids
 
+  accepts_nested_attributes_for :ec2_volumes
+
   after_initialize :init, on: :create
   before_validation :set_platform_security_group_id, on: :create
   before_validation :set_volume_size, on: :create
@@ -41,8 +45,14 @@ class Ec2Instance < ActiveRecord::Base
   scope :terminated, -> { where(state: 'terminated') }
   scope :not_terminated, -> { where.not(state: 'terminated') }
 
+  attr_writer :additional_volume_size
+
   def human_status
     state.humanize
+  end
+
+  def additional_volume_size
+    @additional_volume_size || ec2_volumes[1].try(:size)
   end
 
   def update_info(ec2_instance_info = nil)
@@ -53,6 +63,13 @@ class Ec2Instance < ActiveRecord::Base
     # Phase2: Determine state change(s) needed, if any
     state = updater.update_state
     (attr && state)
+  end
+
+  def initialize_dup(other)
+    super
+    [:instance_id, :created_at, :updated_at, :user_id, :bootstrapped, :joined, :terminated, :ip_address, :dns, :state].each do |attribute|
+      self[attribute] = nil
+    end
   end
 
   private

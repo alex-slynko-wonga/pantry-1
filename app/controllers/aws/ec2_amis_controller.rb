@@ -1,6 +1,8 @@
 class Aws::Ec2AmisController < ApplicationController
   def show
-    ami = Wonga::Pantry::Ec2Adapter.new(pundit_user).get_ami_attributes(params[:id])
+    id = params[:id]
+    id = Ami.find(id).ami_id if params[:use_pantry_id]
+    ami = Wonga::Pantry::Ec2Adapter.new(pundit_user).get_ami_attributes(id)
 
     respond_to do |format|
       format.json do

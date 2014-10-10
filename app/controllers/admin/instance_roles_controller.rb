@@ -42,8 +42,8 @@ class Admin::InstanceRolesController < Admin::AdminController
   private
 
   def instance_role_attributes
-    params.require(:instance_role).permit(:name, :ami_id, :chef_role, :iam_instance_profile,
-                                          :run_list, :instance_size, :disk_size, :enabled, security_group_ids: [])
+    params.require(:instance_role).permit(:name, :ami_id, :chef_role, :iam_instance_profile, :run_list, :instance_size,
+                                          :enabled, security_group_ids: [], ec2_volumes_attributes: [:device_name, :snapshot, :size, :_destroy, :id])
   end
 
   def initialize_ec2_adapter
@@ -61,5 +61,7 @@ class Admin::InstanceRolesController < Admin::AdminController
 
   def initialize_price_list
     @price_list = price_list.retrieve_price_list(@ec2_adapter.flavors)
+  rescue
+    @price_list = nil
   end
 end

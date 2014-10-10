@@ -18,6 +18,7 @@ RSpec.describe Wonga::Pantry::BootMessage do
 
     context 'when instance is not saved' do
       let(:instance) { Ec2Instance.new }
+
       it 'raise exception' do
         expect { boot_message }.to raise_exception
       end
@@ -54,14 +55,34 @@ RSpec.describe Wonga::Pantry::BootMessage do
     end
 
     describe 'block_device_mappings' do
-      it 'processes single drive'
+      let(:block_devices)  { boot_message[:block_device_mappings] }
 
-      context 'for linux' do
-        it 'processes additional drive'
+      it 'processes single drive' do
+        expect(block_devices).to be_one
       end
 
-      context 'for windows' do
-        it 'processes additional drive'
+      it 'sets info from volume model' do
+        volume = instance.ec2_volumes.first
+        device = block_devices.first
+        expect(device[:device_name]).to eq(volume.device_name)
+        expect(device[:ebs][:volume_size]).to eq(volume.size)
+      end
+
+      it 'sets delete_on_termination flag' do
+        expect(block_devices).to be_all { |device| device[:ebs][:delete_on_termination] }
+      end
+
+      context 'for multidrive instance' do
+        let(:instance) { FactoryGirl.build_stubbed(:ec2_instance, additional_volume_size: 50) }
+        let(:additional_device_info) { block_devices[1] }
+
+        it 'sets delete_on_termination flag' do
+          expect(block_devices).to be_all { |device| device[:ebs][:delete_on_termination] }
+        end
+
+        it 'processes additional drive' do
+          expect(block_devices.size).to be 2
+        end
       end
     end
   end

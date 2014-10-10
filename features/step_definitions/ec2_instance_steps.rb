@@ -77,6 +77,7 @@ end
 
 def fill_in_default_values(name)
   fill_in 'Name', with: name
+  fill_in 'Volume size', with: 70
   find(:select, 'Environment').all(:option).last.select_option
   fill_in 'Run list', with: 'role[ted]'
   find(:select, 'Ami').all(:option).last.select_option
@@ -270,7 +271,7 @@ Then(/^I should see that instance is destroyed$/) do
   wait_until(5) do
     page.has_content? 'Terminated'
   end
-  expect(page.text).to include('Terminated')
+  expect(page).to have_text('Terminated')
 end
 
 Then(/^I should not see machine info$/) do
@@ -364,4 +365,15 @@ end
 
 When(/^I opened history$/) do
   page.first(:xpath, '//div[text()="History"]').click
+end
+
+When(/^I fill in (\d+) for additional drive$/) do |volume_size|
+  fill_in 'Additional volume size', with: volume_size
+end
+
+Then(/^build of instance with (\d+) GB additional drive started$/) do |volume_size|
+  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn')) do |args|
+    message = JSON.parse(JSON.parse(args[:message])['default'])
+    expect(message['block_device_mappings']).to be_any { |hash| hash['ebs']['volume_size'].to_i == volume_size.to_i }
+  end
 end

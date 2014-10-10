@@ -87,7 +87,7 @@ Feature: EC2 Instance
 
   @javascript
   Scenario: Creating a new instance with disabled role
-    Given "MyInstanceRole" instance role is disabled
+    Given disabled "MyInstanceRole" instance role
     And I am in the "TeamName" team
     And "TeamName" team has an "INT" environment with name "TEST"
     When I request an EC2 instance

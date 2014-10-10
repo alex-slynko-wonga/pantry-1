@@ -18,6 +18,9 @@
 
   = f.input :ami, collection: @ec2_adapter.amis, as: :grouped_select, group_method: :second, group_label_method: :first,
     wrapper_html: { class: 'instance_role_subvalue' }
+  = f.input :volume_size, wrapper_html: { class: 'instance_role_subvalue' }
+  = f.input :additional_volume_size, wrapper_html: { class: 'instance_role_subvalue' }
+
   - if policy(@ec2_instance).custom_ami?
     .custom_ami.instance_role_subvalue{ data: { remote_url: aws_ec2_ami_url(':id') } }
       = label_tag :custom_ami, 'Custom AMI'

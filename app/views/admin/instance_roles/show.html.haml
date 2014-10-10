@@ -37,10 +37,21 @@
     .span2
       = @instance_role.instance_size
   .row-fluid
-    .span2
-      Disk size:
-    .span2
-      = @instance_role.disk_size
+    %h6 Disks
+    %table.table
+      %thead
+        %tr
+          %th Name
+          %th Size
+          %th Snapshot
+          %th Type
+      %tbody
+        - @instance_role.ec2_volumes.each do |volume|
+          %tr
+            %td= volume.device_name
+            %td= volume.size
+            %td= volume.snapshot
+            %td= volume.display_type
   .row-fluid
     .span2
       Security group ids:

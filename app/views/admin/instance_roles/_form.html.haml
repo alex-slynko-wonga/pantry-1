@@ -1,16 +1,55 @@
-= simple_form_for [:admin, @instance_role] do |f|
+.volumes{ data: { preload_resource: @instance_role.ec2_volumes.to_json(methods: :marked_for_destruction?), preload_resource_name: 'ec2_volumes' } }
+.volumes{ data: { preload_resource: @instance_role.ami_id.to_json, preload_resource_name: 'ami_id' } }
+.row-fluid{ data: { ng_controller: 'InstanceRolesCtrl' } }
+  = simple_form_for [:admin, @instance_role] do |f|
+    .span4
+      = f.input :name
+      = f.association :ami, collection: @ami, as: :grouped_select, group_method: :second,
+        input_html: { data: { ng_model: 'ami_id', ng_change: 'updateAmiInfo()' } }
+      = f.input :chef_role
+      = f.input :iam_instance_profile
+      = f.input :run_list, as: :text
+      = flavor_with_size_input :instance_size, f, @price_list, @ec2_adapter
+      = f.input :security_group_ids, collection: @ec2_adapter.security_groups, as: 'check_boxes'
+      = f.input :enabled, as: :boolean
 
-  = f.input :name
-  = f.association :ami, collection: @ami, as: :grouped_select, group_method: :second
+      %br
+      = f.submit
+    .span4
+      .volumes-group{ data: { ng_repeat: 'volume in ec2_volumes' } }
+        = hidden_field_tag 'instance_role[ec2_volumes_attributes][{{volume.id || (1000000 + $index)}}][id]', '{{volume.id}}', data: { ng_if: 'volume.id' }
+        = hidden_field_tag 'instance_role[ec2_volumes_attributes][{{volume.id}}][_destroy]', '{{volume._destroy}}', data: { ng_if: 'volume._destroy' }
+        .volume.form-inline{ data: { ng_hide: 'volume._destroy' } }
+          = text_field_tag 'instance_role_ec2_volumes_{{$index}}_device_name', '',
+            name: 'instance_role[ec2_volumes_attributes][{{volume.id || (1000000 + $index)}}][device_name]',
+            data: { ng_model: 'volume.device_name', ng_change: 'volume.automatic = false' }, class: 'input-mini'
+          = text_field_tag 'instance_role_ec2_volumes_{{$index}}_snapshot', '',
+            name: 'instance_role[ec2_volumes_attributes][{{volume.id || (1000000 + $index)}}][snapshot]',
+            data: { ng_model: 'volume.snapshot_id', ng_change: 'volume.automatic = false' }, class: 'input-small'
+          = number_field_tag 'instance_role_ec2_volumes_{{$index}}_size', nil,
+            name: 'instance_role[ec2_volumes_attributes][{{volume.id || (1000000 + $index)}}][size]', in: 30...1000,
+            data: { ng_model: 'volume.size', ng_change: 'volume.automatic = false' }, class: 'input-mini'
+          %span.label.label_info.from_ami_definition{ data: { ng_if: 'volume.automatic' } }
+            Generated from AMI model
 
-  = f.input :chef_role
-  = f.input :iam_instance_profile
-  = f.input :run_list, as: :text
-  = flavor_with_size_input :instance_size, f, @price_list, @ec2_adapter
+          .close.icon-remove{ title: 'Remove volume', data: { ng_click: 'removeVolume($index)' } }
+      %button.btn{ type: :button, data: { ng_click: 'addVolume()' } }
+        Add volume
+      .ami_info{ data: { ng_show: 'ami.name' } }
+        %h4 AMI information
+        %ul
+          %li Name: {{ami.name}}
+          %li
+            OS:
+            = image_tag 'win_icon.png', title: 'Windows', data: { ng_show: 'ami.platform == "windows"' }
+            = image_tag 'linux_icon.png', title: 'Linux', data: { ng_show: 'ami.platform == "linux"' }
+          %li ID: {{ami.image_id}}
+          %li Description: {{ami.description}}
+          %li Hypervisor: {{ami.hypervisor}}
+          %li Virtualization type: {{ami.virtualization_type}}
+          %li Architecture: {{ami.architecture}}
+          %li Public {{ami.is_public}}
+        %h4 Tags
+        %ul{ data: { ng_repeat: 'tag in ami.tag_set' } }
+          %li {{tag.key}}: {{tag.value}}
 
-  = f.input :disk_size,  hint: ''
-  = f.input :security_group_ids, collection: @ec2_adapter.security_groups, as: 'check_boxes'
-  = f.input :enabled, as: :boolean
-
-  %br
-  = f.submit

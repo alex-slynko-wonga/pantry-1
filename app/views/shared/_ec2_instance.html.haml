@@ -73,11 +73,11 @@
         CPU Utilization:
       .span5{ data_ng_bind: 'ec2_instance_status.cpu_utilization' }
 
-  = button_to 'Shut down', aws_ec2_instance_url(@ec2_instance, event: 'shutdown_now'), method: :put, data: { ng_show: 'policy.shutdown_now' }, class: 'btn'
+  = button_to 'Shut down', aws_ec2_instance_url(@ec2_instance, event: 'shutdown_now'), method: :put, data: { ng_if: 'policy.shutdown_now' }, class: 'btn'
 
-  = button_to 'Start', aws_ec2_instance_url(@ec2_instance, event: 'start_instance'), method: :put, data: { ng_show: 'policy.start_instance' }, class: 'btn'
+  = button_to 'Start', aws_ec2_instance_url(@ec2_instance, event: 'start_instance'), method: :put, data: { ng_if: 'policy.start_instance' }, class: 'btn'
 
   = button_to 'Run machine cleanup', cleanup_aws_ec2_instance_url(@ec2_instance), method: :delete,
-    data: { confirm: 'This will make machine cleanup and terminate an instance. Are you sure?', ng_show: 'policy.cleanup' }, class: 'btn btn-danger'
+    data: { confirm: 'This will make machine cleanup and terminate an instance. Are you sure?', ng_if: 'policy.cleanup' }, class: 'btn btn-danger'
 
   = link_to 'Create machine like this', new_aws_ec2_instance_url(id: @ec2_instance.id)

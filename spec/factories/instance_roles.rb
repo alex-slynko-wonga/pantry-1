@@ -9,7 +9,11 @@ FactoryGirl.define do
     instance_size 't1.micro'
     security_group_ids ['ssg-111111']
     enabled true
-    disk_size 10
+
+    transient do
+      volume_size 105
+      additional_volume_size nil
+    end
 
     trait :for_jenkins_server do
       sequence(:name) { |n| "Jenkins Server Role #{n}" }
@@ -17,6 +21,14 @@ FactoryGirl.define do
 
     trait :for_jenkins_slave do
       sequence(:name) { |n| "Jenkins Agent Role #{n}" }
+    end
+
+    ec2_volumes do
+      volumes = [association(:ec2_volume_for_role, size: volume_size, instance_role: @instance, strategy: @build_strategy.class)]
+      if additional_volume_size
+        volumes << association(:ec2_volume_for_role, size: additional_volume_size, instance_role: @instance, strategy: @build_strategy.class)
+      end
+      volumes
     end
   end
 end

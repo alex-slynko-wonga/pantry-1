@@ -93,6 +93,20 @@ ActiveRecord::Schema.define(version: 20150210155626) do
 
   add_index "ec2_instances", ["instance_role_id"], name: "index_ec2_instances_on_instance_role_id", using: :btree
 
+  create_table "ec2_volumes", force: :cascade do |t|
+    t.integer  "ec2_instance_id",  limit: 4
+    t.integer  "instance_role_id", limit: 4
+    t.integer  "size",             limit: 4,                       null: false
+    t.string   "snapshot",         limit: 13
+    t.string   "volume_type",      limit: 8,  default: "standard", null: false
+    t.string   "device_name",      limit: 10,                      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "ec2_volumes", ["ec2_instance_id"], name: "index_ec2_volumes_on_ec2_instance_id", using: :btree
+  add_index "ec2_volumes", ["instance_role_id"], name: "index_ec2_volumes_on_instance_role_id", using: :btree
+
   create_table "environments", force: :cascade do |t|
     t.string   "name",             limit: 255
     t.string   "description",      limit: 255
@@ -111,7 +125,6 @@ ActiveRecord::Schema.define(version: 20150210155626) do
     t.string   "chef_role",            limit: 255, null: false
     t.string   "run_list",             limit: 255
     t.string   "instance_size",        limit: 255, null: false
-    t.integer  "disk_size",            limit: 4,   null: false
     t.boolean  "enabled",              limit: 1,   null: false
     t.datetime "created_at"
     t.datetime "updated_at"

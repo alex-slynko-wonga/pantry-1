@@ -28,21 +28,20 @@ RSpec.describe JenkinsSlave, type: :model do
       expect(subject.ec2_instance.name).to eq('agent-00000012')
     end
 
-    context 'when the last id is less than 99999999' do
-      let(:id) { 99_999_998 }
+    context 'when the last id is less than 9999999' do
+      let(:id) { 999998 }
 
-      it 'creates a name of 15 characters when the counter less than 99999999' do
-        expect(subject.ec2_instance).to be_valid
+      it 'creates a name of 14 characters' do
+        is_expected.to be_valid
         expect(subject.ec2_instance.name.length).to eq(14)
       end
     end
 
     context 'when the last id is more than 99999999' do
-      let(:id) { 99_999_999 }
+      let(:id) { 99999999 }
 
       it 'is invalid for windows' do
         subject.ec2_instance.platform = 'windows'
-        expect(subject.ec2_instance).to be_invalid
         is_expected.to be_invalid
       end
     end

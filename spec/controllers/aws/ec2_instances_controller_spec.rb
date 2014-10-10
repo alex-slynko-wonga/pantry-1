@@ -1,4 +1,3 @@
-require 'spec_helper'
 require 'json'
 
 RSpec.describe Aws::Ec2InstancesController, type: :controller do
@@ -47,10 +46,10 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
                                                  user_id: user.id,
                                                  ami: FactoryGirl.create(:ami).ami_id,
                                                  environment_id: environment.id
-                                                ) }
+                                                ).merge(volume_size: 100) }
     end
 
-    let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', platform_for_ami: 'Winux', flavors: []) }
+    let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', platform_for_ami: 'Winux', flavors: [], generate_volumes: [FactoryGirl.build(:ec2_volume)]) }
     let(:ec2_instance) { assigns(:ec2_instance) }
 
     before(:each) do

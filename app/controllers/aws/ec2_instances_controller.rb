@@ -31,6 +31,7 @@ class Aws::Ec2InstancesController < ApplicationController
       end
 
       @ec2_instance.platform = @ec2_adapter.platform_for_ami(@ec2_instance.ami)
+      @ec2_instance.ec2_volumes = @ec2_adapter.generate_volumes(@ec2_instance.ami, @ec2_instance.volume_size, @ec2_instance.additional_volume_size)
     end
 
     @ec2_instance.user_id = current_user.id
@@ -131,12 +132,14 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def ec2_instance_params
     params.require(:ec2_instance).permit(:name, :ami, :instance_role_id, :flavor, :subnet_id, :domain, :environment_id,
-                                         :run_list, :iam_instance_profile, security_group_ids: [])
+                                         :run_list, :iam_instance_profile, :additional_volume_size, :volume_size, security_group_ids: [])
   end
 
   def initialize_ec2_info(user = pundit_user)
     @ec2_adapter = Wonga::Pantry::Ec2Adapter.new(user)
     @price_list = price_list.retrieve_price_list(@ec2_adapter.flavors)
+  rescue
+    @price_list = nil
   end
 
   def initialize_environments

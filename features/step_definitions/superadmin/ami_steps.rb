@@ -6,9 +6,9 @@ Then(/^I should see the AMI details on the right$/) do
   wait_until(5) do
     page.has_content? 'General information'
   end
-  expect(page.text).to include 'General information'
-  expect(page.text).to include 'Devices'
-  expect(page.text).to include 'Tags'
+  expect(page).to have_text 'General information'
+  expect(page).to have_text 'Devices'
+  expect(page).to have_text 'Tags'
 end
 
 When(/^I hide the "(.*?)" AMI$/) do |name|

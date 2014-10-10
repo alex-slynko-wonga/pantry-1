@@ -15,6 +15,11 @@ FactoryGirl.define do
       state 'terminated'
     end
 
+    transient do
+      volume_size 100
+      additional_volume_size nil
+    end
+
     sequence(:name) { |n| "InstanceName#{n}" }
     domain CONFIG['pantry']['domain']
     platform 'Lindows'
@@ -24,8 +29,13 @@ FactoryGirl.define do
     ami 'i-111111'
     team
     user { FactoryGirl.build(:user, team: team) }
-    volume_size 10
     flavor 't1.micro'
+
+    ec2_volumes do
+      volumes = [association(:ec2_volume, size: volume_size, ec2_instance: @instance, strategy: @build_strategy.class)]
+      volumes << association(:ec2_volume, size: additional_volume_size, ec2_instance: @instance, strategy: @build_strategy.class) if additional_volume_size
+      volumes
+    end
   end
 
   factory :ci_ec2_instance, parent: :ec2_instance do

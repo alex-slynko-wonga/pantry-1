@@ -41,9 +41,9 @@ RSpec.describe Wonga::Pantry::Ec2Adapter do
   context '#platform_for_ami' do
     it 'finds image and gets platform from it' do
       images = client.new_stub_for(:describe_images)
+      allow(client).to receive(:describe_images).and_return(images)
       images[:images_set] = [{ platform: 'windows' }]
       images[:image_index] = { 'test' => { platform: 'windows' } }
-      allow(client).to receive(:describe_images).and_return(images)
       expect(subject.platform_for_ami('test')).to eq('windows')
     end
 
@@ -88,6 +88,136 @@ RSpec.describe Wonga::Pantry::Ec2Adapter do
       allow(client).to receive(:describe_images).and_return(images)
       images[:images_set] = [{ name: 'test-ami2' }]
       expect(subject.get_ami_attributes('test')[:platform]).to eq('linux')
+    end
+  end
+
+  describe '#generate_volumes' do
+    shared_examples_for 'valid volumes' do
+      it 'generates valid volumes' do
+        instance = Ec2Instance.new
+        volumes.each { |volume| volume.ec2_instance = instance }
+        expect(volumes.all?(&:valid?)).to be true
+      end
+    end
+
+    let(:volumes) { subject.generate_volumes('ami', nil) }
+    let(:volume_size) { 50 }
+    let(:device_name) { '/dev/sda1' }
+    let(:block_devices) do
+      [
+        {
+          device_name: device_name,
+          ebs: { snapshot_id: 'snap-00110011', volume_size: volume_size, delete_on_termination: false, volume_type: 'standard', encrypted: false }
+        }
+      ]
+    end
+    let(:platform) { 'windows' }
+
+    before(:each) do
+      images = client.new_stub_for(:describe_images)
+      allow(client).to receive(:describe_images).and_return(images)
+      images[:images_set] = [{ platform: platform, block_device_mapping: block_devices }]
+      images[:image_index] = { 'ami' => { platform: platform, block_device_mapping: block_devices  } }
+    end
+
+    include_examples 'valid volumes'
+
+    it 'generates at least one volume' do
+      expect(volumes.size).to be 1
+    end
+
+    it 'sets disk size from mapping' do
+      expect(volumes.first.size).to eq volume_size
+    end
+
+    it 'sets disk name from mapping' do
+      expect(volumes.first.device_name).to eq device_name
+    end
+
+    context 'when size provided is bigger then required for image' do
+      let(:volumes) { subject.generate_volumes('ami', 500) }
+
+      it 'sets disk size' do
+        expect(volumes.first.size).to eq 500
+      end
+
+      include_examples 'valid volumes'
+    end
+
+    context 'when size in params less then required' do
+      let(:volumes) { subject.generate_volumes('ami', 5) }
+
+      it 'sets disk name from mapping' do
+        expect(volumes.first.device_name).to eq device_name
+      end
+
+      include_examples 'valid volumes'
+    end
+
+    context 'when several sizes provided' do
+      let(:volumes) { subject.generate_volumes('ami', 50, 30) }
+
+      context 'when several disks exist in mapping' do
+        let(:block_devices) do
+          [
+            {
+              device_name: device_name,
+              ebs: { snapshot_id: 'snap-00110011', volume_size: volume_size, delete_on_termination: false, volume_type: 'standard', encrypted: false }
+            },
+            {
+              device_name: 'xvdz',
+              ebs: { snapshot_id: 'snap-00110011', volume_size: volume_size, delete_on_termination: false, volume_type: 'standard', encrypted: false }
+            }
+          ]
+        end
+
+        it 'sets names from mapping' do
+          expect(volumes.last.device_name).to eq('xvdz')
+        end
+
+        include_examples 'valid volumes'
+      end
+
+      context 'when mapping with ephemeral drives provided' do
+        let(:block_devices) do
+          [
+            {
+              device_name: device_name,
+              ebs: { snapshot_id: 'snap-00110011', volume_size: volume_size, delete_on_termination: false, volume_type: 'standard', encrypted: false }
+            },
+            { device_name: 'xvdca', virtual_name: 'ephemeral0' }
+          ]
+        end
+
+        it 'ignores mapping for ephemeral drives' do
+          expect(volumes.last.device_name).not_to eq('xvdca')
+        end
+
+        include_examples 'valid volumes'
+      end
+
+      context 'when only one mapping exists' do
+        let(:volumes) { subject.generate_volumes('ami', 30, 30, 30) }
+        context 'when ami platform is windows' do
+          let(:platform) { 'windows' }
+
+          it 'sets xvdg as name' do
+            expect(volumes.last.device_name).to eq('xvdg')
+          end
+
+          include_examples 'valid volumes'
+        end
+
+        context 'when ami platform is linux' do
+          let(:platform) { nil }
+
+          it 'sets /dev/sdg as name' do
+            expect(volumes.last.device_name).to eq('/dev/sdg')
+          end
+
+          include_examples 'valid volumes'
+        end
+      end
     end
   end
 

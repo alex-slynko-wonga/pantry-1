@@ -33,7 +33,7 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bundler-audit', require: false
-  gem 'codesake-dawn', require: false
+  gem 'dawn', require: false
   gem 'guard-bundler'
   gem 'guard-cucumber'
   gem 'guard-migrate'

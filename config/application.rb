@@ -5,7 +5,6 @@ require 'rails/all'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
 CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), 'pantry.yml')))[Rails.env]
 
 module Wonga

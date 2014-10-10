@@ -9,7 +9,6 @@
       %th Chef role
       %th IAM
       %th Instance size
-      %th Disk size
       %th Enabled
   %tbody
     - @instance_roles.each_with_index do |instance_role, index|
@@ -20,6 +19,5 @@
         %td= instance_role.chef_role
         %td= instance_role.iam_instance_profile
         %td= instance_role.instance_size
-        %td= instance_role.disk_size
         %td= instance_role.enabled
 = link_to 'New Instance Role', new_admin_instance_role_url
