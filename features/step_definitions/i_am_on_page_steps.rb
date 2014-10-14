@@ -2,6 +2,10 @@ Given(/^I am on the AMIs page$/) do
   visit admin_amis_path
 end
 
+Given(/^I am on the InstanceRoles page$/) do
+  visit admin_instance_roles_path
+end
+
 Given(/^I am on root page$/) do
   visit '/'
 end

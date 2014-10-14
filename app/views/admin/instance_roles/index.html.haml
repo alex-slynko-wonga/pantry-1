@@ -1,0 +1,23 @@
+%h1 Instance Roles
+
+%table.table
+  %thead
+    %tr
+      %th #
+      %th Name
+      %th AMI
+      %th Chef role
+      %th Instance size
+      %th Disk size
+      %th Enabled
+  %tbody
+    - @instance_roles.each_with_index do |instance_role, index|
+      %tr
+        %td= index + 1
+        %td= link_to instance_role.name, edit_admin_instance_role_url(instance_role)
+        %td= instance_role.ami_id
+        %td= instance_role.chef_role
+        %td= instance_role.instance_size
+        %td= instance_role.disk_size
+        %td= instance_role.enabled
+= link_to "New Instance Role", new_admin_instance_role_url

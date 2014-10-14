@@ -1,0 +1,5 @@
+%h1
+  Edit Instance Roles
+  %span{id: 'edit_instance_role_id'}= @instance_role.name
+= render 'form'
+= button_to 'Delete Instance Role', admin_instance_role_url(id: @instance_role.id), method: :delete, data: { confirm: "Are you sure?"}
