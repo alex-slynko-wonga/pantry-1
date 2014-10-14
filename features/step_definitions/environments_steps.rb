@@ -30,3 +30,21 @@ Given(/^"(.*?)" team has an (?:"(.*?)" )?environment with name "(.*?)"$/) do |te
   @team = Team.where(name: team_name).first
   FactoryGirl.create(:environment, environment_type: environment_type, team: @team, name: environment_name)
 end
+
+Then(/^I should see environment details/) do
+  expect(page).to have_content @environment.name
+  expect(page).to have_content @environment.environment_type
+  expect(page).to have_content @environment.chef_environment
+  expect(page).to have_content @environment.team.name
+  expect(page).to have_content @environment.human_name
+end
+
+When(/^I click on environment human name$/) do
+  click_on @environment.human_name
+end
+
+Then(/^I should see environment list table$/) do
+  @team.environments.each do |environment|
+    expect(page).to have_content environment.human_name
+  end
+end

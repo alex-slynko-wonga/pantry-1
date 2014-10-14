@@ -67,3 +67,8 @@ end
 When(/^I go into Jenkins slave page$/) do
   visit "/jenkins_servers/#{@jenkins_slave.jenkins_server_id}/jenkins_slaves/#{@jenkins_slave.id}"
 end
+
+When(/^I am on environment page$/) do
+  @environment = Environment.last
+  visit "/environments/#{@environment.id}"
+end

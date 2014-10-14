@@ -20,60 +20,59 @@
               %img{src: user.image_url(25), alt: 'Gravatar'}
               = link_to user.username, user_url(user.id)
             %td= mail_to user.email
-.row-fluid
-  .span12
-    %h4 Jenkins server
-    - if @jenkins_server
-      %table.table
-        %thead
-          %tr
-            %th ID
-            %th Address
-            %th Status
-            %th OS
-            %th URL
-          = render partial: 'jenkins_instance', collection: [@jenkins_server]
-      %h5= link_to_new_slave(@jenkins_server)
-      - if @jenkins_slaves && @jenkins_slaves.size > 0
-        %h4 Jenkins slaves
-        %table.table
-          %thead
-            %tr
-              %th ID
-              %th Address
-              %th Status
-              %th OS
-          = render partial: 'jenkins_instance', collection: @jenkins_slaves
-        %h5= link_to_new_slave(@jenkins_server)
-    - elsif policy(@team.build_jenkins_server).create?
-      %p= link_to "Create a new jenkins server", new_jenkins_server_url
 
 .row-fluid
   .span12
-    - if @ec2_instances.size > 0
-      %h4 Instances
-      %table.table
-        %thead
-          %tr
-            %th ID
-            %th Name
-            %th Status
-            %th OS
-            %th Environment
-        = render partial: 'shared/ec2_instance_row', collection: @ec2_instances
+    %h4 Instances
+    .accordion{:id => "accordion-CI-Env"}
+      .accordion-group
+        .accordion-heading
+          .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "#collapse-CI-Env"}
+            %h4 CI Environment
+        #collapse-CI-Env.accordion-body.collapse.in
+          .accordion-inner
+            %h5 Jenkins server
+            - if @jenkins_server
+              %table.table
+                %thead
+                  %tr
+                    %th ID
+                    %th Address
+                    %th Status
+                    %th OS
+                    %th URL
+                = render partial: 'jenkins_instance', collection: [@jenkins_server]
+              %h5= link_to_new_slave(@jenkins_server)
+              - if @jenkins_slaves && @jenkins_slaves.size > 0
+                %h5 Jenkins slaves
+                %table.table
+                  %thead
+                    %tr
+                    %th ID
+                    %th Address
+                    %th Status
+                    %th OS
+                  = render partial: 'jenkins_instance', collection: @jenkins_slaves
+                %h5= link_to_new_slave(@jenkins_server)
+            - elsif policy(@team.build_jenkins_server).create?
+              %p= link_to "Create a new jenkins server", new_jenkins_server_url
+    - @environments.each do |environment_entry|
+      .accordion{:id => "accordion#{environment_entry.environment_type}"}
+        .accordion-group
+          .accordion-heading
+            .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "##{environment_entry.environment_type}"}
+              %h4= link_to environment_entry.human_name, environment_entry
+            .accordion-body.collapse.in{:id => "#{environment_entry.environment_type}"}
+              .accordion-inner
+                - if environment_entry.ec2_instances.size > 0
+                  = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.ec2_instances.not_terminated
 
     - if policy(@team.ec2_instances.build).create?
       %h4 EC2 Instance Control
       %p= link_to "Launch New Instance", new_aws_ec2_instance_url(team_id: params[:id])
 .row-fluid
   .span12
-    %h4 Environments
-    - if @environments
-      %table.table
-        %tr
-          %th Name
-          %th Environment type
-        = render partial: 'environment', collection: @environments
+    %h4 Environment Control
     - if policy(@environments.build).create?
       %p= link_to "Create a new environment", new_team_environment_url(@team)
 - if policy(@team).deactivate?

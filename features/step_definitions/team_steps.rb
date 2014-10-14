@@ -77,3 +77,20 @@ Then(/^I should see a table with the instance$/) do
   expect(page).to have_content @ec2_instance.environment.human_name
   expect(page).to have_selector "img[src$='/assets/linux_icon.png']"
 end
+
+Then(/^I should (not )?see a short table with the instance$/) do |not_contains|
+  if not_contains
+    expect(page).to_not have_content @ec2_instance.name
+    expect(page).to_not have_content @ec2_instance.human_status
+    expect(page).to_not have_selector "img[src$='/assets/linux_icon.png']"
+  else
+    expect(page).to have_content @ec2_instance.name
+    expect(page).to have_content @ec2_instance.human_status
+    expect(page).to have_selector "img[src$='/assets/linux_icon.png']"
+  end
+end
+
+Given(/^"(.*?)" team has (?:an|a) (?:"(.*?)" )?environment (?:"(.*?)")?$/) do |team_name, environment_type, environment_name|
+  @team = Team.where(name: team_name).first
+  FactoryGirl.create(:environment, environment_type: environment_type, team: @team, name: environment_name)
+end

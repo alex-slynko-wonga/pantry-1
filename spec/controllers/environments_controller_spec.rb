@@ -4,6 +4,7 @@ describe EnvironmentsController do
   let(:team) { FactoryGirl.create(:team) }
   let(:user) { User.new(role: 'developer', teams: [team]) }
   let(:chef_utility) { instance_double('Wonga::Pantry::ChefUtility').as_null_object }
+  let (:environment) { FactoryGirl.create(:environment) }
 
   before :each do
     allow(Wonga::Pantry::ChefUtility).to receive(:new).and_return(chef_utility)
@@ -38,6 +39,13 @@ describe EnvironmentsController do
       post :create, team_id: team.id,
                     environment: { environment_type: 'INT' }
       expect(response.status).not_to be eq(302)
+    end
+  end
+
+  describe "GET 'show'" do
+    it "returns http success" do
+      get 'show', :id => environment.id
+      expect(response).to be_success
     end
   end
 end

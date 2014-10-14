@@ -175,7 +175,7 @@ Given(/^an EC2 instance$/) do
   @ec2_instance = FactoryGirl.create(:ec2_instance)
 end
 
-Given(/^I have (?:an|(\w+)) EC2 instance in the team$/) do |size|
+Given(/^I have (?:an|(\w+)) EC2 instance in the team( with CI environment)?$/) do |size, ci_env_type|
   user = User.first
   if user.teams.empty?
     @team = FactoryGirl.create(:team)
@@ -184,7 +184,13 @@ Given(/^I have (?:an|(\w+)) EC2 instance in the team$/) do |size|
     @team = user.teams.first
   end
 
-  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team, flavor: size|| 'm1.small')
+  if !ci_env_type
+    @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team, flavor: size|| 'm1.small')
+  else
+    @ec2_instance = FactoryGirl.create(:ci_ec2_instance, :running, user: user, team: @team, flavor: size|| 'm1.small')
+  end
+
+  @environment = @ec2_instance.environment
 end
 
 Then(/^I should see machine info$/) do

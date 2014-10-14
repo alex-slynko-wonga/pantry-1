@@ -1,0 +1,22 @@
+.row-fluid
+  .span6
+    %h3= @environment.team.name + " Team"
+  .span6
+    %h3= @environment.human_name + " Environment"
+  .span12
+
+.row-fluid
+  .span4
+    %h4
+      Environment Details
+    %strong Name:
+    %p= @environment.name
+    %strong Type:
+    %p= @environment.environment_type
+    %strong Chef Environment:
+    %p= @environment.chef_environment
+
+  .span8
+    - if @ec2_instances.length > 0
+      %h4 Instances
+      = render 'shared/ec2_instance_details_short', ec2_instances: @ec2_instances

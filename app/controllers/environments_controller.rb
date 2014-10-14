@@ -1,5 +1,5 @@
 class EnvironmentsController < ApplicationController
-  before_filter :get_team
+  before_filter :get_team, only: [:new, :create]
 
   def new
     @environment = @team.environments.build
@@ -17,6 +17,11 @@ class EnvironmentsController < ApplicationController
       flash[:error] = "Environment creation failed: #{human_errors(@environment)}"
       render('new')
     end
+  end
+
+  def show
+    @environment = Environment.find params[:id]
+    @ec2_instances = @environment.ec2_instances
   end
 
   private

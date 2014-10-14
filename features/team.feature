@@ -68,7 +68,7 @@ Feature: Managing Teams
   Scenario: Show EC2 instances in the team page
     Given I have an EC2 instance in the team
     When I am on the team page
-    Then I should see a table with the instance
+    Then I should see a short table with the instance
 
   Scenario: Inactive teams
     Given the "TeamName" team is inactive

@@ -1,0 +1,13 @@
+%table.table
+  %thead
+    %tr
+      %th ID
+      %th Name
+      %th Status
+      %th OS
+  - ec2_instances.each do |instance|
+    %tr
+      %td= instance.id
+      %td= link_to instance.name, url_for([:aws, instance])
+      %td= instance.human_status
+      %td= os_image(instance.platform)

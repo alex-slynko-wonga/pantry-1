@@ -16,6 +16,7 @@
 //= require bootstrap-alert
 //= require bootstrap-modal
 //= require bootstrap-dropdown
+//= require bootstrap-collapse
 //= require angular
 //= require angular-resource
 //= require angular_app
