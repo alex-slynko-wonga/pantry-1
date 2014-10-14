@@ -1,15 +1,18 @@
 AllCops:
+  RunRailsCops: true
   Exclude:
     - '**/metadata.rb'
     - '**/*.gemspec'
     - '**/version.rb'
 
-ClassAndModuleChildren:
+Style/ClassAndModuleChildren:
   Enabled: false
-Documentation:
+Style/CollectionMethods:
+  Enabled: false
+Style/Documentation:
   Enabled: false
 
-CollectionMethods:
-  Enabled: false
-LineLength:
+Metrics/LineLength:
   Max: 160
+Metrics/MethodLength:
+  Max: 25
