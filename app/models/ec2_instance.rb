@@ -5,59 +5,48 @@ class Ec2Instance < ActiveRecord::Base
   belongs_to :instance_role
   has_one :jenkins_server
   has_one :jenkins_slave
-  has_many   :ec2_instance_costs
-  has_many   :ec2_instance_logs
+  has_many :ec2_instance_costs
+  has_many :ec2_instance_logs
 
-  validates :name, uniqueness: { scope: [:terminated] }, unless: 'terminated?'
-  validate :winbind_compatibility, unless:'terminated?'
-  validates :name, presence: true
-  validates :platform, presence: true
-  validates :name, length: { maximum: 14, too_long: "Name must be <= 14 characters for MSDTC in Windows platform" }, if: 'platform == "windows"', on: :create
+  validates :ami, presence: true
+  validates :domain, presence: true, domain_name: true
+  validates :environment, presence: true
+  validates :flavor, presence: true
+  validates :instance_id, presence: true, if: :was_booted?
+  validates :ip_address, presence: true, if: :was_booted?
+  validates :name, length: { maximum: 14, too_long: 'Name must be <= 14 characters for MSDTC in Windows platform' }, if: 'platform == "windows"', on: :create
   validates :name, length: { maximum: 63 }, if: 'platform == "linux"'
-  validate  :name_rfc1123
+  validates :name, presence: true, format: /\A[a-zA-Z]+[a-zA-Z0-9-]*[a-zA-Z0-9]+\Z/
+  validates :name, uniqueness: { scope: [:terminated] }, unless: 'terminated?'
+  validates :platform, presence: true
+  validates :run_list, presence: true, chef_run_list_format: true
+  validates :security_group_ids, presence: true, security_group_ids_limit: true
+  validates :state, presence: true
   validates :team, presence: true
   validates :user, presence: true
-  validates :domain, presence: true, domain_name: true
-  validates :run_list, presence: true, chef_run_list_format: true
-  validates :ami, presence: true
-  validates :environment, presence: true
-  validates :volume_size, presence: true
-  validates :flavor, presence: true
-  validates :security_group_ids, presence: true, security_group_ids_limit: true
-  validate  :check_user_team, on: :create
-  validate  :jenkins_slave_is_ok, on: :create
-  validate  :jenkins_server_is_ok, on: :create
-  validate  :check_environment_team, on: :create
-  validates :state, presence: true
-  validates :ip_address, presence: true, if: :was_booted?
-  validates :instance_id, presence: true, if: :was_booted?
+
+  validate :check_environment_team, on: :create
+  validate :check_user_team, on: :create
+  validate :jenkins_server_is_ok, on: :create
+  validate :jenkins_slave_is_ok, on: :create
+  validate :winbind_compatibility, unless: 'terminated?'
 
   serialize :security_group_ids
 
-  before_validation :set_platform_security_group_id, on: :create
   after_initialize :init, on: :create
-  before_validation :check_security_group_ids
+  before_validation :set_platform_security_group_id, on: :create
   before_validation :set_volume_size, on: :create
 
   scope :terminated, -> { where(state: 'terminated') }
   scope :not_terminated, -> { where.not(state: 'terminated') }
 
-  def name_rfc1123
-    hostname_regex = /\A[a-zA-Z]+[a-zA-Z0-9-]*[a-zA-Z0-9]+\Z/
-    errors.add(:name, "Only alphanumeric and hyphens are allowed (see rfc1123)") unless name && name[hostname_regex]
-  end
-
-  def check_security_group_ids
-    self.security_group_ids.reject! { |i| i.empty? } if self.security_group_ids
-  end
-
   def human_status
     state.humanize
   end
 
-  def update_info(ec2_instance_info=nil)
+  def update_info(ec2_instance_info = nil)
     return if self.terminated?
-    updater = Wonga::Pantry::Ec2InstanceUpdateInfo.new(self,ec2_instance_info)
+    updater = Wonga::Pantry::Ec2InstanceUpdateInfo.new(self, ec2_instance_info)
     # Phase1: update attributes
     attr = updater.update_attributes
     # Phase2: Determine state change(s) needed, if any
@@ -66,6 +55,7 @@ class Ec2Instance < ActiveRecord::Base
   end
 
   private
+
   def init
     self.domain       ||= CONFIG['pantry']['domain']
     self.subnet_id    ||= CONFIG['aws']['default_subnet']
@@ -77,24 +67,26 @@ class Ec2Instance < ActiveRecord::Base
   end
 
   def set_platform_security_group_id
-    self.security_group_ids = Array(self.security_group_ids)
-    if self.platform == 'windows'
-      self.security_group_ids << CONFIG['aws']['security_group_windows']
+    self.security_group_ids = Array(security_group_ids)
+    if platform == 'windows'
+      security_group_ids << CONFIG['aws']['security_group_windows']
     else
-      self.security_group_ids << CONFIG['aws']['security_group_linux']
+      security_group_ids << CONFIG['aws']['security_group_linux']
     end
-    self.security_group_ids.uniq!
+    self.security_group_ids = security_group_ids.uniq.reject(&:empty?)
   end
 
   def check_user_team
-    return unless self.user && self.team
-    errors.add(:team_id, "Current user is not in this team.") unless self.user.teams.include?(self.team)
+    return unless user && team
+
+    errors.add(:team_id, 'Current user is not in this team.') unless user.teams.include?(team)
   end
 
   def check_environment_team
-    return unless self.team && self.environment
-    errors.add(:environment_id, "Environment is not from this team") unless self.environment.team_id == self.team_id
-    errors.add(:environment_id, "Environment is not ready to be used") if self.environment.chef_environment.blank?
+    return unless team && environment
+
+    errors.add(:environment_id, 'Environment is not from this team') unless environment.team_id == team_id
+    errors.add(:environment_id, 'Environment is not ready to be used') if environment.chef_environment.blank?
   end
 
   def was_booted?
@@ -114,9 +106,8 @@ class Ec2Instance < ActiveRecord::Base
   def winbind_compatibility
     return unless name
     return unless name.size > 15 # otherwise use Rails uniqueness validation
+    return unless Ec2Instance.where('name like ?', name[0, 14] + '%').where.not(id: id).not_terminated.exists?
 
-    if Ec2Instance.where("name like ?", name[0, 14] + '%').where.not(id: id).not_terminated.exists?
-      errors.add(:name, "The first 15 characters (#{name[0, 14]}) are not unique. This constraint is required to join the Active Directory")
-    end
+    errors.add(:name, "The first 15 characters (#{name[0, 14]}) are not unique. This constraint is required to join the Active Directory")
   end
 end
