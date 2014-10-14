@@ -1,0 +1,14 @@
+= simple_form_for [:admin, @instance_role] do |f|
+
+  = f.input :name
+  = f.association :ami, collection: @ami, as: :grouped_select, group_method: :second
+
+  = f.input :chef_role
+  = f.input :run_list, as: :text
+  = f.input :instance_size
+  = f.input :disk_size
+  = f.input :security_group_ids, collection: @ec2_adapter.security_groups, as: 'check_boxes'
+  = f.input :enabled, as: :boolean
+
+  %br
+  = f.submit

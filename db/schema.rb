@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929094722) do
+ActiveRecord::Schema.define(version: 20141009105311) do
 
   create_table "admin_maintenance_windows", force: true do |t|
     t.string   "name"
@@ -89,6 +89,21 @@ ActiveRecord::Schema.define(version: 20140929094722) do
     t.datetime "updated_at"
     t.string   "environment_type"
   end
+
+  create_table "instance_roles", force: true do |t|
+    t.string   "name",               null: false
+    t.integer  "ami_id",             null: false
+    t.string   "security_group_ids"
+    t.string   "chef_role",          null: false
+    t.string   "run_list"
+    t.string   "instance_size",      null: false
+    t.integer  "disk_size",          null: false
+    t.boolean  "enabled",            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "instance_roles", ["ami_id"], name: "index_instance_roles_on_ami_id", using: :btree
 
   create_table "jenkins_servers", force: true do |t|
     t.integer  "team_id"

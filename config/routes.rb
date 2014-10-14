@@ -2,6 +2,7 @@ Wonga::Pantry::Application.routes.draw do
   namespace :admin do
     resources :maintenance_windows
     resources :amis, except: [:show]
+    resources :instance_roles, except: [:show]
   end
 
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
