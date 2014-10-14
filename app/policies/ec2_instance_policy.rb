@@ -1,6 +1,7 @@
 class Ec2InstancePolicy < ApplicationPolicy
   def create?
-    god_mode? || (team_member? && !maintenance_mode?)
+    god_mode? ||
+      ((team_member? || record.team.blank?) && !maintenance_mode?)
   end
 
   def shutdown_now?
@@ -24,10 +25,10 @@ class Ec2InstancePolicy < ApplicationPolicy
   end
 
   private
+
   def can_move_with_event(event)
     delegated_method = "can_#{event}"
     state_machine = Wonga::Pantry::Ec2InstanceMachine.new(record)
     state_machine.respond_to?(delegated_method) && state_machine.public_send(delegated_method)
   end
-
 end

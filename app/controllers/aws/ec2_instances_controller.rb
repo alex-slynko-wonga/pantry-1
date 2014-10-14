@@ -4,23 +4,20 @@ class Aws::Ec2InstancesController < ApplicationController
   def new
     @ec2_instance = Ec2Instance.new
     @ec2_instance.team_id = params[:team_id] unless params[:team_id].blank?
-    @ec2_instance.team ||= current_user.teams.first
     authorize @ec2_instance
   end
 
   def create
     if ec2_instance_params[:instance_role_id].present?
       @instance_role = @instance_roles.find(ec2_instance_params[:instance_role_id])
-      @ec2_instance = Ec2Instance.new(ec2_instance_params.merge({
-                                                                  user_id: current_user.id,
-                                                                  flavor: @instance_role.instance_size,
-                                                                  ami: @instance_role.ami.ami_id,
-                                                                  run_list: @instance_role.full_run_list,
-                                                                  security_group_ids: @instance_role.security_group_ids,
-                                                                  volume_size: @instance_role.disk_size
-                                                                }))
+      @ec2_instance = Ec2Instance.new(ec2_instance_params.merge(user_id: current_user.id,
+                                                                flavor: @instance_role.instance_size,
+                                                                ami: @instance_role.ami.ami_id,
+                                                                run_list: @instance_role.full_run_list,
+                                                                security_group_ids: @instance_role.security_group_ids,
+                                                                volume_size: @instance_role.disk_size))
     else
-      @ec2_instance = Ec2Instance.new(ec2_instance_params.merge({user_id: current_user.id}))
+      @ec2_instance = Ec2Instance.new(ec2_instance_params.merge(user_id: current_user.id))
     end
 
     if policy(@ec2_instance).custom_ami? && params[:custom_ami].present?
@@ -37,16 +34,14 @@ class Aws::Ec2InstancesController < ApplicationController
 
     @ec2_instance.platform = @ec2_adapter.platform_for_ami(@ec2_instance.ami)
 
-    ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user)
-    @ec2_instance.team ||= current_user.teams.first
     authorize @ec2_instance
 
-    if ec2_resource.boot
-      flash[:notice] = "Ec2 Instance request succeeded."
+    if Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user).boot
+      flash[:notice] = 'Ec2 Instance request succeeded.'
       redirect_to [:aws, @ec2_instance]
     else
       flash[:error] = "Ec2 Instance request failed: #{human_errors(@ec2_instance)}"
-      render :action => "new"
+      render action: 'new'
     end
   end
 
@@ -67,7 +62,7 @@ class Aws::Ec2InstancesController < ApplicationController
     @ec2_instance = Ec2Instance.find(params[:id])
     authorize(@ec2_instance)
     if Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user).terminate
-      flash[:notice] = "Ec2 Instance deletion request success"
+      flash[:notice] = 'Ec2 Instance deletion request success'
     else
       flash[:error] = "Ec2 Instance deletion request failed: #{human_errors(@ec2_instance)}"
     end
@@ -79,21 +74,21 @@ class Aws::Ec2InstancesController < ApplicationController
     ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user)
     authorize(@ec2_instance, "#{params[:event]}?")
 
-    if params[:event] == "shutdown_now"
+    if params[:event] == 'shutdown_now'
       if ec2_resource.stop
-        flash[:notice] = "Shutting down has started"
+        flash[:notice] = 'Shutting down has started'
       else
         flash[:error] = "An error occurred when shutting down.#{human_errors(@ec2_instance)}"
       end
-    elsif params[:event] == "start_instance"
+    elsif params[:event] == 'start_instance'
       if ec2_resource.start
-        flash[:notice] = "Starting instance"
+        flash[:notice] = 'Starting instance'
       else
         flash[:error] = "An error occurred while attempting to start the instance. #{human_errors(@ec2_instance)}"
       end
-    elsif params[:event] == "resize"
+    elsif params[:event] == 'resize'
       if ec2_resource.resize(params[:ec2_instance][:flavor])
-        flash[:notice] = "Resizing instance"
+        flash[:notice] = 'Resizing instance'
       else
         flash[:error] = "An error occurred while attempting to resize the instance. #{human_errors(@ec2_instance)}"
       end
@@ -110,7 +105,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :user_id, :ami, :instance_role_id, :flavor, :subnet_id, :domain, :environment_id, :run_list, :platform, :security_group_ids => [])
+    params.require(:ec2_instance).permit(:name, :user_id, :ami, :instance_role_id, :flavor, :subnet_id, :domain, :environment_id, :run_list, :platform, security_group_ids: [])
   end
 
   def initialize_ec2_adapter

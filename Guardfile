@@ -42,3 +42,7 @@ end
 
 ENV["SKIP_COV"] = 'true'
 
+guard :rubocop, all_on_start: false, all_on_pass: false do
+  watch(%r{.+\.rb$})
+  watch(%r{(?:.+/)?\.rubocop\.yml$}) { |m| File.dirname(m[0]) }
+end
