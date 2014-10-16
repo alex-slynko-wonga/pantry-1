@@ -27,8 +27,11 @@
     .accordion{:id => "accordion-CI-Env"}
       .accordion-group
         .accordion-heading
-          .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "#collapse-CI-Env"}
-            %h4 CI Environment
+          .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "#collapse-CI-Env", :style => "background-color: #eee"}
+            - if @team.ci_environment
+              %h4= link_to "CI Environment", @team.ci_environment
+            - else
+              %h4 CI Environment
         #collapse-CI-Env.accordion-body.collapse.in
           .accordion-inner
             %h5 Jenkins server
@@ -57,15 +60,16 @@
             - elsif policy(@team.build_jenkins_server).create?
               %p= link_to "Create a new jenkins server", new_jenkins_server_url
     - @environments.each do |environment_entry|
-      .accordion{:id => "accordion#{environment_entry.environment_type}"}
-        .accordion-group
-          .accordion-heading
-            .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "##{environment_entry.environment_type}"}
-              %h4= link_to environment_entry.human_name, environment_entry
-            .accordion-body.collapse.in{:id => "#{environment_entry.environment_type}"}
-              .accordion-inner
-                - if environment_entry.ec2_instances.size > 0
-                  = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.ec2_instances.not_terminated
+      - if environment_entry.environment_type!='CI'
+        .accordion{:id => "accordion#{environment_entry.environment_type}"}
+          .accordion-group
+            .accordion-heading
+              .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "##{environment_entry.name}_#{environment_entry.environment_type}", :style => "background-color: #eee"}
+                %h4= link_to environment_entry.human_name, environment_entry
+              .accordion-body.collapse.in{:id => "#{environment_entry.name}_#{environment_entry.environment_type}"}
+                .accordion-inner
+                  - if environment_entry.ec2_instances.size > 0
+                    = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.ec2_instances.not_terminated
 
     - if policy(@team.ec2_instances.build).create?
       %h4 EC2 Instance Control
