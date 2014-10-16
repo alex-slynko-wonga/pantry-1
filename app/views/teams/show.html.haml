@@ -27,12 +27,15 @@
     .accordion{:id => "accordion-CI-Env"}
       .accordion-group
         .accordion-heading
-          .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "#collapse-CI-Env", :style => "background-color: #eee"}
+          .span11.lightgray
             - if @team.ci_environment
-              %h4= link_to "CI Environment", @team.ci_environment
+              %h4.text-centered= link_to "CI Environment", @team.ci_environment
             - else
-              %h4 CI Environment
-        #collapse-CI-Env.accordion-body.collapse.in
+              %h4.text-centered CI Environment
+          .span1
+            .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "#collapse-CI-Env"}
+              .i.icon-centered.icon-chevron-down
+        #collapse-CI-Env.accordion-body.fullwidth.collapse.in
           .accordion-inner
             %h5 Jenkins server
             - if @jenkins_server
@@ -64,20 +67,23 @@
         .accordion{:id => "accordion#{environment_entry.environment_type}"}
           .accordion-group
             .accordion-heading
-              .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "##{environment_entry.name}_#{environment_entry.environment_type}", :style => "background-color: #eee"}
-                %h4= link_to environment_entry.human_name, environment_entry
-              .accordion-body.collapse.in{:id => "#{environment_entry.name}_#{environment_entry.environment_type}"}
-                .accordion-inner
-                  - if environment_entry.ec2_instances.size > 0
-                    = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.ec2_instances.not_terminated
+              .span11.lightgray
+                %h4.text-centered= link_to environment_entry.human_name, environment_entry
+              .span1
+                .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "##{environment_entry.human_name.parameterize}"}
+                  .i.icon-centered.icon-chevron-down
+            .accordion-body.fullwidth.collapse.in{:id => "#{environment_entry.human_name.parameterize}"}
+              .accordion-inner
+                - if environment_entry.ec2_instances.size > 0
+                  = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.ec2_instances.not_terminated
 
     - if policy(@team.ec2_instances.build).create?
       %h4 EC2 Instance Control
       %p= link_to "Launch New Instance", new_aws_ec2_instance_url(team_id: params[:id])
 .row-fluid
   .span12
-    %h4 Environment Control
     - if policy(@environments.build).create?
+      %h4 Environment Control
       %p= link_to "Create a new environment", new_team_environment_url(@team)
 - if policy(@team).deactivate?
   %button.button.close{data: {toggle: 'modal', target: '.deactivate_modal'}} Deactivate

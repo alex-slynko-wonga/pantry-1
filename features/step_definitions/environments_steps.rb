@@ -43,8 +43,10 @@ When(/^I click on environment human name$/) do
   click_on @environment.human_name
 end
 
-Then(/^I should see environment list table$/) do
+Then(/^I should see all environment human names except CI$/) do
   @team.environments.each do |environment|
-    expect(page).to have_content environment.human_name
+    if environment.environment_type!='CI'
+      expect(page).to have_content environment.human_name
+    end
   end
 end

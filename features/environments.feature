@@ -33,10 +33,10 @@ Feature: Multiple environments
     Then I should see environment details
     And I should see a short table with the instance
 
-  Scenario: Show environment list
+  Scenario: Show all environments except CI
     Given I am in the "teamname" team
     And "teamname" team has an "INT" environment "TEST_INT"
     And "teamname" team has an "RC" environment "TEST_RC"
     And "teamname" team has a "WIP" environment "TEST_WIP"
     When I am on the team page
-    Then I should see environment list table
+    Then I should see all environment human names except CI
