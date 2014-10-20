@@ -40,3 +40,15 @@ Feature: Multiple environments
     And "teamname" team has a "WIP" environment "TEST_WIP"
     When I am on the team page
     Then I should see all environment human names except CI
+
+  Scenario: Create new CI environment when it does not exist
+    Given I am in the "teamname" team
+    And "teamname" team does not have "CI" environment
+    When I am on the team page
+    Then I can create a new CI environment
+
+  Scenario: Create new CI environment when it exists
+    Given I am in the "teamname" team
+    And "teamname" team has a "CI" environment "test"
+    When I am on the team page
+    Then I can not create a new CI environment

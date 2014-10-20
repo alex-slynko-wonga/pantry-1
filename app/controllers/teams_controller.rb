@@ -10,8 +10,6 @@ class TeamsController < ApplicationController
     @team = Team.new(team_params)
     @team.users = users
     if @team.save
-      chef_utility = Wonga::Pantry::ChefUtility.new
-      chef_utility.request_chef_environment(@team, @team.environments.first)
       flash[:notice] = "Team created successfully"
       redirect_to @team
     else

@@ -7,7 +7,6 @@ Feature: Managing Teams
     And I should see "TeamName"
     And the team page has my info
     And I should see a flash message with "Team created successfully"
-    And a new CI chef environment should be requested
     And I click "Teams"
     And I should see "TeamProduct"
     And I should see "TeamRegion"

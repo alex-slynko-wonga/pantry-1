@@ -50,3 +50,11 @@ Then(/^I should see all environment human names except CI$/) do
     end
   end
 end
+
+Then(/^I can( not)? create a new CI environment$/) do |not_contains|
+  if not_contains
+    expect(page).to_not have_content "Create a new CI environment"
+  else
+    expect(page).to have_content "Create a new CI environment"
+  end
+end

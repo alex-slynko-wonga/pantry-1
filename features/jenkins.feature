@@ -7,7 +7,7 @@ Feature: Jenkins
     Given AWS has information about machines
     And queues and topics are configured
     And I am in the "Pantry Team" team
-    And CI environment is ready
+    And "Pantry Team" team has a "CI" environment "Pantry"
 
   @javascript
   Scenario: Start jenkins server

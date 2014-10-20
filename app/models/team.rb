@@ -16,15 +16,8 @@ class Team < ActiveRecord::Base
   default_scope -> { where('disabled' => [nil, false]).order(:name) }
   # FIXME with 4.1
   scope :inactive, -> { unscoped.where(disabled: true).order(:name) }
-  after_create :create_ci_environment
 
   def jenkins_host_name
     self.name.parameterize.gsub('_', '-').gsub('--', '-')[0..62]
-  end
-
-  private
-
-  def create_ci_environment
-    self.environments.create!(name: "#{self.name} CI", environment_type: 'CI')
   end
 end

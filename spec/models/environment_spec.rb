@@ -2,14 +2,22 @@ require 'spec_helper'
 
 describe Environment do
   subject { FactoryGirl.build(:environment) }
-  let(:team) { FactoryGirl.create(:team) }
 
   it { should be_valid }
 
-  it "allows only one CI environment_type per team" do
-    expect(FactoryGirl.build(:environment, team: team, environment_type: 'CI')).to be_invalid
-    team.ci_environment.chef_environment = 'chef_env'
-    expect(team.ci_environment).to be_valid
+  context "when team does not have CI environment" do
+    let(:team) { FactoryGirl.create(:team) }
+    it "allows to create new CI environment" do
+      expect(FactoryGirl.build(:environment, team: team, environment_type: 'CI')).to be_valid
+    end
+  end
+
+  context "when team has CI environment" do
+    let(:team) { FactoryGirl.create(:team, :with_ci_environment) }
+    it "does not allow to create new CI environment" do
+      expect(FactoryGirl.build(:environment, team: team, environment_type: 'CI')).to be_invalid
+      expect(team.ci_environment).to be_valid
+    end
   end
 
   context ".available" do

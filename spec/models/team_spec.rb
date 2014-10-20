@@ -17,14 +17,4 @@ describe Team do
       expect(Team.without_jenkins.count).to eq(1)
     end
   end
-
-  it "creates an environment after creation" do
-    team = FactoryGirl.build(:team)
-    expect { team.save }.to change { Environment.count }.by(1)
-  end
-
-  it "creates a CI type enviroment after creation" do
-    team = FactoryGirl.create(:team)
-    expect( team.environments.first.environment_type ).to eq('CI')
-  end
 end

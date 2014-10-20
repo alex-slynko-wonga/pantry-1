@@ -94,3 +94,9 @@ Given(/^"(.*?)" team has (?:an|a) (?:"(.*?)" )?environment (?:"(.*?)")?$/) do |t
   @team = Team.where(name: team_name).first
   FactoryGirl.create(:environment, environment_type: environment_type, team: @team, name: environment_name)
 end
+
+Given(/^"(.*?)" team does not have (?:"(.*?)" )?environment$/) do |team_name, environment_type|
+  @team = Team.where(name: team_name).first
+  @ci_environment_count = @team.environments.count{|environment| environment.environment_type == environment_type}
+  expect(@ci_environment_count).to eq(0)
+end

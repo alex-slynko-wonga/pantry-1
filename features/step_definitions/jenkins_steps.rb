@@ -1,7 +1,3 @@
-Given(/^CI environment is ready$/) do
-  Environment.where(team_id: @team.id).first.update_attributes(chef_environment: 'myenv')
-end
-
 Given(/^I request jenkins server$/) do
   visit '/jenkins_servers/new'
   click_on 'Create server'

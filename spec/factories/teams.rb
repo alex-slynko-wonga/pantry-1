@@ -6,7 +6,7 @@ FactoryGirl.define do
     description "MyString"
 
     trait :with_ci_environment do
-      after(:create) { |team| team.ci_environment.update_attribute(:chef_environment, team.name) }
+      after(:build) { |team| FactoryGirl.build(:ci_environment, team: team, chef_environment: team.name)}
     end
   end
 end

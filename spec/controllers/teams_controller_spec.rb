@@ -46,11 +46,6 @@ describe TeamsController do
       expect(team.users.count).to eq(1)
       expect(team.users.first).to eq(user)
     end
-
-    it "sends SQS message to chef env create daemon" do
-      post :create, team_params.merge(users: [user.username, user.name])
-      expect(chef_utility).to have_received(:request_chef_environment)
-    end
   end
 
   describe "PUT 'update'" do

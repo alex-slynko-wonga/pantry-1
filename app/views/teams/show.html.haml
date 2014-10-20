@@ -20,11 +20,10 @@
               %img{src: user.image_url(25), alt: 'Gravatar'}
               = link_to user.username, user_url(user.id)
             %td= mail_to user.email
-
 .row-fluid
   .span12
     %h4 Instances
-    .accordion{:id => "accordion-CI-Env"}
+    .accordion{id: "accordion-CI-Env"}
       .accordion-group
         .accordion-heading
           .span11.lightgray
@@ -32,8 +31,10 @@
               %h4.text-centered= link_to "CI Environment", @team.ci_environment
             - else
               %h4.text-centered CI Environment
+              - if policy(Environment.new(team: @team)).create?
+                %p.text-centered= link_to "Create a new CI environment", new_team_environment_url(@team, environment_type: 'CI')
           .span1
-            .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "#collapse-CI-Env"}
+            .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", href: "#collapse-CI-Env"}
               .i.icon-centered.icon-chevron-down
         #collapse-CI-Env.accordion-body.fullwidth.collapse.in
           .accordion-inner
@@ -64,15 +65,15 @@
               %p= link_to "Create a new jenkins server", new_jenkins_server_url
     - @environments.each do |environment_entry|
       - if environment_entry.environment_type!='CI'
-        .accordion{:id => "accordion#{environment_entry.environment_type}"}
+        .accordion{id: "accordion#{environment_entry.environment_type}"}
           .accordion-group
             .accordion-heading
               .span11.lightgray
                 %h4.text-centered= link_to environment_entry.human_name, environment_entry
               .span1
-                .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", :href => "##{environment_entry.human_name.parameterize}"}
+                .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", href: "##{environment_entry.human_name.parameterize}"}
                   .i.icon-centered.icon-chevron-down
-            .accordion-body.fullwidth.collapse.in{:id => "#{environment_entry.human_name.parameterize}"}
+            .accordion-body.fullwidth.collapse.in{id: "#{environment_entry.human_name.parameterize}"}
               .accordion-inner
                 - if environment_entry.ec2_instances.size > 0
                   = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.ec2_instances.not_terminated
@@ -82,7 +83,7 @@
       %p= link_to "Launch New Instance", new_aws_ec2_instance_url(team_id: params[:id])
 .row-fluid
   .span12
-    - if policy(@environments.build).create?
+    - if policy(Environment.new(team: @team)).create?
       %h4 Environment Control
       %p= link_to "Create a new environment", new_team_environment_url(@team)
 - if policy(@team).deactivate?
