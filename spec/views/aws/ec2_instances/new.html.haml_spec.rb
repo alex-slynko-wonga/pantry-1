@@ -22,8 +22,9 @@ describe 'aws/ec2_instances/new.html.haml' do
     expect(view).to receive(:policy).and_return(instance_double(Ec2InstancePolicy, custom_ami?: false))
   end
 
-  context "when team_name is exist" do
+  context "when team exists" do
     it "fill environments for specific team" do
+      assign(:team, team)
       assign(:team_name, team.name)
       render
       expect(response).to include(environments.first)
@@ -31,7 +32,7 @@ describe 'aws/ec2_instances/new.html.haml' do
     end
   end
 
-  context "when team_name is empty" do
+  context "when team is empty" do
     it "fill all environments" do
       render
       expect(response).to include(grouped_environments.first[0])

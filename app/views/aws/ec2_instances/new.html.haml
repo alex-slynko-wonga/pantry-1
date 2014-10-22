@@ -4,8 +4,9 @@
   = f.input :name, hint: 'must start with a letter, only alphanumeric and hyphen characters are accepted'
   = f.input :domain
 
-  - if @team_name
+  - if @team
     = f.input :environment_id, collection: @environments
+    = link_to "Create a new environment", new_team_environment_url(@team)
   - else
     = f.input :environment_id, collection: @grouped_environments, as: :grouped_select, group_method: :second, group_label_method: :first
 

@@ -116,7 +116,8 @@ class Aws::Ec2InstancesController < ApplicationController
     @environments = policy_scope(Environment)
     if params[:team_id]
       @environments.where!(team_id: params[:team_id]).order(:name)
-      @team_name = Team.find(params[:team_id]).name
+      @team = Team.find(params[:team_id])
+      @team_name = @team.name
     else
       @grouped_environments = @environments.group_by_team_name
     end

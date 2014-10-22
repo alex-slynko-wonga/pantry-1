@@ -3,7 +3,7 @@ Feature: Multiple environments
   To group instances
   I would like to be able to create multiple Chef environments
 
-  Scenario: Create a new environment
+  Scenario: Create a new environment from the team page
     Given I am in the "TeamName" team
     And queues and topics are configured
     And I am on the "TeamName" team page
@@ -14,6 +14,20 @@ Feature: Multiple environments
     Then a new chef environment should be requested
     When environment is created
     When I request new ec2 instance
+    Then I should be able to choose "Ours" from list of environments
+
+  Scenario: Create  a new environment from the EC2 Instance page
+    Given I am in the "TeamName" team
+    And queues and topics are configured
+    And I request an EC2 instance for team "TeamName"
+    When I click "Create a new environment"
+    And I select "WIP" as environment type
+    And name it as "Ours"
+    And I save environment
+    Then a new chef environment should be requested
+    When environment is created
+    Then I should see "Create EC2 Instance"
+    When I request an EC2 instance for team "TeamName"
     Then I should be able to choose "Ours" from list of environments
 
   Scenario: Link to environment details from pages
