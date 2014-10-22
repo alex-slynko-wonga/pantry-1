@@ -21,6 +21,13 @@
       Status:
     .span2{data_ng_bind: 'ec2_instance.human_status'}
       = ec2_instance.human_status
+
+  - if ec2_instance.instance_role_id
+    .row-fluid
+      .span2
+        Instance role:
+      .span2= link_to_instance_role(ec2_instance)
+
   .row-fluid
     .span2 AMI:
     .span2= ec2_instance.ami

@@ -3,6 +3,10 @@ module ApplicationHelper
     link_to_if ec2_instance.state=="ready", instance_canonical_url(ec2_instance), instance_canonical_url(ec2_instance), target: '_blank'
   end
 
+  def link_to_instance_role(ec2_instance)
+    link_to_if policy(current_user).admin?, ec2_instance.instance_role.name, admin_instance_role_path(ec2_instance.instance_role)
+  end
+
   def navbar_link_to(caption, url)
     content_tag(:li, nil, class: ("active" if current_page?(url))) do
       link_to(caption, url)

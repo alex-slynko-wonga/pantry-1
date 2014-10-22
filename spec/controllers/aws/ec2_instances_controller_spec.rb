@@ -55,6 +55,25 @@ describe Aws::Ec2InstancesController do
       expect(ec2_resource).to have_received(:boot)
     end
 
+    context "with instance role" do
+      let(:instance_role) { FactoryGirl.create(:instance_role) }
+      let(:ec2_instance_params) {
+        { ec2_instance: FactoryGirl.attributes_for(:ec2_instance,
+                                                   name: 'InstanceName',
+                                                   team_id: team.id,
+                                                   user_id: user.id,
+                                                   environment_id: environment.id,
+                                                   instance_role_id: instance_role.id
+                                                  )
+        }
+      }
+
+      it "uses ec2_resource to boot" do
+        post :create, ec2_instance_params
+        expect(ec2_resource).to have_received(:boot)
+      end
+    end
+
     context "with custom_ami in params" do
       let(:ec2_instance_params) {
         { ec2_instance: FactoryGirl.attributes_for(:ec2_instance,

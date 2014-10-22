@@ -15,6 +15,7 @@ Feature: EC2 Instance
     Then I should see "instanceName"
     And I should see "Booting"
     And I should see a flash message with "Ec2 Instance request succeeded."
+    And I should not see "Instance role:"
     And an instance build should start
 
     When an instance is created with ip "123.456.7.8"
@@ -33,11 +34,11 @@ Feature: EC2 Instance
     And I am in the "second" team
     And "second" team has an "WIP" environment with name "custom2"
     When I request an EC2 instance
-    And I select "custom1" environment
+    And I choose "custom1" environment
     Then I should see "Team: first" after page is updated
-    When I select "custom2" environment
+    When I choose "custom2" environment
     Then  I should see "Team: second" after page is updated
-    But I should not be able to select environment "first CI"
+    But I should not be able to choose "first CI" environment
 
   @javascript
   Scenario: Creating a new instance for specific team
@@ -46,10 +47,34 @@ Feature: EC2 Instance
     And I am in the "second" team
     And "second" team has an "WIP" environment with name "custom2"
     When I request an EC2 instance for team "first"
-    And I select "custom1" environment
+    And I choose "custom1" environment
     Then I should see "Team: first"
-    But I should not be able to select environment "custom2"
-    And I should not be able to select environment "first CI"
+    But I should not be able to choose "custom2" environment
+    And I should not be able to choose "first CI" environment
+
+  @javascript
+  Scenario: Creating a new instance with instance role
+    Given "MyInstanceRole" instance role
+    And I am in the "TeamName" team
+    And "TeamName" team has an "INT" environment with name "TEST"
+    When I request an EC2 instance
+    And I enter all required data for ec2
+    And I choose "MyInstanceRole" instance role
+    Then I should not see "Run list"
+    And I should not see "Ami"
+    And I should not see "Flavor"
+    And I should not see "Subnet"
+    And I should not see "Security group ids"
+    When I click on "Create"
+    Then I should see "Instance role: MyInstanceRole"
+
+  @javascript
+  Scenario: Cannot select disabled instance role
+    Given "MyInstanceRole" instance role is disabled
+    And I am in the "TeamName" team
+    And "TeamName" team has an "INT" environment with name "TEST"
+    When I request an EC2 instance
+    Then I should not be able to choose "MyInstanceRole" instance role
 
   Scenario: Bootstrapping event
     Given I have an EC2 instance in the team

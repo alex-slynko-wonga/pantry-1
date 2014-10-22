@@ -1,0 +1,48 @@
+%div
+  %h1= "Instance role: #{@instance_role.name}"
+  = link_to "Go back to main", admin_instance_roles_path
+  %br
+  %br
+
+  .row-fluid
+    .span2
+      Name:
+    .span2
+      = @instance_role.name
+  .row-fluid
+    .span2
+      Ami:
+    .span2
+      = @instance_role.ami.name
+  .row-fluid
+    .span2
+      Chef role:
+    .span2
+      = @instance_role.chef_role
+  .row-fluid
+    .span2
+      Run list:
+    .span2
+      = @instance_role.run_list
+  .row-fluid
+    .span2
+      Instance size:
+    .span2
+      = @instance_role.instance_size
+  .row-fluid
+    .span2
+      Disk size:
+    .span2
+      = @instance_role.disk_size
+  .row-fluid
+    .span2
+      Security group ids:
+    .span2
+      - @ec2_adapter.security_groups.each do |elem|
+        - if @instance_role.security_group_ids.include?(elem.last)
+          %li= elem.first
+  .row-fluid
+    .span2
+      Enabled:
+    .span2
+      = @instance_role.enabled

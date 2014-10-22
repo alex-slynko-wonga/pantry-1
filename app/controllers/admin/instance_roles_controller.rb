@@ -1,5 +1,5 @@
 class Admin::InstanceRolesController < Admin::AdminController
-  before_action :initialize_ami, :initialize_ec2_adapter, only: [:new, :create, :edit, :update]
+  before_action :initialize_ami, :initialize_ec2_adapter, only: [:new, :create, :edit, :update, :show]
 
   def index
     @instance_roles = InstanceRole.all
@@ -36,6 +36,10 @@ class Admin::InstanceRolesController < Admin::AdminController
   def destroy
     InstanceRole.destroy(params[:id])
     redirect_to admin_instance_roles_path
+  end
+
+  def show
+    @instance_role = InstanceRole.find params[:id]
   end
 
   private

@@ -19,6 +19,7 @@ Feature: Manage InstanceRoles
     And I am on the InstanceRoles page
     When I click on "TestRole"
     And I enable the role
+    And I check security_group_id
     And I click on "Update Instance role"
     Then I should see "TestRole"
     And I should see cell "true"

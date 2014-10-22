@@ -22,6 +22,13 @@ Feature: Managing Teams
     Then team should contain "Test Ldap User"
     And team should not contain "Test User"
 
+  Scenario: Redirect to instance role
+    Given I am in the "TeamName" team
+    And instance with "MyInstanceRole" role belong to "TeamName"
+    And I am on the "TeamName" team page
+    And I click on "MyInstanceRole"
+    Then I should be redirected to instance role "MyInstanceRole" page
+
   @javascript
   Scenario: Deactivate team
     Given the "TeamName" team

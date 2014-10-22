@@ -9,6 +9,17 @@ class InstanceRole < ActiveRecord::Base
   validates :instance_size, presence: true
   validates :disk_size, presence: true
 
+  serialize :security_group_ids
+
+  before_validation :check_security_group_ids
+
   scope :enabled, -> { where(enabled: true) }
 
+  def check_security_group_ids
+    self.security_group_ids = self.security_group_ids.uniq.reject { |i| i.empty? } if self.security_group_ids
+  end
+
+  def full_run_list
+    self.run_list.blank? ? "role[#{self.chef_role}]" : "role[#{self.chef_role}]," + self.run_list
+  end
 end

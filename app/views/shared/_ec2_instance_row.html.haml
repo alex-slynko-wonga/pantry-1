@@ -4,3 +4,7 @@
   %td= ec2_instance_row.human_status
   %td= os_image(ec2_instance_row.platform)
   %td= link_to ec2_instance_row.environment.human_name, ec2_instance_row.environment
+  - if ec2_instance_row.instance_role_id.nil?
+    %td= '-'
+  - else
+    %td= link_to_instance_role(ec2_instance_row)

@@ -44,3 +44,11 @@ end
 When(/^I save/) do
   first(:xpath, "//input[@name='commit']").click
 end
+
+When(/^I choose "(.*?)" (\w+ ?\w*)$/) do |option_name, dropdown_name|
+  find(:select, dropdown_name.humanize).find(:option, option_name).select_option
+end
+
+Then(/^I should not be able to choose "(.*?)" (\w+ ?\w*)$/) do |option_name, dropdown_name|
+  expect(find(:select, dropdown_name.humanize).all(:option).collect(&:text)).to_not include(option_name)
+end

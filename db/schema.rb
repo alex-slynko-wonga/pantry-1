@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141009105311) do
+ActiveRecord::Schema.define(version: 20141014140737) do
 
   create_table "admin_maintenance_windows", force: true do |t|
     t.string   "name"
@@ -78,7 +78,10 @@ ActiveRecord::Schema.define(version: 20141009105311) do
     t.string   "state"
     t.boolean  "protected"
     t.integer  "environment_id"
+    t.integer  "instance_role_id"
   end
+
+  add_index "ec2_instances", ["instance_role_id"], name: "index_ec2_instances_on_instance_role_id", using: :btree
 
   create_table "environments", force: true do |t|
     t.string   "name"

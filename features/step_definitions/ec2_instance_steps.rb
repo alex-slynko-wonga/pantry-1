@@ -33,13 +33,10 @@ When(/^I request an EC2 instance for team "(.*?)"$/) do |team_name|
   visit '/aws/ec2_instances/new?team_id=' + @team.id.to_s
 end
 
-When(/^I select "(.*?)" environment$/) do |environment_name|
-  find(:select, 'Environment').find(:option, environment_name).select_option
-  find(:select, 'Environment').click
-end
-
-Then(/^I should not be able to select environment "(.*?)"$/) do |environment_name|
-  expect(find(:select, 'Environment').all(:option).collect(&:text)).to_not include(environment_name)
+When(/^instance with "(.*?)" role belong to "(.*?)"$/) do |role_name, team_name|
+  @team = Team.where(name: team_name).first
+  @instance_role = FactoryGirl.create(:instance_role, name: role_name)
+  FactoryGirl.create(:ec2_instance, instance_role_id: @instance_role.id, team: @team)
 end
 
 def fill_in_default_values(name)

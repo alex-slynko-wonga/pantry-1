@@ -1,5 +1,5 @@
 class Aws::Ec2InstancesController < ApplicationController
-  before_action :initialize_ec2_adapter, :initialize_environments, only: [:new, :create]
+  before_action :initialize_ec2_adapter, :initialize_environments, :initialize_instance_role, only: [:new, :create]
 
   def new
     @ec2_instance = Ec2Instance.new
@@ -9,7 +9,20 @@ class Aws::Ec2InstancesController < ApplicationController
   end
 
   def create
-    @ec2_instance = Ec2Instance.new(ec2_instance_params.merge({user_id: current_user.id}))
+    if ec2_instance_params[:instance_role_id].present?
+      @instance_role = @instance_roles.find(ec2_instance_params[:instance_role_id])
+      @ec2_instance = Ec2Instance.new(ec2_instance_params.merge({
+                                                                  user_id: current_user.id,
+                                                                  flavor: @instance_role.instance_size,
+                                                                  ami: @instance_role.ami.ami_id,
+                                                                  run_list: @instance_role.full_run_list,
+                                                                  security_group_ids: @instance_role.security_group_ids,
+                                                                  volume_size: @instance_role.disk_size
+                                                                }))
+    else
+      @ec2_instance = Ec2Instance.new(ec2_instance_params.merge({user_id: current_user.id}))
+    end
+
     if policy(@ec2_instance).custom_ami? && params[:custom_ami].present?
       @ec2_instance.ami = params[:custom_ami]
     elsif @ec2_instance.ami && !policy_scope(Ami).where(ami_id: @ec2_instance.ami).exists?
@@ -92,7 +105,7 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :user_id, :ami, :flavor, :subnet_id, :domain, :environment_id, :run_list, :platform, :security_group_ids => [])
+    params.require(:ec2_instance).permit(:name, :user_id, :ami, :instance_role_id, :flavor, :subnet_id, :domain, :environment_id, :run_list, :platform, :security_group_ids => [])
   end
 
   def initialize_ec2_adapter
@@ -107,5 +120,9 @@ class Aws::Ec2InstancesController < ApplicationController
     else
       @grouped_environments = @environments.group_by_team_name
     end
+  end
+
+  def initialize_instance_role
+    @instance_roles = policy_scope(InstanceRole)
   end
 end

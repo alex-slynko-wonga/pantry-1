@@ -2,6 +2,7 @@ class Ec2Instance < ActiveRecord::Base
   belongs_to :team
   belongs_to :user
   belongs_to :environment
+  belongs_to :instance_role
   has_one :jenkins_server
   has_one :jenkins_slave
   has_many   :ec2_instance_costs
@@ -9,7 +10,7 @@ class Ec2Instance < ActiveRecord::Base
 
   validates :name, uniqueness: { scope: [:terminated] }, unless: 'terminated?'
   validate :winbind_compatibility, unless:'terminated?'
-  validates :name, presence: true   
+  validates :name, presence: true
   validates :platform, presence: true
   validates :name, length: { maximum: 14, too_long: "Name must be <= 14 characters for MSDTC in Windows platform" }, if: 'platform == "windows"', on: :create
   validates :name, length: { maximum: 63 }, if: 'platform == "linux"'

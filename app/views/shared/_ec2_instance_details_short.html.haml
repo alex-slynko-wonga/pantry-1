@@ -5,9 +5,14 @@
       %th Name
       %th Status
       %th OS
+      %th Instance role
   - ec2_instances.each do |instance|
     %tr
       %td= instance.id
       %td= link_to instance.name, url_for([:aws, instance])
       %td= instance.human_status
       %td= os_image(instance.platform)
+      - if instance.instance_role_id.nil?
+        %td= '-'
+      - else
+        %td= link_to_instance_role(instance)
