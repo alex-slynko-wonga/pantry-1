@@ -6,6 +6,8 @@ describe 'aws/ec2_instances/new.html.haml' do
   let(:user) { FactoryGirl.build_stubbed(:user, team: team) }
   let(:environment) { FactoryGirl.build_stubbed(:environment) }
   let(:environments) { [environment.name] }
+  let(:instance_role) { FactoryGirl.build_stubbed(:instance_role) }
+  let(:instance_roles) { [instance_role] }
   let(:grouped_environments) { {'Pantry'=>[[environment.name, "2"]]}}
   let(:ec2_adapter) { instance_double(Wonga::Pantry::Ec2Adapter, amis: [['windows', ['ami-123']]], flavors: ['flavor'], subnets: ['subnet'], security_groups: ['group']) }
 
@@ -15,6 +17,7 @@ describe 'aws/ec2_instances/new.html.haml' do
     allow(view).to receive(:current_user).and_return(user)
     assign(:ec2_adapter, ec2_adapter)
     assign(:environments, environments)
+    assign(:instance_roles, instance_roles)
     assign(:grouped_environments, grouped_environments)
     expect(view).to receive(:policy).and_return(instance_double(Ec2InstancePolicy, custom_ami?: false))
   end

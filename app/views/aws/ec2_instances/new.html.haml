@@ -11,7 +11,7 @@
 
   = f.label :team_name, 'Team: ' + (@team_name || '')
 
-  = f.association :instance_role, collection: @instance_roles
+  = f.association :instance_role, collection: @instance_roles, label_method: :display_name
 
   = f.input :run_list, as: :text, wrapper_html: { class: 'instance_role_subvalue' }
 

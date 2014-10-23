@@ -33,6 +33,17 @@ Feature: EC2 Instance
     And I click on "MyInstanceRole"
     Then I should be redirected to instance role "MyInstanceRole" page
 
+  @javascript
+  Scenario: Creating a new instance with disabled role
+    Given "MyInstanceRole" instance role is disabled
+    And I am in the "TeamName" team
+    And "TeamName" team has an "INT" environment with name "TEST"
+    When I request an EC2 instance
+    And I enter all required data for ec2
+    And I choose "MyInstanceRole (disabled)" instance role
+    And I click on "Create"
+    Then I should see "Instance role: MyInstanceRole (disabled)"
+
   Scenario: Creating a new instance with hidden AMI
     Given hidden "Test" AMI
     And I am in the "Test" team

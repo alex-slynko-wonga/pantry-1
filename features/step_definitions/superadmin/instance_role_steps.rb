@@ -4,7 +4,8 @@ Given(/^"(.*?)" instance role$/) do |name|
 end
 
 Given(/^"(.*?)" instance role is disabled$/) do |name|
-  FactoryGirl.create(:instance_role, name: name, enabled: false)
+  instance_role = FactoryGirl.create(:instance_role, name: name, enabled: false)
+  stub_ami_info(instance_role.ami.ami_id)
 end
 
 When(/^I enter all required data for "(.*?)" instance role$/) do |name|

@@ -15,6 +15,10 @@ class InstanceRole < ActiveRecord::Base
 
   scope :enabled, -> { where(enabled: true) }
 
+  def display_name
+    self.enabled ? self.name : self.name + ' (disabled)'
+  end
+
   def check_security_group_ids
     self.security_group_ids = self.security_group_ids.uniq.reject { |i| i.empty? } if self.security_group_ids
   end
