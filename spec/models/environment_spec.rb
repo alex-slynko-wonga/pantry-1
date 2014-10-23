@@ -3,8 +3,6 @@ require 'spec_helper'
 describe Environment do
   subject { FactoryGirl.build(:environment) }
 
-  it { should be_valid }
-
   context "when team does not have CI environment" do
     let(:team) { FactoryGirl.create(:team) }
     it "allows to create new CI environment" do

@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :user do
-    ignore do
+    transient do
       team nil
     end
     sequence(:username) { |n| "User#{n}" }

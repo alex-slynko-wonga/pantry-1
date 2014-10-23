@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe Ec2InstanceCost do
   subject { FactoryGirl.build(:ec2_instance_cost) }
-  it { should be_valid }
-  
+
   describe "#get_available_dates" do
     it "returns the grouped dates of the entries" do
       # days must be the last of the month

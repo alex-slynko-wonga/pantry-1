@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Ec2Instance do
   subject { FactoryGirl.build :ec2_instance }
-  it { should be_valid }
 
   it "should be invalid without attributes (and not raise exception)" do
     expect(Ec2Instance.new).to be_invalid

@@ -27,8 +27,6 @@ describe JenkinsServer do
     end
   end
 
-  it { should be_valid }
-
   context "when team already have a jenkins server" do
     let!(:existing_server) { FactoryGirl.create(:jenkins_server, team: team) }
 

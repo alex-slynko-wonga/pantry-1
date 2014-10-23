@@ -3,7 +3,6 @@
 FactoryGirl.define do
   factory :ec2_instance_log do
     ec2_instance
-    message "MyText"
     user
   end
 end

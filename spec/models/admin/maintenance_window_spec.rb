@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe Admin::MaintenanceWindow do
-  some_admin = FactoryGirl.build :superadmin
-  subject { FactoryGirl.build(:admin_maintenance_window, user: some_admin) }
-  it { should be_valid }
+  subject { FactoryGirl.build(:admin_maintenance_window) }
 
   it "should be invalid without attributes (and not raise exception)" do
     expect(Admin::MaintenanceWindow.new).to be_invalid
@@ -23,7 +21,7 @@ describe Admin::MaintenanceWindow do
 
     context "when another active Maintenance Window exists" do
       before(:each) do
-        FactoryGirl.create(:admin_maintenance_window, :enabled, user: some_admin)
+        FactoryGirl.create(:admin_maintenance_window, :enabled)
       end
 
       it "is invalid" do
@@ -37,7 +35,7 @@ describe Admin::MaintenanceWindow do
     end
 
     context "when enabling a closed Maintenance Window" do
-      subject { FactoryGirl.build(:admin_maintenance_window, :closed, user: some_admin)}
+      subject { FactoryGirl.build(:admin_maintenance_window, :closed) }
       it "is invalid" do
         expect(subject).to be_invalid
       end

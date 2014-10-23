@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Team do
   subject { FactoryGirl.build(:team) }
-  it { should be_valid }
 
   describe "without_jenkins" do
     it "finds team without jenkins server" do

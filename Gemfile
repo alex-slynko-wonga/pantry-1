@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.1.6'
 gem 'mysql2'
-gem 'omniauth-ldap', github: 'QuickbridgeLtd/omniauth-ldap', branch: 'newer_ldap'
+gem 'omniauth-ldap', github: 'intridea/omniauth-ldap'
 
 gem 'syslogger'
 gem 'haml-rails'
@@ -15,7 +15,7 @@ gem 'uglifier'
 gem 'jquery-rails'
 gem 'jquery-ui-rails', '~> 4.0'
 gem 'bootstrap-sass', '~> 2.3.2'
-gem 'angularjs-rails', '~> 1.2'
+gem 'angularjs-rails', '~> 1.2.5'
 gem 'rabl'
 gem 'rack-ssl'
 gem 'cache_digests'
@@ -31,7 +31,7 @@ group :development do
   gem 'bundler-audit', require: false
   gem 'codesake-dawn', require: false
   gem 'guard-bundler'
-  gem 'guard-cucumber', github: 'QuickbridgeLtd/guard-cucumber', branch: 'new_cucumber'
+  gem 'guard-cucumber'
   gem 'guard-migrate'
   gem 'guard-rspec', '>= 4.2.6'
   gem 'letter_opener'

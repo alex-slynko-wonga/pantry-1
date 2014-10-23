@@ -3,8 +3,6 @@ require 'spec_helper'
 describe JenkinsSlave do
   subject { FactoryGirl.build(:jenkins_slave) }
 
-  it { should be_valid }
-
   describe "team" do
     it "returns the team" do
       expect(subject.team).to eq(subject.jenkins_server.team)
