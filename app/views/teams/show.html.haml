@@ -13,7 +13,7 @@
           %th Username
           %th Email
       %tbody
-        - @team.users.each do |user|
+        - @team.users.order(:name).each do |user|
           %tr
             %td= user.name
             %td
