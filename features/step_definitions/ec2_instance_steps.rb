@@ -1,8 +1,10 @@
 Given(/^AWS has information about machines$/) do
   stub_security_groups
   stub_subnets
-  ami = FactoryGirl.create(:ami)
-  stub_ami_info(ami.ami_id)
+  windows_ami = FactoryGirl.create(:ami, platform: 'windows')
+  stub_ami_info(windows_ami.ami_id)
+  linux_ami = FactoryGirl.create(:ami, platform: 'linux', name: 'linux')
+  stub_ami_info(linux_ami.ami_id)
 end
 
 Given(/^queues and topics are configured$/) do

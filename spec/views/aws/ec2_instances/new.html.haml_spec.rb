@@ -9,7 +9,7 @@ describe 'aws/ec2_instances/new.html.haml' do
   let(:instance_role) { FactoryGirl.build_stubbed(:instance_role) }
   let(:instance_roles) { [instance_role] }
   let(:grouped_environments) { {'Pantry'=>[[environment.name, "2"]]}}
-  let(:ec2_adapter) { instance_double(Wonga::Pantry::Ec2Adapter, amis: [['windows', ['ami-123']]], flavors: ['flavor'], subnets: ['subnet'], security_groups: ['group']) }
+  let(:ec2_adapter) { instance_double(Wonga::Pantry::Ec2Adapter, amis: [['windows', ['ami-123']]], flavors: {'flavor' => '80'}, subnets: ['subnet'], security_groups: ['group']) }
 
   before(:each) do
     assign(:ec2_instance, ec2_instance)

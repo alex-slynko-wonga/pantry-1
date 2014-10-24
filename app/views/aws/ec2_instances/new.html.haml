@@ -40,7 +40,7 @@
             .span3
               #platform{data: {value: :platform}}
 
-  = f.input :flavor, collection: @ec2_adapter.flavors, wrapper_html: { class: 'instance_role_subvalue' }
+  = f.input :flavor, collection: @ec2_adapter.flavors.keys, wrapper_html: { class: 'instance_role_subvalue' }
 
   = f.input :subnet_id, collection: @ec2_adapter.subnets, wrapper_html: { class: 'instance_role_subvalue' }
 

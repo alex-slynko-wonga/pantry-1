@@ -5,8 +5,10 @@
 
   = f.input :chef_role
   = f.input :run_list, as: :text
-  = f.input :instance_size
-  = f.input :disk_size
+  = f.input :instance_size do
+    = f.select :instance_size, @ec2_adapter.flavors.map { |r| [r.first, r.first, { 'data-disk-size' => r.last }] }
+
+  = f.input :disk_size,  hint: ''
   = f.input :security_group_ids, collection: @ec2_adapter.security_groups, as: 'check_boxes'
   = f.input :enabled, as: :boolean
 

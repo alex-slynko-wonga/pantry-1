@@ -14,6 +14,13 @@ Feature: Manage InstanceRoles
     And I click on "Create Instance role"
     Then I should see the "TestRole" role details
 
+  Scenario: Forbid to change AMI platform
+    Given "TestRole" instance role with "windows" Ami platform
+    And I am on the InstanceRoles page
+    When I click on "TestRole"
+    Then I choose "windows" ami
+    But I should not be able to choose "linux" ami
+
   Scenario: Enabling an instance role
     Given "TestRole" instance role
     And I am on the InstanceRoles page

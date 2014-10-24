@@ -10,7 +10,7 @@ class Wonga::Pantry::Ec2Adapter
   end
 
   def flavors
-    CONFIG['aws']['ebs'].keys
+    CONFIG['aws']['ebs']
   end
 
   def get_ami_attributes(ami)

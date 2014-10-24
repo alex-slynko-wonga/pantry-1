@@ -1,5 +1,7 @@
 class Admin::InstanceRolesController < Admin::AdminController
-  before_action :initialize_ami, :initialize_ec2_adapter, only: [:new, :create, :edit, :update, :show]
+  before_action :initialize_ec2_adapter
+  before_action :initialize_ami, only: [:new, :create, :show]
+  before_action :initialize_existing_role_and_ami, only: [:update, :edit]
 
   def index
     @instance_roles = InstanceRole.all
@@ -19,13 +21,7 @@ class Admin::InstanceRolesController < Admin::AdminController
     end
   end
 
-  def edit
-    @instance_role = InstanceRole.find(params[:id])
-  end
-
   def update
-    @instance_role = InstanceRole.find(params[:id])
-
     if @instance_role.update_attributes(instance_role_attributes)
       redirect_to admin_instance_roles_path
     else
@@ -45,7 +41,7 @@ class Admin::InstanceRolesController < Admin::AdminController
   private
 
   def instance_role_attributes
-     params.require(:instance_role).permit(:name, :ami_id, :chef_role, :run_list, :instance_size, :disk_size, :enabled, :security_group_ids => [])
+    params.require(:instance_role).permit(:name, :ami_id, :chef_role, :run_list, :instance_size, :disk_size, :enabled, :security_group_ids => [])
   end
 
   def initialize_ec2_adapter
@@ -54,5 +50,10 @@ class Admin::InstanceRolesController < Admin::AdminController
 
   def initialize_ami
     @ami = policy_scope(Ami).order(:name).select(:name, :id, :platform).to_a.group_by(&:platform)
+  end
+
+  def initialize_existing_role_and_ami
+    @instance_role = InstanceRole.find(params[:id])
+    @ami = policy_scope(Ami).order(:name).select(:name, :id, :platform).where(platform: @instance_role.ami.platform).to_a.group_by(&:platform)
   end
 end
