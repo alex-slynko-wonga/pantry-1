@@ -14,4 +14,8 @@ class EnvironmentPolicy < ApplicationPolicy
   def create?
     god_mode? || team_member?
   end
+
+  def update?
+    god_mode? || team_member?
+  end
 end

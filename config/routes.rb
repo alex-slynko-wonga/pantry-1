@@ -56,5 +56,5 @@ Wonga::Pantry::Application.routes.draw do
   resources :users, except: [:create, :destroy]
   root to: 'home#index'
 
-  resources :environments, only: [:show]
+  resources :environments, only: [:show, :edit, :update]
 end

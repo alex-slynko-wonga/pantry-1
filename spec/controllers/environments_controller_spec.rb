@@ -5,6 +5,7 @@ describe EnvironmentsController do
   let(:user) { User.new(role: 'developer', teams: [team]) }
   let(:chef_utility) { instance_double('Wonga::Pantry::ChefUtility').as_null_object }
   let (:environment) { FactoryGirl.create(:environment) }
+  let(:environment_update_parameters) { {environment: FactoryGirl.attributes_for(:environment, name: 'EnvironmentTestName', description: 'Test Description')} }
 
   before :each do
     allow(Wonga::Pantry::ChefUtility).to receive(:new).and_return(chef_utility)
@@ -46,6 +47,24 @@ describe EnvironmentsController do
     it "returns http success" do
       get 'show', :id => environment.id
       expect(response).to be_success
+    end
+  end
+
+  describe "PUT 'update'" do
+    before(:each) do
+      allow(controller).to receive(:authorize)
+    end
+
+    it "returns http success" do
+      put 'update', environment_update_parameters.merge({id: environment.id})
+      expect(response).to be_redirect
+    end
+
+    it "should update an environment" do
+      put 'update', environment_update_parameters.merge({id: environment.id})
+      environment.reload
+      expect(environment.name).to eq('EnvironmentTestName')
+      expect(environment.description).to eq('Test Description')
     end
   end
 end

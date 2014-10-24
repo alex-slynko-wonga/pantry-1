@@ -37,6 +37,7 @@ Then(/^I should see environment details/) do
   expect(page).to have_content @environment.chef_environment
   expect(page).to have_content @environment.team.name
   expect(page).to have_content @environment.human_name
+  expect(page).to have_content @environment.description
 end
 
 When(/^I click on environment human name$/) do
@@ -57,4 +58,11 @@ Then(/^I can( not)? create a new CI environment$/) do |not_contains|
   else
     expect(page).to have_content "Create a new CI environment"
   end
+end
+
+When(/^I update environment with name "(.*?)" and description "(.*?)"$/) do |new_name, new_description|
+  click_on 'Edit this environment'
+  fill_in('Name', :with => new_name)
+  fill_in('Description', :with => new_description)
+  click_button("Update Environment")
 end

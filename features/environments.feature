@@ -52,3 +52,18 @@ Feature: Multiple environments
     And "teamname" team has a "CI" environment "test"
     When I am on the team page
     Then I can not create a new CI environment
+
+  Scenario: Update environment
+    Given I am in the "teamname" team with "username" user
+    And "teamname" team has an "INT" environment "TEST_INT"
+    When I am on environment page
+    And I update environment with name "NewName" and description "This is a test"
+    Then I should see a flash message with "Environment updated successfully"
+    And I should see "NewName"
+    And I should see "This is a test"
+
+  Scenario: Updating existing environment when the user is not in the given team
+    Given the "teamname" team
+    And "teamname" team has an "INT" environment "TEST_INT"
+    When I am on environment page
+    Then I should not see "Edit this environment"

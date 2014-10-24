@@ -1,0 +1,9 @@
+%h1 Edit existing environment
+
+= simple_form_for @environment do |f|
+  = f.label :environment_type, 'Environment type: ' + @environment.environment_type
+  = f.label :chef_environment, 'Chef environment: ' + @environment.chef_environment
+  %br
+  = f.input :name
+  = f.input :description, as: :text
+  = f.button :submit

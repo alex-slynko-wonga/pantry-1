@@ -3,6 +3,8 @@
     %h3= @environment.team.name + " Team"
   .span6
     %h3= @environment.human_name + " Environment"
+    - if policy(@environment).edit?
+      %p= link_to "Edit this environment", edit_environment_path(@environment)
   .span12
 
 .row-fluid
@@ -15,6 +17,8 @@
     %p= @environment.environment_type
     %strong Chef Environment:
     %p= @environment.chef_environment
+    %strong Description:
+    %p= @environment.description
 
   .span8
     - if @ec2_instances.length > 0
