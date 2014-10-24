@@ -52,6 +52,11 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def show
     @ec2_instance = Ec2Instance.find params[:id]
+
+    if @ec2_instance.ami && policy_scope(Ami).where(ami_id: @ec2_instance.ami).exists?
+      @ami_name = Ami.where(ami_id: @ec2_instance.ami).first.name
+    end
+
     respond_to do |format|
       format.html
       format.json { render json: @ec2_instance }

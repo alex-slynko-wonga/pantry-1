@@ -29,7 +29,10 @@
       .span2= link_to_instance_role(ec2_instance)
 
   .row-fluid
-    .span2 AMI:
+    .span2 AMI Name:
+    .span2= @ami_name
+  .row-fluid
+    .span2 AMI ID:
     .span2= ec2_instance.ami
   .row-fluid{data: {ng_hide: 'editing', ng_init: 'editing=false'}}
     .span2 Flavor:
