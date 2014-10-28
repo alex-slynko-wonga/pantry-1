@@ -1,0 +1,21 @@
+.full-height {
+  height: 100%
+}
+
+.main-container {
+  min-height: 100%; /*This can cause issues in IE5.5,IE6*/
+  position: relative
+}
+
+.footer-padding {
+  padding-bottom: 60px
+}
+
+.main-footer {
+  position: absolute;
+  bottom: 0px;
+  background-color: #eee;
+  height: 60px;
+  width: 100%
+}
+

@@ -1,50 +1,55 @@
 !!!
-%html{"ng-app" => "Pantry"}
+%html.full-height{"ng-app" => "Pantry"}
   %head
     %title= content_for?(:title) ? yield(:title) : Wonga::Pantry
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
     = csrf_meta_tags
 
-  .navbar
-    .navbar-inner
-      %ul.nav
-        %li= image_tag 'wonga-logo.png', class: "wonga-logo"
-        = navbar_link_to("Home", root_url)
-        = navbar_link_to("Teams", teams_url)
-        = navbar_link_to("Jenkins", jenkins_servers_url)
-        = navbar_link_to("Users", users_url)
-        - if policy(Ec2InstanceCost).index?
-          = navbar_link_to("Billing", ec2_instance_costs_url)
-        - if policy(current_user).see_queues?
-          = navbar_link_to("Queues", queues_url)
-        - if policy(current_user).admin?
-          %li.dropdown
-            %a{:href => "#", :class => "dropdown-toggle", "data-toggle" => "dropdown"}
-              Admin
-              %b.caret
-            %ul.dropdown-menu
-              = navbar_link_to("Maintenance", admin_maintenance_windows_url)
-              = navbar_link_to("AMIs", admin_amis_url)
-              = navbar_link_to("Instance Roles", admin_instance_roles_url)
+  %body.full-height
+    .div.main-container
+      .navbar
+        .navbar-inner
+          %ul.nav
+            %li= image_tag 'wonga-logo.png', class: "wonga-logo"
+            = navbar_link_to("Home", root_url)
+            = navbar_link_to("Teams", teams_url)
+            = navbar_link_to("Jenkins", jenkins_servers_url)
+            = navbar_link_to("Users", users_url)
+            - if policy(Ec2InstanceCost).index?
+              = navbar_link_to("Billing", ec2_instance_costs_url)
+            - if policy(current_user).see_queues?
+              = navbar_link_to("Queues", queues_url)
+            - if policy(current_user).admin?
+              %li.dropdown
+                %a{:href => "#", :class => "dropdown-toggle", "data-toggle" => "dropdown"}
+                  Admin
+                  %b.caret
+                %ul.dropdown-menu
+                  = navbar_link_to("Maintenance", admin_maintenance_windows_url)
+                  = navbar_link_to("AMIs", admin_amis_url)
+                  = navbar_link_to("Instance Roles", admin_instance_roles_url)
 
-      %ul.nav.pull-right
-        - if pundit_user.image_url
-          %li
-            %img{src: pundit_user.image_url, alt: 'Gravatar' }
-        %li
-          = link_to 'Log out', logout_url
-  - if window = get_active_maintenance_window
-    .alert-block.alert.alert-warning
-      %div{:class => "text-center"}
-        %strong{:class => "text-error"}= "Maintenance Mode Active - New Requests Disabled"
-        .text-warning= "Reason: #{window.message}"
-        .text-warning= "Started: #{window.start_at}"
+          %ul.nav.pull-right
+            - if pundit_user.image_url
+              %li
+                %img{src: pundit_user.image_url, alt: 'Gravatar' }
+            %li
+              = link_to 'Log out', logout_url
+      - if window = get_active_maintenance_window
+        .alert-block.alert.alert-warning
+          %div{:class => "text-center"}
+            %strong{:class => "text-error"}= "Maintenance Mode Active - New Requests Disabled"
+            .text-warning= "Reason: #{window.message}"
+            .text-warning= "Started: #{window.start_at}"
 
-  .container
-    - flash.each do |message|
-      %div{:class => ["alert-message", flash_class(message.first)]}
-        %button{:type => "button", :class => "close", "data-dismiss" => "alert"} &times;
-        = message.try(:last)
-    = yield
+      .container.full-height.footer-padding
+        - flash.each do |message|
+          %div{:class => ["alert-message", flash_class(message.first)]}
+            %button{:type => "button", :class => "close", "data-dismiss" => "alert"} &times;
+            = message.try(:last)
+        = yield
 
+      .div.main-footer
+        %p.text-centered= link_to("Pantry Dashboard", 'https://issues.example.com/secure/RapidBoard.jspa?rapidView=379', target: 'blank')
+        %p.text-centered= mail_to('pantry@example.com', "Email us")
