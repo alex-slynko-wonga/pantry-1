@@ -52,4 +52,4 @@
 
       .div.main-footer
         %p.text-centered= link_to("Pantry Dashboard", 'https://issues.example.com/secure/RapidBoard.jspa?rapidView=379', target: 'blank')
-        %p.text-centered= mail_to('pantry@example.com', "Email us")
+        %p.text-centered= %(#{mail_to('pantry@example.com', "Email us")} on pantry@example.com).html_safe
