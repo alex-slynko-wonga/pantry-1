@@ -35,6 +35,18 @@ When(/^I request an EC2 instance for team "(.*?)"$/) do |team_name|
   visit '/aws/ec2_instances/new?team_id=' + @team.id.to_s
 end
 
+When(/^I have "(.*?)" instance$/) do |instance_size|
+  @team = Team.last
+  @ami = Ami.last
+  @ec2_instance = FactoryGirl.create(:ec2_instance, team: @team, flavor: instance_size, ami: @ami.ami_id)
+end
+
+Then(/^I should see new ec2 instance form with prefilled values$/) do
+  expect(page).to have_select('Environment', selected: @ec2_instance.environment.name)
+  expect(page).to have_select('Ami', selected: @ami.name)
+  expect(page).to have_select('Flavor', selected: @ec2_instance.flavor)
+end
+
 When(/^instance with "(.*?)" role belong to "(.*?)"$/) do |role_name, team_name|
   @team = Team.where(name: team_name).first
   @instance_role = FactoryGirl.create(:instance_role, name: role_name)

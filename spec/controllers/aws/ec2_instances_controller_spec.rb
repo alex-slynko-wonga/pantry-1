@@ -32,6 +32,16 @@ RSpec.describe Aws::Ec2InstancesController do
       get 'new', team_id: team.id
       expect(assigns(:ec2_instance).team_id).to eq(team.id)
     end
+
+    context "with prefilled params" do
+      let(:reference_instance) { FactoryGirl.create(:ec2_instance) }
+
+      it "fill required fields" do
+        get "new", id: reference_instance.id
+        expect(assigns(:ec2_instance).team_id).to eq(reference_instance.team_id)
+        expect(assigns(:ec2_instance).environment_id).to eq(reference_instance.environment_id)
+      end
+    end
   end
 
   describe "POST 'create'" do
