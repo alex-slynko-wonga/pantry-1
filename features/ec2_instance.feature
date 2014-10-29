@@ -76,6 +76,13 @@ Feature: EC2 Instance
     When I request an EC2 instance
     Then I should not be able to choose "MyInstanceRole" instance role
 
+  Scenario: Create instance like existing
+    Given I am in the "Pantry" team
+    And I have "m1.large" instance
+    When I am on instance page
+    And I click on "Create machine like this"
+    Then I should see new ec2 instance form with prefilled values
+
   Scenario: Bootstrapping event
     Given I have an EC2 instance in the team
     And the instance is ready

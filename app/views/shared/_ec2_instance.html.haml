@@ -73,3 +73,5 @@
   = button_to "Shut down", aws_ec2_instance_url(@ec2_instance, "event" => "shutdown_now"), method: :put, data: {'ng-show' => 'policy.shutdown_now'}
 
   = button_to 'Start', aws_ec2_instance_url(@ec2_instance, "event" => "start_instance"), method: :put, data: {'ng-show' => 'policy.start_instance'}
+
+  = button_to "Create machine like this", new_aws_ec2_instance_url, method: :get, params: { id: @ec2_instance.id}
