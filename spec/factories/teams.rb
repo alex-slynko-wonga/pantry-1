@@ -3,10 +3,10 @@
 FactoryGirl.define do
   factory :team do
     sequence(:name) { |n| "TeamName#{n}" }
-    description "MyString"
+    description 'MyString'
 
     trait :with_ci_environment do
-      after(:build) { |team| FactoryGirl.build(:ci_environment, team: team, chef_environment: team.name)}
+      after(:build) { |team| FactoryGirl.build(:ci_environment, team: team, chef_environment: team.name) }
     end
   end
 end

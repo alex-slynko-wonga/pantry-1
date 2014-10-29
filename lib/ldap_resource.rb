@@ -13,18 +13,18 @@ class LdapResource
     self
   end
 
-  def all(params={})
+  def all(params = {})
     find(params)
   end
 
   private
+
   def filters
     @filters ||= []
   end
 
   def find(params = {})
-    result = connection.search(params.merge({filter: filters.inject{ |result, filter| result & filter }}))
-    result || []
+    connection.search(params.merge(filter: filters.inject { |result, filter| result & filter })) || []
   end
 
   def connection

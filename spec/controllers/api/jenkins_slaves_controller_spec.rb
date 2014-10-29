@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe Api::JenkinsSlavesController do
-  describe "#update" do
+RSpec.describe Api::JenkinsSlavesController, type: :controller do
+  describe '#update' do
     before(:each) do
       request.headers['X-Auth-Token'] = CONFIG['pantry']['api_key']
     end
 
-    it "should update removed attribute" do
+    it 'should update removed attribute' do
       jenkins_slave = FactoryGirl.create(:jenkins_slave, removed: false)
       put :update, id: jenkins_slave.id, jenkins_slave: { removed: true }, format: :json
       jenkins_slave.reload

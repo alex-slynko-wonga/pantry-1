@@ -22,7 +22,7 @@ Then(/^I should see the "(.*?)" role details$/) do |name|
   instance_role = InstanceRole.where(name: name).first
   ami = Ami.find(instance_role.ami_id).name
   expect(page.text).to include(name)
-  expect(page.text).to include("my-chef-role")
+  expect(page.text).to include('my-chef-role')
   expect(page.text).to include(ami)
   expect(page.text).to include(instance_role.instance_size)
 end
@@ -42,7 +42,7 @@ end
 
 Then(/^I should be redirected to instance role "(.*?)" page$/) do |name|
   expect(page).to have_content "Instance role: #{name}"
-  expect(page).to have_content "Enabled: true"
+  expect(page).to have_content 'Enabled: true'
 end
 
 def fill_in_default_role_values(name)

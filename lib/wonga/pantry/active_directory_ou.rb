@@ -14,6 +14,7 @@ module Wonga
       end
 
       private
+
       def escape(name)
         name.parameterize[0..63]
       end

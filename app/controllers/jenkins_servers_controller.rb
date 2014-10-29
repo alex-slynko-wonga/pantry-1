@@ -1,5 +1,4 @@
 class JenkinsServersController < ApplicationController
-
   def index
     @user_teams = current_user.teams
     @current_team = @user_teams.find(params[:team_id]) if params[:team_id]
@@ -25,10 +24,10 @@ class JenkinsServersController < ApplicationController
     authorize(@jenkins_server)
 
     attributes = jenkins_attributes.merge(
-      { user_id: current_user.id }
+      user_id: current_user.id
     )
     if aws_utility.request_jenkins_instance(attributes, @jenkins_server)
-      flash[:notice] = "Jenkins server request succeeded."
+      flash[:notice] = 'Jenkins server request succeeded.'
       redirect_to @jenkins_server
     else
       flash[:error] = "Jenkins server request failed: #{human_errors(@jenkins_server)}"
@@ -52,8 +51,9 @@ class JenkinsServersController < ApplicationController
   def load_servers
     @user_teams = current_user.teams.with_environment.without_jenkins
     if @user_teams.empty?
-      flash[:error] = "You cannot create a server because you do not belong to this team"
-      redirect_to jenkins_servers_path and return false
+      flash[:error] = 'You cannot create a server because you do not belong to this team'
+      redirect_to jenkins_servers_path
+      return false
     end
     true
   end

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe JenkinsServersController do
+RSpec.describe JenkinsServersController, type: :controller do
   let(:user) { FactoryGirl.create(:user, team: team) }
   let(:team) { FactoryGirl.create(:team, :with_ci_environment) }
 
@@ -8,14 +6,14 @@ describe JenkinsServersController do
     session[:user_id] = user.id
   end
 
-  describe "index" do
-    it "returns http success" do
+  describe 'index' do
+    it 'returns http success' do
       get 'index'
       expect(response).to be_success
     end
 
-    it "should assign a server if there is only one team" do
-      jenkins_server = FactoryGirl.create(:jenkins_server, team: user.teams.first)
+    it 'should assign a server if there is only one team' do
+      FactoryGirl.create(:jenkins_server, team: user.teams.first)
       expect(user.teams.count).to be 1
       get 'index'
       expect(assigns(:jenkins_servers).count).to be 1
@@ -23,22 +21,22 @@ describe JenkinsServersController do
   end
 
   describe "GET 'new'" do
-    it "returns http success" do
+    it 'returns http success' do
       get 'new'
       expect(response).to be_success
     end
 
-    describe "when user has no teams without jenkins server" do
+    describe 'when user has no teams without jenkins server' do
       let(:user) { FactoryGirl.create(:user) }
 
-      it "redirects to index page" do
+      it 'redirects to index page' do
         get 'new'
         expect(response).to be_redirect
       end
 
-      it "notifies the user" do
+      it 'notifies the user' do
         get 'new'
-        expect(flash[:error]).to eq("You cannot create a server because you do not belong to this team")
+        expect(flash[:error]).to eq('You cannot create a server because you do not belong to this team')
       end
     end
   end
@@ -49,10 +47,10 @@ describe JenkinsServersController do
       allow(JenkinsServer).to receive(:new).and_return(JenkinsServer.new(id: 42, team_id: team.id))
     end
 
-    context "when JenkinsUtility process instance" do
+    context 'when JenkinsUtility process instance' do
       let(:jenkins_utility) { instance_double(Wonga::Pantry::JenkinsUtility, request_jenkins_instance: true) }
 
-      it "redirects to resource" do
+      it 'redirects to resource' do
         post :create, jenkins_server: { team_id: team.id }
         expect(response).to be_redirect
       end
@@ -61,22 +59,22 @@ describe JenkinsServersController do
     context "when JenkinsUtility can't process instance" do
       let(:jenkins_utility) { instance_double(Wonga::Pantry::JenkinsUtility, request_jenkins_instance: false) }
 
-      it "renders new" do
+      it 'renders new' do
         post :create, jenkins_server: { team_id: team.id }
         expect(response).to render_template('new')
       end
 
-      it "assigns the teams to the current user" do
+      it 'assigns the teams to the current user' do
         post :create, jenkins_server: { team_id: team.id }
         expect(assigns(:user_teams).size).to be 1
       end
     end
 
-    context "when someone has just created Jenkins Server" do
+    context 'when someone has just created Jenkins Server' do
       let(:jenkins_utility) { instance_double(Wonga::Pantry::JenkinsUtility, request_jenkins_instance: false) }
       let(:team) { FactoryGirl.create(:team) }
 
-      it "redirects" do
+      it 'redirects' do
         post :create, jenkins_server: { team_id: team.id }
         expect(response).to be_redirect
       end

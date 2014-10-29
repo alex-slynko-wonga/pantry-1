@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User do
+RSpec.describe User, type: :model do
   let(:user_id) { 'some_user_id' }
   let(:user_email) { 'test@example.com' }
 

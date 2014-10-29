@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'json'
 
-RSpec.describe Aws::Ec2InstancesController do
+RSpec.describe Aws::Ec2InstancesController, type: :controller do
   let(:ec2_resource)    { instance_double('Wonga::Pantry::Ec2Resource') }
   let(:user) { FactoryGirl.create(:user, team: team) }
   let(:ec2_instance) { FactoryGirl.create(:ec2_instance, :running, team: team) }
@@ -33,11 +33,11 @@ RSpec.describe Aws::Ec2InstancesController do
       expect(assigns(:ec2_instance).team_id).to eq(team.id)
     end
 
-    context "with prefilled params" do
+    context 'with prefilled params' do
       let(:reference_instance) { FactoryGirl.create(:ec2_instance) }
 
-      it "fill required fields" do
-        get "new", id: reference_instance.id
+      it 'fill required fields' do
+        get 'new', id: reference_instance.id
         expect(assigns(:ec2_instance).team_id).to eq(reference_instance.team_id)
         expect(assigns(:ec2_instance).environment_id).to eq(reference_instance.environment_id)
       end

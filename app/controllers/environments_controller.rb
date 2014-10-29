@@ -1,6 +1,6 @@
 class EnvironmentsController < ApplicationController
-  before_filter :get_team, only: [:new, :create]
-  before_filter :get_environment, only: [:show, :edit, :update]
+  before_action :load_team, only: [:new, :create]
+  before_action :load_environment, only: [:show, :edit, :update]
 
   def new
     @environment = @team.environments.build(environment_type: params[:environment_type])
@@ -13,7 +13,7 @@ class EnvironmentsController < ApplicationController
     if @environment.save
       chef_utility = Wonga::Pantry::ChefUtility.new
       chef_utility.request_chef_environment(@team, @environment)
-      flash[:notice] = "Environment created"
+      flash[:notice] = 'Environment created'
       redirect_to session.delete(:return_to) || @team
     else
       flash[:error] = "Environment creation failed: #{human_errors(@environment)}"
@@ -33,7 +33,7 @@ class EnvironmentsController < ApplicationController
     authorize(@environment)
     if @environment.update_attributes(environment_update_parameters)
       redirect_to @environment
-      flash[:notice] = "Environment updated successfully"
+      flash[:notice] = 'Environment updated successfully'
     else
       flash[:error] = "Environment update failed: #{human_errors(@environment)}"
       render :edit
@@ -43,18 +43,18 @@ class EnvironmentsController < ApplicationController
   private
 
   def environment_parameters
-    params.require("environment").permit(:name, :description, :environment_type)
+    params.require('environment').permit(:name, :description, :environment_type)
   end
 
   def environment_update_parameters
-    params.require("environment").permit(:name, :description)
+    params.require('environment').permit(:name, :description)
   end
 
-  def get_team
+  def load_team
     @team = Team.find(params[:team_id])
   end
 
-  def get_environment
+  def load_environment
     @environment = Environment.find(params[:id])
   end
 end

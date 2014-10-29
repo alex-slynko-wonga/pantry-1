@@ -1,7 +1,7 @@
 class Wonga::Pantry::Ec2InstanceUpdateInfo
   def initialize(ec2_instance, aws_ec2_instance_info = nil)
     @ec2_instance = ec2_instance
-    @aws_ec2_instance_info = aws_ec2_instance_info || get_info_from_aws
+    @aws_ec2_instance_info = aws_ec2_instance_info || info_from_aws
     @state_machine = Wonga::Pantry::Ec2InstanceMachine.new(@ec2_instance)
   end
 
@@ -23,18 +23,17 @@ class Wonga::Pantry::Ec2InstanceUpdateInfo
 
       if @state_machine.fire_events(transition.event)
         @ec2_instance.ec2_instance_logs.build(from_state: before_state, event: transition.event.to_s, updates: @ec2_instance.changes, user: nil)
-        if @ec2_instance.save
-          @state_machine.callback
-        end
+        @state_machine.callback if @ec2_instance.save
       else
-        Rails.logger.error("Error mapping #{status} through #{transition.event.to_s} from #{before_state}")
+        Rails.logger.error("Error mapping #{status} through #{transition.event} from #{before_state}")
       end
     end
     true
   end
 
   private
-  def get_info_from_aws
+
+  def info_from_aws
     if @ec2_instance.instance_id.blank?
       Rails.logger.info("Unable to query AWS for #{@ec2_instance.name} without known EC2 instance-id")
       return nil
@@ -43,19 +42,19 @@ class Wonga::Pantry::Ec2InstanceUpdateInfo
   end
 
   def map_ec2_attributes
-    output = Hash.new
+    output = {}
     if aws_ec2_instance_terminated?
-      output["terminated"] = true
-      output["protected"] = false
+      output['terminated'] = true
+      output['protected'] = false
     end
 
     if @aws_ec2_instance_info.exists?
-      output["flavor"] = @aws_ec2_instance_info.instance_type
-      output["ip_address"] = @aws_ec2_instance_info.private_ip_address
-      output["protected"] = @aws_ec2_instance_info.api_termination_disabled?
-      output["security_group_ids"] = @aws_ec2_instance_info.security_groups.map(&:security_group_id)
+      output['flavor'] = @aws_ec2_instance_info.instance_type
+      output['ip_address'] = @aws_ec2_instance_info.private_ip_address
+      output['protected'] = @aws_ec2_instance_info.api_termination_disabled?
+      output['security_group_ids'] = @aws_ec2_instance_info.security_groups.map(&:security_group_id)
       # Skipping this corner case for now, if resized manually must then also be updated manually through rails console
-      #output["volume_size"] = @aws_ec2_instance_info.block_device_mappings[@aws_ec2_instance_info.root_device_name].volume.size
+      # output["volume_size"] = @aws_ec2_instance_info.block_device_mappings[@aws_ec2_instance_info.root_device_name].volume.size
     end
     output
   end
@@ -65,25 +64,25 @@ class Wonga::Pantry::Ec2InstanceUpdateInfo
       Wonga::Pantry::Ec2Resource.new(@ec2_instance, nil).out_of_band_cleanup
       return []
     end
-    return [] if [ "initial_state", "booting", "booted", "added_to_domain", "dns_record_created" ].include?(@ec2_instance.state)
+    return [] if %w(initial_state booting booted added_to_domain dns_record_created).include?(@ec2_instance.state)
     transitions = case @aws_ec2_instance_info.status
-    when :pending
-      unless [ "starting", "resizing", "resized" ].include?(@ec2_instance.state)
-        @state_machine.state_paths(:from => @ec2_instance.state.to_sym, :to => :starting).first
-      end
-    when :running
-      unless [ "ready" ].include?(@ec2_instance.state)
-        @state_machine.state_paths(:from => @ec2_instance.state.to_sym, :to => :ready).first
-      end
-    when :stopping
-      unless [ "shutting_down", "rebooting", "resizing" ].include?(@ec2_instance.state)
-        @state_machine.state_paths(:from => @ec2_instance.state.to_sym, :to => :shutting_down).first
-      end
-    when :stopped
-      unless [ "shutdown", "rebooting", "resizing", "resized" ].include?(@ec2_instance.state)
-        @state_machine.state_paths(:from => @ec2_instance.state.to_sym, :to => :shutdown).first
-      end
-    end
+                  when :pending
+                    unless %w(starting resizing resized).include?(@ec2_instance.state)
+                      @state_machine.state_paths(from: @ec2_instance.state.to_sym, to: :starting).first
+                    end
+                  when :running
+                    unless ['ready'].include?(@ec2_instance.state)
+                      @state_machine.state_paths(from: @ec2_instance.state.to_sym, to: :ready).first
+                    end
+                  when :stopping
+                    unless %w(shutting_down rebooting resizing).include?(@ec2_instance.state)
+                      @state_machine.state_paths(from: @ec2_instance.state.to_sym, to: :shutting_down).first
+                    end
+                  when :stopped
+                    unless %w(shutdown rebooting resizing resized).include?(@ec2_instance.state)
+                      @state_machine.state_paths(from: @ec2_instance.state.to_sym, to: :shutdown).first
+                    end
+                  end
     transitions || []
   end
 

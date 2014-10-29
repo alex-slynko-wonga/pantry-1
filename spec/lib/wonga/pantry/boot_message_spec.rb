@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wonga::Pantry::BootMessage do
+RSpec.describe Wonga::Pantry::BootMessage do
   let(:instance) { FactoryGirl.build_stubbed(:ec2_instance) }
 
   describe '#boot_message' do

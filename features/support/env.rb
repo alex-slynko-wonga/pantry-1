@@ -4,7 +4,7 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-unless ENV["SKIP_COV"]
+unless ENV['SKIP_COV']
   require 'simplecov'
   require 'simplecov-rcov'
   SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
@@ -78,4 +78,3 @@ DatabaseCleaner.strategy = :truncation
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Capybara.javascript_driver = :webkit
-

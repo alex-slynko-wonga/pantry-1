@@ -5,7 +5,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "Role #{n}" }
     ami
     sequence(:chef_role) { |n| "Chef_role#{n}" }
-    run_list "role[test]"
+    run_list 'role[test]'
     sequence(:instance_size) { |n| "t#{n}.small" }
     disk_size 5
     security_group_ids ['ssg-111111']

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wonga::Pantry::Ec2Adapter do
+RSpec.describe Wonga::Pantry::Ec2Adapter do
   let(:role) { 'developer' }
 
   subject { described_class.new(User.new(role: role)) }

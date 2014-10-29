@@ -12,6 +12,7 @@ class TeamPolicy < ApplicationPolicy
   end
 
   private
+
   def active?
     !record.disabled?
   end

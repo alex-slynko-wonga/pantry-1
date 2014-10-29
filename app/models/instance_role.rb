@@ -16,14 +16,14 @@ class InstanceRole < ActiveRecord::Base
   scope :enabled, -> { where(enabled: true) }
 
   def display_name
-    self.enabled ? self.name : self.name + ' (disabled)'
+    enabled ? name : name + ' (disabled)'
   end
 
   def check_security_group_ids
-    self.security_group_ids = self.security_group_ids.uniq.reject { |i| i.empty? } if self.security_group_ids
+    self.security_group_ids = security_group_ids.uniq.reject(&:empty?) if security_group_ids
   end
 
   def full_run_list
-    self.run_list.blank? ? "role[#{self.chef_role}]" : "role[#{self.chef_role}]," + self.run_list
+    run_list.blank? ? "role[#{chef_role}]" : "role[#{chef_role}]," + run_list
   end
 end

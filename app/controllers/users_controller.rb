@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html  # index.html.erb
-      format.json  { render :json => @users }
+      format.json  { render json: @users }
     end
   end
 
@@ -22,16 +22,24 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to(@user,
-                      :notice => "User updated" ) }
-        format.json { render :json => @user,
-                      :status => :updated, :location => @user  }
-        flash[:notice] = "User updated successfully"
+        format.html do
+          redirect_to(@user,
+                      notice: 'User updated')
+        end
+        format.json do
+          render json: @user,
+                      status: :updated, location: @user
+        end
+        flash[:notice] = 'User updated successfully'
       else
-        format.html { redirect_to(@user,
-                      :notice => "User update failed!" ) }
-        format.json { render :json => @user.errors,
-                      :status => :unprocessable_entity  }
+        format.html do
+          redirect_to(@user,
+                      notice: 'User update failed!')
+        end
+        format.json do
+          render json: @user.errors,
+                 status: :unprocessable_entity
+        end
         flash[:error] = "User updating failed: #{user.errors.full_messages.to_sentence}"
       end
     end

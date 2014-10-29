@@ -1,30 +1,28 @@
 require 'spec_helper'
 
-describe Admin::MaintenanceWindowsHelper do
+RSpec.describe Admin::MaintenanceWindowsHelper, type: :helper do
 
-  let(:some_admin) { FactoryGirl.create :superadmin }
-  describe "#maintenance_window_active" do
-    context "while a maintenance window is active" do
-      let(:maint_window) { FactoryGirl.create(:admin_maintenance_window, user: some_admin, enabled: true)}
-      it "returns true" do
-        maint_window
+  describe '#maintenance_window_active' do
+    context 'while a maintenance window is active' do
+      let!(:maint_window) { FactoryGirl.create(:admin_maintenance_window, :enabled) }
+      it 'returns true' do
         expect(helper.maintenance_window_active?).to eq true
       end
     end
-    context "while no maintenance window is active" do
-      let(:maint_window) { FactoryGirl.create(:admin_maintenance_window, user: some_admin, enabled: false)}
-      it "returns false" do
-        maint_window
+    context 'while no maintenance window is active' do
+      let!(:maint_window) { FactoryGirl.create(:admin_maintenance_window, :closed) }
+
+      it 'returns false' do
         expect(helper.maintenance_window_active?).to eq false
       end
     end
   end
 
-  describe "#get_active_maintenance_window" do
-    let(:maint_window) { FactoryGirl.create(:admin_maintenance_window, user: some_admin, enabled: true)}
-    it "returns first active maintenance window" do
-      maint_window
-      expect(helper.get_active_maintenance_window).to eq maint_window
+  describe '#load_active_maintenance_window' do
+    let!(:maint_window) { FactoryGirl.create(:admin_maintenance_window, :enabled) }
+
+    it 'returns first active maintenance window' do
+      expect(helper.load_active_maintenance_window).to eq maint_window
     end
   end
 

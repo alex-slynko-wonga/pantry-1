@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe QueuesController do
+RSpec.describe QueuesController, type: :controller do
 
   describe "GET 'index'" do
     before(:each) do
@@ -12,7 +12,7 @@ describe QueuesController do
       AWS::SQS.new.client.stub_for(:list_queues).clear
     end
 
-    it "returns http success" do
+    it 'returns http success' do
       get 'index'
       expect(response).to be_success
     end
@@ -24,7 +24,7 @@ describe QueuesController do
       expect(response).to be_not_found
     end
 
-    context "when given queue exists" do
+    context 'when given queue exists' do
       let(:queue) { instance_double('AWS::SQS::Queue', visible_messages: 0, url: 'url') }
 
       before(:each) do
@@ -37,14 +37,14 @@ describe QueuesController do
         AWS::SQS.new.client.stub_for(:get_queue_url).clear
       end
 
-      it "returns http success" do
+      it 'returns http success' do
         get 'show', id: 'url'
         expect(response).to be_success
         expect(assigns(:queue)).to eq(queue)
       end
 
-      context "when queue has available messages" do
-        it "reads queue and sets message" do
+      context 'when queue has available messages' do
+        it 'reads queue and sets message' do
           allow(queue).to receive(:visible_messages).and_return(1)
           message = double
           expect(queue).to receive(:receive_message).and_return(message)
@@ -53,8 +53,8 @@ describe QueuesController do
         end
       end
 
-      context "when queue has no available messages" do
-        it "reads queue and sets message" do
+      context 'when queue has no available messages' do
+        it 'reads queue and sets message' do
           allow(queue).to receive(:visible_messages).and_return(0)
           get 'show', id: 'url'
           expect(assigns(:message)).to eq(nil)

@@ -16,14 +16,12 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in_user
-    if http_get? && !auth_request?
-      session['requested_url'] = request.url
-    end
-    redirect_to '/auth/ldap', notice: "Please sign in." unless signed_in?
+    session['requested_url'] = request.url if http_get? && !auth_request?
+    redirect_to '/auth/ldap', notice: 'Please sign in.' unless signed_in?
   end
 
   def pundit_user
-    user = User.where(username: params[:test_user]).first if current_user.role == "superadmin" && params[:test_user]
+    user = User.where(username: params[:test_user]).first if current_user.role == 'superadmin' && params[:test_user]
     user || current_user
   end
 
@@ -34,7 +32,7 @@ class ApplicationController < ActionController::Base
   private
 
   def user_not_authorized
-    flash[:error] = "You are not authorized to perform this action."
+    flash[:error] = 'You are not authorized to perform this action.'
     redirect_to root_path
   end
 
@@ -46,4 +44,3 @@ class ApplicationController < ActionController::Base
     request.fullpath['/auth/']
   end
 end
-

@@ -8,11 +8,11 @@ if Rails.env.test? || Rails.env.development?
 
   desc 'Run RuboCop'
   RuboCop::RakeTask.new(:rubocop) do |task|
-    # only show the files with failures
-    task.formatters = ['files']
     # don't abort rake on failure
     task.fail_on_error = true
   end
+
+  task default: :rubocop
 end
 
 Wonga::Pantry::Application.load_tasks

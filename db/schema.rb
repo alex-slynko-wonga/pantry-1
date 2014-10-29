@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 20141014140737) do
     t.date     "bill_date"
     t.decimal  "cost",            precision: 10, scale: 2
     t.integer  "ec2_instance_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.boolean  "estimated"
   end
 
@@ -50,16 +50,16 @@ ActiveRecord::Schema.define(version: 20141014140737) do
     t.string   "from_state"
     t.string   "event"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.text     "updates"
   end
 
   create_table "ec2_instances", force: true do |t|
     t.string   "name"
     t.string   "instance_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.integer  "team_id"
     t.integer  "user_id"
     t.string   "ami"
@@ -110,8 +110,8 @@ ActiveRecord::Schema.define(version: 20141014140737) do
 
   create_table "jenkins_servers", force: true do |t|
     t.integer  "team_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "ec2_instance_id"
   end
 
@@ -120,8 +120,8 @@ ActiveRecord::Schema.define(version: 20141014140737) do
   create_table "jenkins_slaves", force: true do |t|
     t.integer  "jenkins_server_id"
     t.integer  "ec2_instance_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.boolean  "removed",           default: false
   end
 
@@ -131,8 +131,8 @@ ActiveRecord::Schema.define(version: 20141014140737) do
   create_table "team_members", force: true do |t|
     t.integer  "team_id"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "team_members", ["team_id", "user_id"], name: "index_team_members_on_team_id_and_user_id", unique: true, using: :btree
@@ -140,8 +140,8 @@ ActiveRecord::Schema.define(version: 20141014140737) do
   create_table "teams", force: true do |t|
     t.string   "name"
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.string   "chef_environment"
     t.boolean  "disabled"
     t.string   "product"
@@ -151,15 +151,15 @@ ActiveRecord::Schema.define(version: 20141014140737) do
   create_table "total_costs", force: true do |t|
     t.decimal  "cost",       precision: 10, scale: 2
     t.date     "bill_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   create_table "users", force: true do |t|
     t.string   "username"
     t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "name"
     t.string   "role"
   end

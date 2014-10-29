@@ -37,13 +37,14 @@ class Admin::MaintenanceWindowsController < Admin::AdminController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_admin_maintenance_window
-      @admin_maintenance_window = Admin::MaintenanceWindow.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def admin_maintenance_window_params
-      params.require(:admin_maintenance_window).permit(:name, :description, :message, :end_at, :enabled)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_admin_maintenance_window
+    @admin_maintenance_window = Admin::MaintenanceWindow.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def admin_maintenance_window_params
+    params.require(:admin_maintenance_window).permit(:name, :description, :message, :end_at, :enabled)
+  end
 end

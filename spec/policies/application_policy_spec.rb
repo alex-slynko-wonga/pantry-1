@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ApplicationPolicy do
+RSpec.describe ApplicationPolicy do
   context '#as_json' do
     class JsonPolicy < ApplicationPolicy
       def initialize(allow)

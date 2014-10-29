@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wonga::Pantry::Ec2Resource do
+RSpec.describe Wonga::Pantry::Ec2Resource do
   let(:ec2_instance)  { FactoryGirl.create(:ec2_instance) }
   let(:user)          { ec2_instance.user }
   let(:start_sns)     { instance_double('Wonga::Pantry::SNSPublisher').as_null_object }

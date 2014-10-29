@@ -1,7 +1,7 @@
 class EnvironmentPolicy < ApplicationPolicy
   Scope = Struct.new(:user, :scope) do
     def resolve
-        scope.available(user)
+      scope.available(user)
     end
   end
   def permitted_types

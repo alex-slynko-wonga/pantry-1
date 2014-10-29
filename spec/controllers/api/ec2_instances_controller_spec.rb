@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe Api::Ec2InstancesController do
-  describe "#update" do
+RSpec.describe Api::Ec2InstancesController, type: :controller do
+  describe '#update' do
     let(:team) { FactoryGirl.build(:team) }
     let(:user) { FactoryGirl.build(:user, team: team) }
 
-    context "with valid token" do
+    context 'with valid token' do
       before(:each) do
         request.headers['X-Auth-Token'] = CONFIG['pantry']['api_key']
         @ec2_instance = instance_double('Ec2Instance', id: 45)
@@ -17,12 +17,12 @@ describe Api::Ec2InstancesController do
         allow(User).to receive(:find).with(1).and_return(@user)
       end
 
-      it "updates an instance" do
+      it 'updates an instance' do
         expect(@state).to receive(:change_state!)
         put :update, id: 45, user_id: 1, terminated: true, format: 'json'
       end
 
-      it "returns http success" do
+      it 'returns http success' do
         allow(@state).to receive(:change_state!)
         put :update, id: 45, user_id: 1, terminated: true, format: 'json', test: false
         expect(response).to be_success

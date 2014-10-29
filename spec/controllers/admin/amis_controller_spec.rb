@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Admin::AmisController do
+RSpec.describe Admin::AmisController, type: :controller do
   before(:each) do
     session[:user_id] = user.id
   end
@@ -25,13 +25,13 @@ describe Admin::AmisController do
       it 'creates a new ami' do
         expect do
           post 'create',
-            ami: {
-              ami_id: 'ami-00000001',
-              name: 'windows_sdk_server',
-              hidden: true,
-              platform: 'linux'
-            },
-            format: :json
+               ami: {
+                 ami_id: 'ami-00000001',
+                 name: 'windows_sdk_server',
+                 hidden: true,
+                 platform: 'linux'
+               },
+               format: :json
         end.to change(Ami, :count).by(1)
       end
     end
@@ -65,7 +65,7 @@ describe Admin::AmisController do
     describe "GET 'edit'" do
       subject { get 'edit', id: ami.id }
 
-      it { should be_success }
+      it { is_expected.to be_success }
     end
   end
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Wonga::Pantry::ChefUtility do
+RSpec.describe Wonga::Pantry::ChefUtility do
   let(:sqs_sender) { instance_double('Wonga::Pantry::SQSSender', send_message: true) }
   let(:team) { FactoryGirl.build_stubbed(:team) }
   let(:environment) { FactoryGirl.build(:environment) }
@@ -22,7 +22,7 @@ describe Wonga::Pantry::ChefUtility do
 
     it 'includes users in message' do
       user = FactoryGirl.build_stubbed :user
-      team.users  = [ user ]
+      team.users  = [user]
 
       allow(sqs_sender).to receive(:send_message) do |message|
         expect(message[:users]).to eq([user.username])

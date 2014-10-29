@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-describe TotalCost do
+RSpec.describe TotalCost, type: :model do
 end

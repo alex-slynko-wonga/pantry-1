@@ -7,6 +7,6 @@ class Api::CostsController < ApiController
     end
     TotalCost.where(bill_date: bill_date).first_or_initialize.update_attributes(cost: params[:total_cost])
 
-    respond_with({:msg => "success"}, :location => ec2_instance_costs_url)
+    respond_with({ msg: 'success' }, location: ec2_instance_costs_url)
   end
 end

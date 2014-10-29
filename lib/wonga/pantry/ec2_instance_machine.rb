@@ -8,41 +8,41 @@ module Wonga
         super()
       end
 
-      state_machine :state, :initial => :initial_state do
+      state_machine :state, initial: :initial_state do
         event :ec2_boot do
-          transition :initial_state => :booting
+          transition initial_state: :booting
         end
 
         event :ec2_booted do
-          transition :booting => :booted
+          transition booting: :booted
         end
 
         event :add_to_domain do
-          transition :booted => :added_to_domain
+          transition booted: :added_to_domain
         end
 
         event :create_dns_record do
-          transition :added_to_domain => :dns_record_created
+          transition added_to_domain: :dns_record_created
         end
 
         event :bootstrap do
-          transition [ :dns_record_created , :ready ] => :ready
+          transition [:dns_record_created, :ready] => :ready
         end
 
         event :shutdown_now do
-          transition :ready => :shutting_down
+          transition ready: :shutting_down
         end
 
         event :shutdown do
-          transition :shutting_down => :shutdown
+          transition shutting_down: :shutdown
         end
 
         event :start_instance do
-          transition :shutdown => :starting
+          transition shutdown: :starting
         end
 
         event :started do
-          transition :starting => :ready
+          transition starting: :ready
         end
 
         event :out_of_band_cleanup do
@@ -50,12 +50,12 @@ module Wonga
         end
 
         event :termination do
-          transition [ :ready, :shutting_down, :shutdown, :starting, :resizing ] => :terminating, if: :instance_unprotected
+          transition [:ready, :shutting_down, :shutdown, :starting, :resizing] => :terminating, if: :instance_unprotected
         end
 
         event :terminated do
-          transition :terminating => :terminated, :if => :termination_condition
-          transition :terminating => :terminating, unless: :termination_condition
+          transition terminating: :terminated, if: :termination_condition
+          transition terminating: :terminating, unless: :termination_condition
         end
 
         event :resize do
@@ -63,12 +63,12 @@ module Wonga
         end
 
         event :resized do
-          transition :resizing => :starting
+          transition resizing: :starting
         end
 
-        after_transition :dns_record_created => :ready do |machine, state|
+        after_transition dns_record_created: :ready do |machine, _state|
           mail = Ec2Notifications.machine_created(machine.ec2_instance)
-          machine.callback = lambda { mail.deliver }
+          machine.callback = -> { mail.deliver }
         end
       end
 
@@ -80,9 +80,7 @@ module Wonga
         @callback.call if @callback
       end
 
-      def callback=(value)
-        @callback = value
-      end
+      attr_writer :callback
 
       private
 

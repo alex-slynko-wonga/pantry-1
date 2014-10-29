@@ -7,7 +7,7 @@ class Ec2InstanceCostsController < ApplicationController
       end
 
       format.html do
-        @available_dates = Ec2InstanceCost.get_available_dates.map {|date| [date.strftime("%d-%m-%Y"), date.strftime("%B %Y")]}
+        @available_dates = Ec2InstanceCost.available_dates.map { |date| [date.strftime('%d-%m-%Y'), date.strftime('%B %Y')] }
       end
     end
   end
@@ -21,6 +21,7 @@ class Ec2InstanceCostsController < ApplicationController
   end
 
   private
+
   def costs
     @pantry_costs ||= Wonga::Pantry::Costs.new(params[:date])
   end

@@ -14,13 +14,13 @@ module TeamsHelper
   def teams_toggle_link(inactive)
     return unless policy(Team).see_inactive_teams?
     if inactive
-      link_to "show only active teams", teams_url
+      link_to 'show only active teams', teams_url
     else
-      link_to "show only inactive teams", teams_url(inactive: true)
+      link_to 'show only inactive teams', teams_url(inactive: true)
     end
   end
 
   def teams_header(inactive)
-    inactive ? "Inactive teams" : "Teams"
+    inactive ? 'Inactive teams' : 'Teams'
   end
 end

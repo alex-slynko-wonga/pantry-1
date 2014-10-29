@@ -12,7 +12,7 @@ class Admin::AmisController < Admin::AdminController
 
     if @ami.update_attributes(ami_attributes)
       redirect_to admin_amis_path
-      flash[:notice] = "AMI updated successfully"
+      flash[:notice] = 'AMI updated successfully'
     else
       flash[:error] = "AMI update failed: #{human_errors(@ami)}"
       redirect_to edit_admin_ami_url(@ami)

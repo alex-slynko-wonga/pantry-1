@@ -8,20 +8,19 @@ class Aws::Ec2InstancesController < ApplicationController
       reference_instance = Ec2Instance.find(params[:id])
       if reference_instance
         @ec2_instance.attributes = {
-                                     ami: reference_instance.ami,
-                                     domain: reference_instance.domain,
-                                     environment_id: reference_instance.environment_id,
-                                     flavor: reference_instance.flavor,
-                                     instance_role_id: reference_instance.instance_role_id,
-                                     name: reference_instance.name,
-                                     run_list: reference_instance.run_list,
-                                     security_group_ids: reference_instance.security_group_ids,
-                                     subnet_id: reference_instance.subnet_id,
-                                     team_id: reference_instance.team_id
-                                   }
+          ami: reference_instance.ami,
+          domain: reference_instance.domain,
+          environment_id: reference_instance.environment_id,
+          flavor: reference_instance.flavor,
+          instance_role_id: reference_instance.instance_role_id,
+          name: reference_instance.name,
+          run_list: reference_instance.run_list,
+          security_group_ids: reference_instance.security_group_ids,
+          subnet_id: reference_instance.subnet_id,
+          team_id: reference_instance.team_id
+        }
       end
     end
-
 
     @ec2_instance.team_id = params[:team_id] unless params[:team_id].blank?
     authorize @ec2_instance
@@ -125,7 +124,8 @@ class Aws::Ec2InstancesController < ApplicationController
   private
 
   def ec2_instance_params
-    params.require(:ec2_instance).permit(:name, :user_id, :ami, :instance_role_id, :flavor, :subnet_id, :domain, :environment_id, :run_list, :platform, security_group_ids: [])
+    params.require(:ec2_instance).permit(:name, :user_id, :ami, :instance_role_id, :flavor,
+                                         :subnet_id, :domain, :environment_id, :run_list, :platform, security_group_ids: [])
   end
 
   def initialize_ec2_adapter

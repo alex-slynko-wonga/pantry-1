@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  before_action :get_team, :only => [:show, :edit, :update, :deactivate]
+  before_action :load_team, only: [:show, :edit, :update, :deactivate]
 
   def new
     @team = Team.new
@@ -10,7 +10,7 @@ class TeamsController < ApplicationController
     @team = Team.new(team_params)
     @team.users = users
     if @team.save
-      flash[:notice] = "Team created successfully"
+      flash[:notice] = 'Team created successfully'
       redirect_to @team
     else
       flash[:error] = "Team creation failed: #{human_errors(@team)}"
@@ -38,7 +38,7 @@ class TeamsController < ApplicationController
     @team.users = users
     if @team.update_attributes(team_params)
       redirect_to @team
-      flash[:notice] = "Team updated successfully"
+      flash[:notice] = 'Team updated successfully'
     else
       flash[:error] = "Team update failed: #{human_errors(@team)}"
       render :edit
@@ -52,14 +52,14 @@ class TeamsController < ApplicationController
       flash[:notice] = "Team #{@team.name} deactivated"
       redirect_to teams_url
     else
-      flash[:error] = "Confirmation is not provided"
+      flash[:error] = 'Confirmation is not provided'
       redirect_to @team
     end
   end
 
   private
 
-  def get_team
+  def load_team
     @team = Team.find(params[:id])
   end
 

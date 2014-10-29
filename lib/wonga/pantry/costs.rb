@@ -6,16 +6,16 @@ class Wonga::Pantry::Costs
   end
 
   def costs_per_team
-    Team.unscoped.joins(:ec2_instance_costs).
-      where(ec2_instance_costs: { bill_date: @bill_date }).
-      select('teams.id, teams.name, SUM(ec2_instance_costs.cost) as costs, teams.disabled').
-      order('teams.name').
-      group('teams.id, teams.name').to_a
+    Team.unscoped.joins(:ec2_instance_costs)
+      .where(ec2_instance_costs: { bill_date: @bill_date })
+      .select('teams.id, teams.name, SUM(ec2_instance_costs.cost) as costs, teams.disabled')
+      .order('teams.name')
+      .group('teams.id, teams.name').to_a
   end
 
   def costs_details_per_team(team_id)
-    Ec2InstanceCost.includes(:ec2_instance).
-      where(ec2_instance_costs: { bill_date: @bill_date }, ec2_instances: {team_id: team_id}).
-      order('ec2_instances.name').to_a
+    Ec2InstanceCost.includes(:ec2_instance)
+      .where(ec2_instance_costs: { bill_date: @bill_date }, ec2_instances: { team_id: team_id })
+      .order('ec2_instances.name').to_a
   end
 end

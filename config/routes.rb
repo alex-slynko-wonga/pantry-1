@@ -6,7 +6,7 @@ Wonga::Pantry::Application.routes.draw do
   end
 
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
-  get "ec2_instance_costs/index"
+  get 'ec2_instance_costs/index'
 
   namespace :api do
     resources :chef_nodes, only: [:destroy]
@@ -16,7 +16,7 @@ Wonga::Pantry::Application.routes.draw do
     resources :jenkins_slaves, only: [:update]
     resources :costs, only: [:create]
     resources :teams, only: [] do
-      resources :chef_environments, controller: "teams/chef_environments", only: [:update]
+      resources :chef_environments, controller: 'teams/chef_environments', only: [:update]
     end
   end
 
@@ -28,7 +28,7 @@ Wonga::Pantry::Application.routes.draw do
   resources :aws_costs, only: [:index, :show]
   resources :total_costs, only: [:show]
   resources :ec2_instances, except: [:index]
-  resources :ec2_instance_costs, only: [ :index, :show ]
+  resources :ec2_instance_costs, only: [:index, :show]
 
   resources :jenkins_servers, except: [:destroy] do
     resources :jenkins_slaves
@@ -40,18 +40,18 @@ Wonga::Pantry::Application.routes.draw do
   end
 
   resources :teams, except: [:destroy] do
-    resources :ec2_instances, controller: "teams/ec2_instances", only: [:index]
+    resources :ec2_instances, controller: 'teams/ec2_instances', only: [:index]
     resources :environments, except: [:index]
     post :deactivate, on: :member
   end
 
   resources :ldap_users, only: [:index]
 
-  get  '/login', :to => 'sessions#new', :as => :login
-  post '/auth/ldap/callback', :to => 'sessions#create'
-  get  '/auth/ldap/callback', :to => 'sessions#create'
-  get  '/auth/failure', to: 'sessions#failure'
-  get  '/logout', :to => 'sessions#destroy'
+  get '/login', to: 'sessions#new', as: :login
+  post '/auth/ldap/callback', to: 'sessions#create'
+  get '/auth/ldap/callback', to: 'sessions#create'
+  get '/auth/failure', to: 'sessions#failure'
+  get '/logout', to: 'sessions#destroy'
 
   resources :users, except: [:create, :destroy]
   root to: 'home#index'

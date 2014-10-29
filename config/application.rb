@@ -1,10 +1,10 @@
 require File.expand_path('../boot', __FILE__)
 
-require "rails/all"
+require 'rails/all'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
+  Bundler.require(*Rails.groups(assets: %w(development test)))
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
@@ -38,18 +38,18 @@ module Wonga
 
       # Configure the default encoding used in templates for Ruby 1.9.
 
-      config.action_mailer.default_url_options = { host: CONFIG["mailer"]["host"] }
-      config.action_mailer.default_options = CONFIG["mailer"]["default_options"].symbolize_keys if CONFIG["mailer"] && CONFIG["mailer"]["default_options"]
+      config.action_mailer.default_url_options = { host: CONFIG['mailer']['host'] }
+      config.action_mailer.default_options = CONFIG['mailer']['default_options'].symbolize_keys if CONFIG['mailer'] && CONFIG['mailer']['default_options']
       # Configure logger if attributes present
       if CONFIG['pantry']['log']
         case CONFIG['pantry']['log']['logger']
-        when "syslog"
+        when 'syslog'
           require 'syslogger'
           facility = Syslog.const_get("LOG_#{CONFIG['pantry']['log']['log_facility'].upcase}")
           config.logger = Syslogger.new(CONFIG['pantry']['log']['app_name'],
                                         Syslog::LOG_PID | Syslog::LOG_CONS,
                                         facility)
-        when "file"
+        when 'file'
           if CONFIG['pantry']['log']['log_file']
             config.logger = CONFIG['pantry']['log']['log_file']
           end

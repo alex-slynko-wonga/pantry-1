@@ -1,9 +1,9 @@
 AllCops:
   RunRailsCops: true
   Exclude:
-    - '**/metadata.rb'
-    - '**/*.gemspec'
-    - '**/version.rb'
+    - 'db/schema.rb'
+    - '*file'
+    - 'bin/*'
 
 Style/ClassAndModuleChildren:
   Enabled: false
@@ -11,8 +11,22 @@ Style/CollectionMethods:
   Enabled: false
 Style/Documentation:
   Enabled: false
+Style/FormatString:
+  Enabled: false
+Style/SingleLineBlockParams:
+  Enabled: false
 
 Metrics/LineLength:
   Max: 160
 Metrics/MethodLength:
-  Max: 25
+  Max: 35
+Metrics/ClassLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Max: 13
+
+
+Rails/DefaultScope:
+  Enabled: false

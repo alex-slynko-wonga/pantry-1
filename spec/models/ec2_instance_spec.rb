@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Ec2Instance do
+RSpec.describe Ec2Instance, type: :model do
   subject { FactoryGirl.build :ec2_instance }
 
   it 'should be invalid without attributes (and not raise exception)' do
@@ -25,7 +25,7 @@ describe Ec2Instance do
     context 'when name is 63 symbols' do
       let(:name) { 'a' + '1' * 62 }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
 
       it 'is invalid if the first 15 characters are not unique' do
         subject.save!
@@ -37,7 +37,7 @@ describe Ec2Instance do
     context 'when name is longer than 64 symbols' do
       let(:name) { 'a' + '1' * 64 }
 
-      it { should be_invalid }
+      it { is_expected.to be_invalid }
     end
   end
 
@@ -47,13 +47,13 @@ describe Ec2Instance do
     context 'when name is 14 symbols' do
       let(:name) { 'a' + '1' * 13 }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     context 'when name is longer than 14 symbols' do
       let(:name) { 'a' + '1' * 14 }
 
-      it { should be_invalid }
+      it { is_expected.to be_invalid }
     end
   end
 
@@ -96,12 +96,12 @@ describe Ec2Instance do
 
   context 'if the user does not belogs to the current team' do
     subject { FactoryGirl.build(:ec2_instance, user: FactoryGirl.build(:user), team: FactoryGirl.build(:team)) }
-    it { should be_invalid }
+    it { is_expected.to be_invalid }
   end
 
   context 'if environment is not from current team' do
     subject { FactoryGirl.build(:ec2_instance, environment: Environment.new) }
-    it { should be_invalid }
+    it { is_expected.to be_invalid }
   end
 
   describe 'initial state' do

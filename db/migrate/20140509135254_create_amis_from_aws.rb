@@ -1,3 +1,4 @@
+# rubocop:disable all
 class CreateAmisFromAws < ActiveRecord::Migration
   def up
     AWS::EC2.new.images.with_owner('self').to_a.map do |image|
@@ -9,3 +10,4 @@ class CreateAmisFromAws < ActiveRecord::Migration
     Ami.destroy_all
   end
 end
+# rubocop:enable all

@@ -15,5 +15,5 @@
 # end
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
- inflect.irregular 'slave', 'slaves'
+  inflect.irregular 'slave', 'slaves'
 end

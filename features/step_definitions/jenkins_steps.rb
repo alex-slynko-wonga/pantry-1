@@ -29,12 +29,12 @@ Then(/^I should see the slaves listing$/) do
 end
 
 Then(/^I should be redirected to the Jenkins server page$/) do
-  expect(page).to have_content "Jenkins Slaves"
+  expect(page).to have_content 'Jenkins Slaves'
 end
 
 Then(/^the slave should be starting$/) do
   @jenkins_slave = JenkinsSlave.last
-  expect(@jenkins_slave.ec2_instance.state).to eq("starting")
+  expect(@jenkins_slave.ec2_instance.state).to eq('starting')
 end
 
 When(/^I click on the jenkins slave$/) do
@@ -49,8 +49,8 @@ Given(/^the team has a Jenkins server$/) do
 end
 
 When(/^I request new slave$/) do
-  page.click_on "Create a new slave"
-  click_on "Create slave"
+  page.click_on 'Create a new slave'
+  click_on 'Create slave'
 end
 
 When(/^slave is deleted$/) do
@@ -59,7 +59,7 @@ end
 
 Given(/^the slave is shut down$/) do
   @jenkins_slave ||= JenkinsSlave.last
-  @jenkins_slave.ec2_instance.update_attributes(state: "shutdown")
+  @jenkins_slave.ec2_instance.update_attributes(state: 'shutdown')
 end
 
 Then(/^I should not see slave in listing$/) do
@@ -74,4 +74,3 @@ When(/^the slave does not belong to my team$/) do
   slave.ec2_instance.team = @team
   slave.save(validate: false)
 end
-

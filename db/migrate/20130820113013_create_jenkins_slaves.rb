@@ -6,7 +6,7 @@ class CreateJenkinsSlaves < ActiveRecord::Migration
 
       t.timestamps
     end
-    
+
     add_index :jenkins_slaves, :jenkins_server_id
     add_index :jenkins_slaves, :ec2_instance_id
   end

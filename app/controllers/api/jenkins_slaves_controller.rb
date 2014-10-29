@@ -5,7 +5,7 @@ class Api::JenkinsSlavesController < ApiController
     respond_with jenkins_slave
   end
 
-private
+  private
 
   def jenkins_attributes
     params.require(:jenkins_slave).permit(:removed)

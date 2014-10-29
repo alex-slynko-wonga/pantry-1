@@ -15,7 +15,8 @@ end
 When(/^environment is created$/) do
   environment = Environment.last
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
-  put "/api/teams/#{environment.team_id}/chef_environments/#{environment.id}",  environment_name: environment.name, chef_environment: environment.name, format: :json
+  put "/api/teams/#{environment.team_id}/chef_environments/#{environment.id}", environment_name: environment.name,
+    chef_environment: environment.name, format: :json
 end
 
 When(/^I request new ec2 instance$/) do
@@ -46,7 +47,7 @@ end
 
 Then(/^I should see all environment human names except CI$/) do
   @team.environments.each do |environment|
-    if environment.environment_type!='CI'
+    if environment.environment_type != 'CI'
       expect(page).to have_content environment.human_name
     end
   end
@@ -54,15 +55,15 @@ end
 
 Then(/^I can( not)? create a new CI environment$/) do |not_contains|
   if not_contains
-    expect(page).to_not have_content "Create a new CI environment"
+    expect(page).to_not have_content 'Create a new CI environment'
   else
-    expect(page).to have_content "Create a new CI environment"
+    expect(page).to have_content 'Create a new CI environment'
   end
 end
 
 When(/^I update environment with name "(.*?)" and description "(.*?)"$/) do |new_name, new_description|
   click_on 'Edit this environment'
-  fill_in('Name', :with => new_name)
-  fill_in('Description', :with => new_description)
-  click_button("Update Environment")
+  fill_in('Name', with: new_name)
+  fill_in('Description', with: new_description)
+  click_button('Update Environment')
 end

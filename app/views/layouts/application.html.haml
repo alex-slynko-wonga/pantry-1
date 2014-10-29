@@ -36,7 +36,7 @@
                 %img{src: pundit_user.image_url, alt: 'Gravatar' }
             %li
               = link_to 'Log out', logout_url
-      - if window = get_active_maintenance_window
+      - if window = load_active_maintenance_window
         .alert-block.alert.alert-warning
           %div{:class => "text-center"}
             %strong{:class => "text-error"}= "Maintenance Mode Active - New Requests Disabled"

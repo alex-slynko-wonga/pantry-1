@@ -3,6 +3,6 @@ AfterStep('@slow_motion') do
 end
 
 AfterStep('@single_step') do
-  print "Single Stepping. Hit enter to continue"
-  STDIN.getc
+  print 'Single Stepping. Hit enter to continue'
+  binding.pry # rubocop:disable Lint/Debugger
 end

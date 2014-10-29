@@ -11,4 +11,3 @@ class UserPolicy < ApplicationPolicy
     god_mode?
   end
 end
-

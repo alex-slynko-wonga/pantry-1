@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Ec2InstancePolicy do
+RSpec.describe Ec2InstancePolicy do
   subject { described_class.new(user, ec2_instance) }
   let(:state) { 'ready' }
   let(:ec2_instance) { FactoryGirl.build(:ec2_instance, state: state) }

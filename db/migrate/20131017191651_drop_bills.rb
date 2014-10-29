@@ -12,6 +12,6 @@ class DropBills < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index "bills", "bill_date", :name => "index_bills_on_bill_date", :unique => true
+    add_index 'bills', 'bill_date', name: 'index_bills_on_bill_date', unique: true
   end
 end

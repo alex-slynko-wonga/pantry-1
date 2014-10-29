@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "users/index" do
+RSpec.describe 'users/index', type: :view do
   let(:policy) { instance_double(UserPolicy, edit?: false) }
   let(:user) { FactoryGirl.build_stubbed(:user) }
 
@@ -9,7 +9,6 @@ describe "users/index" do
     allow(view).to receive(:policy).and_return policy
   end
 
-  describe "if user is authorized to edit users" do
+  describe 'if user is authorized to edit users' do
   end
 end
-

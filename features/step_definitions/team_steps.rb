@@ -1,10 +1,10 @@
 When(/^An agent creates a new team named "(.*?)" with product "(.*?)" and region "(.*?)"$/) do |name, product, region|
   click_on 'New Team'
-  fill_in('team_name', :with => name)
-  fill_in('team_product', :with => product)
-  fill_in('team_region', :with => region)
-  fill_in('team_description', :with => "TeamDescription")
-  click_button("Submit")
+  fill_in('team_name', with: name)
+  fill_in('team_product', with: product)
+  fill_in('team_region', with: region)
+  fill_in('team_description', with: 'TeamDescription')
+  click_button('Submit')
 end
 
 Then(/^the team page has my info$/) do
@@ -20,20 +20,21 @@ Given(/^I update team "(.*?)" with name "(.*?)" and product "(.*?)" and region "
   visit '/teams'
   click_on oldname
   click_on 'Edit'
-  fill_in('team_name', :with => newname)
-  fill_in('team_product', :with => product)
-  fill_in('team_region', :with => region)
-  click_button("Submit")
+  fill_in('team_name', with: newname)
+  fill_in('team_product', with: product)
+  fill_in('team_region', with: region)
+  click_button('Submit')
 end
 
 Given(/^(I am in )?the "(.*?)" team(?: with "(.*?)" user)?$/) do |include_logged_user, team_name, user_name|
   @team = FactoryGirl.create(:team, name: team_name)
   @team.users << User.first if include_logged_user
-  user = FactoryGirl.create(:user, name: user_name, team: @team) if user_name
+  FactoryGirl.create(:user, name: user_name, team: @team) if user_name
 end
 
 Given(/^a LDAP user "(.*?)"$/) do |name|
-  allow(LdapResource).to receive_message_chain(:new, :filter_by_name, :all).and_return([{'samaccountname' => [name], 'email' => [name], 'displayname' => [name]}])
+  allow(LdapResource).to receive_message_chain(:new, :filter_by_name, :all).and_return(
+    [{ 'samaccountname' => [name], 'email' => [name], 'displayname' => [name] }])
 end
 
 When(/^I search for "(.*?)"$/) do |search_term|
@@ -97,6 +98,6 @@ end
 
 Given(/^"(.*?)" team does not have (?:"(.*?)" )?environment$/) do |team_name, environment_type|
   @team = Team.where(name: team_name).first
-  @ci_environment_count = @team.environments.count{|environment| environment.environment_type == environment_type}
+  @ci_environment_count = @team.environments.count { |environment| environment.environment_type == environment_type }
   expect(@ci_environment_count).to eq(0)
 end

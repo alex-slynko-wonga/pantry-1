@@ -11,7 +11,7 @@ Given(/^I am on root page$/) do
 end
 
 Then(/^I should be on team page$/) do
-  expect(current_url).to match /teams/
+  expect(current_url).to match(/teams/)
 end
 
 Given(/^I am on the teams page$/) do
