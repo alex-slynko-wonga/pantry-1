@@ -12,8 +12,10 @@ class Admin::AmisController < Admin::AdminController
 
     if @ami.update_attributes(ami_attributes)
       redirect_to admin_amis_path
+      flash[:notice] = "AMI updated successfully"
     else
-      render :edit
+      flash[:error] = "AMI update failed: #{human_errors(@ami)}"
+      redirect_to edit_admin_ami_url(@ami)
     end
   end
 
@@ -29,6 +31,7 @@ class Admin::AmisController < Admin::AdminController
 
   def edit
     @ami = Ami.find(params[:id])
+    @ami_platform_was = @ami.platform
   end
 
   def destroy

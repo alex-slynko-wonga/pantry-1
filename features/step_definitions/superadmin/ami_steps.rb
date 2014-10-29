@@ -28,3 +28,6 @@ When(/^I delete "(.*?)" AMI$/) do |name|
   click_button 'Delete AMI'
 end
 
+When(/^I update "(.*?)" AMI$/) do |name|
+  visit edit_admin_ami_path(Ami.where(name: name).first)
+end

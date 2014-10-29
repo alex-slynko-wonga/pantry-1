@@ -1,4 +1,4 @@
-.row-fluid{data: { ng_controller: 'AmisCtrl', ng_init: "setAmi('#{@ami.ami_id}', '#{@ami.name}', '#{@ami.platform}')"}}
+.row-fluid{data: { ng_controller: 'AmisCtrl', ng_init: "setAmi('#{@ami.ami_id}', '#{@ami.name}', '#{@ami.platform}', '#{@ami_platform_was}')"}}
   .span3
     = simple_form_for [:admin, @ami] do |f|
       .form-inputs
@@ -9,8 +9,10 @@
 
       = f.submit
   .span9
-    %div{"ng-show" => "!ami.name && (ami.ami_id.length > 0)"}
+    %div{"ng-show" => "!aws_ami.name && (ami.ami_id.length > 0)"}
       .span4.label.label-warning AMI {{ami_id}} not found
+    %div{"ng-show" => "ami.platform_was && (ami.platform_was != ami.platform)"}
+      .span5.label.label-warning AMI can't be updated with a different platform
     %div{ "ng-show" => "aws_ami.name"}
       %h3 AMI info for {{ami.ami_id}}
       .span5

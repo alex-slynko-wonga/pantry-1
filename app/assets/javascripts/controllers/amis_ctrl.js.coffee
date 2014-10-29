@@ -1,10 +1,11 @@
 @AmisCtrl = ["$scope", "$http", "AmiAws", "validation", ($scope, $http, AmiAws, validation) ->
-  $scope.setAmi = (ami_id, name, platform) ->
+  $scope.setAmi = (ami_id, name, platform, platform_was) ->
     return unless ami_id
     $scope.ami =
       ami_id: ami_id
       name: name
       platform: platform
+      platform_was: platform_was
     amiAws = AmiAws.get ami_id: ami_id, ->
       $scope.aws_ami = amiAws
 

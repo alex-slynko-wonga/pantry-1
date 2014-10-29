@@ -1,9 +1,17 @@
-Given(/^ami\-(\w+) "(.*?)" exists in AWS$/) do |id, name|
-  stub_ami_info("ami-#{id}", name)
+Given(/^ami\-(\w+) "(.*?)" exists in AWS( with platform "(.*?)")?$/) do |id, name, platform_exist, platform|
+  if platform_exist
+    stub_ami_info("ami-#{id}", name, platform)
+  else
+    stub_ami_info("ami-#{id}", name)
+  end
 end
 
-Given(/^(hidden )?"(.*?)" AMI$/) do |hidden, name|
-  ami = FactoryGirl.create(:ami, name: name, hidden: hidden.present?)
+Given(/^(hidden )?"(.*?)" AMI( with platform "(.*?)")?$/) do |hidden, name, platform_exist, platform|
+  if platform_exist
+    ami = FactoryGirl.create(:ami, name: name, hidden: hidden.present?, platform: platform)
+  else
+    ami = FactoryGirl.create(:ami, name: name, hidden: hidden.present?)
+  end
   stub_ami_info(ami.ami_id)
 end
 

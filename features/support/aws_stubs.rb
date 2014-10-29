@@ -19,11 +19,11 @@ def stub_subnets
   allow(client).to receive(:describe_subnets).and_return(subnets)
 end
 
-def stub_ami_info(ami_id = 'i-121111', name = 'image_name')
+def stub_ami_info(ami_id = 'i-121111', name = 'image_name', platform = 'windows')
   client = AWS::EC2.new.client
   amis = client.new_stub_for(:describe_images)
   amis[:images_set] = [{ name: name, image_id: ami_id }]
-  amis[:image_index] = { ami_id => { platform: 'windows' } }
+  amis[:image_index] = { ami_id => { platform: platform } }
   allow(client).to receive(:describe_images).and_return(amis)
 end
 
