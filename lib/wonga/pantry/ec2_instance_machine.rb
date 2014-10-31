@@ -70,6 +70,12 @@ module Wonga
           mail = Ec2Notifications.machine_created(machine.ec2_instance)
           machine.callback = -> { mail.deliver }
         end
+
+        after_transition terminating: :terminated do |machine, _state|
+          if machine.ec2_instance.jenkins_slave
+            machine.callback = -> { machine.delete_jenkins_slave }
+          end
+        end
       end
 
       def state
@@ -80,7 +86,14 @@ module Wonga
         @callback.call if @callback
       end
 
+      def delete_jenkins_slave
+        jenkins_server = @ec2_instance.jenkins_slave.jenkins_server
+        server_fqdn = "#{jenkins_server.ec2_instance.name}.#{jenkins_server.ec2_instance.domain}"
+        Wonga::Pantry::JenkinsSlaveDestroyer.new(@ec2_instance.jenkins_slave, server_fqdn, 80, @user).delete
+      end
+
       attr_writer :callback
+      attr_writer :user
 
       private
 

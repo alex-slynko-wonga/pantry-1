@@ -5,6 +5,7 @@ RSpec.describe JenkinsSlavesController, type: :controller do
   let(:jenkins_slave) { FactoryGirl.create(:jenkins_slave, jenkins_server: jenkins_server) }
   let(:user) { FactoryGirl.create(:user, team: team) }
   let(:team) { FactoryGirl.create(:team) }
+  let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true) }
 
   before(:each) do
     session[:user_id] = user.id
@@ -72,11 +73,11 @@ RSpec.describe JenkinsSlavesController, type: :controller do
   end
 
   describe "DELETE 'destroy'" do
-    let(:destroyer) { instance_double('Wonga::Pantry::JenkinsSlaveDestroyer') }
+    let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource') }
 
     before(:each) do
-      allow(Wonga::Pantry::JenkinsSlaveDestroyer).to receive(:new).and_return(destroyer)
-      allow(destroyer).to receive(:delete)
+      allow(Wonga::Pantry::Ec2Resource).to receive(:new).with(jenkins_slave.ec2_instance, user).and_return(ec2_resource)
+      allow(ec2_resource).to receive(:terminate)
     end
 
     it 'find the jenkins slave' do
@@ -89,8 +90,8 @@ RSpec.describe JenkinsSlavesController, type: :controller do
       expect(response).to redirect_to jenkins_server_jenkins_slaves_url(jenkins_server)
     end
 
-    it 'deletes the slave record' do
-      expect(destroyer).to receive(:delete)
+    it 'calls Ec2Resource to terminate jenkins slave' do
+      expect(ec2_resource).to receive(:terminate)
       delete :destroy, jenkins_server_id: jenkins_server.id, id: jenkins_slave.id
     end
   end

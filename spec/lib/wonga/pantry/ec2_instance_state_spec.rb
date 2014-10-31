@@ -4,6 +4,7 @@ RSpec.describe Wonga::Pantry::Ec2InstanceState do
       allow(ec2_instance).to receive(:save).and_return(true)
       allow(machine).to receive(:fire_events).and_return(true)
       allow(machine).to receive(:callback)
+      allow(machine).to receive(:user=)
     end
 
     it 'saves user and event to log' do

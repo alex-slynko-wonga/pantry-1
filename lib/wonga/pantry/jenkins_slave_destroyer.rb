@@ -1,16 +1,19 @@
 class Wonga::Pantry::JenkinsSlaveDestroyer
-  def initialize(jenkins_slave, server_ip, server_port = 80, user = nil, sns = Wonga::Pantry::SNSPublisher.new(CONFIG['aws']['jenkins_slave_delete_topic_arn']))
+  def initialize(jenkins_slave,
+                 server_fqdn,
+                 server_port = 80,
+                 user = nil,
+                 sns = Wonga::Pantry::SNSPublisher.new(CONFIG['aws']['jenkins_slave_delete_topic_arn']))
     @sns = sns
     @jenkins_slave = jenkins_slave
     @ec2_instance = @jenkins_slave.ec2_instance
-    @server_ip = server_ip
+    @server_fqdn = server_fqdn
     @server_port = server_port
     @user = user
   end
 
   def delete
-    return unless Wonga::Pantry::Ec2InstanceState.new(@ec2_instance, @user, 'event' => 'termination').change_state
-    @sns.publish_message('server_ip'         => @server_ip,
+    @sns.publish_message('server_fqdn'       => @server_fqdn,
                          'server_port'       => @server_port,
                          'hostname'          => @ec2_instance.name,
                          'domain'            => @ec2_instance.domain,
@@ -18,7 +21,6 @@ class Wonga::Pantry::JenkinsSlaveDestroyer
                          'id'                => @ec2_instance.id,
                          'jenkins_slave_id'  => @jenkins_slave.id,
                          'chef_environment'  => @ec2_instance.environment.chef_environment,
-                         'user_id'           => @ec2_instance.user_id)
-    true
+                         'user_id'           => @user.id)
   end
 end

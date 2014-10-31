@@ -148,6 +148,48 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
         expect(subject).to_not be_can_termination
       end
     end
+
+    context 'jenkins slaves termination' do
+      let(:team) { FactoryGirl.create(:team) }
+      let(:user) { FactoryGirl.create(:user, team: team) }
+      let(:jenkins_server) { FactoryGirl.build_stubbed(:jenkins_server, :running, team: team) }
+      let(:jenkins_slave) { FactoryGirl.build_stubbed(:jenkins_slave, jenkins_server: jenkins_server) }
+      let(:subject_with_jenkins_slave) { described_class.new(jenkins_slave.ec2_instance) }
+      let(:destroyer) { instance_double('Wonga::Pantry::JenkinsSlaveDestroyer') }
+
+      before(:each) do
+        allow(Wonga::Pantry::JenkinsSlaveDestroyer).to receive(:new).with(jenkins_slave,
+                                                                          "#{jenkins_server.ec2_instance.name}.#{jenkins_server.ec2_instance.domain}",
+                                                                          80,
+                                                                          user).and_return(destroyer)
+        allow(destroyer).to receive(:delete)
+      end
+
+      it 'sends message to destroy jenkins slave when slave is available' do
+        jenkins_slave.ec2_instance.state = 'terminating'
+        jenkins_slave.ec2_instance.attributes = { dns: false, terminated: true, bootstrapped: false, joined: false, protected: false }
+
+        expect(destroyer).to receive(:delete)
+
+        subject_with_jenkins_slave.user = user
+        subject_with_jenkins_slave.fire_state_event('terminated')
+        subject_with_jenkins_slave.callback
+      end
+
+      it 'does not send message to destroy jenkins slave when slave is unavailable' do
+        allow(Wonga::Pantry::JenkinsSlaveDestroyer).to receive(:new).and_return(destroyer)
+        allow(destroyer).to receive(:delete)
+
+        ec2_instance.state = 'terminating'
+        ec2_instance.attributes = { dns: false, terminated: true, bootstrapped: false, joined: false, protected: false }
+
+        expect(destroyer).not_to receive(:delete)
+
+        subject.fire_state_event('terminated')
+        subject.callback
+      end
+
+    end
   end
 
   def move_status(transitions)

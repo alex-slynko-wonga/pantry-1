@@ -22,6 +22,7 @@ class Wonga::Pantry::Ec2InstanceState
 
     return unless @ec2_instance.save
 
+    @state_machine.user = @user
     @state_machine.callback
     true
   end
