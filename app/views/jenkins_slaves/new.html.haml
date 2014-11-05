@@ -2,8 +2,11 @@
   .span12
     %h1 Create a new Jenkins Slave for your team
 
-= form_for [@jenkins_server, @jenkins_slave] do |f|
+= simple_form_for [@jenkins_server, @jenkins_slave] do |f|
   %fieldset
     .control-group
       = f.label @jenkins_server.team.name
+    .row
+      .span9
+        = f.input :instance_role_id, collection: InstanceRole.for(@jenkins_slave), include_blank: false
   = f.submit "Create slave", {:class => "btn"}

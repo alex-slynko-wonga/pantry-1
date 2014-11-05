@@ -18,6 +18,14 @@ RSpec.shared_examples_for 'request_instance' do
     )).to eq(:some_result)
     expect(jenkins).to be_valid
   end
+
+  it 'gets attributes from instance role' do
+    subject.request_jenkins_instance(
+      jenkins_params,
+      jenkins
+    )
+    expect(jenkins.ec2_instance.instance_role).to eq instance_role
+  end
 end
 
 RSpec.describe Wonga::Pantry::JenkinsUtility do
@@ -30,7 +38,8 @@ RSpec.describe Wonga::Pantry::JenkinsUtility do
   let(:jenkins_params) do
     {
       user_id: user.id,
-      team: team
+      team_id: team.id,
+      instance_role_id: instance_role.id
     }
   end
 
@@ -41,28 +50,14 @@ RSpec.describe Wonga::Pantry::JenkinsUtility do
 
   describe 'request jenkins slave' do
     let!(:jenkins) { JenkinsSlave.new(jenkins_server: existing_server) }
+    let(:instance_role) { FactoryGirl.create(:instance_role, :for_jenkins_slave) }
 
     include_examples 'request_instance'
-
-    it "sets platform to 'windows'" do
-      expect(subject.jenkins_instance_params(jenkins)[:platform]).to eq('windows')
-    end
-
-    it 'sets jenkins_windows_agent role' do
-      expect(subject.jenkins_instance_params(
-        FactoryGirl.build(:jenkins_slave)
-      )[:run_list]).to eq('role[jenkins_windows_agent]')
-    end
-
-    it 'sets ami-00110011' do
-      expect(subject.jenkins_instance_params(
-        FactoryGirl.build(:jenkins_slave)
-      )[:ami]).to eq('ami-00110011')
-    end
   end
 
   describe 'request jenkins server' do
     let(:jenkins) { JenkinsServer.new(team: team) }
+    let(:instance_role) { FactoryGirl.create(:instance_role, :for_jenkins_server) }
     include_examples 'request_instance'
   end
 end

@@ -23,22 +23,18 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         format.html do
-          redirect_to(@user,
-                      notice: 'User updated')
+          redirect_to @user, notice: 'User updated'
         end
         format.json do
-          render json: @user,
-                      status: :updated, location: @user
+          render json: @user, status: :updated, location: @user
         end
         flash[:notice] = 'User updated successfully'
       else
         format.html do
-          redirect_to(@user,
-                      notice: 'User update failed!')
+          redirect_to @user, notice: 'User update failed!'
         end
         format.json do
-          render json: @user.errors,
-                 status: :unprocessable_entity
+          render json: @user.errors, status: :unprocessable_entity
         end
         flash[:error] = "User updating failed: #{user.errors.full_messages.to_sentence}"
       end

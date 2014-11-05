@@ -1,4 +1,6 @@
 class JenkinsSlave < ActiveRecord::Base
+  attr_writer :instance_role_id
+
   belongs_to :ec2_instance, inverse_of: :jenkins_slave
   belongs_to :jenkins_server
 
@@ -17,6 +19,14 @@ class JenkinsSlave < ActiveRecord::Base
   def instance_name
     counter = JenkinsSlave.last.try(:id) || 0
     "agent-#{'%08d' % (counter + 1)}"
+  end
+
+  def instance_role_id
+    if ec2_instance
+      ec2_instance.instance_role_id
+    else
+      @instance_role_id
+    end
   end
 
   private

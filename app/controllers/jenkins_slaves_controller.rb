@@ -25,7 +25,8 @@ class JenkinsSlavesController < ApplicationController
     @jenkins_slave = @jenkins_server.jenkins_slaves.build
     attributes = {
       user_id: current_user.id,
-      team: @jenkins_server.team
+      team: @jenkins_server.team,
+      instance_role_id: params[:jenkins_slave][:instance_role_id]
     }
     authorize(@jenkins_slave)
 

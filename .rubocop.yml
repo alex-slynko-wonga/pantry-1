@@ -15,6 +15,10 @@ Style/FormatString:
   Enabled: false
 Style/SingleLineBlockParams:
   Enabled: false
+Style/NumericLiterals:
+  MinDigits: 9
+Style/MultilineOperationIndentation:
+  Enabled: false
 
 Metrics/LineLength:
   Max: 160
@@ -26,6 +30,8 @@ Metrics/CyclomaticComplexity:
   Enabled: false
 Metrics/PerceivedComplexity:
   Max: 13
+Metrics/AbcSize:
+  Enabled: false
 
 
 Rails/DefaultScope:

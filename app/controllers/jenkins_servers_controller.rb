@@ -45,7 +45,7 @@ class JenkinsServersController < ApplicationController
   private
 
   def jenkins_attributes
-    params.require(:jenkins_server).permit(:team_id)
+    params.require(:jenkins_server).permit(:team_id, :instance_role_id)
   end
 
   def load_servers

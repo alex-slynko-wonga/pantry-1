@@ -87,6 +87,7 @@ Then(/^an instance (?:with ami\-(\w+) )?build should start$/) do |ami|
     message = JSON.parse(JSON.parse(args[:message])['default'])
     expect(message['ami']).to match(ami) if ami
     expect(message['block_device_mappings']).to be_all { |hash| hash['ebs']['volume_size'].present? }
+    expect(message['block_device_mappings'].size).to be > 0
   end
 end
 

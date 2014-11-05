@@ -15,14 +15,6 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
 
   let(:team) { FactoryGirl.create(:team) }
   let(:environment) { FactoryGirl.create(:environment, team: team) }
-  let(:ec2_instance_params) do
-    { ec2_instance: FactoryGirl.attributes_for(:ec2_instance,
-                                               name: 'InstanceName',
-                                               team_id: team.id,
-                                               user_id: user.id,
-                                               environment_id: environment.id
-                                             ) }
-  end
 
   describe '#new' do
     it 'returns http success' do
@@ -47,23 +39,35 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
   end
 
   describe "POST 'create'" do
+    let(:ec2_instance_params) do
+      { ec2_instance: FactoryGirl.attributes_for(:ec2_instance,
+                                                 name: 'InstanceName',
+                                                 user_id: user.id,
+                                                 ami: FactoryGirl.create(:ami).ami_id,
+                                                 environment_id: environment.id
+                                                ) }
+    end
+
     let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', platform_for_ami: 'Winux') }
     let(:ec2_instance) { assigns(:ec2_instance) }
 
     before(:each) do
       allow(ec2_resource).to receive(:boot)
       allow(Wonga::Pantry::Ec2Adapter).to receive(:new).and_return(adapter)
+      post :create, ec2_instance_params
     end
 
     it 'uses ec2 adapter to get os' do
-      post :create, ec2_instance_params
       expect(adapter).to have_received(:platform_for_ami)
       expect(ec2_instance.platform).to eq('Winux')
     end
 
     it 'uses ec2_resource to boot' do
-      post :create, ec2_instance_params
       expect(ec2_resource).to have_received(:boot)
+    end
+
+    it 'creates valid instance' do
+      expect(ec2_instance).to be_valid
     end
 
     context 'with instance role' do
@@ -80,8 +84,11 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
       end
 
       it 'uses ec2_resource to boot' do
-        post :create, ec2_instance_params
         expect(ec2_resource).to have_received(:boot)
+      end
+
+      it 'creates valid instance' do
+        expect(ec2_instance).to be_valid
       end
     end
 
@@ -102,13 +109,11 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
         let(:user) { FactoryGirl.create(:user, team: team, role: 'superadmin') }
 
         it 'sets custom ami' do
-          post :create, ec2_instance_params
           expect(ec2_instance.ami).to eq(custom_ami)
         end
       end
 
       it 'skipped' do
-        post :create, ec2_instance_params
         expect(ec2_instance.ami).not_to eq(custom_ami)
       end
     end

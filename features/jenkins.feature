@@ -11,7 +11,8 @@ Feature: Jenkins
 
   @javascript
   Scenario: Start jenkins server
-    Given I request jenkins server
+    Given instance role for Jenkins Server
+    And I request jenkins server
     Then I should see "Pantry Team's jenkins server"
     And I should see a flash message with "Jenkins server request succeeded."
     And an instance build should start
@@ -19,6 +20,7 @@ Feature: Jenkins
   @javascript
   Scenario: Create Jenkins slave
     Given I have a jenkins server
+    And instance role for Jenkins Slave
     When I click "Jenkins"
     Then I should see the server listing
     When I click on the server ID

@@ -7,8 +7,16 @@ FactoryGirl.define do
     sequence(:chef_role) { |n| "Chef_role#{n}" }
     run_list 'role[test]'
     instance_size 't1.micro'
-    disk_size 5
     security_group_ids ['ssg-111111']
     enabled true
+    disk_size 10
+
+    trait :for_jenkins_server do
+      sequence(:name) { |n| "Jenkins Server Role #{n}" }
+    end
+
+    trait :for_jenkins_slave do
+      sequence(:name) { |n| "Jenkins Agent Role #{n}" }
+    end
   end
 end

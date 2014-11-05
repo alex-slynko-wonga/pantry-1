@@ -1,4 +1,6 @@
 class JenkinsServer < ActiveRecord::Base
+  attr_writer :instance_role_id
+
   belongs_to :team
   belongs_to :ec2_instance, inverse_of: :jenkins_server
   has_many :jenkins_slaves, -> { where(removed: [false, nil]) }
@@ -12,6 +14,14 @@ class JenkinsServer < ActiveRecord::Base
 
   def instance_name
     team.jenkins_host_name
+  end
+
+  def instance_role_id
+    if ec2_instance
+      ec2_instance.instance_role_id
+    else
+      @instance_role_id
+    end
   end
 
   private

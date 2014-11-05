@@ -51,13 +51,13 @@ RSpec.describe JenkinsSlavesController, type: :controller do
         expect(slave.jenkins_server_id).to eq jenkins_server.id
         false
       end
-      post :create, jenkins_server_id: jenkins_server.id
+      post :create, jenkins_server_id: jenkins_server.id, jenkins_slave: { instance_role_id: 1 }
     end
 
     context 'on success' do
       let(:jenkins_utility) { instance_double(Wonga::Pantry::JenkinsUtility, request_jenkins_instance: true) }
       it 'redirects' do
-        post :create, jenkins_server_id: jenkins_server.id
+        post :create, jenkins_server_id: jenkins_server.id, jenkins_slave: { instance_role_id: 1 }
         expect(response).to be_redirect
       end
     end
@@ -66,7 +66,7 @@ RSpec.describe JenkinsSlavesController, type: :controller do
       let(:jenkins_utility) { instance_double(Wonga::Pantry::JenkinsUtility, request_jenkins_instance: false) }
 
       it 'renders new' do
-        post :create, jenkins_server_id: jenkins_server.id
+        post :create, jenkins_server_id: jenkins_server.id, jenkins_slave: { instance_role_id: 1 }
         expect(response).to render_template('new')
       end
     end

@@ -2,8 +2,8 @@ require 'spec_helper'
 
 RSpec.describe Admin::InstanceRolesController, type: :controller do
   before(:each) do
-    session[:user_id] = user.id
     allow(controller).to receive(:price_list).and_return(instance_price)
+    allow(controller).to receive(:current_user).and_return(user)
   end
 
   let(:ami) { FactoryGirl.create(:ami) }
@@ -14,7 +14,7 @@ RSpec.describe Admin::InstanceRolesController, type: :controller do
   end
 
   context 'user is not a superadmin' do
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { FactoryGirl.build :user }
 
     it 'returns a 404 status' do
       %w(index new).each do |action|
@@ -25,7 +25,7 @@ RSpec.describe Admin::InstanceRolesController, type: :controller do
   end
 
   context 'user is a superadmin' do
-    let(:user) { FactoryGirl.create :superadmin }
+    let(:user) { FactoryGirl.build :superadmin }
 
     describe "POST 'create'" do
       it 'creates a new instance role' do

@@ -1,21 +1,24 @@
 .row
-	.span12
-		%h1 Create a new Jenkins Server for your team
+  .span12
+    %h1 Create a new Jenkins Server for your team
 
-= form_for @jenkins_server do |f|
-	%fieldset
-	-if @user_teams.count == 1
-		.row
-			.span4
-				%h4= "Your team is \'#{@user_teams.first.name}\'"
-				= f.hidden_field :team_id, :value => @user_teams.first.id
-	-else
-		.row
-			.span9
-				%h4 You're in more than 1 team, please select your team below
-				%span= "#{@current_user.name}'s teams: "
-				= f.select :team_id, options_from_collection_for_select(@user_teams, 'id', 'name')
-	.row
-		.span5
-			%span You are going to create the Jenkins server
-			= f.submit "Create server", {:class => "btn"}
+= simple_form_for @jenkins_server do |f|
+  %fieldset
+    - if @user_teams.size == 1
+      .row
+        .span4
+          %h4= "Your team is \'#{@user_teams.first.name}\'"
+        = f.hidden_field :team_id, :value => @user_teams.first.id
+    - else
+      .row
+        .span9
+          %h4 You're in more than 1 team, please select your team below
+          = f.association :team, collection: @user_teams
+    .row
+      .span9
+        = f.input :instance_role_id, collection: InstanceRole.for(@jenkins_server), include_blank: false
+
+  .row
+    .span5
+      %span You are going to create the Jenkins server
+      = f.submit "Create server", {:class => "btn"}
