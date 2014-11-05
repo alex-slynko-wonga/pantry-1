@@ -56,6 +56,7 @@ module Wonga
         event :terminated do
           transition terminating: :terminated, if: :termination_condition
           transition terminating: :terminating, unless: :termination_condition
+          transition terminated: :terminated
         end
 
         event :resize do

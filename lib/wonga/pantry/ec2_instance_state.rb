@@ -17,7 +17,11 @@ class Wonga::Pantry::Ec2InstanceState
 
     before_state = @ec2_instance.state
 
-    return unless event && @state_machine.fire_events(event)
+    unless event && @state_machine.fire_events(event)
+      @ec2_instance.errors.add(:base, 'State machine did not fire event')
+      return
+    end
+
     @ec2_instance.ec2_instance_logs.build(from_state: before_state, event: event, updates: @ec2_instance.changes, user: @user)
 
     return unless @ec2_instance.save

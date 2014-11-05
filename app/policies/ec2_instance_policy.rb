@@ -27,6 +27,7 @@ class Ec2InstancePolicy < ApplicationPolicy
   private
 
   def can_move_with_event(event)
+    return false if record.state == 'terminated'
     delegated_method = "can_#{event}"
     state_machine = Wonga::Pantry::Ec2InstanceMachine.new(record)
     state_machine.respond_to?(delegated_method) && state_machine.public_send(delegated_method)
