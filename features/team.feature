@@ -73,3 +73,12 @@ Feature: Managing Teams
     Given the "TeamName" team is inactive
     And I am on the teams page
     Then I should not see "TeamName"
+
+  Scenario: Show team page from Environment page
+    Given I am in the "TeamName" team with "username" user
+    And "TeamName" team has an "INT" environment "TEST_INT"
+    When I am on environment page
+    And I click on "TeamName Team"
+    Then I should see "Team Members"
+    And I should see "Environment Control"
+    And I should see "EC2 Instance Control"

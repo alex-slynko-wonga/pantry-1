@@ -1,6 +1,6 @@
 .row-fluid
   .span6
-    %h3= @environment.team.name + " Team"
+    %h3= link_to(@environment.team.name + " Team", team_path(@environment.team.id))
   .span6
     %h3= @environment.human_name + " Environment"
     - if policy(@environment).edit?
