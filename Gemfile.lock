@@ -44,6 +44,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
+    amazon-pricing (0.1.48)
     angularjs-rails (1.2.26)
     arel (5.0.1.20140414130214)
     ast (2.0.0)
@@ -394,6 +395,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  amazon-pricing
   angularjs-rails (~> 1.2.5)
   awesome_print
   aws-sdk (~> 1.25)
@@ -420,6 +422,7 @@ DEPENDENCIES
   jquery-ui-rails (~> 4.0)
   launchy
   letter_opener
+  mechanize
   mysql2
   net-ldap!
   newrelic_rpm (~> 3.7)

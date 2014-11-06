@@ -83,6 +83,28 @@ Feature: EC2 Instance
     And I click on "Create machine like this"
     Then I should see new ec2 instance form with prefilled values
 
+  @javascript
+  Scenario: Show info about instance price per hour, RAM and CPU
+    Given I am in the "teamname" team
+    And flavors are configured
+    And I request an EC2 instance
+    When I choose "m3.xlarge" flavor
+    Then "m3.xlarge" instance details should be present
+
+  @javascript
+  Scenario:
+    Given AWS pricing is broken
+    And I am in the "TeamName" team
+    And "TeamName" team has an "INT" environment with name "TEST"
+    And flavors are configured
+    When I request an EC2 instance
+    And I enter all required data for ec2
+    And I choose "m3.xlarge" flavor
+    Then I should not see "Price windows:"
+    And I should not see "Virtual cores:"
+    When I click on "Create"
+    Then I should see "Booting"
+
   Scenario: Bootstrapping event
     Given I have an EC2 instance in the team
     And the instance is ready
@@ -151,6 +173,15 @@ Feature: EC2 Instance
     And I am on instance page
     Then I should not see "Shut down" button
     And I should not see "Destroy" button
+
+  @javascript
+  Scenario: Show info about instance on show form
+   Given I have small EC2 instance in the team
+   And flavors are configured
+   When I am on instance page
+   And I click on instance size
+   When I choose "m3.xlarge" flavor
+   Then "m3.xlarge" instance details should be present
 
   @javascript
   Scenario: Resize machine

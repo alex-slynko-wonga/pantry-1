@@ -14,6 +14,14 @@ Feature: Manage InstanceRoles
     And I click on "Create Instance role"
     Then I should see the "TestRole" role details
 
+  @javascript
+  Scenario: Show info about instance price per hour, RAM and CPU
+    Given I am on the InstanceRoles page
+    And flavors are configured
+    When I click on "New Instance Role"
+    When I choose "m3.xlarge" instance size
+    Then "m3.xlarge" instance details should be present
+
   Scenario: Forbid to change AMI platform
     Given "TestRole" instance role with "windows" Ami platform
     And I am on the InstanceRoles page

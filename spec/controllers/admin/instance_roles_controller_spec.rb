@@ -3,10 +3,12 @@ require 'spec_helper'
 RSpec.describe Admin::InstanceRolesController, type: :controller do
   before(:each) do
     session[:user_id] = user.id
+    allow(controller).to receive(:price_list).and_return(instance_price)
   end
 
   let(:ami) { FactoryGirl.create(:ami) }
   let(:instance_role) { FactoryGirl.create(:instance_role, ami: ami) }
+  let(:instance_price) { instance_double(Wonga::Pantry::PricingList, retrieve_price_list: nil) }
   let(:instance_role_params) do
     { instance_role: FactoryGirl.attributes_for(:instance_role, ami_id: ami.id) }
   end

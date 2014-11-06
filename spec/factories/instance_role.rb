@@ -6,7 +6,7 @@ FactoryGirl.define do
     ami
     sequence(:chef_role) { |n| "Chef_role#{n}" }
     run_list 'role[test]'
-    sequence(:instance_size) { |n| "t#{n}.small" }
+    instance_size 't1.micro'
     disk_size 5
     security_group_ids ['ssg-111111']
     enabled true
