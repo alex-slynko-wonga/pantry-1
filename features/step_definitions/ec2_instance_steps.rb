@@ -7,6 +7,10 @@ Given(/^AWS has information about machines$/) do
   stub_ami_info(linux_ami.ami_id)
 end
 
+Given(/^AWS pricing is broken$/) do
+  allow_any_instance_of(Wonga::Pantry::PricingList).to receive(:get_instance_type).and_raise('some error')
+end
+
 Given(/^queues and topics are configured$/) do
   stub_sns
   stub_sqs
@@ -17,6 +21,12 @@ Given(/^queues and topics are configured$/) do
   config['aws']['ec2_instance_boot_topic_arn'] = 'arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn'
   config['aws']['ec2_instance_resize_topic_arn'] = 'arn:aws:sns:eu-west-1:9:ec2_instance_resize_topic_arn'
   config['aws']['jenkins_slave_delete_topic_arn'] = 'arn:aws:sns:eu-west-1:9:jenkins_slave_delete_topic_arn'
+  stub_const('CONFIG', config)
+end
+
+When(/^flavors are configured$/) do
+  config = CONFIG.deep_dup
+  config['aws']['ebs'] = { 'c3.2xlarge' => 10, 'm3.xlarge' => 500, 't1.micro' => 80 }
   stub_const('CONFIG', config)
 end
 
@@ -210,6 +220,15 @@ end
 
 When(/^I click on instance size$/) do
   find(:xpath, "//div[contains(text(),'#{@ec2_instance.flavor}')]").click
+end
+
+Then(/^"(.*?)" instance details should be present$/) do |instance_size|
+  selected_instance = page.find('option', text: instance_size)
+
+  expect(page).to have_content("Price windows: #{selected_instance['data-windows-price']}")
+  expect(page).to have_content("Price linux: #{selected_instance['data-linux-price']}")
+  expect(page).to have_content("Virtual cores: #{selected_instance['data-cores']}")
+  expect(page).to have_content("RAM: #{selected_instance['data-ram']}")
 end
 
 When(/^I set (.*) as new size$/) do |size|

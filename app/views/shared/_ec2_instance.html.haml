@@ -41,7 +41,12 @@
   .row-fluid{data: {ng_show: 'editing'}}
     = simple_form_for [:aws, ec2_instance], data: {ng_submit: 'editing = false'} do |f|
       = hidden_field_tag 'event', 'resize'
-      = f.input :flavor, collection: CONFIG['aws']['ebs'].keys
+      - if @price_list
+        = f.input :flavor do
+          = f.select :flavor, @price_list.map { |r| [r.first, r.first, { :data => { 'windows-price' => r.last["windows_price"], 'linux-price' => r.last["linux_price"], 'cores' => r.last["virtual_cores"], 'ram' => r.last["ram"] }}]}, include_blank: true
+        = render 'shared/ec2_instance_flavor_details'
+      - else
+        = f.input :flavor, collection: CONFIG['aws']['ebs'].keys
       %p.text-warning
         Instance will be stopped to resize
       = f.submit "Resize"

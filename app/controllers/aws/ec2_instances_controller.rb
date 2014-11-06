@@ -1,5 +1,6 @@
 class Aws::Ec2InstancesController < ApplicationController
-  before_action :initialize_ec2_adapter, :initialize_environments, :initialize_instance_role, only: [:new, :create]
+  before_action :initialize_ec2_adapter, :initialize_environments, :initialize_instance_role, only: [:new, :create, :show]
+  before_action :initialize_price_list, only: [:new, :show]
 
   def new
     @ec2_instance = Ec2Instance.new
@@ -145,5 +146,9 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def initialize_instance_role
     @instance_roles = policy_scope(InstanceRole)
+  end
+
+  def initialize_price_list
+    @price_list = price_list.retrieve_price_list(@ec2_adapter.flavors)
   end
 end

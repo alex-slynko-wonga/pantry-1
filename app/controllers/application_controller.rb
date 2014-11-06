@@ -31,6 +31,12 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def price_list
+    Rails.cache.fetch('prices_list', expires_in: 1.week, race_condition_ttl: 5.seconds) do
+      Wonga::Pantry::PricingList.new
+    end
+  end
+
   def user_not_authorized
     flash[:error] = 'You are not authorized to perform this action.'
     redirect_to root_path

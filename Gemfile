@@ -24,6 +24,8 @@ gem 'newrelic_rpm', '~> 3.7'
 gem 'net-ldap', github: 'ruby-ldap/ruby-net-ldap'
 gem 'simple_form'
 gem 'pundit'
+gem 'amazon-pricing'
+gem 'mechanize'
 
 group :development do
   gem 'better_errors'
