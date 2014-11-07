@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141014140737) do
+ActiveRecord::Schema.define(version: 20141105165412) do
 
   create_table "admin_maintenance_windows", force: true do |t|
     t.string   "name"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 20141014140737) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "environment_type"
+    t.boolean  "hidden"
   end
 
   create_table "instance_roles", force: true do |t|

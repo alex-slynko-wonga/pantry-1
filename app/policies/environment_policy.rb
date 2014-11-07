@@ -1,7 +1,7 @@
 class EnvironmentPolicy < ApplicationPolicy
   Scope = Struct.new(:user, :scope) do
     def resolve
-      scope.available(user)
+      scope.available(user).visible
     end
   end
   def permitted_types
@@ -17,5 +17,9 @@ class EnvironmentPolicy < ApplicationPolicy
 
   def update?
     god_mode? || team_member?
+  end
+
+  def hide?
+    god_mode? && (@record.hidden != true)
   end
 end

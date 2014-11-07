@@ -10,6 +10,10 @@ class Environment < ActiveRecord::Base
   validates :team, uniqueness: { scope: :environment_type, if: "environment_type == 'CI'" }, presence: true
 
   scope :available, ->(user) { where.not(chef_environment: nil).where(team_id: user.team_ids).where.not(environment_type: 'CI') }
+  scope :visible, -> { where(hidden: [false, nil]) }
+  scope :invisible, -> { where(hidden: true) }
+
+  validate :can_hide, on: :update
 
   accepts_nested_attributes_for :team
 
@@ -19,6 +23,17 @@ class Environment < ActiveRecord::Base
 
   def human_name
     "#{name} (#{environment_type})"
+  end
+
+  def can_hide
+    return unless hidden_changed?
+    return if ec2_instances.any? { |instance| instance.state == 'terminated' }
+
+    errors.add(:environment_id, 'Environment can not be hidden due to non-terminated instances')
+  end
+
+  def hide
+    update_attributes(hidden: true)
   end
 
   def self.group_by_team_name

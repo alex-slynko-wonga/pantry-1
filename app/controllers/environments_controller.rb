@@ -1,6 +1,10 @@
 class EnvironmentsController < ApplicationController
-  before_action :load_team, only: [:new, :create]
-  before_action :load_environment, only: [:show, :edit, :update]
+  before_action :load_team, only: [:new, :create, :index]
+  before_action :load_environment, only: [:show, :edit, :update, :hide]
+
+  def index
+    @environments = @team.environments
+  end
 
   def new
     @environment = @team.environments.build(environment_type: params[:environment_type])
@@ -38,6 +42,18 @@ class EnvironmentsController < ApplicationController
       flash[:error] = "Environment update failed: #{human_errors(@environment)}"
       render :edit
     end
+  end
+
+  def hide
+    authorize(@environment)
+
+    if @environment.hide
+      flash[:notice] = 'Environment was hidden successfully'
+    else
+      flash[:error] = "Environment was not hidden with errors: #{human_errors(@environment)}"
+    end
+
+    redirect_to @environment
   end
 
   private

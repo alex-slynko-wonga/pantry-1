@@ -1,0 +1,15 @@
+%table.table
+  %thead
+    %tr
+      %th ID
+      %th Name
+      %th Type
+      %th Chef Environment
+      %th Description
+  - environments.each do |environment|
+    %tr
+      %td= environment.id
+      %td= link_to environment.name, url_for(environment)
+      %td= environment.environment_type
+      %td= environment.chef_environment
+      %td= environment.description

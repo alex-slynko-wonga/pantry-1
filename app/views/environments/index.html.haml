@@ -1,0 +1,33 @@
+%h2.text-centered= %(#{link_to(@team.name, @team)} Environments).html_safe
+
+%br
+
+.row-fluid
+  .span12
+    .accordion{id: "accordion_visible_envs"}
+      .accordion-group
+        .accordion-heading
+          .span11.lightgray
+            %h4.text-centered= "Available Environments"
+          .span1
+            .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion_visible_envs", href: "#visible_envs"}
+              .i.icon-centered.icon-chevron-down
+        .accordion-body.fullwidth.collapse.in{id: "visible_envs"}
+          .accordion-inner
+            - if @environments.visible.size > 0
+              = render 'environments_table', environments: @environments.visible
+
+.row-fluid
+  .span12
+    .accordion{id: "accordion_invisible_envs"}
+      .accordion-group
+        .accordion-heading
+          .span11.lightgray
+            %h4.text-centered= "Hidden Environments"
+          .span1
+            .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion_invisible_envs", href: "#invisible_envs"}
+              .i.icon-centered.icon-chevron-down
+        .accordion-body.fullwidth.collapse.in{id: "invisible_envs"}
+          .accordion-inner
+            - if @environments.invisible.size > 0
+              = render 'environments_table', environments: @environments.invisible

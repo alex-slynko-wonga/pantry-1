@@ -81,3 +81,13 @@ Feature: Multiple environments
     And "teamname" team has an "INT" environment "TEST_INT"
     When I am on environment page
     Then I should not see "Edit this environment"
+
+  Scenario: Show only visible environments
+    Given I am in the "teamname" team
+    And "teamname" team has an "INT" environment "TEST_INT"
+    And "teamname" team has an "RC" environment "TEST_RC"
+    And "teamname" team has hidden "WIP" environment "TEST_WIP"
+    When I am on the team page
+    Then I should see "TEST_INT (INT)"
+    And I should see "TEST_RC (RC)"
+    And I should not see "TEST_WIP (WIP)"

@@ -35,4 +35,21 @@ RSpec.describe Environment, type: :model do
       expect(Environment.available(user).count).to eq(1)
     end
   end
+
+  context '.visible' do
+    it 'filters environment without hidden field' do
+      FactoryGirl.create(:environment, hidden: nil)
+      FactoryGirl.create(:environment, hidden: false)
+      FactoryGirl.create(:environment, hidden: true)
+      expect(Environment.visible.count).to eq(2)
+    end
+  end
+
+  context '.invisible' do
+    it 'filters environment with hidden field' do
+      FactoryGirl.create(:environment, hidden: nil)
+      FactoryGirl.create(:environment, hidden: true)
+      expect(Environment.invisible.count).to eq(1)
+    end
+  end
 end

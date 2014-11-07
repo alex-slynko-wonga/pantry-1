@@ -91,9 +91,13 @@ Then(/^I should (not )?see a short table with the instance$/) do |not_contains|
   end
 end
 
-Given(/^"(.*?)" team has (?:an|a) (?:"(.*?)" )?environment (?:"(.*?)")?$/) do |team_name, environment_type, environment_name|
+Given(/^"(.*?)" team has (?:an|a|(hidden)) (?:"(.*?)" )?environment (?:"(.*?)")?$/) do |team_name, is_hidden, environment_type, environment_name|
   @team = Team.where(name: team_name).first
-  FactoryGirl.create(:environment, environment_type: environment_type, team: @team, name: environment_name)
+  if is_hidden
+    FactoryGirl.create(:environment, environment_type: environment_type, team: @team, name: environment_name, hidden: true)
+  else
+    FactoryGirl.create(:environment, environment_type: environment_type, team: @team, name: environment_name)
+  end
 end
 
 Given(/^"(.*?)" team does not have (?:"(.*?)" )?environment$/) do |team_name, environment_type|

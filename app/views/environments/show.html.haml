@@ -19,8 +19,26 @@
     %p= @environment.chef_environment
     %strong Description:
     %p= @environment.description
+    %strong Hidden:
+    %p= @environment.hidden
 
   .span8
     - if @ec2_instances.length > 0
       %h4 Instances
       = render 'shared/ec2_instance_details_short', ec2_instances: @ec2_instances
+
+- if policy(@environment).hide?
+  %button.button.close{data: {toggle: 'modal', target: '.deactivate_modal'}} Hide Environment
+  .deactivate_modal.modal.fade{tabindex: -1, role: 'dialog', aria_labelledby: "Hide Environment: #{@environment.human_name}", aria_hidden: true, style: 'display: none;'}
+    .modal-dialog
+      .modal-content
+        = simple_form_for @environment, url: hide_environment_url(@environment), method: :put do |f|
+          .modal-header
+            %button.close{data: {dismiss: 'modal'}, aria_hidden: true}
+              &times;
+            %h4.modal-title= "Hide #{@environment.human_name}"
+          .modal-body
+            %p.text-warning
+              Environment will be hidden
+          .modal-footer
+            = f.submit "Confirm", { disabled: false, class: 'btn btn-danger'}

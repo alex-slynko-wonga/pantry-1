@@ -41,7 +41,7 @@ Wonga::Pantry::Application.routes.draw do
 
   resources :teams, except: [:destroy] do
     resources :ec2_instances, controller: 'teams/ec2_instances', only: [:index]
-    resources :environments, except: [:index]
+    resources :environments
     post :deactivate, on: :member
   end
 
@@ -57,4 +57,10 @@ Wonga::Pantry::Application.routes.draw do
   root to: 'home#index'
 
   resources :environments, only: [:show, :edit, :update]
+  resources :environments do
+    member do
+      put :hide
+    end
+  end
+
 end
