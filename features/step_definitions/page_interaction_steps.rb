@@ -25,6 +25,10 @@ When(/^I destroy/) do
   click_on 'Destroy'
 end
 
+When(/^I cleanup/) do
+  click_on 'Run machine cleanup'
+end
+
 When(/^I click on remove cross near "(.*?)"$/) do |value|
   find(:xpath, "//div/input[@value='#{value}']/../i[@class='icon-remove']").click
 end

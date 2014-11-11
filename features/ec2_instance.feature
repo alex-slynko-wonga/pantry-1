@@ -152,6 +152,23 @@ Feature: EC2 Instance
     Then I should not see "Destroy"
 
   @javascript
+  Scenario: Cleaning an instance
+    Given I have an EC2 instance in the team
+    And the instance is booting
+    When I am on instance page
+    And I cleanup an instance
+    And I should see a flash message with "Ec2 Instance cleanup request success"
+    And instance cleaning process should start
+
+  @javascript
+  Scenario: Start cleaning process for terminated machine
+    Given I have an EC2 instance in the team
+    And the instance is terminated
+    When I receive "bootstrap" event
+    Then server should respond with success
+    And instance cleaning process should start
+
+  @javascript
   Scenario: Shutting down an instance
     Given I have an EC2 instance in the team
     And the instance is ready

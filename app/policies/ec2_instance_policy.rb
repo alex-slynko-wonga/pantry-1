@@ -16,6 +16,10 @@ class Ec2InstancePolicy < ApplicationPolicy
     (god_mode? || team_member?) && can_move_with_event(:termination?)
   end
 
+  def cleanup?
+    (god_mode? || record.user == user) && can_move_with_event(:out_of_band_cleanup?) && !can_move_with_event(:termination?)
+  end
+
   def custom_ami?
     god_mode?
   end

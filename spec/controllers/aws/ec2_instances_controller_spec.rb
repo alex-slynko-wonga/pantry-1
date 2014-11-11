@@ -137,6 +137,23 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
     end
   end
 
+  context '#cleanup' do
+    let(:ec2_instance_terminated) { FactoryGirl.create(:ec2_instance, state: 'booting', team: team, user: user) }
+    before(:each) do
+      allow(ec2_resource).to receive(:out_of_band_cleanup)
+    end
+
+    it 'should be success' do
+      delete :cleanup, id: ec2_instance_terminated.id
+      expect(response).to be_success
+    end
+
+    it 'make machine cleanup if transition acceptable' do
+      delete :cleanup, id: ec2_instance_terminated.id
+      expect(ec2_resource).to have_received(:out_of_band_cleanup)
+    end
+  end
+
   describe "PUT 'update'" do
     let(:ec2_resource)    { instance_double('Wonga::Pantry::Ec2Resource') }
 

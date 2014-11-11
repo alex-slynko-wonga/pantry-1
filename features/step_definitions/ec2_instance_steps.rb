@@ -145,11 +145,27 @@ When(/^the instance is ready$/) do
   @instance.reload
 end
 
+When(/^the instance is booting$/) do
+  @instance = Ec2Instance.last
+  @instance.update_attributes(state: 'booting')
+  @instance.reload
+end
+
+When(/^the instance is terminated/) do
+  @instance = Ec2Instance.last
+  @instance.update_attributes(state: 'terminated')
+  @instance.reload
+end
+
 Then(/^I should not be able to add a fifth security group$/) do
   expect { check("#{CONFIG['pantry']['security_groups_prefix']}PHPServer-001122334455") }.to raise_error # because it is grayed out (fifth check box)
 end
 
 Then(/^instance destroying process should start$/) do
+  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_delete_topic_arn'))
+end
+
+Then(/^instance cleaning process should start$/) do
   expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_delete_topic_arn'))
 end
 
