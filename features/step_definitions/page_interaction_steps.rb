@@ -52,3 +52,7 @@ end
 Then(/^I should not be able to choose "(.*?)" (\w+ ?\w*)$/) do |option_name, dropdown_name|
   expect(find(:select, dropdown_name.humanize).all(:option).collect(&:text)).to_not include(option_name)
 end
+
+Then(/^I should see my name near "(.*?)"$/) do |event|
+  expect(find(:xpath, "//tr/td/a[text()='#{User.last.username}']/../../td[text()='#{event}']")).to be_present
+end

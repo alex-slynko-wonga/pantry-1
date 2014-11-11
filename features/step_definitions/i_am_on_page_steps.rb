@@ -28,7 +28,11 @@ Given(/^I (?:visit|am on the) ec2 instance new page$/) do
 end
 
 When(/^I am on instance page$/) do
-  visit "/aws/ec2_instances/#{@ec2_instance.id}"
+  if @ec2_instance
+    visit "/aws/ec2_instances/#{@ec2_instance.id}"
+  else
+    visit "/aws/ec2_instances/#{Ec2Instance.last.id}"
+  end
 end
 
 When(/^I proceed to "(.*?)" page$/) do |page_name|

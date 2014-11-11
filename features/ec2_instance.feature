@@ -14,12 +14,16 @@ Feature: EC2 Instance
     And I request an instance named "instanceName"
     Then I should see "instanceName"
     And I should see "Booting"
+    Then I should see "History"
+    And I should see my name near "Ec2Boot"
     And I should see a flash message with "Ec2 Instance request succeeded."
     And I should not see "Instance role:"
     And an instance build should start
 
     When an instance is created with ip "123.456.7.8"
+    And I am on instance page
     Then I should see "Ready" after page is updated
+    And I should see my name near "Bootstrap"
     And I should see "123.456.7.8"
     And I should see "TEST (INT)"
     And I should receive email
