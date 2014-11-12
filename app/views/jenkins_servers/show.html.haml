@@ -1,5 +1,5 @@
-%div{"ng-controller" => "Ec2InstanceCtrl", "data-instance-id" => @ec2_instance.instance_id, "data-no-turbolink" => true}
-  %h1= "#{@team.name}'s jenkins server"
+.jenkins_server{data: { ng_controller: "Ec2InstanceCtrl", instance_id: @ec2_instance.instance_id}}
+  %h1 #{@team.name}'s jenkins server
   = link_to "Go back to #{@team.name}", @team
   .row-fluid
     .span2

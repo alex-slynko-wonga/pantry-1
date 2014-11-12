@@ -1,8 +1,8 @@
 !!!
-%html.full-height{"ng-app" => "Pantry"}
+%html.full-height{data: { ng_app: 'Pantry'}}
   %head
     %title= content_for?(:title) ? yield(:title) : Wonga::Pantry
-    = stylesheet_link_tag    "application", :media => "all"
+    = stylesheet_link_tag "application", media: 'all'
     = javascript_include_tag "application"
     = csrf_meta_tags
 
@@ -36,20 +36,24 @@
                 %img{src: pundit_user.image_url, alt: 'Gravatar' }
             %li
               = link_to 'Log out', logout_url
-      - if window = load_active_maintenance_window
+      - if active_maintenance_window
         .alert-block.alert.alert-warning
-          %div{:class => "text-center"}
-            %strong{:class => "text-error"}= "Maintenance Mode Active - New Requests Disabled"
-            .text-warning= "Reason: #{window.message}"
-            .text-warning= "Started: #{window.start_at}"
+          .text-center
+            %strong.text-error Maintenance Mode Active - New Requests Disabled
+            .text-warning
+              Reason:
+              = active_maintenance_window.message
+            .text-warning
+              Started:
+              = active_maintenance_window.start_at
 
       .container.full-height.footer-padding
         - flash.each do |message|
-          %div{:class => ["alert-message", flash_class(message.first)]}
-            %button{:type => "button", :class => "close", "data-dismiss" => "alert"} &times;
+          %div{class: ["alert-message", flash_class(message.first)]}
+            %button.close{type: 'button', data_dismiss: "alert"} &times;
             = message.try(:last)
         = yield
 
       .div.main-footer
         %p.text-centered= link_to("Pantry Dashboard", 'https://issues.example.com/secure/RapidBoard.jspa?rapidView=379', target: 'blank')
-        %p.text-centered= %(#{mail_to('pantry@example.com', "Email us")} on pantry@example.com).html_safe
+        %p.text-centered= %(#{mail_to('pantry@example.com', 'Email us')} on pantry@example.com).html_safe

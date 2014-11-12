@@ -5,12 +5,7 @@
 
   = f.input :chef_role
   = f.input :run_list, as: :text
-  - if @price_list
-    = f.input :instance_size do
-      = f.select :instance_size, @price_list.map { |r| [r.first, r.first, { :data => {'disk-size' => r.last["disk_size"], 'windows-price' => r.last["windows_price"], 'linux-price' => r.last["linux_price"], 'cores' => r.last["virtual_cores"], 'ram' => r.last["ram"]}}]}, include_blank: true
-    = render 'shared/ec2_instance_flavor_details'
-  - else
-    = f.select :instance_size, @ec2_adapter.flavors.map { |r| [r.first, r.first, { 'data-disk-size' => r.last }] }, include_blank: true
+  = flavor_with_size_input :instance_size, f, @price_list, @ec2_adapter
 
   = f.input :disk_size,  hint: ''
   = f.input :security_group_ids, collection: @ec2_adapter.security_groups, as: 'check_boxes'

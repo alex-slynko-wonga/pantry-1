@@ -7,7 +7,7 @@
     %select{:id => "change_team_id", :name => "change_team_id", "ng-change" => "getInstances()", "ng-model" => "team_id"}
       %option{:value => ""}
       = user_teams.each do |team|
-        %option{:value => team.id}= team.name
+        %option{value: team.id}= team.name
 
   %table.table
     %thead

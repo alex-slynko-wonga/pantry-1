@@ -2,7 +2,9 @@
   .span6
     %h3= link_to(@environment.team.name + " Team", team_path(@environment.team.id))
   .span6
-    %h3= @environment.human_name + " Environment"
+    %h3
+      = @environment.human_name
+      Environment
     - if policy(@environment).edit?
       %p= link_to "Edit this environment", edit_environment_path(@environment)
   .span12
@@ -29,16 +31,19 @@
 
 - if policy(@environment).hide?
   %button.button.close{data: {toggle: 'modal', target: '.deactivate_modal'}} Hide Environment
-  .deactivate_modal.modal.fade{tabindex: -1, role: 'dialog', aria_labelledby: "Hide Environment: #{@environment.human_name}", aria_hidden: true, style: 'display: none;'}
+  .deactivate_modal.modal.fade{tabindex: -1, role: 'dialog',
+    aria_labelledby: "Hide Environment: #{@environment.human_name}", aria_hidden: true, style: 'display: none;'}
     .modal-dialog
       .modal-content
         = simple_form_for @environment, url: hide_environment_url(@environment), method: :put do |f|
           .modal-header
             %button.close{data: {dismiss: 'modal'}, aria_hidden: true}
               &times;
-            %h4.modal-title= "Hide #{@environment.human_name}"
+            %h4.modal-title
+              Hide
+              = @environment.human_name
           .modal-body
             %p.text-warning
               Environment will be hidden
           .modal-footer
-            = f.submit "Confirm", { disabled: false, class: 'btn btn-danger'}
+            = f.submit 'Confirm', disabled: false, class: 'btn btn-danger'

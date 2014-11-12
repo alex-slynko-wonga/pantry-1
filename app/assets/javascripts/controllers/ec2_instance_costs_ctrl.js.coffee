@@ -4,7 +4,7 @@
 
   $scope.getCosts = ->
     $scope.team_id = null # hide the details
-    $scope.options = JSON.parse($('#Ec2InstanceCostsCtrl').attr('data-bill_dates'))
+    $scope.options = $('#Ec2InstanceCostsCtrl').data('bill-dates')
     unless $scope.date?
       $scope.date = $scope.options[0][0]
       $scope.dateUI = $scope.options[0][1]

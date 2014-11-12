@@ -8,7 +8,7 @@ gem 'syslogger'
 gem 'haml-rails'
 gem 'aws-sdk', '~> 1.25'
 
-gem 'sass-rails'
+gem 'sass-rails', github: 'rails/sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 
@@ -37,6 +37,7 @@ group :development do
   gem 'guard-migrate'
   gem 'guard-rspec', '>= 4.2.6'
   gem 'guard-rubocop'
+  gem 'guard-scss-lint'
   gem 'letter_opener'
   gem 'quiet_assets'
   gem 'thin'
@@ -60,9 +61,11 @@ end
 group :test, :development do
   gem 'awesome_print'
   gem 'factory_girl_rails'
+  gem 'haml-lint', require: false, github: 'alex-slynko-wonga/haml-lint', branch: 'patch-1'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.1.0'
   gem 'rubocop'
+  gem 'scss-lint', '~> 0.30'
   gem 'spring-commands-cucumber'
   gem 'spring-commands-rspec'
 end

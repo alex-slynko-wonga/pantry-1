@@ -1,5 +1,5 @@
-%div{"ng-controller" => "Ec2InstanceCtrl", "data-instance-id" => @ec2_instance.instance_id}
-  %h1= "#{@team.name}'s jenkins slave"
+.jenkins_slave{data: {ng_controller: "Ec2InstanceCtrl", instance_id: @ec2_instance.instance_id}}
+  %h1 #{@team.name}'s jenkins slave
 
   = link_to "Go back to the Jenkins server", jenkins_server_jenkins_slaves_path(@jenkins_server)
   |
@@ -7,7 +7,8 @@
 
   = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
-  = button_to 'Destroy', [@jenkins_server, @jenkins_slave], method: :delete, data: { confirm: 'This will permanently delete this instance. Are you sure?', 'ng-show' => 'policy.destroy'}
+  = button_to 'Destroy', [@jenkins_server, @jenkins_slave], method: :delete,
+    data: { confirm: 'This will permanently delete this instance. Are you sure?', ng_show: 'policy.destroy'}
 
   - if @ec2_instance.state == "terminating"
     %p Destroy action sent. This slave is not usable anymore.

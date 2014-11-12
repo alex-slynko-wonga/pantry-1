@@ -7,8 +7,11 @@
     - if @user_teams.size == 1
       .row
         .span4
-          %h4= "Your team is \'#{@user_teams.first.name}\'"
-        = f.hidden_field :team_id, :value => @user_teams.first.id
+          %h4
+            Your team is '
+            = @user_teams.first.name
+            '
+        = f.hidden_field :team_id, value: @user_teams.first.id
     - else
       .row
         .span9
@@ -21,4 +24,4 @@
   .row
     .span5
       %span You are going to create the Jenkins server
-      = f.submit "Create server", {:class => "btn"}
+      = f.submit "Create server", class: 'btn'

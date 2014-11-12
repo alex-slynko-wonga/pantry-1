@@ -1,6 +1,5 @@
 class Aws::Ec2InstancesController < ApplicationController
-  before_action :initialize_ec2_adapter, :initialize_environments, :initialize_instance_role, only: [:new, :create, :show]
-  before_action :initialize_price_list, only: [:new, :show]
+  before_action :initialize_ec2_info, :initialize_environments, :initialize_instance_role, only: [:new, :create, :show]
 
   def new
     @ec2_instance = if params[:id].present?
@@ -123,8 +122,9 @@ class Aws::Ec2InstancesController < ApplicationController
                                          :run_list, security_group_ids: [])
   end
 
-  def initialize_ec2_adapter
+  def initialize_ec2_info
     @ec2_adapter = Wonga::Pantry::Ec2Adapter.new(current_user)
+    @price_list = price_list.retrieve_price_list(@ec2_adapter.flavors)
   end
 
   def initialize_environments
@@ -140,9 +140,5 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def initialize_instance_role
     @instance_roles = policy_scope(InstanceRole)
-  end
-
-  def initialize_price_list
-    @price_list = price_list.retrieve_price_list(@ec2_adapter.flavors)
   end
 end

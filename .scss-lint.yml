@@ -1,0 +1,6 @@
+---
+linters:
+  Comment:
+    enabled: false
+  SelectorFormat:
+    enabled: false

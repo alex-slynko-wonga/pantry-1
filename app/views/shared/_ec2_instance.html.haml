@@ -1,4 +1,4 @@
-- cache [:v6, ec2_instance] do
+- cache [:v7, ec2_instance] do
   .row-fluid
     .span2
       Requested by user:
@@ -19,7 +19,7 @@
   .row-fluid
     .span2
       Status:
-    .span2{data_ng_bind: 'ec2_instance.human_status'}
+    .span2{data: {ng_bind: 'ec2_instance.human_status'}}
       = ec2_instance.human_status
 
   - if ec2_instance.instance_role_id
@@ -41,12 +41,7 @@
   .row-fluid{data: {ng_show: 'editing'}}
     = simple_form_for [:aws, ec2_instance], data: {ng_submit: 'editing = false'} do |f|
       = hidden_field_tag 'event', 'resize'
-      - if @price_list
-        = f.input :flavor do
-          = f.select :flavor, @price_list.map { |r| [r.first, r.first, { :data => { 'windows-price' => r.last["windows_price"], 'linux-price' => r.last["linux_price"], 'cores' => r.last["virtual_cores"], 'ram' => r.last["ram"] }}]}, include_blank: true
-        = render 'shared/ec2_instance_flavor_details'
-      - else
-        = f.input :flavor, collection: CONFIG['aws']['ebs'].keys
+      = flavor_with_size_input f, @price_list, @ec2_adapter
       %p.text-warning
         Instance will be stopped to resize
       = f.submit "Resize"
@@ -79,4 +74,4 @@
 
   = button_to 'Start', aws_ec2_instance_url(@ec2_instance, "event" => "start_instance"), method: :put, data: {'ng-show' => 'policy.start_instance'}, class: 'btn'
 
-  = link_to "Create machine like this", new_aws_ec2_instance_url({id: @ec2_instance.id})
+  = link_to "Create machine like this", new_aws_ec2_instance_url(id: @ec2_instance.id)

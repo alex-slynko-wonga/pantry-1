@@ -64,7 +64,7 @@
             - elsif policy(@team.build_jenkins_server).create?
               %p= link_to "Create a new jenkins server", new_jenkins_server_url
     - @environments.each do |environment_entry|
-      - if environment_entry.environment_type!='CI'
+      - if environment_entry.environment_type != 'CI'
         .accordion{id: "accordion#{environment_entry.environment_type}"}
           .accordion-group
             .accordion-heading
@@ -95,12 +95,14 @@
           .modal-header
             %button.close{data: {dismiss: 'modal'}, aria_hidden: true}
               &times;
-            %h4.modal-title= "Deactivate #{@team.name}"
+            %h4.modal-title
+              Deactivate
+              = @team.name
           .modal-body
             %p.text-warning
               Deactivation will hide team and make impossible to create instances in it
             = label_tag :confirm, "Please confirm with team name"
-            = text_field_tag :confirm, "",data: {confirmation: @team.name}
+            = text_field_tag :confirm, '', data: {confirmation: @team.name}
           .modal-footer
-            = f.submit "Confirm", { disabled: 'disabled', class: 'btn btn-danger'}
+            = f.submit 'Confirm', disabled: 'disabled', class: 'btn btn-danger'
 

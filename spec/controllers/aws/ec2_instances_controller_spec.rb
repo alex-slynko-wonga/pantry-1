@@ -48,7 +48,7 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
                                                 ) }
     end
 
-    let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', platform_for_ami: 'Winux') }
+    let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', platform_for_ami: 'Winux', flavors: []) }
     let(:ec2_instance) { assigns(:ec2_instance) }
 
     before(:each) do

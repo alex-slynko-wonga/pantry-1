@@ -1,10 +1,10 @@
-%div{"ng-controller" => "Ec2InstanceCostsCtrl", "ng-init" => "getCosts()", "data-bill_dates" => @available_dates, "id" => "Ec2InstanceCostsCtrl", "data-no-turbolink" => "true"}
+#Ec2InstanceCostsCtrl{data: {ng_controller: "Ec2InstanceCostsCtrl", ng_init: "getCosts()", bill_dates: @available_dates}}
   .row-fluid
     .span12
       %h1 Billing for {{dateUI}}
   .row-fluid
     .span7
-      %select{"id" => "change_date", "name" => "change_date", "ng-model" => "date", "ng-change" => "getCosts()", "ng-options" => "o[0] as o[1] for o in options", "value" => "o"}
+      %select#change_date{"ng-model" => "date", "ng-change" => "getCosts()", "ng-options" => "o[0] as o[1] for o in options", "value" => "o"}
 
       %table.table
         %thead
@@ -15,11 +15,11 @@
         %tbody
           %tr{"ng-repeat" => "cost in costs"}
             %td
-              %a{:href => "/teams/{{cost.id}}", data: { ng_hide: "cost.disabled"}} {{cost.name}}
+              %a{href: "/teams/{{cost.id}}", data: { ng_hide: "cost.disabled"}} {{cost.name}}
               %div{ data: { ng_show: "cost.disabled"}} {{cost.name}} (inactive)
             %td ${{cost.costs}}
             %td
-              %a{"id" => "details_{{cost.id}}","href" => "", "ng-click" => "showDetails(cost.id, cost.name, cost.disabled)", "title" => "Open details"}
+              %a{"id" => "details_{{cost.id}}", "href" => "", data: { ng_click: "showDetails(cost.id, cost.name, cost.disabled)" }, "title" => "Open details"}
                 Details for {{cost.name}}
                 {{ cost.disabled | conditionalText :"(inactive)"}}
                 %i.icon-chevron-right

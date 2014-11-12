@@ -1,14 +1,16 @@
-%div{"ng-controller" => "Ec2InstanceCtrl"}
+.instance_controller{data: {ng_controller: "Ec2InstanceCtrl"}}
   %h1= @ec2_instance.name
   = link_to "Go back to #{@ec2_instance.team.name}", @ec2_instance.team
 
   = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
-  = button_to 'Destroy', [:aws, @ec2_instance], method: :delete, data: { confirm: 'This will permanently delete this instance. Are you sure?', 'ng-show' => 'policy.destroy'}, class: 'btn'
-  
-  = button_to 'Run machine cleanup', cleanup_aws_ec2_instance_url(@ec2_instance), method: :delete, data: { confirm: 'This will make machine cleanup and terminate an instance. Are you sure?', 'ng-show' => 'policy.cleanup'}, class: 'btn btn-danger'
+  = button_to 'Destroy', [:aws, @ec2_instance], method: :delete,
+    data: { confirm: 'This will permanently delete this instance. Are you sure?', 'ng-show' => 'policy.destroy'}
 
-  - if @history_log 
+  = button_to 'Run machine cleanup', cleanup_aws_ec2_instance_url(@ec2_instance), method: :delete,
+    data: { confirm: 'This will make machine cleanup and terminate an instance. Are you sure?', 'ng-show' => 'policy.cleanup'}, class: 'btn btn-danger'
+
+  - if @history_log
     .row-fluid
       .span8
         .accordion
@@ -18,7 +20,7 @@
                 .text-centered  History
             .accordion-body.collapse{id: "historyList"}
               .accordion-inner
-                .div{ class: "instance_history_log"}
+                .instance_history_log
                   %table.table
                     %thead
                       %tr
@@ -31,4 +33,4 @@
                           %td= index + 1
                           %td= link_to(record.user.username, record.user)
                           %td= record.event.camelize
-                          %td= index == 0 ? '-' : distance_of_time_in_words(@history_log[index-1].created_at, record.created_at)
+                          %td= index == 0 ? '-' : distance_of_time_in_words(@history_log[index - 1].created_at, record.created_at)

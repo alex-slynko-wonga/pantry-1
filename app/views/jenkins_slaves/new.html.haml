@@ -9,4 +9,4 @@
     .row
       .span9
         = f.input :instance_role_id, collection: InstanceRole.for(@jenkins_slave), include_blank: false
-  = f.submit "Create slave", {:class => "btn"}
+  = f.submit "Create slave", class: 'btn'

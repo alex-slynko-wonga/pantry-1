@@ -13,14 +13,27 @@ if Rails.env.test? || Rails.env.development?
   end
 
   task default: :rubocop
-end
 
-desc 'Brakeman'
-task :security do |_t, args|
-  require 'brakeman'
+  require 'scss_lint/rake_task'
+  desc 'Run SCSS linter'
+  SCSSLint::RakeTask.new(:scss_lint)
+  task default: :scss_lint
 
-  files = args[:output_files].split(' ') if args[:output_files]
-  Brakeman.run app_path: '.', output_files: files, print_report: true
+  require 'haml_lint/rake_task'
+  desc 'Run HAML linter'
+  HamlLint::RakeTask.new do |task, args|
+    task.pattern = Dir['app/views/**/*.haml']
+  end
+
+  task default: :haml_lint
+
+  desc 'Brakeman'
+  task :security do |_t, args|
+    require 'brakeman'
+
+    files = args[:output_files].split(' ') if args[:output_files]
+    Brakeman.run app_path: '.', output_files: files, print_report: true
+  end
 end
 
 Wonga::Pantry::Application.load_tasks

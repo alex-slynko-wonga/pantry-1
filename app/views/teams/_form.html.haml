@@ -11,7 +11,7 @@
       = f.text_field :region
     .control-group
       = f.label :description
-      = f.text_area :description, { size: "50x5" }
+      = f.text_area :description, size: '50x5'
   %fieldset
     %legend Users
     .control-group
@@ -21,14 +21,14 @@
       #users
         - @team.users.each do |user|
           .user
-            = text_field_tag "name", user.name, disabled: true
-            = hidden_field_tag "users[]", user.username
-            = hidden_field_tag "users[]", user.name
+            = text_field_tag 'name', user.name, disabled: true
+            = hidden_field_tag 'users[]', user.username
+            = hidden_field_tag 'users[]', user.name
             %i.icon-remove
-    = f.submit "Submit", { class: 'btn' }
+    = f.submit 'Submit', class: 'btn'
 #user_template
   .user
-    = text_field_tag "name", "%%name%%", disabled: true
-    = hidden_field_tag "users[]", "%%username%%"
-    = hidden_field_tag "users[]", "%%name%%"
+    = text_field_tag 'name', '%%name%%', disabled: true
+    = hidden_field_tag 'users[]', '%%username%%'
+    = hidden_field_tag 'users[]', '%%name%%'
     %i.icon-remove

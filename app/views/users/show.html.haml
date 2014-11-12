@@ -1,6 +1,6 @@
 .row
   .span4
-    = image_tag(@user.image_url(440), { alt: 'Gravatar', size: "220x220" })
+    = image_tag(@user.image_url(440), alt: 'Gravatar', size: "220x220")
   .span8
     %h3= @user.name
     %strong Username:
@@ -8,7 +8,7 @@
     %strong Email:
     %p= mail_to @user.email
     - if policy(@user).edit?
-      = link_to "Edit", edit_user_url(@user)
+      = link_to 'Edit', edit_user_url(@user)
 - if @user.ec2_instances.present?
   .row
     %h4

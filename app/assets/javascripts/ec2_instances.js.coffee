@@ -8,7 +8,7 @@ $(document).ready ->
     if team_name
       $("label[for=ec2_instance_team_name]").text('Team: ' + team_name)
 
-   if $("#ec2_instance_instance_role_id option:selected").text()
+    if $("#ec2_instance_instance_role_id option:selected").text()
       $('.instance_role_subvalue').hide()
 
   $("select[id=ec2_instance_instance_role_id]").change ->
@@ -21,7 +21,7 @@ $(document).ready ->
     updateFlavor this
 
   $("select[id=instance_role_instance_size]").change ->
-      updateFlavor this
+    updateFlavor this
 
   updateFlavor = (flavor) ->
     flavor_data = $(flavor.options[flavor.selectedIndex])
