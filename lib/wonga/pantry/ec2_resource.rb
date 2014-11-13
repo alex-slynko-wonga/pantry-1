@@ -18,7 +18,7 @@ class Wonga::Pantry::Ec2Resource
   end
 
   def terminate(sns = Wonga::Pantry::SNSPublisher.new(CONFIG['aws']['ec2_instance_delete_topic_arn']))
-    change('termination', sns)
+    change('termination', sns, base_message.merge(remove_volumes: true))
   end
 
   def out_of_band_cleanup(sns = Wonga::Pantry::SNSPublisher.new(CONFIG['aws']['ec2_instance_delete_topic_arn']))
