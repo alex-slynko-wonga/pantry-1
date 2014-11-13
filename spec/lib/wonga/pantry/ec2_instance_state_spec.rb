@@ -87,6 +87,18 @@ RSpec.describe Wonga::Pantry::Ec2InstanceState do
 
       include_examples "doesn't change state"
     end
+
+    context 'if machine is terminated' do
+      let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource', out_of_band_cleanup: true) }
+      before(:each) do
+        allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
+      end
+      it 'should call machine cleanup' do
+        ec2_instance.state = 'terminated'
+        subject
+        expect(ec2_resource).to have_received(:out_of_band_cleanup)
+      end
+    end
   end
 
   describe '#change_state!' do

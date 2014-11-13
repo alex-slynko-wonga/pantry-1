@@ -13,6 +13,7 @@ RSpec.describe Ec2InstancePolicy do
       it { is_expected.to permit(:shutdown_now?) }
       it { is_expected.to permit(:resize?) }
       it { is_expected.to_not permit(:start_instance?) }
+      it { is_expected.to_not permit(:cleanup?) }
     end
 
     context 'when machine is loading' do
@@ -22,6 +23,7 @@ RSpec.describe Ec2InstancePolicy do
       it { is_expected.to_not permit(:shutdown_now?) }
       it { is_expected.to_not permit(:start_instance?) }
       it { is_expected.to_not permit(:resize?) }
+      it { is_expected.to_not permit(:cleanup?) }
     end
 
     context 'when machine is shut down' do
@@ -31,6 +33,7 @@ RSpec.describe Ec2InstancePolicy do
       it { is_expected.to_not permit(:shutdown_now?) }
       it { is_expected.to permit(:resize?) }
       it { is_expected.to permit(:start_instance?) }
+      it { is_expected.to_not permit(:cleanup?) }
     end
 
     it { is_expected.to permit(:create?) }
@@ -44,14 +47,18 @@ RSpec.describe Ec2InstancePolicy do
     end
   end
 
-  context 'for superadmin' do
-    let(:user) { User.new(role: 'superadmin') }
+  context 'for machine owner' do
+    let(:user) { FactoryGirl.build(:user, team: ec2_instance.team) }
+    before(:each) do
+      ec2_instance.user = user
+    end
 
     context 'when machine is ready' do
       it { is_expected.to permit(:destroy?) }
       it { is_expected.to permit(:shutdown_now?) }
       it { is_expected.to permit(:resize?) }
       it { is_expected.to_not permit(:start_instance?) }
+      it { is_expected.to_not permit(:cleanup?) }
     end
 
     context 'when machine is loading' do
@@ -59,8 +66,9 @@ RSpec.describe Ec2InstancePolicy do
 
       it { is_expected.to_not permit(:destroy?) }
       it { is_expected.to_not permit(:shutdown_now?) }
-      it { is_expected.to_not permit(:resize?) }
       it { is_expected.to_not permit(:start_instance?) }
+      it { is_expected.to_not permit(:resize?) }
+      it { is_expected.to permit(:cleanup?) }
     end
 
     context 'when machine is shut down' do
@@ -70,6 +78,39 @@ RSpec.describe Ec2InstancePolicy do
       it { is_expected.to_not permit(:shutdown_now?) }
       it { is_expected.to permit(:resize?) }
       it { is_expected.to permit(:start_instance?) }
+      it { is_expected.to_not permit(:cleanup?) }
+    end
+  end
+
+  context 'for superadmin' do
+    let(:user) { User.new(role: 'superadmin') }
+
+    context 'when machine is ready' do
+      it { is_expected.to permit(:destroy?) }
+      it { is_expected.to permit(:shutdown_now?) }
+      it { is_expected.to permit(:resize?) }
+      it { is_expected.to_not permit(:start_instance?) }
+      it { is_expected.to_not permit(:cleanup?) }
+    end
+
+    context 'when machine is loading' do
+      let(:state) { 'booting' }
+
+      it { is_expected.to_not permit(:destroy?) }
+      it { is_expected.to_not permit(:shutdown_now?) }
+      it { is_expected.to_not permit(:resize?) }
+      it { is_expected.to_not permit(:start_instance?) }
+      it { is_expected.to permit(:cleanup?) }
+    end
+
+    context 'when machine is shut down' do
+      let(:state) { 'shutdown' }
+
+      it { is_expected.to permit(:destroy?) }
+      it { is_expected.to_not permit(:shutdown_now?) }
+      it { is_expected.to permit(:resize?) }
+      it { is_expected.to permit(:start_instance?) }
+      it { is_expected.to_not permit(:cleanup?) }
     end
 
     it { is_expected.to permit(:create?) }
@@ -91,6 +132,7 @@ RSpec.describe Ec2InstancePolicy do
     it { is_expected.to_not permit(:start_instance?) }
     it { is_expected.to_not permit(:resize?) }
     it { is_expected.to_not permit(:create?) }
+    it { is_expected.to_not permit(:cleanup?) }
 
     context 'when team for instance is not set' do
       let(:ec2_instance) { Ec2Instance.new }

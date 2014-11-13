@@ -20,7 +20,6 @@ class Wonga::Pantry::Ec2InstanceUpdateInfo
     map_ec2_status_to_transitions.each do |transition|
       before_state = @ec2_instance.state
       status = @aws_ec2_instance_info.status.to_s
-
       if @state_machine.fire_events(transition.event)
         @ec2_instance.ec2_instance_logs.build(from_state: before_state, event: transition.event.to_s, updates: @ec2_instance.changes, user: nil)
         @state_machine.callback if @ec2_instance.save
@@ -60,10 +59,7 @@ class Wonga::Pantry::Ec2InstanceUpdateInfo
   end
 
   def map_ec2_status_to_transitions
-    if aws_ec2_instance_terminated?
-      Wonga::Pantry::Ec2Resource.new(@ec2_instance, nil).out_of_band_cleanup
-      return []
-    end
+    return [] if aws_ec2_instance_terminated?
     return [] if %w(initial_state booting booted added_to_domain dns_record_created).include?(@ec2_instance.state)
     transitions = case @aws_ec2_instance_info.status
                   when :pending

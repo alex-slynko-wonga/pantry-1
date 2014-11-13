@@ -4,6 +4,7 @@ class Wonga::Pantry::Ec2InstanceState
     @user = user
     @instance_params = instance_params
     @state_machine = Wonga::Pantry::Ec2InstanceMachine.new(@ec2_instance)
+    @ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, @user)
   end
 
   def change_state
@@ -17,13 +18,21 @@ class Wonga::Pantry::Ec2InstanceState
 
     before_state = @ec2_instance.state
 
+    if before_state == 'terminated' && event != :terminated && event != :out_of_band_cleanup
+      if Wonga::Pantry::Ec2Resource.new(@ec2_instance, @user).out_of_band_cleanup
+        return true
+      else
+        @ec2_instance.errors.add(:base, 'Ec2 Instance cleanup request failed')
+        return
+      end
+    end
+
     unless event && @state_machine.fire_events(event)
       @ec2_instance.errors.add(:base, 'State machine did not fire event')
       return
     end
 
     @ec2_instance.ec2_instance_logs.build(from_state: before_state, event: event, updates: @ec2_instance.changes, user: @user)
-
     return unless @ec2_instance.save
 
     @state_machine.user = @user

@@ -90,6 +90,17 @@ class Aws::Ec2InstancesController < ApplicationController
     render :show
   end
 
+  def cleanup
+    @ec2_instance = Ec2Instance.find(params[:id])
+    authorize(@ec2_instance)
+    if Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user).out_of_band_cleanup
+      flash[:notice] = 'Ec2 Instance cleanup request success'
+    else
+      flash[:error] = "Ec2 Instance cleanup request failed: #{human_errors(@ec2_instance)}"
+    end
+    render :show
+  end
+
   def update
     @ec2_instance = Ec2Instance.find params[:id]
     ec2_resource = Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user)

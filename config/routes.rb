@@ -35,7 +35,11 @@ Wonga::Pantry::Application.routes.draw do
   end
 
   namespace :aws do
-    resources :ec2_instances, except: [:index]
+    resources :ec2_instances, except: [:index] do
+      member do
+        delete :cleanup
+      end
+    end
     resources :ec2_amis, only: [:show]
   end
 
@@ -56,8 +60,7 @@ Wonga::Pantry::Application.routes.draw do
   resources :users, except: [:create, :destroy]
   root to: 'home#index'
 
-  resources :environments, only: [:show, :edit, :update]
-  resources :environments do
+  resources :environments, only: [:show, :edit, :update] do
     member do
       put :hide
     end

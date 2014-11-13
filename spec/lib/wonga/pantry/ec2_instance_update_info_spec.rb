@@ -167,14 +167,6 @@ RSpec.describe Wonga::Pantry::Ec2InstanceUpdateInfo do
                                       private_ip_address: ec2_instance.ip_address)
       end
 
-      context 'when Pantry record is not in terminal state' do
-        it 'sends termination message' do
-          expect(ec2_instance).to receive(:save)
-          subject.update_state
-          expect(ec2_instance.state).to eq 'terminating'
-        end
-      end
-
       context 'when Pantry record is in terminating state' do
         let(:ec2_instance) { FactoryGirl.create(:ec2_instance, :running, state: 'terminating') }
 
@@ -195,15 +187,6 @@ RSpec.describe Wonga::Pantry::Ec2InstanceUpdateInfo do
                                       instance_type: ec2_instance.flavor,
                                       api_termination_disabled?: ec2_instance.protected,
                                       private_ip_address: ec2_instance.ip_address)
-      end
-
-      context 'when Pantry record is not in terminal state' do
-        it 'sends termination message' do
-          expect(ec2_instance).to receive(:save)
-          subject.update_state
-          expect(ec2_instance.state).to eq 'terminating'
-        end
-
       end
 
       context 'when Pantry record is in terminating state' do
