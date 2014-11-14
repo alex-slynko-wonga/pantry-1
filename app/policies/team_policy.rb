@@ -1,4 +1,10 @@
 class TeamPolicy < ApplicationPolicy
+  Scope = Struct.new(:team, :scope) do
+    def resolve
+      scope.active
+    end
+  end
+
   def update?
     (god_mode? || user.teams.include?(record)) && active?
   end

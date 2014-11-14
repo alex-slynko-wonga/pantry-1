@@ -31,6 +31,6 @@
                       - @history_log.each_with_index do |record, index|
                         %tr
                           %td= index + 1
-                          %td= link_to(record.user.username, record.user)
+                          %td= link_to_user(record.user)
                           %td= record.event.camelize
                           %td= index == 0 ? '-' : distance_of_time_in_words(@history_log[index - 1].created_at, record.created_at)

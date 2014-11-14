@@ -90,6 +90,7 @@ RSpec.describe TeamsController, type: :controller do
 
   describe "GET 'index'" do
     it 'returns http success' do
+      session[:user_id] = user.id
       get 'index'
       expect(response).to be_success
     end
