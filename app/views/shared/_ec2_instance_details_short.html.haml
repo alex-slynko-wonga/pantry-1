@@ -18,3 +18,10 @@
         %td= '-'
       - else
         %td= link_to_instance_role(instance)
+      - if policy(instance).destroy?
+        %td
+          = link_to image_tag("trash.png", class: 'i icon-centered'),
+                    aws_ec2_instance_url(instance.id),
+                    method: :delete,
+                    data: { confirm: 'This will permanently delete this instance. Are you sure?'},
+                    title: 'Delete an instance'

@@ -60,3 +60,7 @@ end
 Then(/^I should see my name near "(.*?)"$/) do |event|
   expect(find(:xpath, "//tr/td/a[text()='#{User.last.username}']/../../td[text()='#{event}']")).to be_present
 end
+
+When(/^I click on "(.*?)" icon$/) do |alt|
+  find(:xpath, "//img[@alt = '#{alt}']/parent::a").click
+end

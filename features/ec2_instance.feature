@@ -151,6 +151,16 @@ Feature: EC2 Instance
     When I am on instance page
     Then I should not see "Destroy"
 
+  Scenario: Destroying an instance from instance list without redirecting to 'show' page
+    Given I have an EC2 instance in the team
+    When I am on the team page
+    And I click on "Trash" icon
+    Then I should see "Terminating"
+    And I should see a flash message with "Ec2 Instance deletion request success"
+    And instance destroying process should start
+    And I should see "Team Members"
+    And I should see "Instances"
+
   @javascript
   Scenario: Cleaning an instance
     Given I have an EC2 instance in the team
