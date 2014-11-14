@@ -17,9 +17,8 @@ class Team < ActiveRecord::Base
        .where('ec2_instances.terminated = 1  or jenkins_servers.id is null')
   }
 
-  default_scope -> { where('disabled' => [nil, false]).order(:name) }
-  # FIXME: with rails 4.2 and rewhere I suppose
-  scope :inactive, -> { unscoped.where(disabled: true).order(:name) }
+  scope :active, -> { where(disabled: [nil, false]).order(:name) }
+  scope :inactive, -> { where(disabled: true).order(:name) }
 
   def jenkins_host_name
     name.parameterize.gsub('_', '-').gsub('--', '-')[0..62]

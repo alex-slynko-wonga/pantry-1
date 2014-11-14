@@ -19,8 +19,8 @@ class TeamsController < ApplicationController
   end
 
   def index
-    @teams = Team.all
-    @teams = @teams.inactive if params[:inactive] && policy(Team).see_inactive_teams?
+    @teams = policy_scope(Team)
+    @teams = Team.inactive if params[:inactive] && policy(Team).see_inactive_teams?
   end
 
   def show

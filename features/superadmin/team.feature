@@ -41,4 +41,5 @@ Feature: Managing Teams
     Then I should not see "TeamName"
 
     When I click on "show only inactive teams"
-    Then I should see "TeamName"
+    And I click on "TeamName"
+    Then I should see "Create a new environment"

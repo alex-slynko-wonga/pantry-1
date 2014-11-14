@@ -7,6 +7,14 @@ module ApplicationHelper
     link_to_if policy(current_user).admin?, ec2_instance.instance_role.display_name, admin_instance_role_path(ec2_instance.instance_role)
   end
 
+  def link_to_user(user)
+    if user
+      link_to(user.username, user)
+    else
+      'system'
+    end
+  end
+
   def navbar_link_to(caption, url)
     content_tag(:li, nil, class: ('active' if current_page?(url))) do
       link_to(caption, url)
