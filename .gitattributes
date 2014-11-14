@@ -1,2 +1,4 @@
-* text eol=lf
+*.rb text eol=lf
+*.haml text eol=lf
+*.coffee text eol=lf
 
