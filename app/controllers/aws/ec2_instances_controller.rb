@@ -61,6 +61,7 @@ class Aws::Ec2InstancesController < ApplicationController
   end
 
   def destroy
+    session[:return_to] ||= request.referer
     @ec2_instance = Ec2Instance.find(params[:id])
     authorize(@ec2_instance)
     if Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user).terminate
@@ -68,7 +69,7 @@ class Aws::Ec2InstancesController < ApplicationController
     else
       flash[:error] = "Ec2 Instance deletion request failed: #{human_errors(@ec2_instance)}"
     end
-    render :show
+    redirect_to session.delete(:return_to)
   end
 
   def cleanup

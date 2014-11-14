@@ -7,3 +7,10 @@
   %td= jenkins_instance.ec2_instance.human_status
   %td= os_image(jenkins_instance.ec2_instance.platform)
   %td= link_to_instance(jenkins_instance.ec2_instance) if jenkins_instance.instance_of? JenkinsServer
+  - if policy(jenkins_instance.ec2_instance).destroy? && (!jenkins_instance.instance_of? JenkinsServer)
+    %td
+      = link_to image_tag("trash.png", class: 'i icon-centered'),
+                aws_ec2_instance_url(jenkins_instance.ec2_instance.id),
+                method: :delete,
+                data: { confirm: 'This will permanently delete this instance. Are you sure?'},
+                title: 'Delete an instance'

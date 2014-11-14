@@ -129,11 +129,12 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
   context '#destroy' do
     before(:each) do
       allow(ec2_resource).to receive(:terminate)
+      request.env['HTTP_REFERER'] = 'test_ref'
     end
 
-    it 'should be success' do
+    it 'should redirect' do
       delete :destroy, id: ec2_instance.id
-      expect(response).to be_success
+      expect(response).to redirect_to('test_ref')
     end
 
     it 'terminates instance if transition acceptable' do
