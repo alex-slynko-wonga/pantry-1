@@ -1,4 +1,4 @@
-*.rb text eol=lf
-*.haml text eol=lf
-*.coffee text eol=lf
+*.rb eol=lf
+*.haml eol=lf
+*.coffee eol=lf
 

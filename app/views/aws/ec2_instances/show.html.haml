@@ -5,10 +5,7 @@
   = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
   = button_to 'Destroy', [:aws, @ec2_instance], method: :delete,
-    data: { confirm: 'This will permanently delete this instance. Are you sure?', 'ng-show' => 'policy.destroy'}
-
-  = button_to 'Run machine cleanup', cleanup_aws_ec2_instance_url(@ec2_instance), method: :delete,
-    data: { confirm: 'This will make machine cleanup and terminate an instance. Are you sure?', 'ng-show' => 'policy.cleanup'}, class: 'btn btn-danger'
+    data: { confirm: 'This will permanently delete this instance. Are you sure?', 'ng-show' => 'policy.destroy'}, class: 'btn btn-danger'
 
   - if @history_log
     .row-fluid

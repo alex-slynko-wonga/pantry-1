@@ -8,7 +8,10 @@
   = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
   = button_to 'Destroy', [@jenkins_server, @jenkins_slave], method: :delete,
-    data: { confirm: 'This will permanently delete this instance. Are you sure?', ng_show: 'policy.destroy'}
+    data: { confirm: 'This will permanently delete this instance. Are you sure?', ng_show: 'policy.destroy'}, class: 'btn btn-danger'
+
+  = button_to 'Force terminate', cleanup_aws_ec2_instance_url(@ec2_instance), method: :delete,
+    data: { confirm: 'This will make machine cleanup and terminate an instance. Are you sure?', 'ng-show' => 'policy.cleanup'}, class: 'btn btn-danger'
 
   - if @ec2_instance.state == "terminating"
     %p Destroy action sent. This slave is not usable anymore.

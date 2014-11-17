@@ -1,7 +1,6 @@
 GIT
-  remote: git://github.com/alex-slynko-wonga/haml-lint.git
-  revision: 63ece1d186da436066ef08045492726d97d5f533
-  branch: patch-1
+  remote: git://github.com/causes/haml-lint.git
+  revision: ff17bbac0efef50bfd133ec6145699be912d7b99
   specs:
     haml-lint (0.7.0)
       haml (~> 4.0)
@@ -30,7 +29,7 @@ GIT
 
 GIT
   remote: git://github.com/ruby-ldap/ruby-net-ldap.git
-  revision: 1dc2907a3b4633ad1ccd0bd660c952b2bb3c4e99
+  revision: 18fcec26c18a2d555dfaa983290bc39d27b9ef8c
   specs:
     net-ldap (0.9.0)
 
@@ -200,9 +199,9 @@ GEM
     guard-rubocop (1.2.0)
       guard (~> 2.0)
       rubocop (~> 0.20)
-    guard-scss-lint (0.0.2)
+    guard-scss-lint (0.0.3)
       guard (~> 2.0)
-      scss-lint (~> 0)
+      scss-lint (~> 0.30.0)
     haml (4.0.5)
       tilt
     haml-rails (0.5.3)
@@ -229,7 +228,7 @@ GEM
     letter_opener (1.2.0)
       launchy (~> 2.2)
     libv8 (3.16.14.7)
-    listen (2.7.11)
+    listen (2.8.0)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -255,7 +254,7 @@ GEM
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     netrc (0.8.0)
-    newrelic_rpm (3.9.6.257)
+    newrelic_rpm (3.9.7.266)
     nokogiri (1.6.4.1)
       mini_portile (~> 0.6.0)
     ntlm-http (0.1.1)
@@ -342,7 +341,7 @@ GEM
     ruby_parser (3.5.0)
       sexp_processor (~> 4.1)
     rubyntlm (0.4.0)
-    sass (3.4.7)
+    sass (3.4.8)
     scss-lint (0.30.0)
       rainbow (~> 2.0)
       sass (~> 3.4.0)

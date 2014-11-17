@@ -268,3 +268,7 @@ Then(/^I should not be able to create EC2 Instance$/) do
   visit '/jenkins_servers/new'
   expect(page.current_path).to eq '/'
 end
+
+When(/^I cleanup an instance$/) do
+  click_on 'Run machine cleanup'
+end

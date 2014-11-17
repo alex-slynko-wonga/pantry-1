@@ -61,7 +61,7 @@ end
 group :test, :development do
   gem 'awesome_print'
   gem 'factory_girl_rails'
-  gem 'haml-lint', require: false, github: 'alex-slynko-wonga/haml-lint', branch: 'patch-1'
+  gem 'haml-lint', require: false, github: 'causes/haml-lint'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.1.0'
   gem 'rubocop'
