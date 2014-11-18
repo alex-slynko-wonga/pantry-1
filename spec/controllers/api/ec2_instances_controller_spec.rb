@@ -29,4 +29,20 @@ RSpec.describe Api::Ec2InstancesController, type: :controller do
       end
     end
   end
+
+  describe '#update_info_from_aws' do
+    let(:ec2_instance) { instance_double(Ec2Instance, update_info: true, id: 45) }
+
+    context 'for instance with some id' do
+      before(:each) do
+        request.headers['X-Auth-Token'] = CONFIG['pantry']['api_key']
+        allow(Ec2Instance).to receive(:find).with('45').and_return(ec2_instance)
+      end
+
+      it 'returns http success' do
+        post :update_info_from_aws, id: 45, format: 'json'
+        expect(response).to be_success
+      end
+    end
+  end
 end

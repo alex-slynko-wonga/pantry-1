@@ -9,4 +9,10 @@ class Api::Ec2InstancesController < ApiController
     results = Wonga::Pantry::Ec2InstancesUpdater.new.update_from_aws
     render json: results
   end
+
+  def update_info_from_aws
+    ec2_instance = Ec2Instance.find(params[:id])
+    ec2_instance.update_info
+    render json: {}
+  end
 end
