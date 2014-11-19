@@ -28,17 +28,18 @@
           %li ID: {{aws_ami.image_id}}
           %li Description: {{aws_ami.description}}
           %li Root device type: {{aws_ami.root_device_type}}
-          %li Root deivce name: {{aws_ami.root_device_name}}
+          %li Root device name: {{aws_ami.root_device_name}}
           %li Hypervisor: {{aws_ami.hypervisor}}
           %li Virtualization type: {{aws_ami.virtualization_type}}
           %li Architecture: {{aws_ami.architecture}}
           %li State: {{aws_ami.image_state}}
           %li Public {{aws_ami.is_public}}
-          %li Image ID {{aws_ami.image_owner_id}}
+          %li Owner ID {{aws_ami.image_owner_id}}
         %h4 Tags
         %ul{"ng-repeat" => "tag in aws_ami.tag_set"}
-          %li Key: {{tag.key}}
-          %li Value: {{tag.value}}
+          %li
+            %b {{tag.key}}
+            {{tag.value}}
       .span4
         %h4 Devices
         %ul{"ng-repeat" => "device in aws_ami.block_device_mapping"}

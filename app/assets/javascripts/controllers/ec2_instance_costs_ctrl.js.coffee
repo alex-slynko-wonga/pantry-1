@@ -3,13 +3,13 @@
   $scope.dateUI = ''
 
   $scope.getCosts = ->
+    $scope.options = $scope.preloadResource.bill_dates
     $scope.team_id = null # hide the details
-    $scope.options = $('#Ec2InstanceCostsCtrl').data('bill-dates')
-    unless $scope.date?
-      $scope.date = $scope.options[0][0]
-      $scope.dateUI = $scope.options[0][1]
-    else
+    if $scope.date?
       $scope.dateUI = $('#change_date option:selected').text()
+    else
+      $scope.date = $scope.preloadResource.bill_dates[0][0]
+      $scope.dateUI = $scope.preloadResource.bill_dates[0][1]
 
     total_costs = $resource("/total_costs/:date.json").get({date: $scope.date}, ->
       $scope.total_costs = parseFloat(total_costs.cost)

@@ -21,6 +21,7 @@
 //= require angular-resource
 //= require angular_app
 //= require_tree ./factories/
+//= require_tree ./directives/
 //= require_tree ./controllers/
 //= require_tree .
 
