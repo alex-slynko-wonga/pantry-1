@@ -43,13 +43,14 @@ RSpec.describe Admin::AmisController, type: :controller do
       end
 
       it 'changes the name and hidden attributes' do
-        post 'update', id: ami.id, ami: { name: 'windows_sdk_server', hidden: true }, format: :json
+        post 'update', id: ami.id, ami: { name: 'windows_sdk_server', hidden: true, bootstrap_username: 'CentOS' }, format: :json
         expect(ami.reload.name).to eq 'windows_sdk_server'
+        expect(ami.reload.bootstrap_username).to eq 'CentOS'
       end
 
       it 'does not update ami with a different platform' do
         post 'update', id: ami.id, ami: { platform: 'windows_test' }
-        expect(flash[:error]).to match("AMI cant't be updated with a different platform")
+        expect(flash[:error]).to match("AMI can't be updated with a different platform")
         expect(ami.platform).to eq 'linux'
       end
     end

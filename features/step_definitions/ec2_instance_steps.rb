@@ -36,6 +36,13 @@ Given(/^I request an instance named "(.*?)"$/) do |name|
   click_on 'Create'
 end
 
+When(/^I request an instance with "(.*?)" AMI$/) do |ami_name|
+  visit '/aws/ec2_instances/new'
+  fill_in_default_values('new-instance')
+  find(:select, text: ami_name).select_option
+  click_on 'Create'
+end
+
 When(/^I request an EC2 instance$/) do
   visit '/aws/ec2_instances/new'
 end
@@ -80,6 +87,13 @@ end
 When(/^I entered ami\-(\w+) in custom ami field$/) do |id|
   fill_in 'Custom AMI', with: "ami-#{id}"
   fill_in 'Name', with: 'new-instance'
+end
+
+Then(/^the instance start using "(.*?)" bootstrap username$/) do |bootstrap_username|
+  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn')) do |args|
+    message = JSON.parse(JSON.parse(args[:message])['default'])
+    expect(message['bootstrap_username']).to match(bootstrap_username)
+  end
 end
 
 Then(/^an instance (?:with ami\-(\w+) )?build should start$/) do |ami|

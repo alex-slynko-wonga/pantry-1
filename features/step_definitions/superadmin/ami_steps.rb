@@ -31,3 +31,7 @@ end
 When(/^I update "(.*?)" AMI$/) do |name|
   visit edit_admin_ami_path(Ami.where(name: name).first)
 end
+
+When(/^I enter "(.*?)" in bootstrap username field$/) do |value|
+  fill_in 'Bootstrap username', with: value
+end

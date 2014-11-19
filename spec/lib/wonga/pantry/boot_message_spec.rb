@@ -23,6 +23,29 @@ RSpec.describe Wonga::Pantry::BootMessage do
       end
     end
 
+    context '#bootstrap_username' do
+      let(:bootstrap_username) { 'CentOS' }
+      let(:ami) { instance_double('Ami', bootstrap_username: bootstrap_username) }
+
+      it 'add bootstrap_username to message' do
+        expect(Ami).to receive(:where).and_return([ami])
+        expect(boot_message).to include(bootstrap_username: bootstrap_username)
+      end
+
+      it 'does not add empty bootstrap_username when ami not found' do
+        expect(boot_message).to_not include(:bootstrap_username)
+      end
+
+      context 'bootstrap_username is empty' do
+        let(:ami) { instance_double('Ami', bootstrap_username: '') }
+
+        it 'does not add empty bootstrap_username' do
+          expect(Ami).to receive(:where).and_return([ami])
+          expect(boot_message).to_not include(:bootstrap_username)
+        end
+      end
+    end
+
     describe 'block_device_mappings' do
       it 'processes single drive'
 

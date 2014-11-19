@@ -20,6 +20,6 @@ class Ami < ActiveRecord::Base
 
   def check_platform_changed
     return unless self.platform_changed?
-    errors.add(:platform, "AMI cant't be updated with a different platform")
+    errors.add(:platform, "AMI can't be updated with a different platform")
   end
 end

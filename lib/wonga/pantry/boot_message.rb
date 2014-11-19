@@ -1,7 +1,7 @@
 class Wonga::Pantry::BootMessage
   def boot_message(instance)
     fail unless instance.persisted?
-    {
+    message = {
       pantry_request_id:          instance.id,
       instance_name:              instance.name,
       domain:                     instance.domain,
@@ -22,9 +22,19 @@ class Wonga::Pantry::BootMessage
       block_device_mappings:      block_device_mappings(instance),
       protected:                  instance.protected?
     }
+
+    bootstrap_username = bootstrap_message(instance.ami)
+    message = message.merge(bootstrap_username: bootstrap_username) unless bootstrap_username.nil? || bootstrap_username.empty?
+    message
   end
 
   private
+
+  def bootstrap_message(ami_id)
+    amis = Ami.where(ami_id: ami_id)
+    bootstrap_username = amis.first.bootstrap_username if amis.any?
+    bootstrap_username
+  end
 
   def security_group_ids(instance)
     security_groups = Array(instance.security_group_ids)

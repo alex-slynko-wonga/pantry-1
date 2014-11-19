@@ -5,6 +5,8 @@
         = f.input :ami_id, label: 'AMI id', input_html: { maxlength: 12, data: { ng_model: 'ami.ami_id', ng_change: 'getAmiInfo()' }}
         = f.input :name, input_html: {data: { ng_model: 'ami.name' }}
         = f.hidden_field :platform, data: { ng_value: 'ami.platform' }
+        %div{"ng-show" => 'ami.platform == "linux"'}
+          = f.input :bootstrap_username
         = f.input :hidden, inline_label: true, label: false
 
       = f.submit

@@ -42,6 +42,6 @@ class Admin::AmisController < Admin::AdminController
   private
 
   def ami_attributes
-    params.require(:ami).permit(:ami_id, :name, :hidden, :platform)
+    params.require(:ami).permit(:ami_id, :name, :hidden, :platform, :bootstrap_username)
   end
 end

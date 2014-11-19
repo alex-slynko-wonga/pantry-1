@@ -22,6 +22,26 @@ Feature: EC2 Instance
     And an instance with ami-123 build should start
 
   @javascript
+  Scenario: Fill bootstrap username for linux
+    Given I am on the AMIs page
+    And I am in the "test" team
+    And ami-12111111 "TestWindows" exists in AWS
+    And ami-12222222 "TestLinux" exists in AWS with platform "linux"
+    When I click on "New AMI"
+    And I enter "ami-12111111" in ami field
+    Then I should not see "Bootstrap username"
+    When I enter "ami-12222222" in ami field
+    Then I should see "Bootstrap username"
+    And I enter "Fedora" in bootstrap username field
+    And I save the AMI
+
+    And I am in the "Pantry" team
+    And "Pantry" team has an "INT" environment with name "TEST"
+    When I request an instance with "TestLinux" AMI
+    Then I should see a flash message with "Ec2 Instance request succeeded."
+    And the instance start using "Fedora" bootstrap username
+
+  @javascript
   Scenario: Creating a new instance with instance role
     Given "MyInstanceRole" instance role
     And I am in the "TeamName" team
