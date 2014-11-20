@@ -1,4 +1,4 @@
-@JenkinsServersCtrl = ["$scope", "$resource", ($scope, $resource) ->
+@app.controller 'JenkinsServersCtrl', ["$scope", "$resource", ($scope, $resource) ->
   $scope.instances = []
   $scope.getInstances = ->
     unless $scope.team_id is ""

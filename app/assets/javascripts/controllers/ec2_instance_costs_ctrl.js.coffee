@@ -1,4 +1,4 @@
-@Ec2InstanceCostsCtrl = ["$scope", "$resource", ($scope, $resource) ->
+@app.controller 'Ec2InstanceCostsCtrl', ["$scope", "$resource", ($scope, $resource) ->
   $scope.date = null
   $scope.dateUI = ''
 

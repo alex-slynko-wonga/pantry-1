@@ -1,4 +1,4 @@
-@AmisCtrl = ["$scope", "$http", "AmiAws", "validation", ($scope, $http, AmiAws, validation) ->
+@app.controller 'AmisCtrl', ["$scope", "$http", "AmiAws", "validation", ($scope, $http, AmiAws, validation) ->
   $scope.setAmi = (ami_id, name, platform, platform_was) ->
     return unless ami_id
     $scope.ami =

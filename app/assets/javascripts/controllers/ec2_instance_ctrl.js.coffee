@@ -1,4 +1,4 @@
-@Ec2InstanceCtrl = ["$scope", "$resource", ($scope, $resource) ->
+@app.controller 'Ec2InstanceCtrl', ["$scope", "$resource", ($scope, $resource) ->
   $scope.ec2_instance_id = $('div[data-ec2-instance-id]').data('ec2InstanceId')
   $scope.retryGetDetails = 2000
   $scope.policy = { start_instance: false, shutdown_now: false }
