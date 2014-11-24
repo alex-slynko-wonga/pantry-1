@@ -1,0 +1,20 @@
+= form_tag auth_ldap_callback_path action: :create do
+  .form-horizontal.dark-form
+    %br
+    = image_tag 'wonga-logo-big.png', class: 'image-centered'
+    %h1.text-centered Pantry LDAP Login
+    .control-group.text-centered
+      .input-prepend
+        .add-on
+          .span1
+            Login
+        = text_field_tag :username, nil, type: 'text', placeholder: 'Login'
+    .control-group.text-centered
+      .input-prepend
+        .add-on
+          .span1
+            Password
+        = text_field_tag :password, nil, type: 'password', placeholder: 'Password'
+    .control-group.text-centered
+      = submit_tag('Sign In', class: 'btn')
+    %br

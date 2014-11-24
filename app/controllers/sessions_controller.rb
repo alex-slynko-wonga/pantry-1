@@ -1,12 +1,12 @@
 class SessionsController < ApplicationController
   force_ssl if: :ssl_needed
+  layout false, only: [:new, :failure]
 
   skip_before_action :signed_in_user
   skip_before_action :verify_authenticity_token
   before_action :redirect_to_root, except: [:destroy]
 
   def new
-    redirect_to '/auth/ldap'
   end
 
   def create
@@ -14,11 +14,13 @@ class SessionsController < ApplicationController
     user = User.from_omniauth(env['omniauth.auth']['extra']['raw_info'])
     redirect_to('/auth/ldap') && return unless user
     session[:user_id] = user.id
-    redirect_to session['requested_url'] || root_url, notice: 'Signed in!'
+    flash[:success] = 'Signed in!'
+    redirect_to session['requested_url'] || root_url
   end
 
   def failure
-    redirect_to '/auth/ldap', notice: 'Authentication failed, please try again.'
+    flash[:error] = 'Authentication failed, please try again'
+    redirect_to request.referer
   end
 
   def destroy

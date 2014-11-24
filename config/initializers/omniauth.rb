@@ -9,7 +9,9 @@ Rails.application.config.middleware.use(
   base: CONFIG['omniauth']['base'],
   uid: CONFIG['omniauth']['uid'],
   bind_dn: CONFIG['omniauth']['bind_dn'],
-  password: CONFIG['omniauth']['password']
+  password: CONFIG['omniauth']['password'],
+
+  form: SessionsController.action(:new)
 )
 
 # omniauth failure redirect doesn't work in dev mode. fix below.

@@ -48,10 +48,10 @@
               = active_maintenance_window.start_at
 
       .container.full-height.footer-padding
-        - flash.each do |message|
-          %div{class: ["alert-message", flash_class(message.first)]}
-            %button.close{type: 'button', data_dismiss: "alert"} &times;
-            = message.try(:last)
+        - flash.each do |type, message|
+          %div{class: "alert alert-#{type}"}
+            %button.close{data: { dismiss: "alert" }} &times;
+            = message
         = yield
 
       .div.main-footer

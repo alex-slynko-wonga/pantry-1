@@ -44,7 +44,7 @@ When(/^I click on remove cross near "(.*?)"$/) do |value|
 end
 
 Then(/^I should see a flash message with "(.*?)"$/) do |arg1|
-  expect(page).to have_selector '.alert-message', text: arg1
+  expect(page).to have_selector '.alert', text: arg1
 end
 
 Then(/^I should see "([^"]*)" button/) do |name|
