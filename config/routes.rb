@@ -65,7 +65,7 @@ Wonga::Pantry::Application.routes.draw do
 
   resources :environments, only: [:show, :edit, :update] do
     member do
-      put :hide
+      put :hide, :update_instances
     end
   end
 

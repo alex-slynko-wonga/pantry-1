@@ -105,4 +105,48 @@ RSpec.describe EnvironmentsController, type: :controller do
       end
     end
   end
+
+  describe "PUT 'update_instances'" do
+    let(:user) { instance_double(User, teams: [environment.team], role: 'developer') }
+    let(:ec2_resource)    { instance_double('Wonga::Pantry::Ec2Resource') }
+    before(:each) do
+      allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
+      allow(ec2_resource).to receive(:stop)
+      allow(ec2_resource).to receive(:start)
+    end
+
+    context 'shut down a list of instances' do
+      let(:environment_update_instances_parameters) do
+        { environment: FactoryGirl.attributes_for(:environment) }.merge(id: environment.id, event: 'shutdown_now')
+      end
+
+      let(:test_instance1) { FactoryGirl.create(:ec2_instance, :running, environment: environment, state: 'ready', team: environment.team) }
+      let(:test_instance2) { FactoryGirl.create(:ec2_instance, :running, environment: environment, state: 'ready', team: environment.team) }
+      let(:test_instance3) { FactoryGirl.create(:ec2_instance, :running, environment: environment, state: 'booting', team: environment.team) }
+
+      it 'shut down a list of instances with only ready state' do
+        environment.ec2_instances = [test_instance1, test_instance2, test_instance3]
+        put 'update_instances', environment_update_instances_parameters
+        expect(response).to be_redirect
+        expect(ec2_resource).to have_received(:stop).twice
+      end
+    end
+
+    context 'start a list of instances' do
+      let(:environment_update_instances_parameters) do
+        { environment: FactoryGirl.attributes_for(:environment) }.merge(id: environment.id, event: 'start_instance')
+      end
+
+      let(:test_instance1) { FactoryGirl.create(:ec2_instance, :running, environment: environment, state: 'shutdown', team: environment.team) }
+      let(:test_instance2) { FactoryGirl.create(:ec2_instance, :running, environment: environment, state: 'shutdown', team: environment.team) }
+      let(:test_instance3) { FactoryGirl.create(:ec2_instance, :running, environment: environment, state: 'booting', team: environment.team) }
+
+      it 'start a list of instances with only shutdown state' do
+        environment.ec2_instances = [test_instance1, test_instance2, test_instance3]
+        put 'update_instances', environment_update_instances_parameters
+        expect(response).to be_redirect
+        expect(ec2_resource).to have_received(:start).twice
+      end
+    end
+  end
 end

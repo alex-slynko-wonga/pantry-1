@@ -230,4 +230,20 @@ Feature: EC2 Instance
     When machine is started
     Then I should see "Ready" after page is updated
 
-	
+  Scenario: Shutdown and Start a single instance
+    Given I have an EC2 instance in the team
+    And the instance is ready
+    When I am on the team page
+    And I click on "Shutdown"
+    Then I should see "Shutting down"
+    And shut down request should be sent
+    When machine is shut down
+    Then option "Start" should be present near instance
+
+    When I click on "Start"
+    Then I should see "Starting"
+    And start request should be sent
+    When machine is started
+    Then option "Shutdown" should be present near instance
+    And I should see "Ready"
+

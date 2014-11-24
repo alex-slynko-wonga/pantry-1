@@ -28,6 +28,10 @@ class Ec2InstancePolicy < ApplicationPolicy
     (god_mode? || team_member?) && can_move_with_event(:resize?)
   end
 
+  def available?
+    god_mode? || team_member?
+  end
+
   private
 
   def can_move_with_event(event)

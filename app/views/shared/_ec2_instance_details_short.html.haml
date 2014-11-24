@@ -7,6 +7,8 @@
       %th OS
       %th AMI ID
       %th Instance role
+      - if policy(ec2_instances.first).available?
+        %th Instance action
   - ec2_instances.each do |instance|
     %tr
       %td= instance.id
@@ -18,6 +20,12 @@
         %td= '-'
       - else
         %td= link_to_instance_role(instance)
+      - if policy(instance).shutdown_now?
+        %td= link_to 'Shutdown', aws_ec2_instance_url(instance, 'event' => 'shutdown_now'), method: :put, class: 'btn btn-mini btn-sized'
+      - elsif policy(instance).start_instance?
+        %td= link_to 'Start', aws_ec2_instance_url(instance, 'event' => 'start_instance'), method: :put, class: 'btn btn-mini btn-sized'
+      - elsif policy(instance).available?
+        %td= '-'
       - if policy(instance).destroy?
         %td
           = link_to image_tag("trash.png", class: 'i icon-centered'),

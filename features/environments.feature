@@ -91,3 +91,25 @@ Feature: Multiple environments
     Then I should see "TEST_INT (INT)"
     And I should see "TEST_RC (RC)"
     And I should not see "TEST_WIP (WIP)"
+
+  Scenario: Shutdown and Start all machines for selected environment
+    Given I am in the "TeamName" team
+    And AWS has information about machines
+    And queues and topics are configured
+    And "TeamName" team has an "INT" environment with name "TEST"
+    And I have an EC2 instance in the team with environment "TEST"
+    And the instance is ready
+    And I have an EC2 instance in the team with environment "TEST"
+    And the instance is ready
+    And I am on environment page
+    When I click on "Shutdown all instances"
+    Then I should see "Shutting down"
+    And shut down request should be sent 2 times
+    When machines with environment "TEST" is shut down
+    Then option "Start" should be present near instances with environment "TEST"
+
+    When I click on "Start all instances"
+    Then I should see "Starting"
+    And start request should be sent 2 times
+    When machines with environment "TEST" is start
+    Then option "Shutdown" should be present near instances with environment "TEST"

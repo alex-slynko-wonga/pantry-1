@@ -124,14 +124,28 @@ When(/^I select four security groups$/) do
   check("#{CONFIG['pantry']['security_groups_prefix']}JavaServer-001122334455")
 end
 
-Then(/^shut down request should be sent$/) do
-  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_stop_topic_arn'))
+Then(/^shut down request should be sent(?: (.*) times)?$/) do |requests_count|
+  hash_content = { topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_stop_topic_arn' }
+  if requests_count
+    expect(AWS::SNS.new.client).to have_received(:publish).exactly(requests_count.to_i).times.with(hash_including(hash_content))
+  else
+    expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(hash_content))
+  end
 end
 
 When(/^machine is shut down$/) do
   instance = Ec2Instance.last
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :shutdown, format: :json
+end
+
+When(/^machines with environment "(.*?)" is shut down$/) do |environment_name|
+  environment_id = Environment.where(name: environment_name).first.id
+  instances = Ec2Instance.where(environment_id: environment_id)
+  instances.each do |instance|
+    header 'X-Auth-Token', CONFIG['pantry']['api_key']
+    put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :shutdown, format: :json
+  end
 end
 
 When(/^I receive "(.*?)" event$/) do |name|
@@ -144,14 +158,28 @@ Then(/^server should respond with success$/) do
   expect(@response.status.to_s).to eq('204') # 204 No Content - http status code
 end
 
-Then(/^start request should be sent$/) do
-  expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_start_topic_arn'))
+Then(/^start request should be sent(?: (.*) times)?$/) do |requests_count|
+  hash_content = { topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_start_topic_arn' }
+  if requests_count
+    expect(AWS::SNS.new.client).to have_received(:publish).exactly(requests_count.to_i).times.with(hash_including(hash_content))
+  else
+    expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(hash_content))
+  end
 end
 
 When(/^machine is started$/) do
   instance = Ec2Instance.last
   header 'X-Auth-Token', CONFIG['pantry']['api_key']
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :started, format: :json
+end
+
+When(/^machines with environment "(.*?)" is start$/) do |environment_name|
+  environment_id = Environment.where(name: environment_name).first.id
+  instances = Ec2Instance.where(environment_id: environment_id)
+  instances.each do |instance|
+    header 'X-Auth-Token', CONFIG['pantry']['api_key']
+    put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :started, format: :json
+  end
 end
 
 When(/^the instance is ready$/) do
@@ -243,6 +271,13 @@ Given(/^I have (?:an|(\w+)) EC2 instance in the team( with CI environment)?$/) d
   end
 
   @environment = @ec2_instance.environment
+end
+
+Given(/^I have an EC2 instance in the team with environment "(.*?)"$/) do |environment|
+  user = User.first
+  @team = user.teams.first
+  environment = Environment.where(name: environment).first
+  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team, environment: environment)
 end
 
 Then(/^I should see machine info$/) do

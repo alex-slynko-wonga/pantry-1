@@ -22,4 +22,8 @@ class EnvironmentPolicy < ApplicationPolicy
   def hide?
     god_mode? && (@record.hidden != true)
   end
+
+  def update_instances?
+    god_mode? || team_member?
+  end
 end

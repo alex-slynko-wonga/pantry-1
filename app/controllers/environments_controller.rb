@@ -1,6 +1,6 @@
 class EnvironmentsController < ApplicationController
   before_action :load_team, only: [:new, :create, :index]
-  before_action :load_environment, only: [:show, :edit, :update, :hide]
+  before_action :load_environment, only: [:show, :edit, :update, :hide, :update_instances]
 
   def index
     @environments = @team.environments
@@ -56,7 +56,37 @@ class EnvironmentsController < ApplicationController
     redirect_to @environment
   end
 
+  def update_instances
+    authorize(@environment)
+    ec2_instances = Ec2Instance.where(environment_id: @environment.id)
+    @changed_instances = 0
+    ec2_instances.each do |ec2_instance|
+      if (params[:event] == 'shutdown_now' && policy(ec2_instance).shutdown_now?) ||
+          (params[:event] == 'start_instance' && policy(ec2_instance).start_instance?)
+        update_instance(ec2_instance)
+      end
+    end
+
+    if params[:event] == 'shutdown_now'
+      flash[:notice] = "Shutting down #{@changed_instances} of #{ec2_instances.count} instances"
+    else
+      flash[:notice] = "Starting #{@changed_instances} of #{ec2_instances.count} instance"
+    end
+
+    redirect_to @environment
+  end
+
   private
+
+  def update_instance(ec2_instance)
+    ec2_resource = Wonga::Pantry::Ec2Resource.new(ec2_instance, current_user)
+
+    if params[:event] == 'shutdown_now'
+      @changed_instances += 1 if ec2_resource.stop
+    elsif params[:event] == 'start_instance'
+      @changed_instances += 1 if ec2_resource.start
+    end
+  end
 
   def environment_parameters
     params.require('environment').permit(:name, :description, :environment_type)

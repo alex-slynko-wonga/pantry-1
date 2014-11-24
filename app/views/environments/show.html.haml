@@ -29,6 +29,12 @@
       %h4 Instances
       = render 'shared/ec2_instance_details_short', ec2_instances: @ec2_instances
 
+    - if policy(@environment).update_instances?
+      .pull-right
+        .btn-toolbar
+          .btn-group
+            = link_to('Start all instances', update_instances_environment_url(@environment, 'event' => 'start_instance'), method: :put, class: 'btn')
+            = link_to('Shutdown all instances', update_instances_environment_url(@environment, 'event' => 'shutdown_now'), method: :put, class: 'btn')
 - if policy(@environment).hide?
   %button.button.close{data: {toggle: 'modal', target: '.deactivate_modal'}} Hide Environment
   .deactivate_modal.modal.fade{tabindex: -1, role: 'dialog',

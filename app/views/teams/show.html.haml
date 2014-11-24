@@ -48,6 +48,8 @@
                     %th Status
                     %th OS
                     %th URL
+                    - if policy(@jenkins_server.ec2_instance).available?
+                      %th Instance action
                 = render partial: 'jenkins_instance', collection: [@jenkins_server]
               %h5= link_to_new_slave(@jenkins_server)
               - if @jenkins_slaves && @jenkins_slaves.size > 0
@@ -59,6 +61,8 @@
                     %th Address
                     %th Status
                     %th OS
+                    - if policy(@jenkins_slaves.first.ec2_instance).available?
+                      %th Instance action
                   = render partial: 'jenkins_instance', collection: @jenkins_slaves
                 %h5= link_to_new_slave(@jenkins_server)
             - elsif policy(@team.build_jenkins_server).create?
@@ -75,7 +79,7 @@
                   .i.icon-centered.icon-chevron-down
             .accordion-body.fullwidth.collapse.in{id: "#{environment_entry.human_name.parameterize}"}
               .accordion-inner
-                - if environment_entry.ec2_instances.size > 0
+                - if environment_entry.ec2_instances.not_terminated.size > 0
                   = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.ec2_instances.not_terminated
 
     - if policy(@team.ec2_instances.build).create?

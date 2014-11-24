@@ -9,6 +9,20 @@ Then(/^I should see "(.*?)" after page is updated$/) do |some_text|
   expect(page).to have_content(some_text)
 end
 
+Then(/^option "(.*?)" should be present near instance$/) do |some_text|
+  visit current_path
+  expect(find(:xpath, "//tr/td/a[text()='#{Ec2Instance.last.name}']/../../td/a[text()='#{some_text}']")).to be_present
+end
+
+Then(/^option "(.*?)" should be present near instances with environment "(.*?)"$/) do |some_text, environment_name|
+  visit current_path
+  environment_id = Environment.where(name: environment_name).first.id
+  instances = Ec2Instance.where(environment_id: environment_id)
+  instances.each do |instance|
+    expect(find(:xpath, "//tr/td/a[text()='#{instance.name}']/../../td/a[text()='#{some_text}']")).to be_present
+  end
+end
+
 Then(/^I should not see "(.*?)"$/) do |some_text|
   expect(page).to_not have_content(some_text)
 end

@@ -6,7 +6,14 @@
     %td= link_to jenkins_instance.ec2_instance.name, [@jenkins_server, jenkins_instance]
   %td= jenkins_instance.ec2_instance.human_status
   %td= os_image(jenkins_instance.ec2_instance.platform)
-  %td= link_to_instance(jenkins_instance.ec2_instance) if jenkins_instance.instance_of? JenkinsServer
+  - if jenkins_instance.instance_of? JenkinsServer
+    %td= link_to_instance(jenkins_instance.ec2_instance)
+  - if policy(jenkins_instance.ec2_instance).shutdown_now?
+    %td= link_to 'Shutdown', aws_ec2_instance_url(jenkins_instance.ec2_instance, 'event' => 'shutdown_now'), method: :put, class: 'btn btn-mini btn-sized'
+  - elsif policy(jenkins_instance.ec2_instance).start_instance?
+    %td= link_to 'Start', aws_ec2_instance_url(jenkins_instance.ec2_instance, 'event' => 'start_instance'), method: :put, class: 'btn btn-mini btn-sized'
+  - elsif policy(jenkins_instance.ec2_instance).available?
+    %td= '-'
   - if policy(jenkins_instance.ec2_instance).destroy? && (!jenkins_instance.instance_of? JenkinsServer)
     %td
       = link_to image_tag("trash.png", class: 'i icon-centered'),
