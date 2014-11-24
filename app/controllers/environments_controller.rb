@@ -17,7 +17,7 @@ class EnvironmentsController < ApplicationController
     if @environment.save
       chef_utility = Wonga::Pantry::ChefUtility.new
       chef_utility.request_chef_environment(@team, @environment)
-      flash[:notice] = 'Environment created'
+      flash[:success] = 'Environment created'
       redirect_to session.delete(:return_to) || @team
     else
       flash[:error] = "Environment creation failed: #{human_errors(@environment)}"
@@ -37,7 +37,7 @@ class EnvironmentsController < ApplicationController
     authorize(@environment)
     if @environment.update_attributes(environment_update_parameters)
       redirect_to @environment
-      flash[:notice] = 'Environment updated successfully'
+      flash[:success] = 'Environment updated successfully'
     else
       flash[:error] = "Environment update failed: #{human_errors(@environment)}"
       render :edit
@@ -48,7 +48,7 @@ class EnvironmentsController < ApplicationController
     authorize(@environment)
 
     if @environment.hide
-      flash[:notice] = 'Environment was hidden successfully'
+      flash[:success] = 'Environment was hidden successfully'
     else
       flash[:error] = "Environment was not hidden with errors: #{human_errors(@environment)}"
     end

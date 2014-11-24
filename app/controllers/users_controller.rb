@@ -23,15 +23,17 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         format.html do
-          redirect_to @user, notice: 'User updated'
+          flash[:success] = 'User updated'
+          redirect_to @user
         end
         format.json do
           render json: @user, status: :updated, location: @user
         end
-        flash[:notice] = 'User updated successfully'
+        flash[:success] = 'User updated successfully'
       else
         format.html do
-          redirect_to @user, notice: 'User update failed!'
+          flash[:error] = 'User update failed!'
+          redirect_to @user
         end
         format.json do
           render json: @user.errors, status: :unprocessable_entity

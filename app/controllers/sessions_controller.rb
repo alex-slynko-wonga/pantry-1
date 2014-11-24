@@ -19,14 +19,15 @@ class SessionsController < ApplicationController
   end
 
   def failure
-    flash[:error] = 'Authentication failed, please try again'
+    flash[:error] = 'Authentication failed, please try again!'
     redirect_to request.referer
   end
 
   def destroy
     session[:user_id] = nil
     session['requested_url'] = nil
-    redirect_to '/auth/ldap', notice: 'Signed out!'
+    flash[:success] = 'Signed out!'
+    redirect_to '/auth/ldap'
   end
 
   private

@@ -10,7 +10,7 @@ class TeamsController < ApplicationController
     @team = Team.new(team_params)
     @team.users = users
     if @team.save
-      flash[:notice] = 'Team created successfully'
+      flash[:success] = 'Team created successfully'
       redirect_to @team
     else
       flash[:error] = "Team creation failed: #{human_errors(@team)}"
@@ -38,7 +38,7 @@ class TeamsController < ApplicationController
     @team.users = users
     if @team.update_attributes(team_params)
       redirect_to @team
-      flash[:notice] = 'Team updated successfully'
+      flash[:success] = 'Team updated successfully'
     else
       flash[:error] = "Team update failed: #{human_errors(@team)}"
       render :edit
@@ -49,7 +49,7 @@ class TeamsController < ApplicationController
     authorize(@team)
     if params[:confirm] == @team.name
       @team.update_attributes(disabled: true)
-      flash[:notice] = "Team #{@team.name} deactivated"
+      flash[:success] = "Team #{@team.name} deactivated"
       redirect_to teams_url
     else
       flash[:error] = 'Confirmation is not provided'

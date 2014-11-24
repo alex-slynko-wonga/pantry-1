@@ -21,8 +21,10 @@ class Admin::MaintenanceWindowsController < Admin::AdminController
     @admin_maintenance_window.user = current_user
 
     if @admin_maintenance_window.save
-      redirect_to admin_maintenance_windows_path, notice: 'Maintenance window was successfully created.'
+      flash[:success] = 'Maintenance window was successfully created.'
+      redirect_to admin_maintenance_windows_path
     else
+      flash[:error] = 'Create Maintenance window failed!'
       render action: 'new'
     end
   end
@@ -30,8 +32,10 @@ class Admin::MaintenanceWindowsController < Admin::AdminController
   # PATCH/PUT /admin/maintenance_windows/1
   def update
     if @admin_maintenance_window.update(admin_maintenance_window_params)
-      redirect_to admin_maintenance_windows_path, notice: 'Maintenance window was successfully updated.'
+      flash[:success] = 'Maintenance window was successfully updated.'
+      redirect_to admin_maintenance_windows_path
     else
+      flash[:error] = 'Update Maintenance window failed!'
       render action: 'edit'
     end
   end

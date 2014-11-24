@@ -17,7 +17,9 @@ class ApplicationController < ActionController::Base
 
   def signed_in_user
     session['requested_url'] = request.url if http_get? && !auth_request?
-    redirect_to '/auth/ldap', notice: 'Please sign in.' unless signed_in?
+    return if signed_in?
+    flash[:info] = 'Please sign in'
+    redirect_to '/auth/ldap'
   end
 
   def pundit_user

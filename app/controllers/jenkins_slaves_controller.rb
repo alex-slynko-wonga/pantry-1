@@ -32,7 +32,7 @@ class JenkinsSlavesController < ApplicationController
     authorize(@jenkins_slave)
 
     if aws_utility.request_jenkins_instance(attributes, @jenkins_slave)
-      flash[:notice] = 'Jenkins slave request succeeded.'
+      flash[:success] = 'Jenkins slave request succeeded.'
       redirect_to jenkins_server_jenkins_slaves_url(@jenkins_server)
     else
       flash[:error] = "Error: #{human_errors(@jenkins_slave)}"
@@ -44,7 +44,7 @@ class JenkinsSlavesController < ApplicationController
     @jenkins_slave = @jenkins_server.jenkins_slaves.find(params[:id])
 
     if Wonga::Pantry::Ec2Resource.new(@jenkins_slave.ec2_instance, current_user).terminate
-      flash[:notice] = 'Jenkins slave deletion request succeeded'
+      flash[:success] = 'Jenkins slave deletion request succeeded'
     else
       flash[:error] = "Jenkins slave deletion request failed: #{human_errors(@jenkins_slave) + human_errors(@jenkins_slave.ec2_instance)}"
     end

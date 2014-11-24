@@ -38,7 +38,7 @@ class Aws::Ec2InstancesController < ApplicationController
     authorize @ec2_instance
 
     if Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user).boot
-      flash[:notice] = 'Ec2 Instance request succeeded.'
+      flash[:success] = 'Ec2 Instance request succeeded.'
       redirect_to [:aws, @ec2_instance]
     else
       flash[:error] = "Ec2 Instance request failed: #{human_errors(@ec2_instance)}"
@@ -65,7 +65,7 @@ class Aws::Ec2InstancesController < ApplicationController
     @ec2_instance = Ec2Instance.find(params[:id])
     authorize(@ec2_instance)
     if Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user).terminate
-      flash[:notice] = 'Ec2 Instance deletion request success'
+      flash[:success] = 'Ec2 Instance deletion request success'
     else
       flash[:error] = "Ec2 Instance deletion request failed: #{human_errors(@ec2_instance)}"
     end
@@ -76,7 +76,7 @@ class Aws::Ec2InstancesController < ApplicationController
     @ec2_instance = Ec2Instance.find(params[:id])
     authorize(@ec2_instance)
     if Wonga::Pantry::Ec2Resource.new(@ec2_instance, current_user).out_of_band_cleanup
-      flash[:notice] = 'Ec2 Instance cleanup request success'
+      flash[:success] = 'Ec2 Instance cleanup request success'
     else
       flash[:error] = "Ec2 Instance cleanup request failed: #{human_errors(@ec2_instance)}"
     end
@@ -90,19 +90,19 @@ class Aws::Ec2InstancesController < ApplicationController
 
     if params[:event] == 'shutdown_now'
       if ec2_resource.stop
-        flash[:notice] = 'Shutting down has started'
+        flash[:success] = 'Shutting down has started'
       else
         flash[:error] = "An error occurred when shutting down.#{human_errors(@ec2_instance)}"
       end
     elsif params[:event] == 'start_instance'
       if ec2_resource.start
-        flash[:notice] = 'Starting instance'
+        flash[:success] = 'Starting instance'
       else
         flash[:error] = "An error occurred while attempting to start the instance. #{human_errors(@ec2_instance)}"
       end
     elsif params[:event] == 'resize'
       if ec2_resource.resize(params[:ec2_instance][:flavor])
-        flash[:notice] = 'Resizing instance'
+        flash[:success] = 'Resizing instance'
       else
         flash[:error] = "An error occurred while attempting to resize the instance. #{human_errors(@ec2_instance)}"
       end
