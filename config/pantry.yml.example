@@ -12,7 +12,7 @@ development:
     ldap_group: "CN=Group,OU=Users,DC=example,DC=com"
   aws:
     queue_prefix: pantry_example_com
-    chef_env_create_queue_name: some_queue
+    chef_env_create_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-chef_env_create
     jenkins_slave_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-jenkins_slave_delete
     ec2_instance_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
     ec2_instance_start_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_start_command
@@ -71,7 +71,7 @@ test:
     ec2_instance_stop_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_stop_command
     ec2_instance_boot_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
     ec2_instance_resize_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
-    chef_env_create_queue_name: some_queue
+    chef_env_create_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-chef_env_create
     billing_bucket: "some-bucketname"
     vpc_id: "vpc-00110011"
     security_group_windows: "sg-00110011"

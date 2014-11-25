@@ -1,10 +1,10 @@
 class Wonga::Pantry::ChefUtility
   def initialize
-    @sqs = Wonga::Pantry::SQSSender.new(CONFIG['aws']['chef_env_create_queue_name'])
+    @sns = Wonga::Pantry::SNSPublisher.new(CONFIG['aws']['chef_env_create_topic_arn'])
   end
 
   def request_chef_environment(team, environment)
-    @sqs.send_message(environment_message(team, environment))
+    @sns.publish_message(environment_message(team, environment))
   end
 
   def environment_message(team, environment)

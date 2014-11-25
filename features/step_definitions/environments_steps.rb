@@ -1,5 +1,7 @@
 Then(/^a new (\w*) ?chef environment should be requested$/) do |env_type|
-  expect(AWS::SQS.new.client).to have_received(:send_message) do |message|
+  expect(AWS::SNS.new.client).to have_received(:publish).with(
+                                     hash_including(topic_arn: 'arn:aws:sns:eu-west-1:001100110011:pantry_example_com-chef_env_create')
+                                 ) do |message|
     expect(JSON.parse(message[:message_body])['environment_type']).to eq(env_type) if env_type.present?
   end
 end
