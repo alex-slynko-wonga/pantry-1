@@ -1,7 +1,7 @@
 %tr
   %td= ec2_instance_row.id
   %td= link_to ec2_instance_row.name, url_for([:aws, ec2_instance_row])
-  %td= ec2_instance_row.human_status
+  %td.col_status{data: {ec2_id: ec2_instance_row.id}}= ec2_instance_row.human_status
   %td= os_image(ec2_instance_row.platform)
   %td= link_to ec2_instance_row.environment.human_name, ec2_instance_row.environment
   %td= ec2_instance_row.ami

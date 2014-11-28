@@ -19,9 +19,9 @@
 //= require bootstrap-collapse
 //= require angular
 //= require angular-resource
-//= require angular_app
+//= require_tree ./global_scripts/
 //= require_tree ./factories/
 //= require_tree ./directives/
 //= require_tree ./controllers/
-//= require_tree .
+//= require_tree ./filters/
 
