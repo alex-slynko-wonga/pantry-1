@@ -13,6 +13,6 @@ class Api::Ec2InstancesController < ApiController
   def update_info_from_aws
     ec2_instance = Ec2Instance.find(params[:id])
     ec2_instance.update_info
-    render json: {}
+    respond_with({ msg: 'success' }, location: aws_ec2_instance_url)
   end
 end
