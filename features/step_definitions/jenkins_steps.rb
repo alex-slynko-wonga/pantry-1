@@ -7,6 +7,10 @@ Given(/^I have a jenkins server$/) do
   @jenkins_server = FactoryGirl.create(:jenkins_server, :running, team: @team)
 end
 
+Given(/I have a terminated jenkins server/) do
+  @jenkins_server = FactoryGirl.create(:jenkins_server, :terminated, team: @team)
+end
+
 Given(/^I have a jenkins slave$/) do
   @jenkins_slave = FactoryGirl.create(:jenkins_slave, :running, jenkins_server: @jenkins_server)
 end

@@ -10,6 +10,10 @@ Given(/^I am on the ApiKeys page$/) do
   visit admin_api_keys_path
 end
 
+When(/^I am on the new server page$/) do
+  visit new_jenkins_server_path
+end
+
 Given(/^I am on root page$/) do
   visit '/'
 end

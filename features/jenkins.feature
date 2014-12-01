@@ -17,6 +17,25 @@ Feature: Jenkins
     And I should see a flash message with "Jenkins server request succeeded."
     And an instance build should start
 
+  Scenario: Team should not be duplicated
+    Given I am in the "TestTeam" team
+    And "TestTeam" team has a "CI" environment "Pantry"
+    And "TestTeam" team has a "WIP" environment "WIPPantry"
+    When I am on the new server page
+    Then team "TestTeam" should not be duplicated
+
+  Scenario: Skips team with terminated and running jenkins_server
+    Given I am in the "TestTeam" team
+    And "TestTeam" team has a "CI" environment "Pantry"
+    And I am on the new server page
+    Then I choose "TestTeam" team
+    When I have a terminated jenkins server
+    And I am on the new server page
+    Then I choose "TestTeam" team
+    When I have a jenkins server
+    And I am on the new server page
+    Then I should not see "TestTeam"
+
   @javascript
   Scenario: Create Jenkins slave
     Given I have a jenkins server

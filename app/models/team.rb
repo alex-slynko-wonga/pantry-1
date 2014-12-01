@@ -10,12 +10,8 @@ class Team < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   validates :chef_environment, uniqueness: true, if: 'chef_environment'
 
-  scope :with_environment, -> { joins(:environments).where.not(environments: { chef_environment: nil }) }
-  scope :without_jenkins, lambda {
-    joins('LEFT OUTER JOIN jenkins_servers on jenkins_servers.team_id = teams.id')
-       .joins('LEFT OUTER JOIN ec2_instances on ec2_instances.id = jenkins_servers.ec2_instance_id')
-       .where('ec2_instances.terminated = 1  or jenkins_servers.id is null')
-  }
+  scope :with_ci_environment, -> { joins(:environments).where(environments: { environment_type: 'CI' }).where.not(environments: { chef_environment: nil }) }
+  scope :without_jenkins, -> { order(:name).select { |team| JenkinsServer.where(team_id: team.id).count == 0 } }
 
   scope :active, -> { where(disabled: [nil, false]).order(:name) }
   scope :inactive, -> { where(disabled: true).order(:name) }

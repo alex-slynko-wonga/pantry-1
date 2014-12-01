@@ -50,7 +50,7 @@ class JenkinsServersController < ApplicationController
   end
 
   def load_servers(user = current_user)
-    @user_teams = user.teams.with_environment.without_jenkins
+    @user_teams = user.teams.with_ci_environment.without_jenkins
     if @user_teams.empty?
       flash[:error] = 'You cannot create a server because you do not belong to this team'
       redirect_to jenkins_servers_path

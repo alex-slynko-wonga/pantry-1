@@ -13,5 +13,11 @@ RSpec.describe Team, type: :model do
       FactoryGirl.create(:jenkins_server, :terminated, team: subject)
       expect(Team.without_jenkins.count).to eq(1)
     end
+
+    it 'skips team with terminated and running jenkins_server' do
+      FactoryGirl.create(:jenkins_server, :terminated, team: subject)
+      FactoryGirl.create(:jenkins_server, team: subject)
+      expect(Team.without_jenkins.count).to eq(0)
+    end
   end
 end

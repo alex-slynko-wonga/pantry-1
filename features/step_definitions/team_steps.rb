@@ -11,6 +11,10 @@ Then(/^the team page has my info$/) do
   expect(page).to have_content User.last.name
 end
 
+Then(/^team "(.*?)" should not be duplicated$/) do |team_name|
+  expect(find(:select, Team).all(:option, team_name).count).to equal(1)
+end
+
 Given(/^the "(.*?)" team is inactive$/) do |name|
   team = Team.where(name: name).first || FactoryGirl.create(:team, name: name)
   team.update_attribute(:disabled, true)
