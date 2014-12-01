@@ -107,13 +107,14 @@ end
 
 When(/^an instance is created with ip "(.*?)"$/) do |ip|
   instance = Ec2Instance.last
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance))
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :ec2_booted, ip_address: ip, instance_id: 'i-12345', format: :json
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, joined: true, format: :json
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :create_dns_record, format: :json, dns: true
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, bootstrapped: true, format: :json
 end
 
@@ -135,27 +136,42 @@ end
 
 When(/^machine is shut down$/) do
   instance = Ec2Instance.last
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance))
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :shutdown, format: :json
 end
 
 When(/^machines with environment "(.*?)" is shut down$/) do |environment_name|
   environment_id = Environment.where(name: environment_name).first.id
   instances = Ec2Instance.where(environment_id: environment_id)
+  api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance))
   instances.each do |instance|
-    header 'X-Auth-Token', CONFIG['pantry']['api_key']
+    header 'X-Auth-Token', api_key.key
     put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :shutdown, format: :json
   end
 end
 
-When(/^I receive "(.*?)" event$/) do |name|
+When(/^I receive "(.*?)" event( with wrong api key)?( without api key permissions)?$/) do |name, api_key, access_denied|
   instance = Ec2Instance.last
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  if api_key
+    key = SecureRandom.uuid
+  else
+    if access_denied
+      key = FactoryGirl.create(:api_key, permissions: %w(wrong_permission)).key
+    else
+      key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance)).key
+    end
+  end
+  header 'X-Auth-Token', key
   @response = put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: name, format: :json
 end
 
 Then(/^server should respond with success$/) do
   expect(@response.status.to_s).to eq('204') # 204 No Content - http status code
+end
+
+Then(/^server should respond with fail$/) do
+  expect(@response.status.to_s).to eq('404') # 404 Not Found - http status code
 end
 
 Then(/^start request should be sent(?: (.*) times)?$/) do |requests_count|
@@ -169,15 +185,17 @@ end
 
 When(/^machine is started$/) do
   instance = Ec2Instance.last
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance), key: SecureRandom.uuid)
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :started, format: :json
 end
 
 When(/^machines with environment "(.*?)" is start$/) do |environment_name|
   environment_id = Environment.where(name: environment_name).first.id
   instances = Ec2Instance.where(environment_id: environment_id)
+  api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance), key: SecureRandom.uuid)
   instances.each do |instance|
-    header 'X-Auth-Token', CONFIG['pantry']['api_key']
+    header 'X-Auth-Token', api_key.key
     put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :started, format: :json
   end
 end
@@ -214,15 +232,16 @@ end
 
 When(/^an instance is destroyed$/) do
   instance = Ec2Instance.last
+  api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance api_chef_node))
   user_id = instance.user_id
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{instance.id}", user_id: user_id, terminated: true, format: :json
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  header 'X-Auth-Token', api_key.key
   delete "/api/chef_nodes/#{instance.id}", user_id: user_id, format: :json
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{instance.id}", user_id: user_id, joined: false, format: :json
   expect(instance.reload.state).to_not eq('terminated')
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{instance.id}", user_id: user_id, event: :terminated, dns: false, format: :json
 end
 
@@ -307,7 +326,8 @@ Then(/^request for resize should be sent$/) do
 end
 
 When(/^machine is resized with "(.*?)"$/) do |size|
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance))
+  header 'X-Auth-Token', api_key.key
   put "/api/ec2_instances/#{@ec2_instance.id}", user_id: @ec2_instance.user_id, event: :resized, flavor: size, format: :json
 end
 

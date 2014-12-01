@@ -14,7 +14,8 @@ end
 
 When(/^environment is created$/) do
   environment = Environment.last
-  header 'X-Auth-Token', CONFIG['pantry']['api_key']
+  api_key = FactoryGirl.create(:api_key, permissions: %w(api_team_chef_environment))
+  header 'X-Auth-Token', api_key.key
   put "/api/teams/#{environment.team_id}/chef_environments/#{environment.id}",
       environment_name: environment.name, chef_environment: environment.name, format: :json
 end
