@@ -1,6 +1,6 @@
 class JenkinsServersController < ApplicationController
   def index
-    @user_teams = current_user.teams
+    @user_teams = pundit_user.teams
     @current_team = @user_teams.find(params[:team_id]) if params[:team_id]
     @current_team = @user_teams.first if @user_teams && @user_teams.count == 1
     @jenkins_servers = JenkinsServer.includes(:ec2_instance)
@@ -13,7 +13,7 @@ class JenkinsServersController < ApplicationController
   end
 
   def new
-    return unless load_servers
+    return unless load_servers(pundit_user)
     @jenkins_server = JenkinsServer.new(team: @user_teams.first)
     authorize @jenkins_server
   end
@@ -36,7 +36,7 @@ class JenkinsServersController < ApplicationController
   end
 
   def show
-    @ec2_adapter = Wonga::Pantry::Ec2Adapter.new(current_user)
+    @ec2_adapter = Wonga::Pantry::Ec2Adapter.new(pundit_user)
     @jenkins_server = JenkinsServer.find(params[:id])
     @team = @jenkins_server.team
     @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance).references(:ec2_instance).merge(Ec2Instance.not_terminated)
@@ -49,8 +49,8 @@ class JenkinsServersController < ApplicationController
     params.require(:jenkins_server).permit(:team_id, :instance_role_id)
   end
 
-  def load_servers
-    @user_teams = current_user.teams.with_environment.without_jenkins
+  def load_servers(user = current_user)
+    @user_teams = user.teams.with_environment.without_jenkins
     if @user_teams.empty?
       flash[:error] = 'You cannot create a server because you do not belong to this team'
       redirect_to jenkins_servers_path

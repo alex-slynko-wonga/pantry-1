@@ -4,7 +4,7 @@ module ApplicationHelper
   end
 
   def link_to_instance_role(ec2_instance)
-    link_to_if policy(current_user).admin?, ec2_instance.instance_role.display_name, admin_instance_role_path(ec2_instance.instance_role)
+    link_to_if policy(pundit_user).admin?, ec2_instance.instance_role.display_name, admin_instance_role_path(ec2_instance.instance_role)
   end
 
   def link_to_user(user)
