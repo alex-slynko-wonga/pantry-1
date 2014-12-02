@@ -27,16 +27,22 @@
     %p= @environment.hidden
 
   .span8
-    - if @ec2_instances.length > 0
-      %h4 Instances
-      = render 'shared/ec2_instance_details_short', ec2_instances: @ec2_instances
+    .row-fluid
+      - if @ec2_instances.length > 0
+        %h4 Instances
+        = render 'shared/ec2_instance_details_short', ec2_instances: @ec2_instances
 
-    - if policy(@environment).update_instances?
+      - if policy(@environment).update_instances?
+        .pull-right
+          .btn-toolbar
+            .btn-group
+              = link_to('Start all instances', update_instances_environment_url(@environment, 'event' => 'start_instance'), method: :put, class: 'btn')
+              = link_to('Shutdown all instances', update_instances_environment_url(@environment, 'event' => 'shutdown_now'), method: :put, class: 'btn')
+
+    .row-fluid
       .pull-right
-        .btn-toolbar
-          .btn-group
-            = link_to('Start all instances', update_instances_environment_url(@environment, 'event' => 'start_instance'), method: :put, class: 'btn')
-            = link_to('Shutdown all instances', update_instances_environment_url(@environment, 'event' => 'shutdown_now'), method: :put, class: 'btn')
+        - if policy(@environment.ec2_instances.build).create?
+          %p= link_to "Launch New Instance", new_aws_ec2_instance_url(team_id: @environment.team.id)
 - if policy(@environment).hide?
   %button.button.close{data: {toggle: 'modal', target: '.deactivate_modal'}} Hide Environment
   .deactivate_modal.modal.fade{tabindex: -1, role: 'dialog',
