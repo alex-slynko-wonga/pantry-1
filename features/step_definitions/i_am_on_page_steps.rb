@@ -72,6 +72,10 @@ When(/^I am on the user page$/) do
   click_on User.first.name
 end
 
+When(/^I go into Jenkins server page$/) do
+  visit "/jenkins_servers/#{@jenkins_server.id}"
+end
+
 When(/^I go into Jenkins slave page$/) do
   visit "/jenkins_servers/#{@jenkins_slave.jenkins_server_id}/jenkins_slaves/#{@jenkins_slave.id}"
 end

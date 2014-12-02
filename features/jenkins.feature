@@ -49,6 +49,31 @@ Feature: Jenkins
     And I click "Shut down"
     Then I should see "Shutting down has started"
 
+  @javascript
+  Scenario: Resizing jenkins server
+    Given flavors are configured
+    And I have a jenkins server
+    When I go into Jenkins server page
+    And I click on jenkins server size
+    And I choose "m3.xlarge" flavor
+    Then "m3.xlarge" instance details should be present
+    When I click on "Resize"
+    Then I should see "Resizing" after page is updated
+    And request for resize should be sent
+
+  @javascript
+  Scenario: Resizing jenkins slave
+    Given flavors are configured
+    And I have a jenkins server
+    When I have a jenkins slave
+    And I go into Jenkins slave page
+    And I click on jenkins server size
+    And I choose "c3.2xlarge" flavor
+    Then "c3.2xlarge" instance details should be present
+    When I click on "Resize"
+    Then I should see "Resizing" after page is updated
+    And request for resize should be sent
+
   Scenario: Delete a slave
     Given I have a jenkins server
     And I have a jenkins slave

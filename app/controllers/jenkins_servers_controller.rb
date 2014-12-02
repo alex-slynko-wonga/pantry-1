@@ -37,6 +37,7 @@ class JenkinsServersController < ApplicationController
 
   def show
     @ec2_adapter = Wonga::Pantry::Ec2Adapter.new(pundit_user)
+    @price_list = price_list.retrieve_price_list(@ec2_adapter.flavors)
     @jenkins_server = JenkinsServer.find(params[:id])
     @team = @jenkins_server.team
     @jenkins_slaves = @jenkins_server.jenkins_slaves.includes(:ec2_instance).references(:ec2_instance).merge(Ec2Instance.not_terminated)
