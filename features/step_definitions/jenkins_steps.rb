@@ -45,6 +45,14 @@ When(/^I click on the jenkins slave$/) do
   click_on @jenkins_slave.id
 end
 
+When(/^I click on jenkins server size$/) do
+  find(:xpath, "//div[contains(text(),'#{@jenkins_server.ec2_instance.flavor}')]").click
+end
+
+When(/^I click on jenkins slave size$/) do
+  find(:xpath, "//div[contains(text(),'#{@jenkins_slave.ec2_instance.flavor}')]").click
+end
+
 Given(/^the team has a Jenkins server$/) do
   @jenkins_server = FactoryGirl.create(:jenkins_server,
                                        :running,

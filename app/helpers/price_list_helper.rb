@@ -21,7 +21,7 @@ module PriceListHelper
       end
       (input + render(partial: 'shared/ec2_instance_flavor_details')).html_safe
     elsif ec2_adapter
-      form.input(name, collection: ec2_adapter.flavors, wrapper_html: { class: 'instance_role_subvalue' }).html_safe
+      form.input(name, collection: ec2_adapter.flavors.keys, wrapper_html: { class: 'instance_role_subvalue' }).html_safe
     end
   end
 end
