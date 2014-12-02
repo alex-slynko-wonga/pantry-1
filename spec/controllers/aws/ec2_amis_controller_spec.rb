@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Aws::Ec2AmisController, type: :controller do
-  let(:user) { instance_double('User', id: 1) }
+  let(:user) { instance_double('User', id: 1, role: 'dev') }
   let(:ami_id) { 'ami-01010101' }
   let(:ami_attributes) do
     {

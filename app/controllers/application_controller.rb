@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
 
   def pundit_user
     user = User.where(username: params[:test_user]).first if current_user.role == 'superadmin' && params[:test_user]
-    user || current_user
+    @pundit_user = user || current_user
   end
 
   def human_errors(model)

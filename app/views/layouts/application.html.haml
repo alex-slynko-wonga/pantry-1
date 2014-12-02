@@ -18,9 +18,9 @@
             = navbar_link_to("Users", users_url)
             - if policy(Ec2InstanceCost).index?
               = navbar_link_to("Billing", ec2_instance_costs_url)
-            - if policy(current_user).see_queues?
+            - if policy(pundit_user).see_queues?
               = navbar_link_to("Queues", queues_url)
-            - if policy(current_user).admin?
+            - if policy(pundit_user).admin?
               %li.dropdown
                 %a{:href => "#", :class => "dropdown-toggle", "data-toggle" => "dropdown"}
                   Admin
