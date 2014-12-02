@@ -3,10 +3,12 @@ require 'spec_helper'
 RSpec.describe Api::CostsController, type: :controller do
   let(:ec2_instance) { FactoryGirl.create(:ec2_instance) }
   let(:bill_date) { '2013-08-31 23:59:00 +0100' }
+  let(:token) { SecureRandom.uuid }
 
   describe '#create' do
     before(:each) do
-      request.headers['X-Auth-Token'] = CONFIG['pantry']['api_key']
+      request.headers['X-Auth-Token'] = token
+      FactoryGirl.create(:api_key, key: token, permissions: %w(api_costs))
     end
 
     it 'should add the total cost' do

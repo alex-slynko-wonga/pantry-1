@@ -70,7 +70,7 @@ class EnvironmentsController < ApplicationController
     if params[:event] == 'shutdown_now'
       flash[:notice] = "Shutting down #{@changed_instances} of #{ec2_instances.count} instances"
     else
-      flash[:notice] = "Starting #{@changed_instances} of #{ec2_instances.count} instance"
+      flash[:notice] = "Starting #{@changed_instances} of #{ec2_instances.count} instances"
     end
 
     redirect_to @environment

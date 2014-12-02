@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141117124453) do
+ActiveRecord::Schema.define(version: 20141124150311) do
 
   create_table "admin_maintenance_windows", force: true do |t|
     t.string   "name"
@@ -33,6 +33,14 @@ ActiveRecord::Schema.define(version: 20141117124453) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "bootstrap_username"
+  end
+
+  create_table "api_keys", force: true do |t|
+    t.string   "name"
+    t.string   "key"
+    t.text     "permissions"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "ec2_instance_costs", force: true do |t|

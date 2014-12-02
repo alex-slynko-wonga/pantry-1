@@ -115,6 +115,18 @@ Feature: EC2 Instance
     When I receive "bootstrap" event
     Then server should respond with success
 
+  Scenario: Unable to bootstrap an instance with invalid api key
+    Given I have an EC2 instance in the team
+    And the instance is ready
+    When I receive "bootstrap" event with wrong api key
+    Then server should respond with fail
+
+  Scenario: Unable to bootstrap an instance without valid permissions
+    Given I have an EC2 instance in the team
+    And the instance is ready
+    When I receive "bootstrap" event without api key permissions
+    Then server should respond with fail
+
   @javascript
   Scenario: Machine status
     Given I have an EC2 instance in the team

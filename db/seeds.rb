@@ -5,3 +5,5 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+permissions = Rails.application.routes.named_routes.routes.values.select { |node| node.name[/(?=api)(?!api_key)/] }.map(&:name)
+ApiKey.create(name: 'Default key', key: CONFIG['pantry']['api_key'], permissions: permissions)

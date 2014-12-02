@@ -1,0 +1,8 @@
+= simple_form_for [:admin, @api_key] do |f|
+
+  = f.input :name
+  = f.input :key, input_html: { class: 'guid-input-field' }
+  = f.input :permissions, collection: @permissions, as: 'check_boxes'
+
+  %br
+  = f.submit
