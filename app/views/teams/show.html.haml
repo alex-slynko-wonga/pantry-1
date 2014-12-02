@@ -1,3 +1,5 @@
+= javascript_include_tag "specific/refresh_machine_status.js"
+
 %h1= @team.name
 - if policy(@team).edit?
   %p= link_to "Edit this team", edit_team_url(@team)
@@ -40,7 +42,7 @@
           .accordion-inner
             %h5 Jenkins server
             - if @jenkins_server
-              %table.table
+              %table.table.table_with_instances
                 %thead
                   %tr
                     %th ID
@@ -54,7 +56,7 @@
               %h5= link_to_new_slave(@jenkins_server)
               - if @jenkins_slaves && @jenkins_slaves.size > 0
                 %h5 Jenkins slaves
-                %table.table
+                %table.table.table_with_instances
                   %thead
                     %tr
                     %th ID

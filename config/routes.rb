@@ -43,6 +43,9 @@ Wonga::Pantry::Application.routes.draw do
       member do
         delete :cleanup
       end
+      collection do
+        get :check_ec2_instance_state
+      end
     end
     resources :ec2_amis, only: [:show]
   end

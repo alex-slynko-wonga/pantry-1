@@ -52,6 +52,11 @@ Feature: Jenkins
     Then I should be redirected to the Jenkins server page
     And I should see the slaves listing
 
+    When an instance is created with ip "123.456.7.8"
+    And I wait 5 seconds
+    Then I should see "Ready"
+    And I should not see "Booting"
+
   Scenario: Starting a shut down slave
     Given I have a jenkins server
     And I have a jenkins slave

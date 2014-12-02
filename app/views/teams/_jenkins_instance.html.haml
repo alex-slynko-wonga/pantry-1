@@ -4,7 +4,7 @@
     %td= link_to jenkins_instance.ec2_instance.name, jenkins_instance
   - else
     %td= link_to jenkins_instance.ec2_instance.name, [@jenkins_server, jenkins_instance]
-  %td= jenkins_instance.ec2_instance.human_status
+  %td.col_status{data: {ec2_id: jenkins_instance.ec2_instance.id}}= jenkins_instance.ec2_instance.human_status
   %td= os_image(jenkins_instance.ec2_instance.platform)
   - if jenkins_instance.instance_of? JenkinsServer
     %td= link_to_instance(jenkins_instance.ec2_instance)

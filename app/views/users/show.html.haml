@@ -1,3 +1,5 @@
+= javascript_include_tag "specific/refresh_machine_status.js"
+
 .row
   .span4
     = image_tag(@user.image_url(440), alt: 'Gravatar', size: "220x220")
@@ -13,7 +15,7 @@
   .row
     %h4
       Instances
-    %table.table
+    %table.table.table_with_instances
       %thead
         %tr
           %th #

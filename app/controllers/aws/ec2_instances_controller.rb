@@ -118,6 +118,11 @@ class Aws::Ec2InstancesController < ApplicationController
     end
   end
 
+  def check_ec2_instance_state
+    @ec2_instance = Ec2Instance.find params[:id]
+    render json: @ec2_instance.human_status.to_json
+  end
+
   private
 
   def ec2_instance_params

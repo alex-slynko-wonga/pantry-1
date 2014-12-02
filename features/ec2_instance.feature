@@ -259,3 +259,18 @@ Feature: EC2 Instance
     Then option "Shutdown" should be present near instance
     And I should see "Ready"
 
+  @javascript
+  Scenario: Update instances statuses without page refresh
+    Given I have an EC2 instance with "TEST1" name in the team
+    And I have an EC2 instance with "TEST2" name in the team
+    When I am on the team page
+    Then I should see "Ready" status near "TEST1" name
+    Then I should see "Ready" status near "TEST2" name
+
+    When the instance is terminated
+    Then I should see "Terminated" status near "TEST2" name after 5 seconds
+    Then I should see "Ready" status near "TEST1" name
+
+
+
+

@@ -1,3 +1,5 @@
+= javascript_include_tag "specific/refresh_machine_status.js"
+
 .jenkins_server{data: { ng_controller: "Ec2InstanceCtrl", instance_id: @ec2_instance.instance_id}}
   %h1 #{@team.name}'s jenkins server
   = link_to "Go back to #{@team.name}", @team

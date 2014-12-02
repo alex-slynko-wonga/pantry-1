@@ -28,7 +28,6 @@ Then(/^I should see the slaves listing$/) do
   expect(page).to have_content @jenkins_slave.ec2_instance.instance_id
   expect(page).to have_content @jenkins_slave.ec2_instance.name
   expect(page).to have_content @jenkins_slave.ec2_instance.ami
-  expect(page).to have_content @jenkins_slave.ec2_instance.instance_id
   expect(page).to have_content @jenkins_slave.ec2_instance.human_status
 end
 

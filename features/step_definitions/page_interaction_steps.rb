@@ -74,3 +74,12 @@ end
 When(/^I click on "(.*?)" icon$/) do |alt|
   find(:xpath, "//img[@alt = '#{alt}']/parent::a").click
 end
+
+When(/^I wait (\d+) seconds?$/) do |seconds|
+  sleep seconds.to_i
+end
+
+Then(/^I should see "(.*?)" status near "(.*?)" name(?: after (\d+) seconds|)$/) do |status, name, seconds|
+  sleep seconds.to_i if seconds
+  expect(find(:xpath, "//tr/td/a[text()='#{name}']/../../td[text()='#{status}']")).to be_present
+end
