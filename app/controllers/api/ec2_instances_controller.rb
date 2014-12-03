@@ -15,4 +15,16 @@ class Api::Ec2InstancesController < ApiController
     ec2_instance.update_info
     respond_with({ msg: 'success' }, location: aws_ec2_instance_url)
   end
+
+  def start
+    ec2_instance = Ec2Instance.find(params[:id])
+    Wonga::Pantry::Ec2Resource.new(ec2_instance).start_automatically
+    respond_with({ msg: 'success' }, location: aws_ec2_instance_url)
+  end
+
+  def shut_down
+    ec2_instance = Ec2Instance.find(params[:id])
+    Wonga::Pantry::Ec2Resource.new(ec2_instance).stop_automatically
+    respond_with({ msg: 'success' }, location: aws_ec2_instance_url)
+  end
 end

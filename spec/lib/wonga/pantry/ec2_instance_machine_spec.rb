@@ -76,9 +76,6 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
 
     context 'when instance is protected' do
       let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: true, state: 'ready') }
-      # before(:each) do
-      #  ec2_instance = FactoryGirl.build(:ec2_instance, protected: true, state: 'ready')
-      # end
 
       it 'does not start the shut down process' do
         expect(subject.can_termination?).to be_falsey
@@ -89,11 +86,30 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
     end
   end
 
-  describe 'start a instance' do
+  describe 'shut down automatically an instance' do
+    context 'instance not protected' do
+      let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: false, state: 'ready') }
+
+      it 'starts the shut down automatically process' do
+        ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
+        move_status [:ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record, :bootstrap]
+        expect(subject).to be_ready
+        subject.shutdown_now_automatically
+        expect(subject).to be_shutting_down_automatically
+      end
+
+      it 'changes the status to shutdown_automatically' do
+        ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
+        move_status [:ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record, :bootstrap, :shutdown_now_automatically]
+        expect(subject).to be_shutting_down_automatically
+        subject.shutdown
+        expect(subject).to be_shutdown_automatically
+      end
+    end
+  end
+
+  describe 'start an instance' do
     let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: true, state: 'shutdown') }
-    # before(:each) do
-    #  ec2_instance = FactoryGirl.build(:ec2_instance, protected: true, state: 'shutdown')
-    # end
 
     it 'starts an instance' do
       ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
@@ -103,6 +119,40 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
       ]
       expect(subject).to be_shutdown
       subject.start_instance
+      expect(subject).to be_starting
+    end
+
+    it 'starts an instance from shutdown_automatically state' do
+      ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true, state: 'shutdown_automatically' }
+      move_status [
+        :ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record, :bootstrap, :shutdown_now_automatically
+      ]
+      expect(subject).to be_shutdown_automatically
+      subject.start_instance
+      expect(subject).to be_starting
+    end
+
+    it 'puts the status to ready' do
+      ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
+      move_status [
+        :ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record,
+        :bootstrap, :shutdown_now, :shutdown, :start_instance
+      ]
+      expect(subject).to be_starting
+      subject.started
+      expect(subject).to be_ready
+    end
+  end
+
+  describe 'start an instance automatically' do
+    let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: true, state: 'shutdown_automatically') }
+
+    it 'starts an instance from shutdown_automatically state' do
+      move_status [
+        :ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record, :bootstrap, :shutdown_now_automatically
+      ]
+      expect(subject).to be_shutdown_automatically
+      subject.start_instance_automatically
       expect(subject).to be_starting
     end
 

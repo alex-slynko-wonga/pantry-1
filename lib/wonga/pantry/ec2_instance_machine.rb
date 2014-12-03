@@ -35,10 +35,20 @@ module Wonga
 
         event :shutdown do
           transition shutting_down: :shutdown
+          transition shutting_down_automatically: :shutdown_automatically
+        end
+
+        event :shutdown_now_automatically do
+          transition ready: :shutting_down_automatically
         end
 
         event :start_instance do
           transition shutdown: :starting
+          transition shutdown_automatically: :starting
+        end
+
+        event :start_instance_automatically do
+          transition shutdown_automatically: :starting
         end
 
         event :started do
@@ -51,7 +61,8 @@ module Wonga
         end
 
         event :termination do
-          transition [:ready, :shutting_down, :shutdown, :starting, :resizing] => :terminating, if: :instance_unprotected
+          transition [:ready, :shutting_down, :shutting_down_automatically, :shutdown,
+                      :shutdown_automatically, :starting, :resizing] => :terminating, if: :instance_unprotected
         end
 
         event :terminated do
@@ -61,7 +72,7 @@ module Wonga
         end
 
         event :resize do
-          transition [:ready, :shutdown, :shutting_down] => :resizing
+          transition [:ready, :shutdown, :shutting_down, :shutdown_automatically, :shutting_down_automatically] => :resizing
         end
 
         event :resized do

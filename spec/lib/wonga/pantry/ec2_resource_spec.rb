@@ -94,6 +94,19 @@ RSpec.describe Wonga::Pantry::Ec2Resource do
     end
   end
 
+  context '#stop_automatically' do
+    let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true) }
+
+    before(:each) do
+      expect(Wonga::Pantry::Ec2InstanceState).to receive(:new).with(ec2_instance, user, 'event' => 'shutdown_now_automatically').and_return(ec2_instance_state)
+    end
+
+    it 'sends a stop message via sns publisher' do
+      expect(stop_sns).to receive(:publish_message)
+      expect(subject.stop_automatically).to be_truthy
+    end
+  end
+
   context '#start' do
     let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true) }
 
@@ -104,6 +117,20 @@ RSpec.describe Wonga::Pantry::Ec2Resource do
     it 'sends a start message via sns publisher' do
       expect(start_sns).to receive(:publish_message)
       expect(subject.start).to be_truthy
+    end
+  end
+
+  context '#start_automatically' do
+    let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true) }
+
+    before(:each) do
+      expect(Wonga::Pantry::Ec2InstanceState).to receive(:new).with(ec2_instance, user, 'event' => 'start_instance_automatically')
+                                                 .and_return(ec2_instance_state)
+    end
+
+    it 'sends a start message via sns publisher' do
+      expect(start_sns).to receive(:publish_message)
+      expect(subject.start_automatically).to be_truthy
     end
   end
 end

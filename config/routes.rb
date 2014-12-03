@@ -14,7 +14,7 @@ Wonga::Pantry::Application.routes.draw do
     resources :ec2_instances, only: [:update] do
       post :update_from_aws, on: :collection
       member do
-        post :update_info_from_aws
+        post :update_info_from_aws, :start, :shut_down
       end
     end
     resources :jenkins_slaves, only: [:update]
