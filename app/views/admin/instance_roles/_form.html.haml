@@ -4,6 +4,7 @@
   = f.association :ami, collection: @ami, as: :grouped_select, group_method: :second
 
   = f.input :chef_role
+  = f.input :iam_instance_profile
   = f.input :run_list, as: :text
   = flavor_with_size_input :instance_size, f, @price_list, @ec2_adapter
 

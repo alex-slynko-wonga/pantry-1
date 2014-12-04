@@ -23,6 +23,11 @@
       = @instance_role.chef_role
   .row-fluid
     .span2
+      IAM:
+    .span2
+      = @instance_role.iam_instance_profile
+  .row-fluid
+    .span2
       Run list:
     .span2
       = @instance_role.run_list

@@ -40,7 +40,8 @@ class InstanceRole < ActiveRecord::Base
       security_group_ids: security_group_ids,
       instance_role: self,
       volume_size: disk_size,
-      platform: ami.platform
+      platform: ami.platform,
+      iam_instance_profile: iam_instance_profile
     }
   end
 

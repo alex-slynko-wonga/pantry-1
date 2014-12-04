@@ -25,6 +25,7 @@ class Wonga::Pantry::BootMessage
 
     bootstrap_username = bootstrap_message(instance.ami)
     message = message.merge(bootstrap_username: bootstrap_username) unless bootstrap_username.nil? || bootstrap_username.empty?
+    message = message.merge(iam_instance_profile: instance.iam_instance_profile) if instance.iam_instance_profile
     message
   end
 

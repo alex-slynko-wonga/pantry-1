@@ -22,6 +22,17 @@ Feature: EC2 Instance
     And an instance with ami-123 build should start
 
   @javascript
+  Scenario: Creating a new instance with custom IAM
+    Given I am in the "Pantry" team
+    And "Pantry" team has an "INT" environment with name "TEST"
+    And I am on the ec2 instance new page
+    When I enter all required data for ec2
+    And I entered "test_iam" in iam field
+    When I create machine
+    Then I should see a flash message with "Ec2 Instance request succeeded."
+    And an instance with "test_iam" iam build should start
+
+  @javascript
   Scenario: Fill bootstrap username for linux
     Given I am on the AMIs page
     And I am in the "test" team
@@ -52,6 +63,19 @@ Feature: EC2 Instance
     And I click on "Create"
     And I click on "MyInstanceRole"
     Then I should be redirected to instance role "MyInstanceRole" page
+
+  @javascript
+  Scenario: Creating a new instance with instance role, iam should be overridden
+    Given "MyInstanceRole" instance role with "existed-iam" Iam profile
+    And I am in the "TeamName" team
+    And "TeamName" team has an "INT" environment with name "TEST"
+    When I request an EC2 instance
+    And I enter all required data for ec2
+    And I entered "test_iam" in iam field
+    And I choose "MyInstanceRole" instance role
+    When I create machine
+    Then I should see a flash message with "Ec2 Instance request succeeded."
+    And an instance with "existed-iam" iam build should start
 
   @javascript
   Scenario: Creating a new instance with disabled role

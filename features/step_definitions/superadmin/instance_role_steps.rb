@@ -9,6 +9,7 @@ Then(/^I should see the "(.*?)" role details$/) do |name|
   expect(page.text).to include('my-chef-role')
   expect(page.text).to include(ami)
   expect(page.text).to include(instance_role.instance_size)
+  expect(page.text).to include('existed-iam')
 end
 
 When(/^I enable the role$/) do
@@ -33,6 +34,7 @@ def fill_in_default_role_values(name)
   fill_in 'Name', with: name
   find(:select, 'Ami').all(:option).last.select_option
   fill_in 'Chef role', with: 'my-chef-role'
+  fill_in 'Iam instance profile', with: 'existed-iam'
   fill_in 'Run list', with: 'role[some]'
   find(:select, 'Instance size').all(:option).last.select_option
   fill_in 'Disk size', with: 80

@@ -64,11 +64,11 @@ class Wonga::Pantry::Ec2Resource
   def base_message
     user_id = @user.id if @user
     {
-      hostname:    @ec2_instance.name,
-      domain:      @ec2_instance.domain,
-      instance_id: @ec2_instance.instance_id,
-      id:          @ec2_instance.id,
-      user_id:     user_id
+      hostname:             @ec2_instance.name,
+      domain:               @ec2_instance.domain,
+      instance_id:          @ec2_instance.instance_id,
+      id:                   @ec2_instance.id,
+      user_id:              user_id
     }
   end
 end

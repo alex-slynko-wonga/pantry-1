@@ -42,7 +42,8 @@ class Admin::InstanceRolesController < Admin::AdminController
   private
 
   def instance_role_attributes
-    params.require(:instance_role).permit(:name, :ami_id, :chef_role, :run_list, :instance_size, :disk_size, :enabled, security_group_ids: [])
+    params.require(:instance_role).permit(:name, :ami_id, :chef_role, :iam_instance_profile,
+                                          :run_list, :instance_size, :disk_size, :enabled, security_group_ids: [])
   end
 
   def initialize_ec2_adapter

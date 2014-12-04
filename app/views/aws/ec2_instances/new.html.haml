@@ -42,6 +42,9 @@
             .span3
               #platform{data: {value: :platform}}
 
+  - if policy(@ec2_instance).custom_iam?
+    = f.input :iam_instance_profile, wrapper_html: { class: 'instance_role_subvalue' }
+
   = flavor_with_size_input f, @price_list, @ec2_adapter
 
   = f.input :subnet_id, collection: @ec2_adapter.subnets, wrapper_html: { class: 'instance_role_subvalue' }

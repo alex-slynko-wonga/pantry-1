@@ -25,7 +25,7 @@ RSpec.describe 'aws/ec2_instances/new.html.haml', type: :view do
     assign(:environments, environments)
     assign(:instance_roles, instance_roles)
     assign(:grouped_environments, grouped_environments)
-    expect(view).to receive(:policy).and_return(instance_double(Ec2InstancePolicy, custom_ami?: false))
+    allow(view).to receive(:policy).and_return(instance_double(Ec2InstancePolicy, custom_ami?: false, custom_iam?: false))
   end
 
   context 'when team exists' do

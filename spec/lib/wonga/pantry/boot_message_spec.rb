@@ -23,6 +23,13 @@ RSpec.describe Wonga::Pantry::BootMessage do
       end
     end
 
+    context 'when custom IAM exists' do
+      it 'adds iam_instance_profile to message' do
+        instance.iam_instance_profile = 'test_iam_profile'
+        expect(boot_message).to include(iam_instance_profile: 'test_iam_profile')
+      end
+    end
+
     context '#bootstrap_username' do
       let(:bootstrap_username) { 'CentOS' }
       let(:ami) { instance_double('Ami', bootstrap_username: bootstrap_username) }

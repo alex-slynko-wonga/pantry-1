@@ -34,6 +34,9 @@
   .row-fluid
     .span2 AMI ID:
     .span5= ec2_instance.ami
+  .row-fluid
+    .span2 IAM:
+    .span5= ec2_instance.iam_instance_profile
   .row-fluid{data: {ng_hide: 'editing', ng_init: 'editing=false'}}
     .span2 Flavor:
     .span5{data: {ng_click: 'editing = policy.resize', ng_bind: 'ec2_instance.flavor'}}

@@ -7,6 +7,7 @@
       %th Name
       %th AMI
       %th Chef role
+      %th IAM
       %th Instance size
       %th Disk size
       %th Enabled
@@ -17,6 +18,7 @@
         %td= link_to instance_role.name, edit_admin_instance_role_url(instance_role)
         %td= instance_role.ami.name
         %td= instance_role.chef_role
+        %td= instance_role.iam_instance_profile
         %td= instance_role.instance_size
         %td= instance_role.disk_size
         %td= instance_role.enabled

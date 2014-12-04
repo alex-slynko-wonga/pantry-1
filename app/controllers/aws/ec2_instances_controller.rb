@@ -127,7 +127,7 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def ec2_instance_params
     params.require(:ec2_instance).permit(:name, :ami, :instance_role_id, :flavor, :subnet_id, :domain, :environment_id,
-                                         :run_list, security_group_ids: [])
+                                         :run_list, :iam_instance_profile, security_group_ids: [])
   end
 
   def initialize_ec2_info(user = pundit_user)

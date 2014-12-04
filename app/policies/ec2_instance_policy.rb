@@ -32,6 +32,10 @@ class Ec2InstancePolicy < ApplicationPolicy
     god_mode? || team_member?
   end
 
+  def custom_iam?
+    god_mode?
+  end
+
   private
 
   def can_move_with_event(event)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141124150311) do
+ActiveRecord::Schema.define(version: 20141204103033) do
 
   create_table "admin_maintenance_windows", force: true do |t|
     t.string   "name"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20141124150311) do
     t.boolean  "protected"
     t.integer  "environment_id"
     t.integer  "instance_role_id"
+    t.string   "iam_instance_profile"
   end
 
   add_index "ec2_instances", ["instance_role_id"], name: "index_ec2_instances_on_instance_role_id", using: :btree
@@ -104,16 +105,17 @@ ActiveRecord::Schema.define(version: 20141124150311) do
   end
 
   create_table "instance_roles", force: true do |t|
-    t.string   "name",               null: false
-    t.integer  "ami_id",             null: false
+    t.string   "name",                 null: false
+    t.integer  "ami_id",               null: false
     t.string   "security_group_ids"
-    t.string   "chef_role",          null: false
+    t.string   "chef_role",            null: false
     t.string   "run_list"
-    t.string   "instance_size",      null: false
-    t.integer  "disk_size",          null: false
-    t.boolean  "enabled",            null: false
+    t.string   "instance_size",        null: false
+    t.integer  "disk_size",            null: false
+    t.boolean  "enabled",              null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "iam_instance_profile"
   end
 
   add_index "instance_roles", ["ami_id"], name: "index_instance_roles_on_ami_id", using: :btree

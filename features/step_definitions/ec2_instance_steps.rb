@@ -93,6 +93,10 @@ When(/^I entered ami\-(\w+) in custom ami field$/) do |id|
   fill_in 'Name', with: 'new-instance'
 end
 
+When(/^I entered "(.*?)" in iam field$/) do |iam|
+  fill_in 'Iam instance profile', with: "#{iam}"
+end
+
 Then(/^the instance start using "(.*?)" bootstrap username$/) do |bootstrap_username|
   expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn')) do |args|
     message = JSON.parse(JSON.parse(args[:message])['default'])
@@ -100,10 +104,11 @@ Then(/^the instance start using "(.*?)" bootstrap username$/) do |bootstrap_user
   end
 end
 
-Then(/^an instance (?:with ami\-(\w+) )?build should start$/) do |ami|
+Then(/^an instance (?:with ami\-(\w+) )?(?:with "(.*?)" iam )?build should start$/) do |ami, iam|
   expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn')) do |args|
     message = JSON.parse(JSON.parse(args[:message])['default'])
     expect(message['ami']).to match(ami) if ami
+    expect(message['iam_instance_profile']).to match(iam) if iam
     expect(message['block_device_mappings']).to be_all { |hash| hash['ebs']['volume_size'].present? }
     expect(message['block_device_mappings'].size).to be > 0
   end
