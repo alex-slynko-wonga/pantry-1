@@ -84,6 +84,10 @@ When(/^I enter all required data for ec2$/) do
   fill_in_default_values('new-instance')
 end
 
+When(/^I enter "(.*?)" in name field$/) do |name|
+  fill_in 'Name', with: name
+end
+
 When(/^I entered ami\-(\w+) in custom ami field$/) do |id|
   fill_in 'Custom AMI', with: "ami-#{id}"
   fill_in 'Name', with: 'new-instance'

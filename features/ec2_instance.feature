@@ -138,8 +138,13 @@ Feature: EC2 Instance
   Scenario: Cannot select more than four security groups
     Given I am in the "Pantry" team
     And I visit ec2 instance new page
+    And I enter all required data for ec2
+    And I enter "" in name field
     When I select four security groups
     Then I should not be able to add a fifth security group
+    When I click on "Create"
+    Then I should see "Name can't be blank"
+    And I should not be able to add a fifth security group
 
   @javascript
   Scenario: Destroying an instance

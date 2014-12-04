@@ -1,7 +1,8 @@
 $(document).ready ->
+  updateSecurityGroups()
+
   $("input[type=checkbox][name='ec2_instance[security_group_ids][]']").click ->
-    bol = $("input[type=checkbox][name='ec2_instance[security_group_ids][]']:checked").length >= 4
-    $("input[type=checkbox][name='ec2_instance[security_group_ids][]']").not(":checked").attr("disabled", bol)
+    updateSecurityGroups()
 
   $("select[id=ec2_instance_environment_id]").change ->
     team_name = $(this.options[this.selectedIndex]).closest('optgroup').prop('label')
@@ -33,3 +34,7 @@ $(document).ready ->
       $(".instance_flavor_details .ram").text(flavor_data.data('ram'))
     else
       $(".instance_flavor_details").hide()
+
+updateSecurityGroups = ->
+  bol = $("input[type=checkbox][name='ec2_instance[security_group_ids][]']:checked").length >= 4
+  $("input[type=checkbox][name='ec2_instance[security_group_ids][]']").not(":checked").attr("disabled", bol)
