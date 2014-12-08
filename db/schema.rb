@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141204103033) do
+ActiveRecord::Schema.define(version: 20141208124147) do
 
   create_table "admin_maintenance_windows", force: true do |t|
     t.string   "name"
@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 20141204103033) do
     t.datetime "updated_at"
     t.string   "name"
     t.string   "role"
+    t.datetime "last_seen_at"
   end
 
 end

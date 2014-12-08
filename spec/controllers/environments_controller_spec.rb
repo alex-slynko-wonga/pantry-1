@@ -6,9 +6,7 @@ RSpec.describe EnvironmentsController, type: :controller do
 
   before :each do
     allow(Wonga::Pantry::ChefUtility).to receive(:new).and_return(chef_utility)
-  end
-
-  before(:each) do
+    allow(subject).to receive(:signed_in?).and_return(true)
     allow(@controller).to receive(:current_user).and_return(user)
   end
 

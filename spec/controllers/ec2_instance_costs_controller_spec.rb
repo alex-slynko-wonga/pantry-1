@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe Ec2InstanceCostsController, type: :controller do
+  before(:each) do
+    allow(subject).to receive(:signed_in?).and_return(true)
+  end
 
   describe "GET 'index'" do
     before(:each) do

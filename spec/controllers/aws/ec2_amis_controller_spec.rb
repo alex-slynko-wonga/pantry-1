@@ -10,6 +10,10 @@ RSpec.describe Aws::Ec2AmisController, type: :controller do
     }
   end
 
+  before(:each) do
+    allow(subject).to receive(:signed_in?).and_return(true)
+  end
+
   describe "GET 'show'" do
     let(:adapter) { instance_double('Wonga::Pantry::Ec2Adapter', get_ami_attributes: ami_attributes) }
 
