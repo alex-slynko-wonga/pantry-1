@@ -43,7 +43,7 @@
               #platform{data: {value: :platform}}
 
   - if policy(@ec2_instance).custom_iam?
-    = f.input :iam_instance_profile, wrapper_html: { class: 'instance_role_subvalue' }
+    = f.input :iam_instance_profile, collection: @iam_list, wrapper_html: { class: 'instance_role_subvalue' }
 
   = flavor_with_size_input f, @price_list, @ec2_adapter
 

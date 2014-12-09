@@ -24,6 +24,11 @@ Given(/^queues and topics are configured$/) do
   stub_const('CONFIG', config)
 end
 
+Given(/^I have "(.*?)" IAM$/) do |iam|
+  stub_iam(iam) if iam
+  stub_iam unless iam
+end
+
 When(/^flavors are configured$/) do
   config = CONFIG.deep_dup
   config['aws']['ebs'] = { 'c3.2xlarge' => 10, 'm3.xlarge' => 500, 't1.micro' => 80 }
@@ -94,7 +99,7 @@ When(/^I entered ami\-(\w+) in custom ami field$/) do |id|
 end
 
 When(/^I entered "(.*?)" in iam field$/) do |iam|
-  fill_in 'Iam instance profile', with: "#{iam}"
+  select "#{iam}", from: 'Iam instance profile'
 end
 
 Then(/^the instance start using "(.*?)" bootstrap username$/) do |bootstrap_username|

@@ -38,3 +38,10 @@ def stub_sqs
   resp[:queue_url] = 'https://some_url.example.com'
   allow(sqs_client).to receive(:send_message).and_return(AWS::Core::Response.new)
 end
+
+def stub_iam(role_name = 'test_iam')
+  iam_client = AWS::IAM.new.client
+  iam = iam_client.new_stub_for(:list_roles)
+  iam[:roles] = [{ role_name: role_name }]
+  allow(iam_client).to receive(:list_roles).and_return(iam)
+end

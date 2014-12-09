@@ -8,6 +8,8 @@ class Aws::Ec2InstancesController < ApplicationController
                     else
                       Ec2Instance.new(team_id: params[:team_id])
                     end
+    roles = Wonga::Pantry::AWSAdapter.new.iam_role_list
+    @iam_list = roles.map(&:role_name) if roles
 
     authorize @ec2_instance
   end

@@ -25,6 +25,7 @@ Feature: EC2 Instance
   Scenario: Creating a new instance with custom IAM
     Given I am in the "Pantry" team
     And "Pantry" team has an "INT" environment with name "TEST"
+    And I have "test_iam" IAM
     And I am on the ec2 instance new page
     When I enter all required data for ec2
     And I entered "test_iam" in iam field
@@ -69,6 +70,7 @@ Feature: EC2 Instance
     Given "MyInstanceRole" instance role with "existed-iam" Iam profile
     And I am in the "TeamName" team
     And "TeamName" team has an "INT" environment with name "TEST"
+    And I have "test_iam" IAM
     When I request an EC2 instance
     And I enter all required data for ec2
     And I entered "test_iam" in iam field

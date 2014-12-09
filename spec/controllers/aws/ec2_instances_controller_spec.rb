@@ -6,11 +6,13 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
   let(:user) { FactoryGirl.create(:user, team: team) }
   let(:ec2_instance) { FactoryGirl.create(:ec2_instance, :running, team: team) }
   let(:instance_price) { instance_double(Wonga::Pantry::PricingList, retrieve_price_list: nil) }
+  let(:aws_adapter) { instance_double('Wonga::Pantry::AWSAdapter', iam_role_list: nil) }
 
   before(:each) do
     session[:user_id] = user.id
     allow(controller).to receive(:price_list).and_return(instance_price)
     allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
+    allow(Wonga::Pantry::AWSAdapter).to receive(:new).and_return(aws_adapter)
   end
 
   let(:team) { FactoryGirl.create(:team) }
