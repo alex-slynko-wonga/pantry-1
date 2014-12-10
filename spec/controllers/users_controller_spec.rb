@@ -1,5 +1,8 @@
 RSpec.describe UsersController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
+  before(:each) do
+    allow(subject).to receive(:signed_in?).and_return(true)
+  end
 
   describe 'GET #index' do
     it 'returns http success' do

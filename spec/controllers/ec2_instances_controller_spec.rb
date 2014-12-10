@@ -2,6 +2,9 @@ require 'spec_helper'
 
 RSpec.describe Ec2InstancesController, type: :controller do
   let(:instance) { FactoryGirl.create(:ec2_instance) }
+  before(:each) do
+    allow(subject).to receive(:signed_in?).and_return(true)
+  end
 
   describe "GET 'aws_status'" do
     it 'returns object with instance status' do

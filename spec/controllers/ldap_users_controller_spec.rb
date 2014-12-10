@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 RSpec.describe LdapUsersController, type: :controller do
+  before(:each) do
+    allow(subject).to receive(:signed_in?).and_return(true)
+  end
+
   context '#index' do
     let(:name) { 'Alex' }
     let(:username) { 'alex' }

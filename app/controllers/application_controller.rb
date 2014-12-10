@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in?
-    session[:user_id].present?
+    current_user.update_attribute(:last_seen_at, Time.current) if session[:user_id].present?
   end
 
   def signed_in_user
