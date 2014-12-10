@@ -9,6 +9,8 @@
     %p= @user.username
     %strong Email:
     %p= mail_to @user.email
+    %strong Last Activity:
+    %p= @user.last_seen_at
     - if policy(@user).edit?
       = link_to 'Edit', edit_user_url(@user)
 - if @user.ec2_instances.present?
