@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe Wonga::Pantry::PricingList do
-
   let(:flavors) { { 't1.supermicro' => 10 } }
   let(:virtual_cores) { 1 }
   let(:price) { 0.123 }

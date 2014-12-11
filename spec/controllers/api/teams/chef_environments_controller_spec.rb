@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Api::Teams::ChefEnvironmentsController, type: :controller do
-
   describe "PUT 'update'" do
-
     let(:environment) { FactoryGirl.create(:environment, chef_environment: nil) }
     let(:params) { { team_id: environment.team_id, id: environment.id, chef_environment: 'env_name', format: 'json' } }
     let(:token) { SecureRandom.uuid }

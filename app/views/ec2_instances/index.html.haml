@@ -1,0 +1,28 @@
+%h1 Instances
+
+%table.table.table_with_instances.table-hover.table-striped.sortable-datatable
+  %thead
+    %tr
+      %th ID
+      %th Name
+      %th Status
+      %th OS
+      %th AMI ID
+      %th Instance role
+      %th Team
+      %th User
+      %th Environment
+  - @ec2_instances.each do |instance|
+    %tr
+      %td= instance.id
+      %td= link_to instance.name, url_for([:aws, instance])
+      %td.col_status{data: {ec2_id: instance.id}}= instance.human_status
+      %td= os_image(instance.platform)
+      %td= instance.ami
+      - if instance.instance_role_id.nil?
+        %td= '-'
+      - else
+        %td= link_to_instance_role(instance)
+      %td= link_to instance.team.name, team_url(instance.team.id)
+      %td= link_to instance.user.username, user_url(instance.user.id)
+      %td= link_to instance.environment.human_name, environment_url(instance.environment.id)

@@ -211,7 +211,6 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
         expect(response).to redirect_to [:aws, ec2_instance]
         expect(ec2_resource).to have_received(:start)
       end
-
     end
   end
 end

@@ -1,4 +1,6 @@
 ---
+exclude: 'vendor/assets/stylesheets/**'
+
 linters:
   Comment:
     enabled: false

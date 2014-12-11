@@ -3,7 +3,6 @@ require 'spec_helper'
 RSpec.describe JenkinsSlavePolicy do
   subject { described_class.new(user, JenkinsSlave.new(jenkins_server: jenkins_server)) }
   permissions :create? do
-
     context 'when jenkins server is ready' do
       let(:jenkins_server) { FactoryGirl.build(:jenkins_server, :running) }
 

@@ -19,7 +19,6 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe Admin::MaintenanceWindowsController, type: :controller do
-
   # Admin::MaintenanceWindow. As you add validations to Admin::MaintenanceWindow, be sure to
   # adjust the attributes here as well.
   let(:some_admin) { FactoryGirl.create :superadmin }
@@ -128,5 +127,4 @@ RSpec.describe Admin::MaintenanceWindowsController, type: :controller do
       end
     end
   end
-
 end

@@ -4,7 +4,6 @@ RSpec.describe JenkinsServerPolicy do
   let(:team) { Team.new }
   subject { described_class.new(user, JenkinsServer.new(team: team)) }
   permissions :create? do
-
     let(:jenkins_server) { FactoryGirl.build(:jenkins_server, :running) }
 
     context 'for superadmin' do
