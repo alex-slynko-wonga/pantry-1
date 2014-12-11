@@ -8,6 +8,7 @@ class Wonga::Pantry::BootMessage
       flavor:                     instance.flavor,
       ami:                        instance.ami,
       team_id:                    instance.team_id,
+      team_name:                  instance.team.name,
       user_id:                    instance.user_id,
       subnet_id:                  instance.subnet_id,
       security_group_ids:         security_group_ids(instance),

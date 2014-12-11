@@ -37,7 +37,6 @@ group :development do
   gem 'guard-migrate'
   gem 'guard-rspec', '>= 4.2.6'
   gem 'guard-rubocop'
-  gem 'guard-scss-lint'
   gem 'letter_opener'
   gem 'quiet_assets'
   gem 'thin'

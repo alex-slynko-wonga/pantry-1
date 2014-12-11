@@ -200,9 +200,6 @@ GEM
     guard-rubocop (1.2.0)
       guard (~> 2.0)
       rubocop (~> 0.20)
-    guard-scss-lint (0.0.3)
-      guard (~> 2.0)
-      scss-lint (~> 0.30.0)
     haml (4.0.6)
       tilt
     haml-rails (0.5.3)
@@ -439,7 +436,6 @@ DEPENDENCIES
   guard-migrate
   guard-rspec (>= 4.2.6)
   guard-rubocop
-  guard-scss-lint
   haml-lint!
   haml-rails
   jquery-rails
