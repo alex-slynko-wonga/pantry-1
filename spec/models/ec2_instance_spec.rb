@@ -94,11 +94,6 @@ RSpec.describe Ec2Instance, type: :model do
     expect(subject).to be_invalid
   end
 
-  context 'if the user does not belogs to the current team' do
-    subject { FactoryGirl.build(:ec2_instance, user: FactoryGirl.build(:user), team: FactoryGirl.build(:team)) }
-    it { is_expected.to be_invalid }
-  end
-
   context 'if environment is not from current team' do
     subject { FactoryGirl.build(:ec2_instance, environment: Environment.new) }
     it { is_expected.to be_invalid }
