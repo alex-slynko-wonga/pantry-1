@@ -19,5 +19,4 @@ namespace :update_from_aws do
       puts "Ec2Instance #{instance.id} had error updating"
     end
   end
-
 end

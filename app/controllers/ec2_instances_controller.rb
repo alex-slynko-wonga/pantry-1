@@ -13,4 +13,8 @@ class Ec2InstancesController < ApplicationController
       format.json { render }
     end
   end
+
+  def index
+    @ec2_instances = Ec2Instance.all
+  end
 end

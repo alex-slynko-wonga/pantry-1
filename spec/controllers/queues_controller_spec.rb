@@ -65,5 +65,4 @@ RSpec.describe QueuesController, type: :controller do
       end
     end
   end
-
 end

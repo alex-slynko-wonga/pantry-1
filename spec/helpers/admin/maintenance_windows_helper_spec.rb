@@ -18,5 +18,4 @@ RSpec.describe Admin::MaintenanceWindowsHelper, type: :helper do
       expect(helper.active_maintenance_window).to be_present
     end
   end
-
 end

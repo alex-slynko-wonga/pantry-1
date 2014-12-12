@@ -14,6 +14,7 @@
             %li= image_tag 'wonga-logo.png', class: "wonga-logo"
             = navbar_link_to("Home", root_url)
             = navbar_link_to("Teams", teams_url)
+            = navbar_link_to("Instances", ec2_instances_url)
             = navbar_link_to("Jenkins", jenkins_servers_url)
             = navbar_link_to("Users", users_url)
             - if policy(Ec2InstanceCost).index?

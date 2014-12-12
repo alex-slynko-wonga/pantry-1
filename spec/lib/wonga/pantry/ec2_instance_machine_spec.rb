@@ -238,7 +238,6 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
         subject.fire_state_event('terminated')
         subject.callback
       end
-
     end
   end
 

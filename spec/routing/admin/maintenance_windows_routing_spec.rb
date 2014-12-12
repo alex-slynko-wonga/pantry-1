@@ -2,7 +2,6 @@ require 'spec_helper'
 
 RSpec.describe Admin::MaintenanceWindowsController, type: :routing do
   describe 'routing' do
-
     it 'routes to #index' do
       expect(get: '/admin/maintenance_windows').to route_to('admin/maintenance_windows#index')
     end
@@ -30,6 +29,5 @@ RSpec.describe Admin::MaintenanceWindowsController, type: :routing do
     it 'routes to #destroy' do
       expect(delete: '/admin/maintenance_windows/1').to route_to('admin/maintenance_windows#destroy', id: '1')
     end
-
   end
 end

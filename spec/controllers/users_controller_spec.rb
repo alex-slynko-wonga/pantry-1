@@ -46,7 +46,6 @@ RSpec.describe UsersController, type: :controller do
         put 'update', id: user.id, user: { role: 'team_admin' }
         expect(user.reload.role).to eq('team_admin')
       end
-
     end
   end
 end

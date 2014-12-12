@@ -32,7 +32,6 @@ RSpec.describe LdapResource do
   end
 
   context '#filter_by_name' do
-
     before(:each) do
       expect(Net::LDAP::Filter).to receive(:eq).with('sAMAccountName', username).and_return(or_filter)
       expect(Net::LDAP::Filter).to receive(:eq).with('DisplayName', username).and_return(or_filter)
