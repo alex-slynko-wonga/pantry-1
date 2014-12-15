@@ -26,9 +26,49 @@ div.dataTables_paginate ul.pagination {
   margin: 2px;
 }
 
-div.dataTables_paginate ul.pagination li.paginate_button.active {
-  background: #ffffff;
+div.dataTables_paginate ul.pagination li.paginate_button:hover {
+  background: #eeeeee;
   border: #ffffff;
+}
+
+div.dataTables_paginate ul.pagination li.paginate_button.previous.disabled {
+  cursor: not-allowed;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+div.dataTables_paginate ul.pagination li.paginate_button.previous.disabled a {
+  color: #666;
+}
+
+div.dataTables_paginate ul.pagination li.paginate_button.previous.disabled:hover {
+  cursor: not-allowed;
+  color: #666 !important;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+div.dataTables_paginate ul.pagination li.paginate_button.next.disabled {
+  cursor: not-allowed;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+div.dataTables_paginate ul.pagination li.paginate_button.next.disabled a {
+  color: #666;
+}
+
+div.dataTables_paginate ul.pagination li.paginate_button.next.disabled:hover {
+  cursor: not-allowed;
+  color: #666 !important;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
 }
 
 table.table {
@@ -45,11 +85,11 @@ table.table thead .sorting_desc_disabled {
   cursor: pointer;
 }
 
-table.table thead .sorting { background-image: url('sort_both.png'); }
-table.table thead .sorting_asc { background-image: url('sort_asc.png'); }
-table.table thead .sorting_desc { background-image: url('sort_desc.png'); }
-table.table thead .sorting_asc_disabled { background-image: url('sort_asc_disabled.png'); }
-table.table thead .sorting_desc_disabled { background-image: url('sort_desc_disabled.png'); }
+table.table thead .sorting { background-image: image-url('sort_both.png'); }
+table.table thead .sorting_asc { background-image: image-url('sort_asc.png'); }
+table.table thead .sorting_desc { background-image: image-url('sort_desc.png'); }
+table.table thead .sorting_asc_disabled { background-image: image-url('sort_asc_disabled.png'); }
+table.table thead .sorting_desc_disabled { background-image: image-url('sort_desc_disabled.png'); }
 
 table.dataTable th:active {
   outline: none;
