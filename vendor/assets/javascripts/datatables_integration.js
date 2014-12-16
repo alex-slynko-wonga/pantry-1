@@ -63,7 +63,7 @@
                         switch ( button ) {
                             case 'ellipsis':
                                 btnDisplay = '&hellip;';
-                                btnClass = '';
+                                btnClass = 'disabled';
                                 break;
 
                             case 'first':

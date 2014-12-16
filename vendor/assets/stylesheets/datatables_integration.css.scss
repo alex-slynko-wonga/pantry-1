@@ -42,6 +42,10 @@ div.dataTables_paginate ul.pagination li.paginate_button.active a {
   color: #666;
 }
 
+div.dataTables_paginate ul.pagination li.paginate_button.disabled a {
+  color: #666;
+}
+
 div.dataTables_paginate ul.pagination li.paginate_button.previous.disabled {
   cursor: not-allowed;
   border: 1px solid transparent;
