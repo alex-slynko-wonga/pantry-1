@@ -83,3 +83,7 @@ Then(/^I should see "(.*?)" status near "(.*?)" name(?: after (\d+) seconds|)$/)
   sleep seconds.to_i if seconds
   expect(find(:xpath, "//tr/td/a[text()='#{name}']/../../td[text()='#{status}']")).to be_present
 end
+
+When(/^I click on collapsible button for "(.*?)" machine$/) do |name|
+  find(:xpath, "//tr/td/a[text()='#{name}']/../../../../../../..//div[@class='accordion-toggle']").click
+end

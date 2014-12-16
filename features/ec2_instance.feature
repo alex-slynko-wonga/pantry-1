@@ -282,7 +282,8 @@ Feature: EC2 Instance
     Then I should see "Ready" status near "TEST1" name
     Then I should see "Ready" status near "TEST2" name
 
-    When the instance is terminated
+    When I click on collapsible button for "TEST2" machine
+    And the instance is terminated
     Then I should see "Terminated" status near "TEST2" name after 5 seconds
     Then I should see "Ready" status near "TEST1" name
 

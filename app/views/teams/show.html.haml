@@ -79,7 +79,7 @@
               .span1
                 .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", href: "##{environment_entry.human_name.parameterize}"}
                   .i.icon-centered.icon-chevron-down
-            .accordion-body.fullwidth.collapse.in{id: "#{environment_entry.human_name.parameterize}"}
+            .accordion-body.fullwidth.collapse{id: "#{environment_entry.human_name.parameterize}"}
               .accordion-inner
                 - if environment_entry.ec2_instances.not_terminated.size > 0
                   = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.ec2_instances.not_terminated

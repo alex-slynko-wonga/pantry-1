@@ -21,6 +21,7 @@
 //= require angular-resource
 //= require dataTables/jquery.dataTables
 //= require datatables_integration
+//= require jquery.visible
 //= require_tree ./global_scripts/
 //= require_tree ./factories/
 //= require_tree ./directives/
