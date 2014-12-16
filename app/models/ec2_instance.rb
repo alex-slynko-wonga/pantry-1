@@ -26,7 +26,6 @@ class Ec2Instance < ActiveRecord::Base
   validates :user, presence: true
 
   validate :check_environment_team, on: :create
-  validate :check_user_team, on: :create
   validate :jenkins_server_is_ok, on: :create
   validate :jenkins_slave_is_ok, on: :create
   validate :winbind_compatibility, unless: 'terminated?'
@@ -74,12 +73,6 @@ class Ec2Instance < ActiveRecord::Base
       security_group_ids << CONFIG['aws']['security_group_linux']
     end
     self.security_group_ids = security_group_ids.uniq.reject(&:empty?)
-  end
-
-  def check_user_team
-    return unless user && team
-
-    errors.add(:team_id, 'Current user is not in this team.') unless user.teams.include?(team)
   end
 
   def check_environment_team

@@ -32,6 +32,16 @@ Feature: EC2 Instance
     Then I should see machine info
 
   @javascript
+    Scenario: Creating a new instance for different teams
+      Given the "test1" team
+      And I am in the "test2" team
+      When I am on the "test1" team page
+      Then I should not see "Launch New Instance"
+
+      When I am on the "test2" team page
+      Then I should see "Launch New Instance"
+
+  @javascript
   Scenario: Creating a new instance without team_id
     Given I am in the "first" team
     And "first" team has an "INT" environment with name "custom1"

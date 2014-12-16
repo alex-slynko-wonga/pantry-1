@@ -9,6 +9,12 @@ Feature: EC2 Instance
     And I am a superadmin
 
   @javascript
+  Scenario: Creating a new instance for different teams as a superadmin
+    Given the "test1" team
+    When I am on the "test1" team page
+    Then I should see "Launch New Instance"
+
+  @javascript
   Scenario: Creating a new instance with custom AMI
     Given I am in the "Pantry" team
     And "Pantry" team has an "INT" environment with name "TEST"
