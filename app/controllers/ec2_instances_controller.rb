@@ -15,6 +15,6 @@ class Ec2InstancesController < ApplicationController
   end
 
   def index
-    @ec2_instances = Ec2Instance.all
+    @ec2_instances = Ec2Instance.includes(:team, :user, :environment).all
   end
 end
