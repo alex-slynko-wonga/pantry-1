@@ -90,13 +90,10 @@ RSpec.describe EnvironmentsController, type: :controller do
 
     describe 'with non-terminated instance' do
       let(:instance) { FactoryGirl.create(:ec2_instance, state: 'booting') }
-      let(:environment_hide_parameters) do
-        { environment: FactoryGirl.attributes_for(:environment, hidden: true) }.merge(id: environment.id)
-      end
 
       it 'should not hide environment in non-terminated machine found' do
         environment.ec2_instances = [instance]
-        put 'hide', environment_hide_parameters
+        put 'hide', id:  environment.id, environments: { hidden: true }
         expect(flash[:error]).to match('Environment can not be hidden due to non-terminated instances')
         expect(environment.hidden).not_to eq(true)
         expect(response).to be_redirect

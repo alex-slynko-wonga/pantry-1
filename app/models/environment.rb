@@ -27,7 +27,7 @@ class Environment < ActiveRecord::Base
 
   def can_hide
     return unless hidden_changed?
-    return if ec2_instances.any? { |instance| instance.state == 'terminated' }
+    return if ec2_instances.all? { |instance| instance.state == 'terminated' }
 
     errors.add(:environment_id, 'Environment can not be hidden due to non-terminated instances')
   end
