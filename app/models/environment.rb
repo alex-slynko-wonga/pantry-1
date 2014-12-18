@@ -2,6 +2,7 @@ class Environment < ActiveRecord::Base
   TYPES = %w(CI INT RC STG WIP CUSTOM)
 
   has_many :ec2_instances
+  has_many :running_ec2_instances, -> { not_terminated }, class_name: 'Ec2Instance'
   belongs_to :team
 
   validates :name, uniqueness: { scope: :team_id }, presence: true

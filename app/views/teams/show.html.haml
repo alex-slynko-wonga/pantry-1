@@ -81,8 +81,8 @@
                   .i.icon-centered.icon-chevron-down
             .accordion-body.fullwidth.collapse{id: "#{environment_entry.human_name.parameterize}"}
               .accordion-inner
-                - if environment_entry.ec2_instances.not_terminated.size > 0
-                  = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.ec2_instances.not_terminated
+                - if environment_entry.running_ec2_instances.size > 0
+                  = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.running_ec2_instances
 
     - if policy(@team.ec2_instances.build).create?
       %h4 EC2 Instance Control
