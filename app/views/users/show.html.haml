@@ -15,16 +15,5 @@
       = link_to 'Edit', edit_user_url(@user)
 - if @user.ec2_instances.present?
   .row
-    %h4
-      Instances
-    %table.table.table_with_instances
-      %thead
-        %tr
-          %th #
-          %th Address
-          %th Status
-          %th OS
-          %th Environment
-          %th AMI ID
-          %th Instance role
-          = render partial: 'shared/ec2_instance_row', collection: @user.ec2_instances
+    %h4 Instances
+    = render 'shared/ec2_instance_row', ec2_instances: @user.ec2_instances

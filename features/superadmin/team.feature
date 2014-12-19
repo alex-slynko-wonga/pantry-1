@@ -18,7 +18,7 @@ Feature: Managing Teams
     Then I should see dropdown with "Test Ldap User"
 
     When I select "Test Ldap User" from dropdown
-    And save team
+    And I save team
     Then team should contain "Test Ldap User"
     And team should not contain "Test User"
 

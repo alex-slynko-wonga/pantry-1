@@ -46,19 +46,6 @@ When(/^I search for "(.*?)"$/) do |search_term|
   input.set(search_term)
 end
 
-Then(/^I should see dropdown with "(.*?)"$/) do |text|
-  expect(page).to have_xpath("//a[contains(text(),'#{text}')]")
-end
-
-When(/^I select "(.*?)" from dropdown$/) do |text|
-  page.find(:xpath, "//a[contains(text(),'#{text}')]").click
-end
-
-When(/^save team$/) do
-  click_on 'Submit'
-  page.has_no_button? 'Submit'
-end
-
 Then(/^team should (not )?contain "(.*?)"$/) do |not_contains, name|
   user = User.where(name: name).first
   if not_contains
@@ -108,4 +95,8 @@ Given(/^"(.*?)" team does not have (?:"(.*?)" )?environment$/) do |team_name, en
   @team = Team.where(name: team_name).first
   @ci_environment_count = @team.environments.count { |environment| environment.environment_type == environment_type }
   expect(@ci_environment_count).to eq(0)
+end
+
+When(/^I expanded all environments$/) do
+  page.all(:xpath, '//div[contains(@class, "accordion-toggle")]').each(&:click)
 end

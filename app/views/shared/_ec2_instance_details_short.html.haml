@@ -1,4 +1,4 @@
-%table.table.table_with_instances
+%table.table.table-hover.table_with_instances.sortable-datatable-short
   %thead
     %tr
       %th ID
@@ -9,6 +9,7 @@
       %th Instance role
       - if policy(ec2_instances.first).available?
         %th Instance action
+      %th Delete
   - ec2_instances.each do |instance|
     %tr
       %td= instance.id
@@ -33,3 +34,5 @@
                     method: :delete,
                     data: { confirm: 'This will permanently delete this instance. Are you sure?'},
                     title: 'Delete an instance'
+      - else
+        %td= '-'

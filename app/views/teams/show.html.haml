@@ -71,13 +71,13 @@
               %p= link_to "Create a new jenkins server", new_jenkins_server_url
     - @environments.each do |environment_entry|
       - if environment_entry.environment_type != 'CI'
-        .accordion{id: "accordion#{environment_entry.environment_type}"}
+        .accordion{id: "accordion#{environment_entry.human_name.parameterize}"}
           .accordion-group
             .accordion-heading
               .span11.lightgray
                 %h4.text-centered= link_to environment_entry.human_name, environment_entry
               .span1
-                .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", href: "##{environment_entry.human_name.parameterize}"}
+                .accordion-toggle{data: { toggle: "collapse", parent: "#accordion"}, href: "##{environment_entry.human_name.parameterize}"}
                   .i.icon-centered.icon-chevron-down
             .accordion-body.fullwidth.collapse{id: "#{environment_entry.human_name.parameterize}"}
               .accordion-inner
