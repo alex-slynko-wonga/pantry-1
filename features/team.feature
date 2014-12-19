@@ -36,7 +36,7 @@ Feature: Managing Teams
     Then I should see dropdown with "Test Ldap User"
 
     When I select "Test Ldap User" from dropdown
-    And save team
+    And I save team
     Then team should contain "Test Ldap User"
 
   @javascript
@@ -45,7 +45,7 @@ Feature: Managing Teams
     And I am on the teams page
     When I click on "Edit"
     And I click on remove cross near "Test User"
-    And save team
+    And I save team
     Then team should not contain "Test User"
 
   Scenario: Show Create a new jenkins server in the team page

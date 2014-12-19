@@ -57,6 +57,7 @@ end
 
 When(/^I save/) do
   first(:xpath, "//input[@name='commit']").click
+  has_no_xpath?("//input[@name='commit']")
 end
 
 When(/^I choose "(.*?)" (\w+ ?\w*)$/) do |option_name, dropdown_name|
@@ -80,10 +81,23 @@ When(/^I wait (\d+) seconds?$/) do |seconds|
 end
 
 Then(/^I should see "(.*?)" status near "(.*?)" name(?: after (\d+) seconds|)$/) do |status, name, seconds|
-  sleep seconds.to_i if seconds
-  expect(find(:xpath, "//tr/td/a[text()='#{name}']/../../td[text()='#{status}']")).to be_present
+  wait_until(seconds.to_i) do
+    has_xpath?("//tr/td/a[text()='#{name}']/../../td[text()='#{status}']")
+  end
 end
 
 When(/^I click on collapsible button for "(.*?)" machine$/) do |name|
-  find(:xpath, "//tr/td/a[text()='#{name}']/../../../../../../..//div[@class='accordion-toggle']").click
+  find(:xpath, "//tr/td/a[text()='#{name}']/../../../../../../../..//div[@class='accordion-toggle']").click
+end
+
+When(/^make screenshot with "(.*?)" name$/) do |name|
+  page.driver.save_screenshot("#{name}.png")
+end
+
+Then(/^I should see dropdown with "(.*?)"$/) do |text|
+  expect(page).to have_xpath("//a[contains(text(),'#{text}')]")
+end
+
+When(/^I select "(.*?)" from dropdown$/) do |text|
+  page.find(:xpath, "//a[contains(text(),'#{text}')]").click
 end

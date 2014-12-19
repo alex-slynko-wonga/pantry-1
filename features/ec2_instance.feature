@@ -279,10 +279,10 @@ Feature: EC2 Instance
     Given I have an EC2 instance with "TEST1" name in the team
     And I have an EC2 instance with "TEST2" name in the team
     When I am on the team page
+    And I expanded all environments
     Then I should see "Ready" status near "TEST1" name
     Then I should see "Ready" status near "TEST2" name
 
-    When I click on collapsible button for "TEST2" machine
     And the instance is terminated
     Then I should see "Terminated" status near "TEST2" name after 5 seconds
     Then I should see "Ready" status near "TEST1" name
