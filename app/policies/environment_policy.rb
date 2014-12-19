@@ -1,7 +1,11 @@
 class EnvironmentPolicy < ApplicationPolicy
   Scope = Struct.new(:user, :scope) do
     def resolve
-      scope.available(user).visible
+      if user.role == 'superadmin'
+        scope.available.visible
+      else
+        scope.available_for_user(user).visible
+      end
     end
   end
   def permitted_types

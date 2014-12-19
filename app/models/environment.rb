@@ -10,7 +10,8 @@ class Environment < ActiveRecord::Base
   validates :environment_type, inclusion: { in: TYPES }, presence: true
   validates :team, uniqueness: { scope: :environment_type, if: "environment_type == 'CI'" }, presence: true
 
-  scope :available, ->(user) { where.not(chef_environment: nil).where(team_id: user.team_ids).where.not(environment_type: 'CI') }
+  scope :available, -> { where.not(chef_environment: nil) }
+  scope :available_for_user, ->(user) { available.where(team_id: user.team_ids).where.not(environment_type: 'CI') }
   scope :visible, -> { where(hidden: [false, nil]) }
   scope :invisible, -> { where(hidden: true) }
 
