@@ -11,8 +11,8 @@ RSpec.describe Wonga::Pantry::Ec2InstanceState do
       subject
       log = ec2_instance.ec2_instance_logs[-1]
       expect(log.user).to eq(user)
-      expect(log.event).to eq(:some_event)
-      expect(log.updates).to eq(ec2_instance.changes)
+      expect(log.event).to eq('some_event')
+      expect(log.updates).to eq(ec2_instance.changes.to_s)
     end
 
     it 'saves instance' do
@@ -69,7 +69,7 @@ RSpec.describe Wonga::Pantry::Ec2InstanceState do
         it 'processes' do
           subject
           expect(machine).to have_received(:fire_events).with(:bootstrap)
-          expect(ec2_instance.ec2_instance_logs.last.updates).to eq(ec2_instance.changes)
+          expect(ec2_instance.ec2_instance_logs.last.updates).to eq(ec2_instance.changes.to_s)
         end
       end
     end

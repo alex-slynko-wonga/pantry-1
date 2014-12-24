@@ -2,12 +2,9 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-if defined?(Bundler)
-  # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(assets: %w(development test)))
-  # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
-end
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
 CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), 'pantry.yml')))[Rails.env]
 
@@ -18,16 +15,6 @@ module Wonga
       # Application configuration should go into files in config/initializers
       # -- all .rb files in that directory are automatically loaded.
 
-      # Custom directories with classes and modules you want to be autoloadable.
-      config.autoload_paths += %W(#{config.root}/lib)
-
-      # Only load the plugins named here, in the order given (default is alphabetical).
-      # :all can be used as a placeholder for all plugins not explicitly named.
-      # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
-
-      # Activate observers that should always be running.
-      # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
-
       # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
       # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
       # config.time_zone = 'Central Time (US & Canada)'
@@ -36,19 +23,18 @@ module Wonga
       # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
       # config.i18n.default_locale = :de
 
-      # Configure the default encoding used in templates for Ruby 1.9.
+      # Do not swallow errors in after_commit/after_rollback callbacks.
+      config.active_record.raise_in_transactional_callbacks = true
 
+      ##### Additions
       config.action_mailer.default_url_options = { host: CONFIG['mailer']['host'] }
       config.action_mailer.default_options = CONFIG['mailer']['default_options'].symbolize_keys if CONFIG['mailer'] && CONFIG['mailer']['default_options']
-      # Configure logger if attributes present
       if CONFIG['pantry']['log']
         case CONFIG['pantry']['log']['logger']
         when 'syslog'
           require 'syslogger'
           facility = Syslog.const_get("LOG_#{CONFIG['pantry']['log']['log_facility'].upcase}")
-          config.logger = Syslogger.new(CONFIG['pantry']['log']['app_name'],
-                                        Syslog::LOG_PID | Syslog::LOG_CONS,
-                                        facility)
+          config.logger = Syslogger.new(CONFIG['pantry']['log']['app_name'], Syslog::LOG_PID | Syslog::LOG_CONS, facility)
         when 'file'
           if CONFIG['pantry']['log']['log_file']
             config.logger = CONFIG['pantry']['log']['log_file']
@@ -56,9 +42,7 @@ module Wonga
         end
       end
 
-      config.generators do |g|
-        g.view_specs false
-      end
+      config.autoload_paths += %W(#{config.root}/lib)
     end
   end
 end

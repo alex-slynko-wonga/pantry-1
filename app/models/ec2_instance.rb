@@ -1,3 +1,5 @@
+require 'wonga/pantry/ec2_instance_machine'
+
 class Ec2Instance < ActiveRecord::Base
   belongs_to :team
   belongs_to :user

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.1.7'
+gem 'rails', '~> 4.2'
 gem 'mysql2'
 gem 'omniauth-ldap', github: 'intridea/omniauth-ldap'
 
@@ -8,7 +8,6 @@ gem 'syslogger'
 gem 'haml-rails'
 gem 'aws-sdk', '~> 1.25'
 
-gem 'sass-rails', github: 'rails/sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 
@@ -27,6 +26,7 @@ gem 'simple_form'
 gem 'pundit'
 gem 'amazon-pricing'
 gem 'mechanize'
+gem 'responders', '~> 2.0'
 
 group :development do
   gem 'better_errors'
@@ -65,7 +65,7 @@ group :test, :development do
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.1.0'
   gem 'rubocop'
-  gem 'scss-lint', '~> 0.30'
+  gem 'scss-lint', github: 'causes/scss-lint'
   gem 'spring-commands-cucumber'
   gem 'spring-commands-rspec'
 end

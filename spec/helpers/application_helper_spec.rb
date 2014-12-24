@@ -6,7 +6,8 @@ RSpec.describe ApplicationHelper, type: :helper do
       let(:instance) { FactoryGirl.build(:ec2_instance, state: 'ready') }
 
       it 'returns link to instance' do
-        is_expected.to eq "<a href=\"http://#{instance.name}.#{instance.domain}\" target=\"_blank\">http://#{instance.name}.#{instance.domain}</a>"
+        is_expected.to match %r{\<a.* href=\"http://#{instance.name}.#{instance.domain}\".*\>http://#{instance.name}.#{instance.domain}\<\/a\>}
+        is_expected.to match(/a.* target="_blank".*/)
       end
     end
 

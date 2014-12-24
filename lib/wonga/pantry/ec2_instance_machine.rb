@@ -81,7 +81,7 @@ module Wonga
 
         after_transition dns_record_created: :ready do |machine, _state|
           mail = Ec2Notifications.machine_created(machine.ec2_instance)
-          machine.callback = -> { mail.deliver }
+          machine.callback = -> { mail.deliver_now }
         end
 
         after_transition terminating: :terminated do |machine, _state|

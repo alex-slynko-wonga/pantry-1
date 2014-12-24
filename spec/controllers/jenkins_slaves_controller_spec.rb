@@ -6,9 +6,11 @@ RSpec.describe JenkinsSlavesController, type: :controller do
   let(:user) { FactoryGirl.create(:user, team: team) }
   let(:team) { FactoryGirl.create(:team) }
   let(:ec2_instance_state) { instance_double('Wonga::Pantry::Ec2InstanceState', change_state: true) }
+  let(:instance_price) { instance_double(Wonga::Pantry::PricingList, retrieve_price_list: nil) }
 
   before(:each) do
     session[:user_id] = user.id
+    allow(controller).to receive(:price_list).and_return(instance_price)
   end
 
   describe "GET 'index'" do

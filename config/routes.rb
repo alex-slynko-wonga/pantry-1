@@ -1,4 +1,4 @@
-Wonga::Pantry::Application.routes.draw do
+Rails.application.routes.draw do
   namespace :admin do
     resources :maintenance_windows
     resources :amis, except: [:show]
