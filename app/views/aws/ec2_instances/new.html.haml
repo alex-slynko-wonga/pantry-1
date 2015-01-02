@@ -6,11 +6,11 @@
 
   - if @team
     = f.input :environment_id, collection: @environments
-    = link_to "Create a new environment", new_team_environment_url(@team)
+    = link_to 'Create a new environment', new_team_environment_url(@team)
   - else
     = f.input :environment_id, collection: @grouped_environments, as: :grouped_select, group_method: :second, group_label_method: :first
 
-  = f.label :team_name, 'Team: ' + (@team_name || '')
+  = f.label :team_name, "Team: #{@team_name}"
 
   = f.association :instance_role, collection: @instance_roles, label_method: :display_name
 
@@ -19,7 +19,7 @@
   = f.input :ami, collection: @ec2_adapter.amis, as: :grouped_select, group_method: :second, group_label_method: :first,
     wrapper_html: { class: 'instance_role_subvalue' }
   - if policy(@ec2_instance).custom_ami?
-    .custom_ami.instance_role_subvalue{data: {'remote-url' => aws_ec2_ami_url(':id')}}
+    .custom_ami.instance_role_subvalue{ data: { remote_url: aws_ec2_ami_url(':id') } }
       = label_tag :custom_ami, 'Custom AMI'
       = text_field_tag :custom_ami, @ec2_instance.ami
       .details
@@ -28,19 +28,19 @@
             .span1
               Name:
             .span7
-              #name{data: {value: :name}}
+              #name{ data: { value: :name } }
           .row
             .span1
               by
             .span2
-              #owner_alias{data: {value: :image_owner_alias}}
+              #owner_alias{ data: { value: :image_owner_alias } }
             .span2
-              #owner_by{data: {value: :image_owner_id}}
+              #owner_by{ data: { value: :image_owner_id } }
           .row
             .span1
               OS:
             .span3
-              #platform{data: {value: :platform}}
+              #platform{ data: { value: :platform } }
 
   - if policy(@ec2_instance).custom_iam?
     = f.input :iam_instance_profile, collection: @iam_list, wrapper_html: { class: 'instance_role_subvalue' }
@@ -52,4 +52,4 @@
   = f.input :security_group_ids, collection: @ec2_adapter.security_groups, as: 'check_boxes', wrapper_html: { class: 'instance_role_subvalue' }
 
   %br
-  = f.submit "Create"
+  = f.submit 'Create'

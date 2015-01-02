@@ -1,21 +1,21 @@
-.row-fluid{data: { ng_controller: 'AmisCtrl', ng_init: "setAmi('#{@ami.ami_id}', '#{@ami.name}', '#{@ami.platform}', '#{@ami_platform_was}')"}}
+.row-fluid{ data: { ng_controller: 'AmisCtrl', ng_init: "setAmi('#{@ami.ami_id}', '#{@ami.name}', '#{@ami.platform}', '#{@ami_platform_was}')" } }
   .span3
     = simple_form_for [:admin, @ami] do |f|
       .form-inputs
-        = f.input :ami_id, label: 'AMI id', input_html: { maxlength: 12, data: { ng_model: 'ami.ami_id', ng_change: 'getAmiInfo()' }}
-        = f.input :name, input_html: {data: { ng_model: 'ami.name' }}
+        = f.input :ami_id, label: 'AMI id', input_html: { maxlength: 12, data: { ng_model: 'ami.ami_id', ng_change: 'getAmiInfo()' } }
+        = f.input :name, input_html: { data: { ng_model: 'ami.name' } }
         = f.hidden_field :platform, data: { ng_value: 'ami.platform' }
-        %div{"ng-show" => 'ami.platform == "linux"'}
+        #username{ data: { ng_show: 'ami.platform == "linux"' } }
           = f.input :bootstrap_username
         = f.input :hidden, inline_label: true, label: false
 
       = f.submit
   .span9
-    %div{"ng-show" => "!aws_ami.name && (ami.ami_id.length > 0)"}
+    #ami_not_found{ data: { ng_show: '!aws_ami.name && (ami.ami_id.length > 0)' } }
       .span4.label.label-warning AMI {{ami_id}} not found
-    %div{"ng-show" => "ami.platform_was && (ami.platform_was != ami.platform)"}
+    #ami_different_platform{ data: { ng_show: 'ami.platform_was && (ami.platform_was != ami.platform)' } }
       .span5.label.label-warning AMI can't be updated with a different platform
-    %div{ "ng-show" => "aws_ami.name"}
+    #ami_info{ data: { ng_show: 'aws_ami.name' } }
       %h3 AMI info for {{ami.ami_id}}
       .span5
         %h4 General information
@@ -23,8 +23,8 @@
           %li Name: {{aws_ami.name}}
           %li
             OS:
-            = image_tag 'win_icon.png', title: 'Windows', data: {ng_show: 'aws_ami.platform == "windows"'}
-            = image_tag 'linux_icon.png', title: 'Linux', data: {ng_show: 'aws_ami.platform == "linux"'}
+            = image_tag 'win_icon.png', title: 'Windows', data: { ng_show: 'aws_ami.platform == "windows"' }
+            = image_tag 'linux_icon.png', title: 'Linux', data: { ng_show: 'aws_ami.platform == "linux"' }
           %li ID: {{aws_ami.image_id}}
           %li Description: {{aws_ami.description}}
           %li Root device type: {{aws_ami.root_device_type}}
@@ -36,13 +36,13 @@
           %li Public {{aws_ami.is_public}}
           %li Owner ID {{aws_ami.image_owner_id}}
         %h4 Tags
-        %ul{"ng-repeat" => "tag in aws_ami.tag_set"}
+        %ul{ data: { ng_repeat: 'tag in aws_ami.tag_set' } }
           %li
             %b {{tag.key}}
             {{tag.value}}
       .span4
         %h4 Devices
-        %ul{"ng-repeat" => "device in aws_ami.block_device_mapping"}
+        %ul{ data: { ng_repeat: 'device in aws_ami.block_device_mapping' } }
           %li Device name: {{device.device_name}}
           %li Snapshot id: {{device.ebs.snapshot_id}}
           %li Volume size: {{device.ebs.volume_size}}

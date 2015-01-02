@@ -1,9 +1,10 @@
 !!!
-%html.full-height{data: { ng_app: 'Pantry'}}
+%html.full-height{ data: { ng_app: 'Pantry' } }
   %head
     %title= content_for?(:title) ? yield(:title) : Wonga::Pantry
-    = stylesheet_link_tag "application", media: 'all'
-    = javascript_include_tag "application"
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_include_tag 'application'
+    = javascript_include_tag 'test/helpers' if Rails.env.test?
     = csrf_meta_tags
 
   %body.full-height
@@ -11,31 +12,31 @@
       .navbar
         .navbar-inner
           %ul.nav
-            %li= image_tag 'wonga-logo.png', class: "wonga-logo"
-            = navbar_link_to("Home", root_url)
-            = navbar_link_to("Teams", teams_url)
-            = navbar_link_to("Instances", ec2_instances_url)
-            = navbar_link_to("Jenkins", jenkins_servers_url)
-            = navbar_link_to("Users", users_url)
+            %li= image_tag 'wonga-logo.png', class: 'wonga-logo'
+            = navbar_link_to('Home', root_url)
+            = navbar_link_to('Teams', teams_url)
+            = navbar_link_to('Instances', ec2_instances_url)
+            = navbar_link_to('Jenkins', jenkins_servers_url)
+            = navbar_link_to('Users', users_url)
             - if policy(Ec2InstanceCost).index?
-              = navbar_link_to("Billing", ec2_instance_costs_url)
+              = navbar_link_to('Billing', ec2_instance_costs_url)
             - if policy(pundit_user).see_queues?
-              = navbar_link_to("Queues", queues_url)
+              = navbar_link_to('Queues', queues_url)
             - if policy(pundit_user).admin?
               %li.dropdown
-                %a{:href => "#", :class => "dropdown-toggle", "data-toggle" => "dropdown"}
+                %a.dropdown-toggle{ href: '#', data: { toggle: 'dropdown' } }
                   Admin
                   %b.caret
                 %ul.dropdown-menu
-                  = navbar_link_to("Maintenance", admin_maintenance_windows_url)
-                  = navbar_link_to("AMIs", admin_amis_url)
-                  = navbar_link_to("Instance Roles", admin_instance_roles_url)
-                  = navbar_link_to("Api Keys", admin_api_keys_url)
+                  = navbar_link_to('Maintenance', admin_maintenance_windows_url)
+                  = navbar_link_to('AMIs', admin_amis_url)
+                  = navbar_link_to('Instance Roles', admin_instance_roles_url)
+                  = navbar_link_to('Api Keys', admin_api_keys_url)
 
           %ul.nav.pull-right
             - if pundit_user.image_url
               %li
-                %img{src: pundit_user.image_url, alt: 'Gravatar' }
+                %img{ src: pundit_user.image_url, alt: 'Gravatar' }
             %li
               = link_to 'Log out', logout_url
       - if active_maintenance_window
@@ -51,11 +52,11 @@
 
       .container.full-height.footer-padding
         - flash.each do |type, message|
-          %div{class: "alert alert-#{type}"}
-            %button.close{data: { dismiss: "alert" }} &times;
+          .alert{ class: "alert-#{type}" }
+            %button.close{ data: { dismiss: 'alert' } } &times;
             = message
         = yield
 
       .div.main-footer
-        %p.text-centered= link_to("Pantry Dashboard", 'https://issues.example.com/secure/RapidBoard.jspa?rapidView=379', target: 'blank')
+        %p.text-centered= link_to('Pantry Dashboard', 'https://issues.example.com/secure/RapidBoard.jspa?rapidView=379', target: 'blank')
         %p.text-centered= %(#{mail_to('pantry@example.com', 'Email us')} on pantry@example.com).html_safe

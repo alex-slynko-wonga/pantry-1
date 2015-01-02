@@ -16,4 +16,4 @@ $ ->
 
   $("i.icon-remove").on "click", (event) ->
     event.preventDefault()
-    $(this).parents('.user').remove()
+    $(this).parents('.inner_item').remove()

@@ -19,12 +19,13 @@
 //= require bootstrap-collapse
 //= require angular
 //= require angular-resource
+//= require angular_app
 //= require dataTables/jquery.dataTables
 //= require datatables_integration
 //= require jquery.visible
-//= require_tree ./global_scripts/
 //= require_tree ./factories/
 //= require_tree ./directives/
 //= require_tree ./controllers/
 //= require_tree ./filters/
+//= require_directory .
 

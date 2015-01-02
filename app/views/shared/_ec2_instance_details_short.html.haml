@@ -14,25 +14,22 @@
     %tr
       %td= instance.id
       %td= link_to instance.name, url_for([:aws, instance])
-      %td.col_status{data: {ec2_id: instance.id}}= instance.human_status
+      %td.col_status{ data: { ec2_id: instance.id } }= instance.human_status
       %td= os_image(instance.platform)
       %td= instance.ami
-      - if instance.instance_role_id.nil?
-        %td= '-'
-      - else
-        %td= link_to_instance_role(instance)
+      %td
+        - if instance.instance_role_id
+          = link_to_instance_role(instance)
       - if policy(instance).shutdown_now?
-        %td= link_to 'Shutdown', aws_ec2_instance_url(instance, 'event' => 'shutdown_now'), method: :put, class: 'btn btn-mini btn-sized'
+        %td= link_to 'Shutdown', aws_ec2_instance_url(instance, event: 'shutdown_now'), method: :put, class: 'btn btn-mini btn-sized', data: { remote: true }
       - elsif policy(instance).start_instance?
-        %td= link_to 'Start', aws_ec2_instance_url(instance, 'event' => 'start_instance'), method: :put, class: 'btn btn-mini btn-sized'
+        %td= link_to 'Start', aws_ec2_instance_url(instance, event: 'start_instance'), method: :put, class: 'btn btn-mini btn-sized', data: { remote: true }
       - elsif policy(instance).available?
-        %td= '-'
-      - if policy(instance).destroy?
-        %td
-          = link_to image_tag("trash.png", class: 'i icon-centered'),
-                    aws_ec2_instance_url(instance.id),
-                    method: :delete,
-                    data: { confirm: 'This will permanently delete this instance. Are you sure?'},
-                    title: 'Delete an instance'
-      - else
-        %td= '-'
+        %td -
+      %td
+        - if policy(instance).destroy?
+          = link_to image_tag('trash.png', class: 'i icon-centered'),
+                      aws_ec2_instance_url(instance.id),
+                      method: :delete,
+                      data: { confirm: 'This will permanently delete this instance. Are you sure?' },
+                      title: 'Delete an instance'

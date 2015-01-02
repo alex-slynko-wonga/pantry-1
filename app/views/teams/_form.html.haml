@@ -18,16 +18,16 @@
       = label_tag 'ldap_users_search', 'Add user'
       = search_field_tag 'ldap_users_search'
     .control-group
-      #users
+      .list#users
         - @team.users.each do |user|
-          .user
+          .user.inner_item
             = text_field_tag 'name', user.name, disabled: true
             = hidden_field_tag 'users[]', user.username
             = hidden_field_tag 'users[]', user.name
             %i.icon-remove
     = f.submit 'Submit', class: 'btn'
-#user_template
-  .user
+.template#user_template
+  .user.inner_item
     = text_field_tag 'name', '%%name%%', disabled: true
     = hidden_field_tag 'users[]', '%%username%%'
     = hidden_field_tag 'users[]', '%%name%%'

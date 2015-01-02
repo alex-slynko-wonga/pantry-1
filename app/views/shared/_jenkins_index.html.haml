@@ -14,5 +14,5 @@
         %td= jenkins_instance.ec2_instance.name
         %td= jenkins_instance.ec2_instance.ami
         %td= jenkins_instance.ec2_instance.security_group_ids
-        %td.col_status{data: {ec2_id: jenkins_instance.ec2_instance.id}}= jenkins_instance.ec2_instance.human_status
+        %td.col_status{ data: { ec2_id: jenkins_instance.ec2_instance.id } }= jenkins_instance.ec2_instance.human_status
 

@@ -53,8 +53,7 @@ Feature: Jenkins
     And I should see the slaves listing
 
     When an instance is created with ip "123.456.7.8"
-    And I wait 5 seconds
-    Then I should see "Ready"
+    Then I should see "Ready" after page is updated
     And I should not see "Booting"
 
   Scenario: Starting a shut down slave

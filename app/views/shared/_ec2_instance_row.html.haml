@@ -12,11 +12,10 @@
     %tr
       %td= ec2_instance_row.id
       %td= link_to ec2_instance_row.name, url_for([:aws, ec2_instance_row])
-      %td.col_status{data: {ec2_id: ec2_instance_row.id}}= ec2_instance_row.human_status
+      %td.col_status{ data: { ec2_id: ec2_instance_row.id } }= ec2_instance_row.human_status
       %td= os_image(ec2_instance_row.platform)
       %td= link_to ec2_instance_row.environment.human_name, ec2_instance_row.environment
       %td= ec2_instance_row.ami
-      - if ec2_instance_row.instance_role_id.nil?
-        %td= '-'
-      - else
-        %td= link_to_instance_role(ec2_instance_row)
+      %td
+        - if ec2_instance_row.instance_role_id
+          = link_to_instance_role(ec2_instance_row)

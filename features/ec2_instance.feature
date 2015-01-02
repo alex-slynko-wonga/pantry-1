@@ -257,23 +257,6 @@ Feature: EC2 Instance
     When machine is started
     Then I should see "Ready" after page is updated
 
-  Scenario: Shutdown and Start a single instance
-    Given I have an EC2 instance in the team
-    And the instance is ready
-    When I am on the team page
-    And I click on "Shutdown"
-    Then I should see "Shutting down"
-    And shut down request should be sent
-    When machine is shut down
-    Then option "Start" should be present near instance
-
-    When I click on "Start"
-    Then I should see "Starting"
-    And start request should be sent
-    When machine is started
-    Then option "Shutdown" should be present near instance
-    And I should see "Ready"
-
   @javascript
   Scenario: Update instances statuses without page refresh
     Given I have an EC2 instance with "TEST1" name in the team
@@ -284,9 +267,23 @@ Feature: EC2 Instance
     Then I should see "Ready" status near "TEST2" name
 
     And the instance is terminated
-    Then I should see "Terminated" status near "TEST2" name after 5 seconds
+    Then I should see "Terminated" status near "TEST2" name
     Then I should see "Ready" status near "TEST1" name
 
+  Scenario: Shutdown and Start a single instance from team page
+    Given I have an EC2 instance in the team
+    And the instance is ready
+    When I am on the team page
+    And I expanded all environments
+    And I click on "Shutdown"
+    Then I should see "Shutting down" after page is updated
+    And shut down request should be sent
+    When machine is shut down
+    Then option "Start" should be present near instance
 
-
-
+    When I click on "Start"
+    Then I should see "Starting"
+    And start request should be sent
+    When machine is started
+    Then option "Shutdown" should be present near instance
+    And I should see "Ready" after page is updated

@@ -4,20 +4,20 @@
     %td= link_to jenkins_instance.ec2_instance.name, jenkins_instance
   - else
     %td= link_to jenkins_instance.ec2_instance.name, [@jenkins_server, jenkins_instance]
-  %td.col_status{data: {ec2_id: jenkins_instance.ec2_instance.id}}= jenkins_instance.ec2_instance.human_status
+  %td.col_status{ data: { ec2_id: jenkins_instance.ec2_instance.id } }= jenkins_instance.ec2_instance.human_status
   %td= os_image(jenkins_instance.ec2_instance.platform)
   - if jenkins_instance.instance_of? JenkinsServer
     %td= link_to_instance(jenkins_instance.ec2_instance)
   - if policy(jenkins_instance.ec2_instance).shutdown_now?
-    %td= link_to 'Shutdown', aws_ec2_instance_url(jenkins_instance.ec2_instance, 'event' => 'shutdown_now'), method: :put, class: 'btn btn-mini btn-sized'
+    %td= link_to 'Shutdown', aws_ec2_instance_url(jenkins_instance.ec2_instance, event: 'shutdown_now'), method: :put, class: 'btn btn-mini btn-sized'
   - elsif policy(jenkins_instance.ec2_instance).start_instance?
-    %td= link_to 'Start', aws_ec2_instance_url(jenkins_instance.ec2_instance, 'event' => 'start_instance'), method: :put, class: 'btn btn-mini btn-sized'
+    %td= link_to 'Start', aws_ec2_instance_url(jenkins_instance.ec2_instance, event: 'start_instance'), method: :put, class: 'btn btn-mini btn-sized'
   - elsif policy(jenkins_instance.ec2_instance).available?
-    %td= '-'
+    %td -
   - if policy(jenkins_instance.ec2_instance).destroy? && (!jenkins_instance.instance_of? JenkinsServer)
     %td
-      = link_to image_tag("trash.png", class: 'i icon-centered'),
+      = link_to image_tag('trash.png', class: 'i icon-centered'),
                 aws_ec2_instance_url(jenkins_instance.ec2_instance.id),
                 method: :delete,
-                data: { confirm: 'This will permanently delete this instance. Are you sure?'},
+                data: { confirm: 'This will permanently delete this instance. Are you sure?' },
                 title: 'Delete an instance'

@@ -1,14 +1,12 @@
-= javascript_include_tag "specific/refresh_machine_status.js"
-
 .row-fluid
   .span6
-    %h3= link_to(@environment.team.name + " Team", team_path(@environment.team.id))
+    %h3= link_to(@environment.team.name + ' Team', team_path(@environment.team.id))
   .span6
     %h3
       = @environment.human_name
       Environment
     - if policy(@environment).edit?
-      %p= link_to "Edit this environment", edit_environment_path(@environment)
+      %p= link_to 'Edit this environment', edit_environment_path(@environment)
   .span12
 
 .row-fluid
@@ -36,22 +34,22 @@
         .pull-right
           .btn-toolbar
             .btn-group
-              = link_to('Start all instances', update_instances_environment_url(@environment, 'event' => 'start_instance'), method: :put, class: 'btn')
-              = link_to('Shutdown all instances', update_instances_environment_url(@environment, 'event' => 'shutdown_now'), method: :put, class: 'btn')
+              = link_to('Start all instances', update_instances_environment_url(@environment, event: 'start_instance'), method: :put, class: 'btn')
+              = link_to('Shutdown all instances', update_instances_environment_url(@environment, event: 'shutdown_now'), method: :put, class: 'btn')
 
     .row-fluid
       .pull-right
         - if policy(@environment.ec2_instances.build).create?
-          %p= link_to "Launch New Instance", new_aws_ec2_instance_url(team_id: @environment.team.id)
+          %p= link_to 'Launch New Instance', new_aws_ec2_instance_url(team_id: @environment.team.id)
 - if policy(@environment).hide?
-  %button.button.close{data: {toggle: 'modal', target: '.deactivate_modal'}} Hide Environment
-  .deactivate_modal.modal.fade{tabindex: -1, role: 'dialog',
-    aria_labelledby: "Hide Environment: #{@environment.human_name}", aria_hidden: true, style: 'display: none;'}
+  %button.button.close{ data: { toggle: 'modal', target: '.deactivate_modal' } } Hide Environment
+  .deactivate_modal.modal.fade{ tabindex: -1, role: 'dialog',
+    aria_labelledby: "Hide Environment: #{@environment.human_name}", aria_hidden: true, style: 'display: none;' }
     .modal-dialog
       .modal-content
         = simple_form_for @environment, url: hide_environment_url(@environment), method: :put do |f|
           .modal-header
-            %button.close{data: {dismiss: 'modal'}, aria_hidden: true}
+            %button.close{ data: { dismiss: 'modal' }, aria_hidden: true }
               &times;
             %h4.modal-title
               Hide

@@ -1,13 +1,15 @@
-%div{"ng-controller" => "JenkinsServersCtrl", "ng-init" => "getInstances()", "data-no-turbolink" => true}
+- if current_team
+  .team{ data: { preload_resource: current_team.id, preload_resource_name: 'team_id' } }
+.jenkins_servers{ data: { ng_controller: 'JenkinsServersCtrl', ng_init: 'getInstances()' } }
   - if current_team
-    %span{'id' => 'single_team_id', 'data-team_id' => current_team.id}
+    %span
       Current team:
       = link_to current_team.name, current_team
   - else
-    %select{:id => "change_team_id", :name => "change_team_id", "ng-change" => "getInstances()", "ng-model" => "team_id"}
-      %option{:value => ""}
+    %select#change_team_id{ name: 'change_team_id', data: { ng_change: 'getInstances()', ng_model: 'team_id' } }
+      %option{ value: '' }
       = user_teams.each do |team|
-        %option{value: team.id}= team.name
+        %option{ value: team.id }= team.name
 
   %table.table
     %thead
@@ -18,9 +20,9 @@
         %th ImageID
         %th Groups
         %th State
-    %tr{"ng-repeat" => "instance in instances"}
+    %tr{ data: { ng_repeat: 'instance in instances' } }
       %td
-        %a{:href => "/jenkins_servers/{{instance.id}}"} {{instance.id}}
+        %a{ href: '/jenkins_servers/{{instance.id}}' } {{instance.id}}
       %td {{instance.ec2_instance.id}}
       %td {{instance.ec2_instance.name}}
       %td {{instance.ec2_instance.ami}}

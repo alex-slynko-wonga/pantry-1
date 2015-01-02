@@ -3,22 +3,22 @@
 
 %head
   %title= content_for?(:title) ? yield(:title) : Wonga::Pantry
-  = stylesheet_link_tag "application", media: 'all'
-  = javascript_include_tag "application"
+  = stylesheet_link_tag 'application', media: 'all'
+  = javascript_include_tag 'application'
   = csrf_meta_tags
 
 %body.full-height
   .div.main-container.dark-container
     .container
-      = render "form"
+      = render 'form'
 
     .container
       - flash.each do |type, message|
-        %div{class: "alert alert-#{type}"}
-          %button.close{data: { dismiss: "alert" }} &times;
+        .alert{ class: "alert-#{type}" }
+          %button.close{ data: { dismiss: 'alert' } } &times;
           = message
       = yield
 
     .div.main-footer.dark-footer
-      %p.text-centered= link_to("Pantry Dashboard", 'https://issues.example.com/secure/RapidBoard.jspa?rapidView=379', target: 'blank')
+      %p.text-centered= link_to('Pantry Dashboard', 'https://issues.example.com/secure/RapidBoard.jspa?rapidView=379', target: 'blank')
       %p.text-centered= %(#{mail_to('pantry@example.com', 'Email us')} on pantry@example.com).html_safe

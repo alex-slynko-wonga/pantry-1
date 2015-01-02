@@ -1,8 +1,6 @@
-= javascript_include_tag "specific/refresh_machine_status.js"
-
 %h1= @team.name
 - if policy(@team).edit?
-  %p= link_to "Edit this team", edit_team_url(@team)
+  %p= link_to 'Edit this team', edit_team_url(@team)
 
 .row-fluid
   .span12
@@ -19,26 +17,26 @@
           %tr
             %td= user.name
             %td
-              %img{src: user.image_url(25), alt: 'Gravatar'}
+              %img{ src: user.image_url(25), alt: 'Gravatar' }
               = link_to user.username, user_url(user.id)
             %td= mail_to user.email
 .row-fluid
   .span12
     %h4 Instances
-    .accordion{id: "accordion-CI-Env"}
+    .accordion#accordion_CI_Env
       .accordion-group
         .accordion-heading
           .span11.lightgray
             - if @team.ci_environment
-              %h4.text-centered= link_to "CI Environment", @team.ci_environment
+              %h4.text-centered= link_to 'CI Environment', @team.ci_environment
             - else
               %h4.text-centered CI Environment
               - if policy(Environment.new(team: @team)).create?
-                %p.text-centered= link_to "Create a new CI environment", new_team_environment_url(@team, environment_type: 'CI')
+                %p.text-centered= link_to 'Create a new CI environment', new_team_environment_url(@team, environment_type: 'CI')
           .span1
-            .accordion-toggle{"data-toggle" => "collapse", "data-parent" => "#accordion", href: "#collapse-CI-Env"}
+            .accordion-toggle{ data: { toggle: 'collapse', parent: '#accordion' }, href: '#collapse-CI-Env' }
               .i.icon-centered.icon-chevron-down
-        #collapse-CI-Env.accordion-body.fullwidth.collapse.in
+        .accordion-body.fullwidth.collapse.in#collapse-CI-Env
           .accordion-inner
             %h5 Jenkins server
             - if @jenkins_server
@@ -68,38 +66,38 @@
                   = render partial: 'jenkins_instance', collection: @jenkins_slaves
                 %h5= link_to_new_slave(@jenkins_server)
             - elsif policy(@team.build_jenkins_server).create?
-              %p= link_to "Create a new jenkins server", new_jenkins_server_url
+              %p= link_to 'Create a new jenkins server', new_jenkins_server_url
     - @environments.each do |environment_entry|
       - if environment_entry.environment_type != 'CI'
-        .accordion{id: "accordion#{environment_entry.human_name.parameterize}"}
+        .accordion{ id: "accordion#{environment_entry.human_name.parameterize}" }
           .accordion-group
             .accordion-heading
               .span11.lightgray
                 %h4.text-centered= link_to environment_entry.human_name, environment_entry
               .span1
-                .accordion-toggle{data: { toggle: "collapse", parent: "#accordion"}, href: "##{environment_entry.human_name.parameterize}"}
+                .accordion-toggle{ data: { toggle: 'collapse', parent: '#accordion' }, href: "##{environment_entry.human_name.parameterize}" }
                   .i.icon-centered.icon-chevron-down
-            .accordion-body.fullwidth.collapse{id: "#{environment_entry.human_name.parameterize}"}
+            .accordion-body.fullwidth.collapse{ id: "#{environment_entry.human_name.parameterize}" }
               .accordion-inner
                 - if environment_entry.running_ec2_instances.size > 0
                   = render 'shared/ec2_instance_details_short', ec2_instances: environment_entry.running_ec2_instances
 
     - if policy(@team.ec2_instances.build).create?
       %h4 EC2 Instance Control
-      %p= link_to "Launch New Instance", new_aws_ec2_instance_url(team_id: params[:id])
+      %p= link_to 'Launch New Instance', new_aws_ec2_instance_url(team_id: params[:id])
 .row-fluid
   .span12
     - if policy(Environment.new(team: @team)).create?
       %h4 Environment Control
-      %p= link_to "Create a new environment", new_team_environment_url(@team)
+      %p= link_to 'Create a new environment', new_team_environment_url(@team)
 - if policy(@team).deactivate?
-  %button.button.close{data: {toggle: 'modal', target: '.deactivate_modal'}} Deactivate
-  .deactivate_modal.modal.fade{tabindex: -1, role: 'dialog', aria_labelledby: "Deactivate Team #{@team.name}", aria_hidden: true, style: 'display: none;'}
+  %button.button.close{ data: { toggle: 'modal', target: '.deactivate_modal' } } Deactivate
+  .deactivate_modal.modal.fade{ tabindex: -1, role: 'dialog', aria_labelledby: "Deactivate Team #{@team.name}", aria_hidden: true, style: 'display: none;' }
     .modal-dialog
       .modal-content
         = simple_form_for @team, url: deactivate_team_url(@team), method: :post do |f|
           .modal-header
-            %button.close{data: {dismiss: 'modal'}, aria_hidden: true}
+            %button.close{ data: { dismiss: 'modal' }, aria_hidden: true }
               &times;
             %h4.modal-title
               Deactivate
@@ -107,8 +105,8 @@
           .modal-body
             %p.text-warning
               Deactivation will hide team and make impossible to create instances in it
-            = label_tag :confirm, "Please confirm with team name"
-            = text_field_tag :confirm, '', data: {confirmation: @team.name}
+            = label_tag :confirm, 'Please confirm with team name'
+            = text_field_tag :confirm, '', data: { confirmation: @team.name }
           .modal-footer
             = f.submit 'Confirm', disabled: 'disabled', class: 'btn btn-danger'
 

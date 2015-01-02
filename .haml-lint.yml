@@ -1,18 +1,7 @@
 linters:
   LineLength:
-      max: 200
+      max: 160
 
   ClassesBeforeIds:
     enabled: false
-
-  ImplicitDiv:
-    enabled: false
-
-  UnnecessaryStringOutput:
-    enabled: false
-
-  RuboCop:
-    ignored_cops:
-      - Style/StringLiterals
-      - Style/SpaceInsideHashLiteralBraces
 

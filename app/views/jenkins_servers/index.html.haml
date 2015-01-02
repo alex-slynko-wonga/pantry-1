@@ -5,7 +5,7 @@
     = link_to @current_team.name, @current_team
 - if can_add_server?(@current_team)
   .row
-    .span12= link_to "Create a new server", new_jenkins_server_path
+    .span12= link_to 'Create a new server', new_jenkins_server_path
 
 .row
   .span12

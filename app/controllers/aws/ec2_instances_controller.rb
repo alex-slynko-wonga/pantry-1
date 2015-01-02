@@ -145,6 +145,7 @@ class Aws::Ec2InstancesController < ApplicationController
       @team_name = @team.name
     else
       @grouped_environments = @environments.group_by_team_name
+      @team_name = ''
     end
   end
 

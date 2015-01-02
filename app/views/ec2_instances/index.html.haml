@@ -16,7 +16,7 @@
     %tr
       %td= instance.id
       %td= link_to instance.name, url_for([:aws, instance])
-      %td.col_status{data: {ec2_id: instance.id}}= instance.human_status
+      %td.col_status{ data: { ec2_id: instance.id } }= instance.human_status
       %td= os_image(instance.platform)
       %td= instance.ami
       - if instance.instance_role_id.nil?

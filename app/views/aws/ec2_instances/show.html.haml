@@ -1,11 +1,11 @@
-.instance_controller{data: {ng_controller: "Ec2InstanceCtrl"}}
+.instance_controller{ data: { ng_controller: 'Ec2InstanceCtrl' } }
   %h1= @ec2_instance.name
   = link_to "Go back to #{@ec2_instance.team.name}", @ec2_instance.team
 
   = render 'shared/ec2_instance', ec2_instance: @ec2_instance
 
   = button_to 'Destroy', [:aws, @ec2_instance], method: :delete,
-    data: { confirm: 'This will permanently delete this instance. Are you sure?', 'ng-show' => 'policy.destroy'}, class: 'btn btn-danger'
+    data: { confirm: 'This will permanently delete this instance. Are you sure?', ng_show: 'policy.destroy' }, class: 'btn btn-danger'
 
   - if @history_log
     .row-fluid
@@ -13,9 +13,9 @@
         .accordion
           .accordion-group
             .accordion-heading
-              .lightgray.accordion-toggle{"data-toggle" => "collapse", href: "#historyList"}
+              .lightgray.accordion-toggle{ href: '#historyList', data: { toggle: 'collapse' } }
                 .text-centered  History
-            .accordion-body.collapse{id: "historyList"}
+            .accordion-body.collapse#historyList
               .accordion-inner
                 .instance_history_log
                   %table.table

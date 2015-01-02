@@ -76,14 +76,8 @@ When(/^I click on "(.*?)" icon$/) do |alt|
   find(:xpath, "//img[@alt = '#{alt}']/parent::a").click
 end
 
-When(/^I wait (\d+) seconds?$/) do |seconds|
-  sleep seconds.to_i
-end
-
-Then(/^I should see "(.*?)" status near "(.*?)" name(?: after (\d+) seconds|)$/) do |status, name, seconds|
-  wait_until(seconds.to_i) do
-    has_xpath?("//tr/td/a[text()='#{name}']/../../td[text()='#{status}']")
-  end
+Then(/^I should see "(.*?)" status near "(.*?)" name$/) do |status, name|
+  expect(page).to have_xpath("//tr/td/a[text()='#{name}']/../../td[text()='#{status}']")
 end
 
 When(/^I click on collapsible button for "(.*?)" machine$/) do |name|

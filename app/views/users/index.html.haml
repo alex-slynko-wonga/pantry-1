@@ -19,4 +19,4 @@
         %td= user.last_seen_at
       - if policy(user).edit?
         %td= user.role.humanize
-        %td= link_to "Edit", edit_user_url(user)
+        %td= link_to 'Edit', edit_user_url(user)

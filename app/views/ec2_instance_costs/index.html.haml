@@ -1,11 +1,11 @@
-.bill_dates{data: {preload_resource: @available_dates.to_json, preload_resource_name: 'bill_dates'}}
-#Ec2InstanceCostsCtrl{data: {ng_controller: 'Ec2InstanceCostsCtrl', ng_init: 'getCosts()'}}
+.bill_dates{ data: { preload_resource: @available_dates.to_json, preload_resource_name: 'bill_dates' } }
+#Ec2InstanceCostsCtrl{ data: { ng_controller: 'Ec2InstanceCostsCtrl', ng_init: 'getCosts()' } }
   .row-fluid
     .span12
       %h1 Billing for {{dateUI}}
   .row-fluid
     .span7
-      %select#change_date{data: {ng_model: 'date', ng_change: 'getCosts()', ng_options: 'o[0] as o[1] for o in options'}, value: 'o'}
+      %select#change_date{ data: { ng_model: 'date', ng_change: 'getCosts()', ng_options: 'o[0] as o[1] for o in options' }, value: 'o' }
 
       %table.table
         %thead
@@ -14,13 +14,13 @@
             %th Costs
             %th
         %tbody
-          %tr{"ng-repeat" => "cost in costs"}
+          %tr{ data: { ng_repeat: 'cost in costs' } }
             %td
-              %a{href: "/teams/{{cost.id}}", data: { ng_hide: "cost.disabled"}} {{cost.name}}
-              %div{ data: { ng_show: "cost.disabled"}} {{cost.name}} (inactive)
+              %a{ href: '/teams/{{cost.id}}', data: { ng_hide: 'cost.disabled' } } {{cost.name}}
+              .team{ data: { ng_show: 'cost.disabled' } } {{cost.name}} (inactive)
             %td ${{cost.costs}}
             %td
-              %a{"id" => "details_{{cost.id}}", "href" => "", data: { ng_click: "showDetails(cost.id, cost.name, cost.disabled)" }, "title" => "Open details"}
+              %a{ id: 'details_{{cost.id}}', href: '', data: { ng_click: 'showDetails(cost.id, cost.name, cost.disabled)' }, title: 'Open details' }
                 Details for {{cost.name}}
                 {{ cost.disabled | conditionalText :"(inactive)"}}
                 %i.icon-chevron-right
@@ -42,7 +42,7 @@
                 ${{total_costs}}
                 %td
     .span5
-      %div{"ng-show" => "team_id"}
+      .team_details{ data: { ng_show: 'team_id' } }
         %h3
           Details for team {{name}}
           {{ disabled | conditionalText :"(inactive)"}}
@@ -53,7 +53,7 @@
               %th Instance name
               %th Costs
           %tbody
-            %tr{"ng-repeat" => "cost_detail in cost_details"}
+            %tr{ data: { ng_repeat: 'cost_detail in cost_details' } }
               %td
-                %a{"href" => "/aws/ec2_instances/{{cost_detail.ec2_instance_id}}"} {{cost_detail.ec2_instance.name}}.{{cost_detail.ec2_instance.domain}}
+                %a{ href: '/aws/ec2_instances/{{cost_detail.ec2_instance_id}}' } {{cost_detail.ec2_instance.name}}.{{cost_detail.ec2_instance.domain}}
               %td {{cost_detail.cost}}

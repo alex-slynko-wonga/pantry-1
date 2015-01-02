@@ -1,8 +1,8 @@
-#user_template {
+.template {
   display: none;
 }
 
-#users .user .icon-remove {
+.list .inner_item .icon-remove {
   cursor: pointer;
   vertical-align: top;
 }
