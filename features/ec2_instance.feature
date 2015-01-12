@@ -15,10 +15,11 @@ Feature: EC2 Instance
     Then I should see "instanceName"
     And I should see "Booting"
     Then I should see "History"
-    And I should see my name near "Ec2Boot"
     And I should see a flash message with "Ec2 Instance request succeeded."
     And I should not see "Instance role:"
     And an instance build should start
+    When I opened history
+    And I should see my name near "Ec2Boot"
 
     When an instance is created with ip "123.456.7.8"
     And I am on instance page
@@ -90,6 +91,7 @@ Feature: EC2 Instance
     When I request an EC2 instance
     Then I should not be able to choose "MyInstanceRole" instance role
 
+  @javascript
   Scenario: Create instance like existing
     Given I am in the "Pantry" team
     And I have "m1.large" instance
@@ -106,7 +108,7 @@ Feature: EC2 Instance
     Then "m3.xlarge" instance details should be present
 
   @javascript
-  Scenario:
+  Scenario: With broken pricing
     Given AWS pricing is broken
     And I am in the "TeamName" team
     And "TeamName" team has an "INT" environment with name "TEST"

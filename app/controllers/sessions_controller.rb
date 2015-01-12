@@ -13,9 +13,11 @@ class SessionsController < ApplicationController
     redirect_to('auth/ldap') && return unless env && env['omniauth.auth']
     user = User.from_omniauth(env['omniauth.auth']['extra']['raw_info'])
     redirect_to('/auth/ldap') && return unless user
+    requested_url = session['requested_url'] || root_url
+    reset_session
     session[:user_id] = user.id
     flash[:success] = 'Signed in!'
-    redirect_to session['requested_url'] || root_url
+    redirect_to requested_url
   end
 
   def failure

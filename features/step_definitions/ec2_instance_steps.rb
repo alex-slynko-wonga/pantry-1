@@ -361,3 +361,7 @@ end
 When(/^I cleanup an instance$/) do
   click_on 'Run machine cleanup'
 end
+
+When(/^I opened history$/) do
+  page.first(:xpath, '//div[text()="History"]').click
+end

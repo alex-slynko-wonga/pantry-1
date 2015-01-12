@@ -4,7 +4,9 @@ class Aws::Ec2InstancesController < ApplicationController
 
   def new
     @ec2_instance = if params[:id].present?
-                      Ec2Instance.find(params[:id]).dup
+                      Ec2Instance.find(params[:id]).dup.tap do |instance|
+                        instance.security_group_ids = instance.security_group_ids.to_a
+                      end
                     else
                       Ec2Instance.new(team_id: params[:team_id])
                     end
