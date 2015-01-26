@@ -14,6 +14,6 @@ $ ->
         @value = ""
         false
 
-  $("i.icon-remove").on "click", (event) ->
+  $('.list').on "click", "i.icon-remove", (event) ->
     event.preventDefault()
     $(this).parents('.inner_item').remove()
