@@ -22,7 +22,7 @@ if Rails.env.test? || Rails.env.development?
   require 'haml_lint/rake_task'
   desc 'Run HAML linter'
   HamlLint::RakeTask.new do |task, args|
-    task.pattern = Dir['app/views/**/*.haml']
+    task.files = ['app/views/**/*.haml']
   end
 
   task default: :haml_lint

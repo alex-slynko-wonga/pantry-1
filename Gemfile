@@ -21,12 +21,13 @@ gem 'rack-ssl'
 gem 'cache_digests'
 gem 'state_machine'
 gem 'newrelic_rpm', '~> 3.7'
-gem 'net-ldap', github: 'ruby-ldap/ruby-net-ldap'
+gem 'net-ldap'
 gem 'simple_form'
 gem 'pundit'
 gem 'amazon-pricing'
 gem 'mechanize'
 gem 'responders', '~> 2.0'
+gem 'activerecord-session_store'
 
 group :development do
   gem 'better_errors'
@@ -61,11 +62,11 @@ end
 group :test, :development do
   gem 'awesome_print'
   gem 'factory_girl_rails'
-  gem 'haml-lint', require: false, github: 'causes/haml-lint'
+  gem 'haml-lint', require: false
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.1.0'
-  gem 'rubocop'
-  gem 'scss-lint', github: 'causes/scss-lint'
+  gem 'rubocop', '0.28.0'
+  gem 'scss-lint'
   gem 'spring-commands-cucumber'
   gem 'spring-commands-rspec'
 end

@@ -1,5 +1,9 @@
 ---
-exclude: 'vendor/assets/stylesheets/**'
+exclude:
+  - 'coverage/**'
+  - 'stepdown/**'
+  - 'tmp/**'
+  - 'vendor/assets/stylesheets/**'
 
 linters:
   Comment:

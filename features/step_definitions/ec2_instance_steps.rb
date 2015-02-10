@@ -44,7 +44,7 @@ end
 When(/^I request an instance with "(.*?)" AMI$/) do |ami_name|
   visit '/aws/ec2_instances/new'
   fill_in_default_values('new-instance')
-  find(:select, text: ami_name).select_option
+  select(ami_name, from: 'Ami')
   click_on 'Create'
 end
 
