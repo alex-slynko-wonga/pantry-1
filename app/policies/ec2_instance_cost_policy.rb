@@ -6,4 +6,8 @@ class Ec2InstanceCostPolicy < ApplicationPolicy
   def show?
     index?
   end
+
+  def show_all?
+    index?
+  end
 end

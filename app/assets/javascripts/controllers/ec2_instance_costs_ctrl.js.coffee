@@ -1,6 +1,8 @@
 @app.controller 'Ec2InstanceCostsCtrl', ["$scope", "$resource", ($scope, $resource) ->
   $scope.date = null
   $scope.dateUI = ''
+  $scope.teamSortOrder = 'name'
+  $scope.instanceSortOrder = 'name'
 
   $scope.getCosts = ->
     $scope.options = $scope.preloadResource.bill_dates
@@ -18,6 +20,8 @@
     costs = $resource("/ec2_instance_costs.json?date=:date", date: $scope.date).query ->
       $scope.total_pantry_costs = (costs.reduce ((total, cost) -> total + parseFloat(cost.costs)), 0).toFixed(2)
       $scope.costs = costs
+      $scope.sortTeamsBy $scope.teamSortOrder
+      $scope.costs
 
   $scope.showDetails = (team_id, name, disabled)->
     $scope.team_id = team_id
@@ -26,4 +30,34 @@
     CostDetail = $resource("/ec2_instance_costs/:team_id.json?date=:date", team_id: $scope.team_id, date: $scope.date)
     $scope.cost_details = CostDetail.query()
     $scope.render_estimated = "* costs are estimated" unless $scope.cost_details.size > 0 && $scope.cost_details[0].estimated? && $scope.cost_details[0].estimated == true
+    $scope.sortInstancesBy $scope.instanceSortOrder
+
+  $scope.showDetailsForAllTeams = () ->
+    $scope.team_id = null
+    $scope.name = 'All instances'
+    CostDetail = $resource("/ec2_instance_costs/show_all.json?date=:date", date: $scope.date)
+    $scope.cost_details = CostDetail.query()
+    $scope.render_estimated = "* costs are estimated" unless $scope.cost_details.size > 0 && $scope.cost_details[0].estimated? && $scope.cost_details[0].estimated == true
+    $scope.sortInstancesBy $scope.instanceSortOrder
+
+  $scope.sortInstancesBy = (column) ->
+    $scope.instanceSortOrder = column
+    $scope.cost_details.sort (first, second) ->
+      if first[$scope.instanceSortOrder] == second[$scope.instanceSortOrder]
+        0
+      else if first[$scope.instanceSortOrder] < second[$scope.instanceSortOrder]
+        -1
+      else
+        1
+
+  $scope.sortTeamsBy = (column) ->
+    $scope.teamSortOrder = column
+    $scope.costs.sort (first, second) ->
+      if first[$scope.teamSortOrder] == second[$scope.teamSortOrder]
+        0
+      else if first[$scope.teamSortOrder] < second[$scope.teamSortOrder]
+        -1
+      else
+        1
+
 ]

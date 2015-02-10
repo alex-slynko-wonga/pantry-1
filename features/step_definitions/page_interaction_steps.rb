@@ -1,15 +1,15 @@
-Then(/^I should see "(.*?)"$/) do |some_text|
+Then(/^I (?:should )?see "(.*?)"$/) do |some_text|
   expect(page).to have_content(some_text)
 end
 
-Then(/^I should see "(.*?)" after page is updated$/) do |some_text|
+Then(/^I (?:should )?see "(.*?)" after page is updated$/) do |some_text|
   wait_until(5) do
     page.has_content? some_text
   end
   expect(page).to have_content(some_text)
 end
 
-Then(/^option "(.*?)" should be present near instance$/) do |some_text|
+Then(/^option "(.*?)" (?:should )?be present near instance$/) do |some_text|
   visit current_path
   expect(find(:xpath, "//tr/td/a[text()='#{Ec2Instance.last.name}']/../../td/a[text()='#{some_text}']")).to be_present
 end

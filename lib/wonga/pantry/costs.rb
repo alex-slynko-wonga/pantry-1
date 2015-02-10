@@ -18,4 +18,8 @@ class Wonga::Pantry::Costs
       .where(ec2_instance_costs: { bill_date: @bill_date }, ec2_instances: { team_id: team_id })
       .order('ec2_instances.name').to_a
   end
+
+  def costs_details
+    Ec2InstanceCost.includes(:ec2_instance).where(ec2_instance_costs: { bill_date: @bill_date }).to_a
+  end
 end

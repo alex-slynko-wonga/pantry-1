@@ -10,8 +10,10 @@
       %table.table
         %thead
           %tr
-            %th Team
-            %th Costs
+            %th
+              %a{ data: { ng_click: 'sortTeamsBy("name")' }, title: 'Team' }
+            %th
+              %a{ data: { ng_click: 'sortTeamsBy("costs")' }, title: 'Costs' }
             %th
         %tbody
           %tr{ data: { ng_repeat: 'cost in costs' } }
@@ -26,7 +28,9 @@
                 %i.icon-chevron-right
 
           %tr.warning
-            %td Total for instances created in Pantry
+            %td
+              %a{ id: 'all_details_costs', href: '', data: { ng_click: 'showDetailsForAllTeams()' }, title: 'Total for instances created in Pantry' }
+                Total for instances created in Pantry
             %td ${{total_pantry_costs}}
             %td
           %tr
@@ -42,16 +46,20 @@
                 ${{total_costs}}
                 %td
     .span5
-      .team_details{ data: { ng_show: 'team_id' } }
-        %h3
+      .team_details{ data: { ng_show: 'cost_details' } }
+        %h3{ data: { ng_show: 'team_id' } }
           Details for team {{name}}
           {{ disabled | conditionalText :"(inactive)"}}
+        %h3{ data: { ng_hide: 'team_id' } }
+          Costs for all instances
         %p {{render_estimated}}
         %table.table.details
           %thead
             %tr
-              %th Instance name
-              %th Costs
+              %th
+                %a{ data: { ng_click: 'sortInstancesBy("name")' }, title: 'Instance name' }
+              %th
+                %a{ data: { ng_click: 'sortInstancesBy("cost")' }, title: 'Costs' }
           %tbody
             %tr{ data: { ng_repeat: 'cost_detail in cost_details' } }
               %td

@@ -2,18 +2,19 @@ require 'spec_helper'
 
 RSpec.describe Wonga::Pantry::Costs do
   let(:bill_date) { Date.today.prev_month.end_of_month }
+  let(:team) { FactoryGirl.create(:team) }
+  let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
+
   subject { Wonga::Pantry::Costs.new(bill_date) }
 
   describe '#costs_per_team' do
-    let!(:team) { FactoryGirl.create(:team) }
-    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
-
     it 'returns array of hashes with total costs for current bill date only' do
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date + 1, ec2_instance: ec2_instance, cost: 50)
       result = subject.costs_per_team.first
       expect(result.id).to eq team.id
       expect(result.name).to eq team.name
+      expect(result.costs).to eq 100
     end
 
     it 'returns array of hashes with total costs for all instances' do
@@ -22,12 +23,11 @@ RSpec.describe Wonga::Pantry::Costs do
       result = subject.costs_per_team.first
       expect(result.id).to eq team.id
       expect(result.name).to eq team.name
+      expect(result.costs).to eq 150
     end
 
     context 'when team is disabled' do
-      before(:each) do
-        team.update_attribute(:disabled, true)
-      end
+      let(:team) { FactoryGirl.create(:team, disabled: true) }
 
       it 'returns array of hashes with total costs' do
         FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
@@ -39,14 +39,41 @@ RSpec.describe Wonga::Pantry::Costs do
   end
 
   describe '#costs_details_per_team' do
-    let!(:team) { FactoryGirl.create(:team) }
-    let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
-
     it 'returns the instances with their cost, providing a date and the team id' do
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
       FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: FactoryGirl.create(:ec2_instance, team: team), cost: 50)
       result = subject.costs_details_per_team(team.id)
       expect(result.map(&:cost)).to match_array([50, 100])
+    end
+
+    it 'returns the costs of team instances only' do
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: FactoryGirl.create(:ec2_instance), cost: 50)
+      result = subject.costs_details_per_team(team.id)
+      expect(result.map(&:cost)).to match_array([100])
+    end
+
+    it 'returns the costs for current bill date only' do
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date + 1, ec2_instance: FactoryGirl.create(:ec2_instance, team: team), cost: 50)
+      result = subject.costs_details_per_team(team.id)
+      expect(result.map(&:cost)).to match_array([100])
+    end
+  end
+
+  describe '#costs_details' do
+    it 'returns the instances with their cost, providing a date and the team id' do
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: FactoryGirl.create(:ec2_instance), cost: 50)
+      result = subject.costs_details
+      expect(result.map(&:cost)).to match_array([50, 100])
+    end
+
+    it 'returns the costs for current bill date only' do
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date, ec2_instance: ec2_instance, cost: 100)
+      FactoryGirl.create(:ec2_instance_cost, bill_date: bill_date + 1, ec2_instance: FactoryGirl.create(:ec2_instance, team: team), cost: 50)
+      result = subject.costs_details
+      expect(result.map(&:cost)).to match_array([100])
     end
   end
 

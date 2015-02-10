@@ -6,9 +6,6 @@ Rails.application.routes.draw do
     resources :api_keys
   end
 
-  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
-  get 'ec2_instance_costs/index'
-
   namespace :api do
     resources :chef_nodes, only: [:destroy]
     resources :ec2_instances, only: [:update] do
@@ -33,7 +30,9 @@ Rails.application.routes.draw do
   resources :aws_costs, only: [:index, :show]
   resources :total_costs, only: [:show]
   resources :ec2_instances
-  resources :ec2_instance_costs, only: [:index, :show]
+  resources :ec2_instance_costs, only: [:index, :show] do
+    get :show_all, on: :collection
+  end
 
   resources :jenkins_servers, except: [:destroy] do
     resources :jenkins_slaves

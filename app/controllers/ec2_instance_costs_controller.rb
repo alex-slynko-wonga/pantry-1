@@ -13,9 +13,19 @@ class Ec2InstanceCostsController < ApplicationController
   end
 
   def show
+    authorize(Ec2InstanceCost)
     respond_to do |format|
       format.json do
         @costs = costs.costs_details_per_team(params[:id])
+      end
+    end
+  end
+
+  def show_all
+    authorize(Ec2InstanceCost)
+    respond_to do |format|
+      format.json do
+        @costs = costs.costs_details
       end
     end
   end

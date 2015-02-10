@@ -1,5 +1,7 @@
-Given(/^"(.*?)" team has an instance which costs (\d+) dollars for "(.*?)"$/) do |team_name, cost, month_and_year|
-  @instance = FactoryGirl.create(:ec2_instance, team: Team.find_by_name(team_name))
+Given(/^"(.*?)" team has (?:an|"(.*?)") instance which cost (\d+) dollars for "(.*?)"$/) do |team_name, instance_name, cost, month_and_year|
+  params = { team: Team.find_by_name(team_name) }
+  params[:name] = instance_name if instance_name.present?
+  @instance = FactoryGirl.create(:ec2_instance, params)
   (month, year) = month_and_year.split
   month = Date::MONTHNAMES.index(month)
   date = Date.new(year.to_i, month, 1).end_of_month
