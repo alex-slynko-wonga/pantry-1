@@ -41,23 +41,36 @@
     $scope.sortInstancesBy $scope.instanceSortOrder
 
   $scope.sortInstancesBy = (column) ->
-    $scope.instanceSortOrder = column
+    if $scope.instanceSortOrder == column
+      $scope.instanceSortOrderDirection = $scope.instanceSortOrderDirection * -1
+    else
+      $scope.instanceSortOrderDirection = 1
+      $scope.instanceSortOrder = column
     $scope.cost_details.sort (first, second) ->
-      if first[$scope.instanceSortOrder] == second[$scope.instanceSortOrder]
-        0
-      else if first[$scope.instanceSortOrder] < second[$scope.instanceSortOrder]
-        -1
-      else
-        1
+      $scope.sortFunction(first, second, $scope.instanceSortOrder) * $scope.instanceSortOrderDirection
 
   $scope.sortTeamsBy = (column) ->
+    if $scope.teamSortOrder == column
+      $scope.teamSortOrderDirection = $scope.teamSortOrderDirection * -1
+    else
+      $scope.teamSortOrderDirection = 1
+      $scope.instanceSortOrder = column
     $scope.teamSortOrder = column
     $scope.costs.sort (first, second) ->
-      if first[$scope.teamSortOrder] == second[$scope.teamSortOrder]
+      $scope.sortFunction(first, second, $scope.teamSortOrder) * $scope.teamSortOrderDirection
+
+  $scope.sortFunction = (firstUnconverted, secondUnconverted, columnName) ->
+      first = parseFloat(firstUnconverted[columnName])
+      if isNaN(first)
+        first = firstUnconverted[columnName]
+        second = secondUnconverted[columnName]
+      else
+        second = parseFloat(secondUnconverted[columnName])
+
+      if first == second
         0
-      else if first[$scope.teamSortOrder] < second[$scope.teamSortOrder]
+      else if first < second
         -1
       else
         1
-
 ]
