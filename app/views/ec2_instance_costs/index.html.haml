@@ -12,8 +12,10 @@
           %tr
             %th
               %a{ data: { ng_click: 'sortTeamsBy("name")' }, title: 'Team' }
+                Team
             %th
               %a{ data: { ng_click: 'sortTeamsBy("costs")' }, title: 'Costs' }
+                Costs
             %th
         %tbody
           %tr{ data: { ng_repeat: 'cost in costs' } }
@@ -58,8 +60,10 @@
             %tr
               %th
                 %a{ data: { ng_click: 'sortInstancesBy("name")' }, title: 'Instance name' }
+                  Instance name
               %th
                 %a{ data: { ng_click: 'sortInstancesBy("cost")' }, title: 'Costs' }
+                  Costs
           %tbody
             %tr{ data: { ng_repeat: 'cost_detail in cost_details' } }
               %td
