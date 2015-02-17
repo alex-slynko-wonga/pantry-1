@@ -33,7 +33,7 @@ RSpec.describe Wonga::Pantry::BootMessage do
 
     context '#bootstrap_username' do
       let(:bootstrap_username) { 'CentOS' }
-      let(:ami) { instance_double('Ami', bootstrap_username: bootstrap_username) }
+      let(:ami) { Ami.new bootstrap_username: bootstrap_username }
 
       it 'add bootstrap_username to message' do
         expect(Ami).to receive(:where).and_return([ami])

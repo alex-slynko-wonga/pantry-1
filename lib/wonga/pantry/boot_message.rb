@@ -49,7 +49,7 @@ class Wonga::Pantry::BootMessage
         device_name: volume.device_name,
         ebs: {
           volume_size: volume.size,
-          snapshot: volume.snapshot,
+          snapshot_id: volume.snapshot,
           volume_type: volume.volume_type,
           delete_on_termination: true
         }
