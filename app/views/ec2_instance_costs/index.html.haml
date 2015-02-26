@@ -14,7 +14,7 @@
               %a{ data: { ng_click: 'sortTeamsBy("name")' }, title: 'Team' }
                 Team
             %th
-              %a{ data: { ng_click: 'sortTeamsBy("costs")' }, title: 'Costs' }
+              %a{ data: { ng_click: 'sortTeamsBy("parsed_costs")' }, title: 'Costs' }
                 Costs
             %th
         %tbody
@@ -62,7 +62,7 @@
                 %a{ data: { ng_click: 'sortInstancesBy("name")' }, title: 'Instance name' }
                   Instance name
               %th
-                %a{ data: { ng_click: 'sortInstancesBy("cost")' }, title: 'Costs' }
+                %a{ data: { ng_click: 'sortInstancesBy("parsed_cost")' }, title: 'Costs' }
                   Costs
           %tbody
             %tr{ data: { ng_repeat: 'cost_detail in cost_details' } }
