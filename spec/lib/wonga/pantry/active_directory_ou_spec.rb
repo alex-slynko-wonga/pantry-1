@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.describe Wonga::Pantry::ActiveDirectoryOU do
   let(:name) { 'team' }
   let(:domain) { 'example.com' }

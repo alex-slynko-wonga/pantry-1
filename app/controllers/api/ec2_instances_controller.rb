@@ -27,4 +27,12 @@ class Api::Ec2InstancesController < ApiController
     Wonga::Pantry::Ec2Resource.new(ec2_instance).stop_automatically
     respond_with({ msg: 'success' }, location: aws_ec2_instance_url)
   end
+
+  def ready_for_shutdown
+    render json: ScheduledEvent.ready_for_shutdown.pluck(:ec2_instance_id)
+  end
+
+  def ready_for_start
+    render json: ScheduledEvent.ready_for_start.pluck(:ec2_instance_id)
+  end
 end

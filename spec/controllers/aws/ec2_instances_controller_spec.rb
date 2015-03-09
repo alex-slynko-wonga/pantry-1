@@ -33,7 +33,6 @@ RSpec.describe Aws::Ec2InstancesController, type: :controller do
 
       it 'fill required fields' do
         get 'new', id: reference_instance.id
-        expect(assigns(:ec2_instance).team_id).to eq(reference_instance.team_id)
         expect(assigns(:ec2_instance).environment_id).to eq(reference_instance.environment_id)
       end
     end

@@ -1,15 +1,16 @@
-require 'wonga/pantry/ec2_instance_machine'
-
 class Ec2Instance < ActiveRecord::Base
-  belongs_to :team
-  belongs_to :user
   belongs_to :environment
   belongs_to :instance_role
-  has_one :jenkins_server
-  has_one :jenkins_slave
+  belongs_to :team
+  belongs_to :user
+  has_one :instance_schedule
+  has_one :jenkins_server, validate: true
+  has_one :jenkins_slave, validate: true
   has_many :ec2_instance_costs
   has_many :ec2_instance_logs
   has_many :ec2_volumes, inverse_of: :ec2_instance
+  has_many :schedules, through: :instance_schedule
+  has_one :scheduled_event
 
   validates :ami, presence: true
   validates :domain, presence: true, domain_name: true
@@ -30,17 +31,17 @@ class Ec2Instance < ActiveRecord::Base
   validates :ec2_volumes, presence: true, on: :create
 
   validate :check_environment_team, on: :create
-  validate :jenkins_server_is_ok, on: :create
-  validate :jenkins_slave_is_ok, on: :create
   validate :winbind_compatibility, unless: 'terminated?'
 
   serialize :security_group_ids
 
   accepts_nested_attributes_for :ec2_volumes
+  accepts_nested_attributes_for :scheduled_event
 
   after_initialize :init, on: :create
   before_validation :set_platform_security_group_id, on: :create
   before_validation :set_volume_size, on: :create
+  after_validation :set_schedule, on: :create
 
   scope :terminated, -> { where(state: 'terminated') }
   scope :not_terminated, -> { where.not(state: 'terminated') }
@@ -67,8 +68,21 @@ class Ec2Instance < ActiveRecord::Base
 
   def initialize_dup(other)
     super
-    [:instance_id, :created_at, :updated_at, :user_id, :bootstrapped, :joined, :terminated, :ip_address, :dns, :state].each do |attribute|
+    [:instance_id, :team_id, :created_at, :updated_at, :user_id, :bootstrapped, :joined, :terminated, :ip_address, :dns, :state].each do |attribute|
       self[attribute] = nil
+    end
+  end
+
+  def schedule_next_event
+    return unless instance_schedule
+    if state == 'ready'
+      event = scheduled_event || build_scheduled_event
+      event.event_type = 'shutdown'
+      event.event_time = instance_schedule.next_shutdown_time
+    elsif state == 'shutdown_automatically'
+      event = scheduled_event || build_scheduled_event
+      event.event_type = 'start'
+      event.event_time = instance_schedule.next_start_time
     end
   end
 
@@ -105,21 +119,17 @@ class Ec2Instance < ActiveRecord::Base
     state != 'initial_state' && state != 'booting'
   end
 
-  def jenkins_server_is_ok
-    return unless jenkins_server
-    errors.add(:jenkins_server, jenkins_server.errors.full_messages.to_sentence) if jenkins_server.invalid?
-  end
-
-  def jenkins_slave_is_ok
-    return unless jenkins_slave
-    errors.add(:jenkins_slave, jenkins_slave.errors.full_messages.to_sentence) if jenkins_slave.invalid?
-  end
-
   def winbind_compatibility
     return unless name
     return unless name.size > 15 # otherwise use Rails uniqueness validation
     return unless Ec2Instance.where('name like ?', name[0, 14] + '%').where.not(id: id).not_terminated.exists?
 
     errors.add(:name, "The first 15 characters (#{name[0, 14]}) are not unique. This constraint is required to join the Active Directory")
+  end
+
+  def set_schedule
+    return unless team
+    team_schedule = team.schedules.daily.first
+    build_instance_schedule(schedule: team_schedule) if team_schedule
   end
 end

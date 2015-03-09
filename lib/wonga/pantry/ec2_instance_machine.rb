@@ -5,6 +5,7 @@ module Wonga
 
       def initialize(ec2_instance)
         @ec2_instance = ec2_instance
+        @custom_callbacks = []
         super()
       end
 
@@ -81,12 +82,27 @@ module Wonga
 
         after_transition dns_record_created: :ready do |machine, _state|
           mail = Ec2Notifications.machine_created(machine.ec2_instance)
-          machine.callback = -> { mail.deliver_now }
+          machine._add_callback(-> { mail.deliver_now })
+          machine.ec2_instance.schedule_next_event
         end
 
         after_transition terminating: :terminated do |machine, _state|
           if machine.ec2_instance.jenkins_slave
-            machine.callback = -> { machine.delete_jenkins_slave }
+            machine._add_callback(-> { machine.delete_jenkins_slave })
+          end
+        end
+
+        after_transition to: [:shutdown_automatically, :ready] do |machine, _state|
+          machine.ec2_instance.schedule_next_event
+        end
+
+        after_transition to: :shutdown do |machine, _state|
+          machine.ec2_instance.scheduled_event.destroy if machine.ec2_instance.scheduled_event
+        end
+
+        after_transition to: :terminating do |machine, _state|
+          if machine.ec2_instance.instance_schedule
+            machine.ec2_instance.scheduled_event.destroy
           end
         end
       end
@@ -96,7 +112,7 @@ module Wonga
       end
 
       def callback
-        @callback.call if @callback
+        @custom_callbacks.each(&:call)
       end
 
       def delete_jenkins_slave
@@ -105,8 +121,11 @@ module Wonga
         Wonga::Pantry::JenkinsSlaveDestroyer.new(@ec2_instance.jenkins_slave, server_fqdn, 80, @user).delete
       end
 
-      attr_writer :callback
       attr_writer :user
+
+      def _add_callback(lambda_or_proc)
+        @custom_callbacks << lambda_or_proc
+      end
 
       private
 

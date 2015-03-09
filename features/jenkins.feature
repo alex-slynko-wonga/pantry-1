@@ -15,7 +15,7 @@ Feature: Jenkins
     And I request jenkins server
     Then I should see "Pantry Team's jenkins server"
     And I should see a flash message with "Jenkins server request succeeded."
-    And an instance build should start
+    And the instance build should start
 
   Scenario: Team should not be duplicated
     Given I am in the "TestTeam" team
@@ -52,7 +52,7 @@ Feature: Jenkins
     Then I should be redirected to the Jenkins server page
     And I should see the slaves listing
 
-    When an instance is created with ip "123.456.7.8"
+    When the instance is created with ip "123.456.7.8"
     Then I should see "Ready" after page is updated
     And I should not see "Booting"
 
@@ -112,7 +112,7 @@ Feature: Jenkins
     Then I should not see slave in listing
 
     Given I have a jenkins slave
-    And the jenkins slave is protected
+    And the jenkins slave is protected from termination
     When I go into Jenkins slave page
     Then I should not see "Destroy"
 

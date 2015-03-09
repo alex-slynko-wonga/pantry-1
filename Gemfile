@@ -64,8 +64,8 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'haml-lint', require: false
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 3.1.0'
-  gem 'rubocop', '0.28.0'
+  gem 'rspec-rails', '~> 3.2'
+  gem 'rubocop'
   gem 'scss-lint'
   gem 'spring-commands-cucumber'
   gem 'spring-commands-rspec'

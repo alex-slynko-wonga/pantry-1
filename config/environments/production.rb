@@ -77,12 +77,6 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
-
-  # Do not dump schema after migrations.
-  config.active_record.dump_schema_after_migration = false
-
   #### CUSTOM ADDITIONS
   config.action_mailer.delivery_method = CONFIG['mailer']['delivery_method'].to_sym
   config.action_mailer.smtp_options = CONFIG['mailer']['smtp_options'].symbolize_keys if CONFIG['mailer']['smtp_options']

@@ -23,7 +23,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "InstanceName#{n}" }
     domain CONFIG['pantry']['domain']
     platform 'Lindows'
-    environment { FactoryGirl.build(:environment, team: team) }
+    environment { association(:environment, team: team, strategy: @build_strategy.class) }
     run_list "role[ted]\r\nrecipe[ted]\r\nrecipe[ted::something]"
     security_group_ids ['sg-00000001', 'sg-00000002']
     ami 'i-111111'

@@ -1,10 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
-  let(:ec2_instance) { FactoryGirl.build_stubbed(:ec2_instance) }
-  # before(:each) do
-  #  ec2_instance = FactoryGirl.build_stubbed(:ec2_instance)
-  # end
+  let(:ec2_instance) { FactoryGirl.build(:ec2_instance) }
 
   subject { described_class.new(ec2_instance) }
 
@@ -48,14 +45,31 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
         expect(subject).to be_ready
       end
     end
+
+    context 'with instance_schedule' do
+      before(:each) do
+        ec2_instance.instance_schedule = FactoryGirl.build(:instance_schedule, ec2_instance: ec2_instance)
+        ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
+        move_status [:ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record]
+      end
+
+      it 'builds new start event' do
+        subject.bootstrap
+        expect(ec2_instance.scheduled_event.event_type).to eq 'shutdown'
+      end
+
+      it 'uses next_start_time from instance_schedule' do
+        time = Time.now - 5.days
+        allow(ec2_instance.instance_schedule).to receive(:next_shutdown_time).and_return(time)
+        subject.bootstrap
+        expect(ec2_instance.scheduled_event.event_time).to eq time
+      end
+    end
   end
 
   describe 'shut down an instance' do
     context 'instance not protected' do
       let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: false, state: 'ready') }
-      # before(:each) do
-      #  ec2_instance = FactoryGirl.build(:ec2_instance, protected: false, state: 'ready')
-      # end
 
       it 'starts the shut down process' do
         ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
@@ -74,106 +88,147 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
       end
     end
 
-    context 'when instance is protected' do
-      let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: true, state: 'ready') }
+    context 'when instance has scheduled shutdown event' do
+      let(:ec2_instance) { FactoryGirl.build(:ec2_instance, :running, state: 'shutting_down') }
 
-      it 'does not start the shut down process' do
-        expect(subject.can_termination?).to be_falsey
-        subject.termination
-        expect(subject).not_to be_terminating
-        expect(subject).to_not be_can_termination
+      before(:each) do
+        FactoryGirl.build(:scheduled_shutdown_event, ec2_instance: ec2_instance)
+      end
+
+      it 'does remove scheduled event' do
+        subject.shutdown
+        expect(subject).to be_shutdown
       end
     end
   end
 
   describe 'shut down automatically an instance' do
-    context 'instance not protected' do
-      let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: false, state: 'ready') }
+    let(:ec2_instance) { FactoryGirl.build(:ec2_instance, :running) }
 
-      it 'starts the shut down automatically process' do
-        ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
-        move_status [:ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record, :bootstrap]
-        expect(subject).to be_ready
-        subject.shutdown_now_automatically
-        expect(subject).to be_shutting_down_automatically
+    it 'starts the shut down automatically process' do
+      expect(subject).to be_ready
+      subject.shutdown_now_automatically
+      expect(subject).to be_shutting_down_automatically
+    end
+
+    it 'changes the status to shutdown_automatically' do
+      move_status [:shutdown_now_automatically]
+      subject.shutdown
+      expect(subject).to be_shutdown_automatically
+    end
+
+    context 'with instance_schedule' do
+      before(:each) do
+        ec2_instance.instance_schedule = FactoryGirl.build(:instance_schedule, ec2_instance: ec2_instance)
+        move_status [:shutdown_now_automatically]
       end
 
-      it 'changes the status to shutdown_automatically' do
-        ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
-        move_status [:ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record, :bootstrap, :shutdown_now_automatically]
-        expect(subject).to be_shutting_down_automatically
+      it 'builds new start event' do
         subject.shutdown
-        expect(subject).to be_shutdown_automatically
+        expect(ec2_instance.scheduled_event.event_type).to eq 'start'
+      end
+
+      it 'uses next_start_time from instance_schedule' do
+        time = Time.now - 5.days
+        allow(ec2_instance.instance_schedule).to receive(:next_start_time).and_return(time)
+        subject.shutdown
+        expect(ec2_instance.scheduled_event.event_time).to eq time
+      end
+
+      context 'if event exists' do
+        before(:each) do
+          ec2_instance.scheduled_event = FactoryGirl.build(:scheduled_shutdown_event, ec2_instance: ec2_instance)
+        end
+
+        it 'changes it to start event' do
+          subject.shutdown
+          expect(ec2_instance.scheduled_event.event_type).to eq 'start'
+        end
       end
     end
   end
 
   describe 'start an instance' do
-    let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: true, state: 'shutdown') }
+    let(:ec2_instance) { FactoryGirl.build(:ec2_instance, :running, state: 'shutdown') }
 
     it 'starts an instance' do
-      ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
-      move_status [
-        :ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record,
-        :bootstrap, :shutdown_now, :shutdown
-      ]
-      expect(subject).to be_shutdown
       subject.start_instance
       expect(subject).to be_starting
     end
 
-    it 'starts an instance from shutdown_automatically state' do
-      ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true, state: 'shutdown_automatically' }
-      move_status [
-        :ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record, :bootstrap, :shutdown_now_automatically
-      ]
-      expect(subject).to be_shutdown_automatically
-      subject.start_instance
-      expect(subject).to be_starting
+    context 'for instance which was shutdown automatically' do
+      let(:ec2_instance) { FactoryGirl.build(:ec2_instance, :running, state: 'shutdown_automatically') }
+
+      it 'starts an instance from shutdown_automatically state' do
+        subject.start_instance
+        expect(subject).to be_starting
+      end
     end
 
     it 'puts the status to ready' do
-      ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
-      move_status [
-        :ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record,
-        :bootstrap, :shutdown_now, :shutdown, :start_instance
-      ]
-      expect(subject).to be_starting
+      ec2_instance.state = 'starting'
       subject.started
       expect(subject).to be_ready
     end
   end
 
   describe 'start an instance automatically' do
-    let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: true, state: 'shutdown_automatically') }
+    let(:ec2_instance) { FactoryGirl.build(:ec2_instance, :running, state: 'shutdown_automatically') }
+
+    context 'for instance which was shutdown manually' do
+      let(:ec2_instance) { FactoryGirl.build(:ec2_instance, :running, state: 'shutdown') }
+
+      it 'starts an instance from shutdown_automatically state' do
+        subject.start_instance_automatically
+        expect(subject).to be_shutdown
+      end
+    end
 
     it 'starts an instance from shutdown_automatically state' do
-      move_status [
-        :ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record, :bootstrap, :shutdown_now_automatically
-      ]
-      expect(subject).to be_shutdown_automatically
       subject.start_instance_automatically
       expect(subject).to be_starting
     end
 
     it 'puts the status to ready' do
-      ec2_instance.attributes = { dns: true, terminated: false, bootstrapped: true, joined: true }
-      move_status [
-        :ec2_boot, :ec2_booted, :add_to_domain, :create_dns_record,
-        :bootstrap, :shutdown_now, :shutdown, :start_instance
-      ]
-      expect(subject).to be_starting
+      move_status [:start_instance]
       subject.started
       expect(subject).to be_ready
+    end
+
+    context 'with instance_schedule' do
+      before(:each) do
+        ec2_instance.instance_schedule = FactoryGirl.build(:instance_schedule, ec2_instance: ec2_instance)
+        move_status [:start_instance]
+      end
+
+      it 'builds new start event' do
+        subject.started
+        expect(ec2_instance.scheduled_event.event_type).to eq 'shutdown'
+      end
+
+      it 'uses next_start_time from instance_schedule' do
+        time = Time.now - 5.days
+        allow(ec2_instance.instance_schedule).to receive(:next_shutdown_time).and_return(time)
+        subject.started
+        expect(ec2_instance.scheduled_event.event_time).to eq time
+      end
+
+      context 'if event exists' do
+        before(:each) do
+          ec2_instance.scheduled_event = FactoryGirl.build(:scheduled_start_event, ec2_instance: ec2_instance)
+        end
+
+        it 'changes it to start event' do
+          subject.started
+          expect(ec2_instance.scheduled_event.event_type).to eq 'shutdown'
+        end
+      end
     end
   end
 
   describe 'instance termination' do
     context 'instance not protected' do
       let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: false, state: 'ready') }
-      # before(:each) do
-      #  ec2_instance = FactoryGirl.build(:ec2_instance, protected: false, state: 'ready')
-      # end
 
       it 'starts the termination' do
         subject.termination
@@ -188,13 +243,13 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
       end
     end
 
-    context 'instance is protected' do
-      let(:ec2_instance) { FactoryGirl.build(:ec2_instance, protected: true, state: 'ready') }
-      # before(:each) do
-      #  ec2_instance = FactoryGirl.build(:ec2_instance, protected: true, state: 'ready')
-      # end
+    context 'when instance is protected' do
+      let(:ec2_instance) { FactoryGirl.build(:ec2_instance, :running, protected: true) }
 
       it 'should not put the instance to terminated' do
+        expect(subject.can_termination?).to be_falsey
+        subject.termination
+        expect(subject).not_to be_terminating
         expect(subject).to_not be_can_termination
       end
     end

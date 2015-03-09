@@ -299,4 +299,13 @@ RSpec.describe Ec2Instance, type: :model do
       end
     end
   end
+
+  context '#create' do
+    it 'sets schedule' do
+      schedule = FactoryGirl.create(:schedule)
+      instance = FactoryGirl.build(:ec2_instance, team: schedule.team)
+      instance.save
+      expect(instance.instance_schedule.schedule).to eq(schedule)
+    end
+  end
 end

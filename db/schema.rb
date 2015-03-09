@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150210155626) do
+ActiveRecord::Schema.define(version: 20150319130506) do
 
   create_table "admin_maintenance_windows", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -133,6 +133,14 @@ ActiveRecord::Schema.define(version: 20150210155626) do
 
   add_index "instance_roles", ["ami_id"], name: "index_instance_roles_on_ami_id", using: :btree
 
+  create_table "instance_schedules", force: :cascade do |t|
+    t.integer "ec2_instance_id", limit: 4, null: false
+    t.integer "schedule_id",     limit: 4, null: false
+  end
+
+  add_index "instance_schedules", ["ec2_instance_id", "schedule_id"], name: "index_instance_schedules_on_ec2_instance_id_and_schedule_id", unique: true, using: :btree
+  add_index "instance_schedules", ["schedule_id"], name: "fk_rails_ba65efa180", using: :btree
+
   create_table "jenkins_servers", force: :cascade do |t|
     t.integer  "team_id",         limit: 4
     t.datetime "created_at",                null: false
@@ -152,6 +160,30 @@ ActiveRecord::Schema.define(version: 20150210155626) do
 
   add_index "jenkins_slaves", ["ec2_instance_id"], name: "index_jenkins_slaves_on_ec2_instance_id", using: :btree
   add_index "jenkins_slaves", ["jenkins_server_id"], name: "index_jenkins_slaves_on_jenkins_server_id", using: :btree
+
+  create_table "scheduled_events", force: :cascade do |t|
+    t.integer  "ec2_instance_id", limit: 4
+    t.datetime "event_time"
+    t.string   "event_type",      limit: 255
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "scheduled_events", ["ec2_instance_id"], name: "index_scheduled_events_on_ec2_instance_id", using: :btree
+  add_index "scheduled_events", ["event_type", "event_time"], name: "index_scheduled_events_on_event_type_and_event_time", using: :btree
+
+  create_table "schedules", force: :cascade do |t|
+    t.time     "start_time",                              null: false
+    t.time     "shutdown_time",                           null: false
+    t.integer  "team_id",       limit: 4,                 null: false
+    t.boolean  "weekend_only",  limit: 1, default: false, null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
+  add_index "schedules", ["team_id"], name: "index_schedules_on_team_id", using: :btree
+  add_index "schedules", ["weekend_only", "shutdown_time"], name: "index_schedules_on_weekend_only_and_shutdown_time", using: :btree
+  add_index "schedules", ["weekend_only", "start_time"], name: "index_schedules_on_weekend_only_and_start_time", using: :btree
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", limit: 255,   null: false
@@ -200,4 +232,8 @@ ActiveRecord::Schema.define(version: 20150210155626) do
     t.datetime "last_seen_at"
   end
 
+  add_foreign_key "instance_schedules", "ec2_instances"
+  add_foreign_key "instance_schedules", "schedules"
+  add_foreign_key "scheduled_events", "ec2_instances"
+  add_foreign_key "schedules", "teams"
 end

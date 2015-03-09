@@ -3,6 +3,7 @@ Then(/^I (?:should )?see "(.*?)"$/) do |some_text|
 end
 
 Then(/^I (?:should )?see "(.*?)" after page is updated$/) do |some_text|
+  page.execute_script('window.runTimeouts()')
   wait_until(5) do
     page.has_content? some_text
   end
@@ -69,6 +70,7 @@ Then(/^I should not be able to choose "(.*?)" (\w+ ?\w*)$/) do |option_name, dro
 end
 
 Then(/^I should see my name near "(.*?)"$/) do |event|
+  page.execute_script('window.runTimeouts()')
   expect(find(:xpath, "//tr/td/a[text()='#{User.last.username}']/../../td[text()='#{event}']")).to be_present
 end
 
@@ -77,6 +79,7 @@ When(/^I click on "(.*?)" icon$/) do |alt|
 end
 
 Then(/^I should see "(.*?)" status near "(.*?)" name$/) do |status, name|
+  page.execute_script('window.runTimeouts()')
   expect(page).to have_xpath("//tr/td/a[text()='#{name}']/../../td[text()='#{status}']")
 end
 
@@ -89,6 +92,7 @@ When(/^make screenshot with "(.*?)" name$/) do |name|
 end
 
 Then(/^I should see dropdown with "(.*?)"$/) do |text|
+  page.execute_script('window.runTimeouts()')
   expect(page).to have_xpath("//a[contains(text(),'#{text}')]")
 end
 

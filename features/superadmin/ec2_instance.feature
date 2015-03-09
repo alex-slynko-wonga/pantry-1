@@ -25,7 +25,7 @@ Feature: EC2 Instance
     Then I should see "TestWindows" after page is updated
     When I create machine
     Then I should see a flash message with "Ec2 Instance request succeeded."
-    And an instance with ami-123 build should start
+    And the instance with ami-123 build should start
 
   @javascript
   Scenario: Creating a new instance with custom IAM
@@ -37,7 +37,7 @@ Feature: EC2 Instance
     And I entered "test_iam" in iam field
     When I create machine
     Then I should see a flash message with "Ec2 Instance request succeeded."
-    And an instance with "test_iam" iam build should start
+    And the instance with "test_iam" iam build should start
 
   @javascript
   Scenario: Fill bootstrap username for linux
@@ -83,7 +83,7 @@ Feature: EC2 Instance
     And I choose "MyInstanceRole" instance role
     When I create machine
     Then I should see a flash message with "Ec2 Instance request succeeded."
-    And an instance with "existed-iam" iam build should start
+    And the instance with "existed-iam" iam build should start
 
   @javascript
   Scenario: Creating a new instance with disabled role

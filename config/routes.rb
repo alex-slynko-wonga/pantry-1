@@ -9,7 +9,11 @@ Rails.application.routes.draw do
   namespace :api do
     resources :chef_nodes, only: [:destroy]
     resources :ec2_instances, only: [:update] do
-      post :update_from_aws, on: :collection
+      collection do
+        post :update_from_aws
+        get :ready_for_shutdown, :ready_for_start
+      end
+
       member do
         post :start, :shut_down
         put :update_info_from_aws

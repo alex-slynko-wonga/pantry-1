@@ -17,20 +17,21 @@ Feature: EC2 Instance
     Then I should see "History"
     And I should see a flash message with "Ec2 Instance request succeeded."
     And I should not see "Instance role:"
-    And an instance build should start
+    And the instance build should start
     When I opened history
     And I should see my name near "Ec2Boot"
 
-    When an instance is created with ip "123.456.7.8"
+    When the instance is created with ip "123.456.7.8"
     And I am on instance page
     Then I should see "Ready" after page is updated
-    And I should see my name near "Bootstrap"
+    When I opened history
+    Then I should see my name near "Bootstrap"
     And I should see "123.456.7.8"
     And I should see "TEST (INT)"
     And I should receive email
 
     When I check my profile page
-    Then I should see machine info
+    Then I should see the instance info
 
     @javascript
     Scenario: Creating a new instance for different teams
@@ -101,7 +102,7 @@ Feature: EC2 Instance
   @javascript
   Scenario: Create instance like existing
     Given I am in the "Pantry" team
-    And I have "m1.large" instance
+    And m1.large EC2 instance
     When I am on instance page
     And I click on "Create machine like this"
     Then I should see new ec2 instance form with prefilled values
@@ -169,21 +170,21 @@ Feature: EC2 Instance
   Scenario: Destroying an instance
     Given I have an EC2 instance in the team
     When I am on instance page
-    And I destroy an instance
+    And I destroy the instance
     Then I should see "Terminating"
     And I should see a flash message with "Ec2 Instance deletion request success"
     And instance destroying process should start
 
-    When an instance is destroyed
+    When the instance is destroyed
     And I am still on instance page
     Then I should see that instance is destroyed
 
     When I am on the team page
-    Then I should not see machine info
+    Then I should not see the instance info
 
   Scenario: Destroying an protected instance
     Given I have an EC2 instance in the team
-    And the instance is protected
+    And the instance is protected from termination
     When I am on instance page
     Then I should not see "Destroy"
 
@@ -202,7 +203,7 @@ Feature: EC2 Instance
     Given I have an EC2 instance in the team
     And the instance is booting
     When I am on instance page
-    And I cleanup an instance
+    And I cleanup the instance
     And I should see a flash message with "Ec2 Instance cleanup request success"
     And instance cleaning process should start
 
@@ -285,7 +286,7 @@ Feature: EC2 Instance
     When I am on the team page
     And I expanded all environments
     And I click on "Shutdown"
-    Then I should see "Shutting down" after page is updated
+    Then I should see "Shutting down"
     And shut down request should be sent
     When machine is shut down
     Then option "Start" should be present near instance
@@ -295,4 +296,4 @@ Feature: EC2 Instance
     And start request should be sent
     When machine is started
     Then option "Shutdown" should be present near instance
-    And I should see "Ready" after page is updated
+    And I should see "Ready"

@@ -1,6 +1,6 @@
 Then(/^a new (\w*) ?chef environment should be requested$/) do |env_type|
   expect(AWS::SNS.new.client).to have_received(:publish).with(
-                                     hash_including(topic_arn: 'arn:aws:sns:eu-west-1:001100110011:pantry_example_com-chef_env_create')
+    hash_including(topic_arn: 'arn:aws:sns:eu-west-1:001100110011:pantry_example_com-chef_env_create')
                                  ) do |message|
     expect(JSON.parse(message[:message_body])['environment_type']).to eq(env_type) if env_type.present?
   end
@@ -45,6 +45,7 @@ Then(/^I should see environment details/) do
 end
 
 When(/^I click on environment human name$/) do
+  @environment ||= Environment.first
   click_on @environment.human_name
 end
 

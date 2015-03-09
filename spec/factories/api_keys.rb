@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :api_key do
     sequence(:name) { |n| "ApiKey #{n}" }
-    key '3e475446-210a-479a-b7b9-a459dcf157e7'
+    key { SecureRandom.uuid }
     permissions %w(api_chef_node)
   end
 end

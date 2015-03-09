@@ -13,8 +13,8 @@ RSpec.shared_examples_for 'request_instance' do
   it 'boots machine using ec2_resource and returns it result' do
     expect(ec2_resource).to receive(:boot).and_return(:some_result)
     expect(subject.request_jenkins_instance(
-      jenkins_params,
-      jenkins
+             jenkins_params,
+             jenkins
     )).to eq(:some_result)
     expect(jenkins).to be_valid
   end

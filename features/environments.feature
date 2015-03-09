@@ -105,11 +105,11 @@ Feature: Multiple environments
     When I click on "Shutdown all instances"
     Then I should see "Shutting down"
     And shut down request should be sent 2 times
-    When machines with environment "TEST" is shut down
+    When machines with environment "TEST" are shut down
     Then option "Start" should be present near instances with environment "TEST"
 
     When I click on "Start all instances"
     Then I should see "Starting"
     And start request should be sent 2 times
-    When machines with environment "TEST" is start
+    When machines with environment "TEST" are started
     Then option "Shutdown" should be present near instances with environment "TEST"

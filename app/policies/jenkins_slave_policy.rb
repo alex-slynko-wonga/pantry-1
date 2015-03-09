@@ -3,7 +3,7 @@ class JenkinsSlavePolicy < ApplicationPolicy
     (god_mode? || (team_member? && !maintenance_mode?)) && @record.jenkins_server.ec2_instance.state == 'ready'
   end
 
-  class Scope < Struct.new(:user, :scope)
+  Scope = Struct.new(:user, :scope) do
     def resolve
       scope
     end

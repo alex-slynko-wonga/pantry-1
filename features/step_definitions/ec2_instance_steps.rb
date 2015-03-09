@@ -1,40 +1,3 @@
-Given(/^AWS has information about machines$/) do
-  stub_security_groups
-  stub_subnets
-  windows_ami = FactoryGirl.create(:ami, platform: 'windows')
-  stub_ami_info(windows_ami.ami_id)
-  linux_ami = FactoryGirl.create(:ami, platform: 'linux', name: 'linux')
-  stub_ami_info(linux_ami.ami_id)
-end
-
-Given(/^AWS pricing is broken$/) do
-  allow_any_instance_of(Wonga::Pantry::PricingList).to receive(:get_instance_type).and_raise('some error')
-end
-
-Given(/^queues and topics are configured$/) do
-  stub_sns
-  stub_sqs
-  config = CONFIG.deep_dup
-  config['aws']['ec2_instance_stop_topic_arn'] = 'arn:aws:sns:eu-west-1:9:ec2_instance_stop_topic_arn'
-  config['aws']['ec2_instance_start_topic_arn'] = 'arn:aws:sns:eu-west-1:9:ec2_instance_start_topic_arn'
-  config['aws']['ec2_instance_delete_topic_arn'] = 'arn:aws:sns:eu-west-1:9:ec2_instance_delete_topic_arn'
-  config['aws']['ec2_instance_boot_topic_arn'] = 'arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn'
-  config['aws']['ec2_instance_resize_topic_arn'] = 'arn:aws:sns:eu-west-1:9:ec2_instance_resize_topic_arn'
-  config['aws']['jenkins_slave_delete_topic_arn'] = 'arn:aws:sns:eu-west-1:9:jenkins_slave_delete_topic_arn'
-  stub_const('CONFIG', config)
-end
-
-Given(/^I have "(.*?)" IAM$/) do |iam|
-  stub_iam(iam) if iam
-  stub_iam unless iam
-end
-
-When(/^flavors are configured$/) do
-  config = CONFIG.deep_dup
-  config['aws']['ebs'] = { 'c3.2xlarge' => 10, 'm3.xlarge' => 500, 't1.micro' => 80 }
-  stub_const('CONFIG', config)
-end
-
 Given(/^I request an instance named "(.*?)"$/) do |name|
   visit '/aws/ec2_instances/new'
   fill_in_default_values(name)
@@ -57,15 +20,9 @@ When(/^I request an EC2 instance for team "(.*?)"$/) do |team_name|
   visit '/aws/ec2_instances/new?team_id=' + @team.id.to_s
 end
 
-When(/^I have "(.*?)" instance$/) do |instance_size|
-  @team = Team.last
-  @ami = Ami.last
-  @ec2_instance = FactoryGirl.create(:ec2_instance, team: @team, flavor: instance_size, ami: @ami.ami_id)
-end
-
 Then(/^I should see new ec2 instance form with prefilled values$/) do
-  expect(page).to have_select('Environment', selected: @ec2_instance.environment.name)
-  expect(page).to have_select('Ami', selected: @ami.name)
+  ami = Ami.where(ami_id: @ec2_instance.ami).first!
+  expect(page).to have_select('Ami', selected: ami.name)
   expect(page).to have_select('Flavor', selected: @ec2_instance.flavor)
 end
 
@@ -110,7 +67,7 @@ Then(/^the instance start using "(.*?)" bootstrap username$/) do |bootstrap_user
   end
 end
 
-Then(/^an instance (?:with ami\-(\w+) )?(?:with "(.*?)" iam )?build should start$/) do |ami, iam|
+Then(/^the instance (?:with ami\-(\w+) )?(?:with "(.*?)" iam )?build should start$/) do |ami, iam|
   expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_boot_topic_arn')) do |args|
     message = JSON.parse(JSON.parse(args[:message])['default'])
     expect(message['ami']).to match(ami) if ami
@@ -120,7 +77,7 @@ Then(/^an instance (?:with ami\-(\w+) )?(?:with "(.*?)" iam )?build should start
   end
 end
 
-When(/^an instance is created with ip "(.*?)"$/) do |ip|
+When(/^the instance is created with ip "(.*?)"$/) do |ip|
   instance = Ec2Instance.last
   api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance))
   header 'X-Auth-Token', api_key.key
@@ -156,7 +113,7 @@ When(/^machine is shut down$/) do
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :shutdown, format: :json
 end
 
-When(/^machines with environment "(.*?)" is shut down$/) do |environment_name|
+When(/^machines with environment "(.*?)" are shut down$/) do |environment_name|
   environment_id = Environment.where(name: environment_name).first.id
   instances = Ec2Instance.where(environment_id: environment_id)
   api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance))
@@ -205,7 +162,7 @@ When(/^machine is started$/) do
   put "/api/ec2_instances/#{instance.id}", user_id: instance.user_id, event: :started, format: :json
 end
 
-When(/^machines with environment "(.*?)" is start$/) do |environment_name|
+When(/^machines with environment "(.*?)" are started$/) do |environment_name|
   environment_id = Environment.where(name: environment_name).first.id
   instances = Ec2Instance.where(environment_id: environment_id)
   api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance), key: SecureRandom.uuid)
@@ -216,21 +173,15 @@ When(/^machines with environment "(.*?)" is start$/) do |environment_name|
 end
 
 When(/^the instance is ready$/) do
-  @instance = Ec2Instance.last
-  @instance.update_attributes(state: 'ready')
-  @instance.reload
+  Ec2Instance.last.update_attributes(state: 'ready')
 end
 
 When(/^the instance is booting$/) do
-  @instance = Ec2Instance.last
-  @instance.update_attributes(state: 'booting')
-  @instance.reload
+  Ec2Instance.last.update_attributes(state: 'booting')
 end
 
 When(/^the instance is terminated/) do
-  @instance = Ec2Instance.last
-  @instance.update_attributes(state: 'terminated')
-  @instance.reload
+  Ec2Instance.last.update_attributes(state: 'terminated')
 end
 
 Then(/^I should not be able to add a fifth security group$/) do
@@ -245,7 +196,7 @@ Then(/^instance cleaning process should start$/) do
   expect(AWS::SNS.new.client).to have_received(:publish).with(hash_including(topic_arn: 'arn:aws:sns:eu-west-1:9:ec2_instance_delete_topic_arn'))
 end
 
-When(/^an instance is destroyed$/) do
+When(/^the instance is destroyed$/) do
   instance = Ec2Instance.last
   api_key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance api_chef_node))
   user_id = instance.user_id
@@ -260,7 +211,7 @@ When(/^an instance is destroyed$/) do
   put "/api/ec2_instances/#{instance.id}", user_id: user_id, event: :terminated, dns: false, format: :json
 end
 
-Given(/^the (?:instance|jenkins slave) is protected$/) do
+Given(/^the (?:instance|jenkins slave) is protected from termination$/) do
   instance = Ec2Instance.last
   instance.protected = true
   instance.save
@@ -274,8 +225,12 @@ Then(/^I should see that instance is destroyed$/) do
   expect(page).to have_text('Terminated')
 end
 
-Then(/^I should not see machine info$/) do
-  expect(page).not_to have_text(Ec2Instance.last.name)
+Then(/^I should( not)? see the instance info$/) do |hidden|
+  if hidden
+    expect(page).to have_no_text(Ec2Instance.last.name)
+  else
+    expect(page).to have_text(Ec2Instance.last.name)
+  end
 end
 
 When(/^instance load is "(.*?)"$/) do |load|
@@ -283,45 +238,6 @@ When(/^instance load is "(.*?)"$/) do |load|
   metrics[:metrics] = [{ metric_name: 'CPUUtilization', namespace: 'Test' }]
   statistics = AWS::CloudWatch.new.client.stub_for :get_metric_statistics
   statistics[:datapoints] =  [{ timestamp: Time.current, unit: 'Percent', average: load.to_d }]
-end
-
-Given(/^an EC2 instance$/) do
-  @ec2_instance = FactoryGirl.create(:ec2_instance)
-end
-
-Given(/^I have (?:an|(\w+)) EC2 instance(?: with "(.*?)" name|) in the team( with CI environment)?$/) do |size, name, ci_env_type|
-  user = User.first
-  if user.teams.empty?
-    @team = FactoryGirl.create(:team)
-    @team.users << user
-  else
-    @team = user.teams.first
-  end
-
-  if !ci_env_type
-    @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team, flavor: size || 'm1.small')
-  else
-    @ec2_instance = FactoryGirl.create(:ci_ec2_instance, :running, user: user, team: @team, flavor: size || 'm1.small')
-  end
-
-  if name
-    @instance = Ec2Instance.last
-    @instance.update_attributes(name: name)
-    @instance.reload
-  end
-
-  @environment = @ec2_instance.environment
-end
-
-Given(/^I have an EC2 instance in the team with environment "(.*?)"$/) do |environment|
-  user = User.first
-  @team = user.teams.first
-  environment = Environment.where(name: environment).first
-  @ec2_instance = FactoryGirl.create(:ec2_instance, :running, user: user, team: @team, environment: environment)
-end
-
-Then(/^I should see machine info$/) do
-  expect(page).to have_text(Ec2Instance.last.name)
 end
 
 When(/^I click on instance size$/) do
@@ -359,7 +275,7 @@ Then(/^I should not be able to create EC2 Instance$/) do
   expect(page.current_path).to eq '/'
 end
 
-When(/^I cleanup an instance$/) do
+When(/^I cleanup the instance$/) do
   click_on 'Run machine cleanup'
 end
 
@@ -376,4 +292,31 @@ Then(/^build of instance with (\d+) GB additional drive started$/) do |volume_si
     message = JSON.parse(JSON.parse(args[:message])['default'])
     expect(message['block_device_mappings']).to be_any { |hash| hash['ebs']['volume_size'].to_i == volume_size.to_i }
   end
+end
+
+When(/^"(.*?)" instance is shutdown automatically$/) do |instance_name|
+  ec2_instance = Ec2Instance.where(name: instance_name).first!
+  key = FactoryGirl.create(:api_key, permissions: %w(shut_down_api_ec2_instance api_ec2_instance)).key
+  header 'X-Auth-Token', key
+  post "/api/ec2_instances/#{ec2_instance.id}/shut_down", format: :json
+  header 'X-Auth-Token', key
+  put "/api/ec2_instances/#{ec2_instance.id}", user_id: ec2_instance.user_id, event: :shutdown, format: :json
+end
+
+When(/^"(.*?)" instance is started automatically$/) do |instance_name|
+  ec2_instance = Ec2Instance.where(name: instance_name).first!
+  key = FactoryGirl.create(:api_key, permissions: %w(start_api_ec2_instance api_ec2_instance)).key
+  header 'X-Auth-Token', key
+  post "/api/ec2_instances/#{ec2_instance.id}/start", format: :json
+  header 'X-Auth-Token', key
+  put "/api/ec2_instances/#{ec2_instance.id}", user_id: ec2_instance.user_id, event: :started, format: :json
+end
+
+When(/^"(.*?)" instance is shutdown manually$/) do |instance_name|
+  ec2_instance = Ec2Instance.where(name: instance_name).first!
+  visit "/aws/ec2_instances/#{ec2_instance.id}"
+  click_on 'Shut down'
+  key = FactoryGirl.create(:api_key, permissions: %w(api_ec2_instance)).key
+  header 'X-Auth-Token', key
+  put "/api/ec2_instances/#{ec2_instance.id}", user_id: ec2_instance.user_id, event: :shutdown, format: :json
 end
