@@ -32,9 +32,9 @@ module Wonga
         case CONFIG['pantry']['log']['logger']
         when 'syslog'
           require 'syslogger'
-          facility = Syslog.const_get("LOG_#{CONFIG['pantry']['log']['log_facility'].upcase}")
+          facility = Syslog::Facility.const_get("LOG_#{CONFIG['pantry']['log']['log_facility'].upcase}")
           Syslogger.send :include, ActiveRecord::SessionStore::Extension::LoggerSilencer
-          config.logger = Syslogger.new(CONFIG['pantry']['log']['app_name'], Syslog::LOG_PID | Syslog::LOG_CONS, facility)
+          config.logger = Syslogger.new(CONFIG['pantry']['log']['app_name'], Syslog::Option::LOG_PID | Syslog::Option::LOG_CONS, facility)
         when 'file'
           if CONFIG['pantry']['log']['log_file']
             config.logger = CONFIG['pantry']['log']['log_file']
