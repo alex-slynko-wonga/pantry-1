@@ -101,7 +101,7 @@ module Wonga
         end
 
         after_transition to: :terminating do |machine, _state|
-          if machine.ec2_instance.instance_schedule
+          if machine.ec2_instance.instance_schedule && machine.ec2_instance.scheduled_event
             machine.ec2_instance.scheduled_event.destroy
           end
         end
