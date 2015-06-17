@@ -43,7 +43,7 @@ RSpec.describe TeamsHelper, type: :helper do
       allow(helper).to receive(:policy).and_return(policy)
     end
     context 'when user cannot see inactive teams' do
-      let(:policy) { instance_double(TeamPolicy, :see_inactive_teams? => true) }
+      let(:policy) { instance_double(TeamPolicy, see_inactive_teams?: true) }
 
       context 'when params[:inactive] is true' do
         it "returns link with 'show only active teams'" do
@@ -59,7 +59,7 @@ RSpec.describe TeamsHelper, type: :helper do
     end
 
     context 'when user cannot see inactive teams' do
-      let(:policy) { instance_double(TeamPolicy, :see_inactive_teams? => false) }
+      let(:policy) { instance_double(TeamPolicy, see_inactive_teams?: false) }
       it { expect(helper.teams_toggle_link(true)).to be_nil }
     end
   end

@@ -1,6 +1,6 @@
 When(/^it is (\d+)\.(\d+) (am|pm) on (\w+)$/) do |hour, minute, pm_or_am, day_of_week|
   weekdays = %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
-  t = Time.now
+  t = Time.current
   days_to = weekdays.index(day_of_week) - t.wday + 1
   days_to += 7 if days_to < 0
   t += days_to.days
@@ -12,7 +12,7 @@ end
 Given(/^schedule for "(.*?)" is to shutdown at (\d+) pm (every day|before weekend)$/) do |name, time, weekend_or_every_day|
   ec2_instance = Ec2Instance.where(name: name).first!
   weekend_only = weekend_or_every_day == 'before weekend'
-  shutdown_time = Time.now.change(hour: time.to_i + 12, min: 0, sec: 0)
+  shutdown_time = Time.current.change(hour: time.to_i + 12, min: 0, sec: 0)
   schedule = ec2_instance.schedules.first
   if schedule
     schedule.update_attribute(:shutdown_time, shutdown_time)
@@ -24,7 +24,7 @@ end
 Given(/^schedule for "(.*?)" is to start at (\d+) am (every day|after weekend)$/) do |name, time, weekend_or_every_day|
   ec2_instance = Ec2Instance.where(name: name).first!
   weekend_only = weekend_or_every_day == 'after weekend'
-  start_time = Time.now.change(hour: time.to_i, min: 0, sec: 0)
+  start_time = Time.current.change(hour: time.to_i, min: 0, sec: 0)
   schedule = ec2_instance.schedules.first
   if schedule
     schedule.update_attribute(:start_time, start_time)

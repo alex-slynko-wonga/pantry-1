@@ -123,26 +123,26 @@ RSpec.describe Ec2Instance, type: :model do
             describe_instances_hash = AWS::EC2.new.client.stub_for(:describe_instances)
             describe_instances_hash[:instance_index] = {
               aws_instance.instance_id => {
-                :group_set => aws_instance.security_groups.map do |sg|
+                group_set: aws_instance.security_groups.map do |sg|
                   {
                     group_name: sg.name,
                     group_id: sg.security_group_id
                   }
                 end,
-                :instance_id => aws_instance.instance_id,
-                :image_id => aws_instance.image,
-                :instance_state => {
+                instance_id: aws_instance.instance_id,
+                image_id: aws_instance.image,
+                instance_state: {
                   code: aws_instance.status_code,
                   name: aws_instance.status.to_s
                 },
-                :api_termination_disabled? => aws_instance.api_termination_disabled?,
-                :disable_api_termination => aws_instance.api_termination_disabled?,
-                :instance_type => aws_instance.instance_type,
-                :ip_address => aws_instance.ip_address,
-                :platform => aws_instance.platform,
-                :private_ip_address => aws_instance.private_ip_address,
-                :subnet_id => aws_instance.subnet_id,
-                :vpc_id => aws_instance.vpc_id
+                api_termination_disabled?: aws_instance.api_termination_disabled?,
+                disable_api_termination: aws_instance.api_termination_disabled?,
+                instance_type: aws_instance.instance_type,
+                ip_address: aws_instance.ip_address,
+                platform: aws_instance.platform,
+                private_ip_address: aws_instance.private_ip_address,
+                subnet_id: aws_instance.subnet_id,
+                vpc_id: aws_instance.vpc_id
               }
             }
             describe_instance_attributes_hash = AWS::EC2.new.client.stub_for(:describe_instance_attribute)

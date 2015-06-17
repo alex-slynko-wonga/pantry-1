@@ -7,7 +7,7 @@ class InstanceSchedule < ActiveRecord::Base
 
   def next_shutdown_time
     time = schedule.shutdown_time
-    now = Time.now + 1.minute
+    now = Time.current + 1.minute
     time = time.change(day: now.day, month: now.month, year: now.year)
     if schedule.weekend_only
       time += (5 - time.wday).days
@@ -20,7 +20,7 @@ class InstanceSchedule < ActiveRecord::Base
 
   def next_start_time
     time = schedule.start_time
-    now = Time.now + 1.minute
+    now = Time.current + 1.minute
     time = time.change(day: now.day, month: now.month, year: now.year)
     if schedule.weekend_only
       time += (1 - time.wday).days

@@ -1,6 +1,6 @@
 RSpec.describe ScheduledEvent, type: :model do
   context '#ready_for_shutdown' do
-    let(:time) { Time.now }
+    let(:time) { Time.current }
     it 'returns events for ready instances' do
       event = FactoryGirl.create(:scheduled_shutdown_event)
       expect(ScheduledEvent.ready_for_shutdown.first).to eq(event)

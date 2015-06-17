@@ -59,7 +59,7 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
       end
 
       it 'uses next_start_time from instance_schedule' do
-        time = Time.now - 5.days
+        time = Time.current - 5.days
         allow(ec2_instance.instance_schedule).to receive(:next_shutdown_time).and_return(time)
         subject.bootstrap
         expect(ec2_instance.scheduled_event.event_time).to eq time
@@ -129,7 +129,7 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
       end
 
       it 'uses next_start_time from instance_schedule' do
-        time = Time.now - 5.days
+        time = Time.current - 5.days
         allow(ec2_instance.instance_schedule).to receive(:next_start_time).and_return(time)
         subject.shutdown
         expect(ec2_instance.scheduled_event.event_time).to eq time
@@ -207,7 +207,7 @@ RSpec.describe Wonga::Pantry::Ec2InstanceMachine do
       end
 
       it 'uses next_start_time from instance_schedule' do
-        time = Time.now - 5.days
+        time = Time.current - 5.days
         allow(ec2_instance.instance_schedule).to receive(:next_shutdown_time).and_return(time)
         subject.started
         expect(ec2_instance.scheduled_event.event_time).to eq time

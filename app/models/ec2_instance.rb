@@ -89,8 +89,8 @@ class Ec2Instance < ActiveRecord::Base
   private
 
   def init
-    self.domain       ||= CONFIG['pantry']['domain']
-    self.subnet_id    ||= CONFIG['aws']['default_subnet']
+    self.domain ||= CONFIG['pantry']['domain']
+    self.subnet_id ||= CONFIG['aws']['default_subnet']
     Wonga::Pantry::Ec2InstanceMachine.new(self)
   end
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Wonga::Pantry::Costs do
-  let(:bill_date) { Date.today.prev_month.end_of_month }
+  let(:bill_date) { Time.zone.today.prev_month.end_of_month }
   let(:team) { FactoryGirl.create(:team) }
   let(:ec2_instance) { FactoryGirl.create(:ec2_instance, team: team) }
 
@@ -86,7 +86,7 @@ RSpec.describe Wonga::Pantry::Costs do
       subject { Wonga::Pantry::Costs.new(nil) }
 
       it 'is end of current month' do
-        bill_date = Date.today.end_of_month
+        bill_date = Time.zone.today.end_of_month
         allow(Date).to receive(:today).and_return(double(end_of_month: bill_date))
         expect(subject.bill_date).to eq(bill_date)
       end

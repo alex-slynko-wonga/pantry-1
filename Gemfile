@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2'
+gem 'rails', '~> 4.2.1'
 gem 'mysql2'
 gem 'omniauth-ldap', github: 'intridea/omniauth-ldap'
 

@@ -56,7 +56,7 @@ Given(/^the team has a Jenkins server$/) do
   @jenkins_server = FactoryGirl.create(:jenkins_server,
                                        :running,
                                        team: @team
-  )
+                                      )
 end
 
 When(/^I request new slave$/) do

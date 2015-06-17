@@ -52,7 +52,7 @@ class Wonga::Pantry::Ec2InstanceState
     if @instance_params['bootstrapped']
       :bootstrap
     elsif @instance_params.key?('joined')
-      @instance_params['joined'] && @instance_params['joined'] != 'false'  ? :add_to_domain : :terminated
+      @instance_params['joined'] && @instance_params['joined'] != 'false' ? :add_to_domain : :terminated
     elsif @instance_params['terminated']
       :terminated
     end

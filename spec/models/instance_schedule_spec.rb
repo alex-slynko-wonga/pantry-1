@@ -14,14 +14,14 @@ RSpec.describe InstanceSchedule, type: :model do
 
     context 'for weekend only shutdown' do
       let(:time) do
-        t = Time.now
+        t = Time.current
         t += (5 - t.wday).days
         t.change(hour: hour, min: 0)
       end
 
       let(:hour) { planned_hour - 2 }
       let(:planned_hour) { 12 }
-      subject { FactoryGirl.build(:instance_schedule, start_time: Time.now.change(hour: planned_hour, min: 0), weekend_only: true) }
+      subject { FactoryGirl.build(:instance_schedule, start_time: Time.current.change(hour: planned_hour, min: 0), weekend_only: true) }
 
       it 'is on planned time' do
         start_time = subject.next_start_time
@@ -39,7 +39,7 @@ RSpec.describe InstanceSchedule, type: :model do
 
       context 'if today is Saturday' do
         let(:time) do
-          t = Time.now
+          t = Time.current
           t += (6 - t.wday).days
           t.change(hour: hour, min: 0)
         end
@@ -54,8 +54,8 @@ RSpec.describe InstanceSchedule, type: :model do
       end
 
       context 'if today is Saturday before Daylight Saving Time' do
-        subject { FactoryGirl.create(:instance_schedule, start_time: Time.now.change(hour: planned_hour, min: 0), weekend_only: true).reload }
-        let(:time) { Time.new(2015, 3, 28, hour) }
+        subject { FactoryGirl.create(:instance_schedule, start_time: Time.current.change(hour: planned_hour, min: 0), weekend_only: true).reload }
+        let(:time) { Time.current.change(year: 2015, month: 3, day: 28, hour: hour) }
 
         it 'is on planned time' do
           start_time = subject.next_start_time
@@ -66,7 +66,7 @@ RSpec.describe InstanceSchedule, type: :model do
 
       context 'if today is Monday' do
         let(:time) do
-          t = Time.now
+          t = Time.current
           t += (1 - t.wday).days
           t.change(hour: hour, min: 0)
         end
@@ -91,14 +91,14 @@ RSpec.describe InstanceSchedule, type: :model do
 
     context 'for every day' do
       let(:time) do
-        t = Time.now
+        t = Time.current
         t += (2 - t.wday).days
         t.change(hour: hour, min: 0)
       end
 
       let(:hour) { planned_hour - 2 }
       let(:planned_hour) { 12 }
-      subject { FactoryGirl.build(:instance_schedule, start_time: Time.now.change(hour: planned_hour, min: 0)) }
+      subject { FactoryGirl.build(:instance_schedule, start_time: Time.current.change(hour: planned_hour, min: 0)) }
 
       it 'is on planned time' do
         start_time = subject.next_start_time
@@ -130,7 +130,7 @@ RSpec.describe InstanceSchedule, type: :model do
 
       context 'if today is Saturday' do
         let(:time) do
-          t = Time.now
+          t = Time.current
           t += (6 - t.wday).days
           t.change(hour: hour, min: 0)
         end
@@ -153,14 +153,14 @@ RSpec.describe InstanceSchedule, type: :model do
 
     context 'for weekend only shutdown' do
       let(:time) do
-        t = Time.now
+        t = Time.current
         t += (2 - t.wday).days
         t.change(hour: hour, min: 0)
       end
 
       let(:hour) { planned_hour - 2 }
       let(:planned_hour) { 12 }
-      subject { FactoryGirl.build(:instance_schedule, shutdown_time: Time.now.change(hour: planned_hour, min: 0), weekend_only: true) }
+      subject { FactoryGirl.build(:instance_schedule, shutdown_time: Time.current.change(hour: planned_hour, min: 0), weekend_only: true) }
 
       it 'is on planned time' do
         shutdown_time = subject.next_shutdown_time
@@ -178,7 +178,7 @@ RSpec.describe InstanceSchedule, type: :model do
 
       context 'if today is Friday' do
         let(:time) do
-          t = Time.now
+          t = Time.current
           t += (5 - t.wday).days
           t.change(hour: hour, min: 0)
         end
@@ -203,14 +203,14 @@ RSpec.describe InstanceSchedule, type: :model do
 
     context 'for every day' do
       let(:time) do
-        t = Time.now
+        t = Time.current
         t += (2 - t.wday).days
         t.change(hour: hour, min: 0)
       end
 
       let(:hour) { planned_hour - 2 }
       let(:planned_hour) { 12 }
-      subject { FactoryGirl.build(:instance_schedule, shutdown_time: Time.now.change(hour: planned_hour, min: 0)) }
+      subject { FactoryGirl.build(:instance_schedule, shutdown_time: Time.current.change(hour: planned_hour, min: 0)) }
 
       it 'is on planned time' do
         shutdown_time = subject.next_shutdown_time

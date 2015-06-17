@@ -2,7 +2,7 @@ class Wonga::Pantry::Costs
   attr_reader :bill_date
 
   def initialize(bill_date)
-    @bill_date = (bill_date || Date.today.end_of_month).to_date
+    @bill_date = (bill_date || Time.zone.today.end_of_month).to_date
   end
 
   def costs_per_team

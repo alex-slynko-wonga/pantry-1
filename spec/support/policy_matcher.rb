@@ -75,5 +75,5 @@ module Pundit
 end
 
 RSpec.configure do |config|
-  config.include Pundit::RSpec::PolicyExampleGroup, type: :policy, file_path: /spec\/policies/
+  config.include Pundit::RSpec::PolicyExampleGroup, type: :policy, file_path: %r{spec/policies}
 end
