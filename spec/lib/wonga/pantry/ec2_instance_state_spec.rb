@@ -90,11 +90,27 @@ RSpec.describe Wonga::Pantry::Ec2InstanceState do
 
     context 'if machine is terminated' do
       let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource', out_of_band_cleanup: true) }
+      let(:ec2_instance) { FactoryGirl.build_stubbed(:ec2_instance, state: 'terminated') }
+
       before(:each) do
         allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
       end
-      it 'should call machine cleanup' do
-        ec2_instance.state = 'terminated'
+
+      it 'cleans machine up' do
+        subject
+        expect(ec2_resource).to have_received(:out_of_band_cleanup)
+      end
+    end
+
+    context 'if machine is terminating' do
+      let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource', out_of_band_cleanup: true) }
+      let(:ec2_instance) { FactoryGirl.build_stubbed(:ec2_instance, state: 'terminating') }
+
+      before(:each) do
+        allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
+      end
+
+      it 'cleans machine up' do
         subject
         expect(ec2_resource).to have_received(:out_of_band_cleanup)
       end
@@ -110,7 +126,7 @@ RSpec.describe Wonga::Pantry::Ec2InstanceState do
       end
 
       it 'raise exception' do
-        expect { subject }.to raise_exception
+        expect { subject }.to raise_exception RuntimeError
       end
     end
 
@@ -118,7 +134,7 @@ RSpec.describe Wonga::Pantry::Ec2InstanceState do
       let(:params) { {} }
 
       it 'raise exception' do
-        expect { subject }.to raise_exception
+        expect { subject }.to raise_exception RuntimeError
       end
     end
   end

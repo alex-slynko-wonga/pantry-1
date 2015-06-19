@@ -20,7 +20,7 @@ RSpec.describe Wonga::Pantry::BootMessage do
       let(:instance) { Ec2Instance.new }
 
       it 'raise exception' do
-        expect { boot_message }.to raise_exception
+        expect { boot_message }.to raise_exception RuntimeError
       end
     end
 

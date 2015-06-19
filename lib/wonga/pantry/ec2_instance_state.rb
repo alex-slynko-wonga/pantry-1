@@ -18,7 +18,7 @@ class Wonga::Pantry::Ec2InstanceState
 
     before_state = @ec2_instance.state
 
-    if before_state == 'terminated' && event != :terminated && event != :out_of_band_cleanup
+    if (before_state == 'terminating' || before_state == 'terminated') && event != :terminated && event != :out_of_band_cleanup
       if Wonga::Pantry::Ec2Resource.new(@ec2_instance, @user).out_of_band_cleanup
         return true
       else
