@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/QuickbridgeLtd/activerecord-session_store.git
+  revision: 5da33110e662b305f5131c47a9144d38526f58bd
+  specs:
+    activerecord-session_store (0.1.1)
+      actionpack (>= 4.0.0, < 5)
+      activerecord (>= 4.0.0, < 5)
+      railties (>= 4.0.0, < 5)
+
+GIT
   remote: git://github.com/intridea/omniauth-ldap.git
   revision: 9d36cdb9f3d4da040ab6f7aff54450392b78f5eb
   specs:
@@ -7,15 +16,6 @@ GIT
       omniauth (~> 1.0)
       pyu-ruby-sasl (~> 0.0.3.1)
       rubyntlm (~> 0.3)
-
-GIT
-  remote: git://github.com/rails/activerecord-session_store.git
-  revision: 2d9517d0f26281e76e80e63ca202fb7dafbe27cb
-  specs:
-    activerecord-session_store (0.1.1)
-      actionpack (>= 4.0.0, < 5)
-      activerecord (>= 4.0.0, < 5)
-      railties (>= 4.0.0, < 5)
 
 GEM
   remote: https://rubygems.org/
