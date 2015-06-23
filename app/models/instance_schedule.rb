@@ -6,7 +6,7 @@ class InstanceSchedule < ActiveRecord::Base
   after_validation :set_event, on: :create
 
   def next_shutdown_time
-    time = schedule.shutdown_time
+    time = schedule.shutdown_time.in_time_zone
     now = Time.current + 1.minute
     time = time.change(day: now.day, month: now.month, year: now.year)
     if schedule.weekend_only
@@ -15,11 +15,12 @@ class InstanceSchedule < ActiveRecord::Base
     else
       time += 1.day if now >= time
     end
+    time = time.change(hour: schedule.shutdown_time.hour)
     time
   end
 
   def next_start_time
-    time = schedule.start_time
+    time = schedule.start_time.in_time_zone
     now = Time.current + 1.minute
     time = time.change(day: now.day, month: now.month, year: now.year)
     if schedule.weekend_only
@@ -30,6 +31,7 @@ class InstanceSchedule < ActiveRecord::Base
       time += 2.day if time.saturday?
       time += 1.day if time.sunday?
     end
+    time = time.change(hour: schedule.start_time.hour)
     time
   end
 
