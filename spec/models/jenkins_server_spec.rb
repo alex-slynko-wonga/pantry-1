@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe JenkinsServer, type: :model do
-  let(:team) { FactoryGirl.build(:team) }
+  let(:team) { FactoryGirl.build(:team, name: 'Rspec Wunder-kind') }
   subject { FactoryGirl.build(:jenkins_server, team: team) }
 
   describe 'jenkins_slave' do
@@ -13,8 +13,8 @@ RSpec.describe JenkinsServer, type: :model do
   end
 
   describe '#instance_name' do
-    it 'gets instance_name from the chef environment' do
-      expect(subject.instance_name).to eq(team.name.parameterize.gsub('_', '-').gsub('--', '-')[0..62])
+    it 'gets instance_name from the team name' do
+      expect(subject.instance_name).to eq('rspec-wunder-kind')
     end
   end
 

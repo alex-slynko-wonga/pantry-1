@@ -10,7 +10,7 @@ RSpec.describe LdapResource do
   let(:group) { 'CN=Group,OU=Users,DC=example,DC=com' }
 
   before(:each) do
-    config =  Marshal.load(Marshal.dump(CONFIG))
+    config = Marshal.load(Marshal.dump(CONFIG))
     config['omniauth']['ldap_group'] = group
     stub_const('CONFIG', config)
     allow(Net::LDAP).to receive(:new).and_return(ldap)

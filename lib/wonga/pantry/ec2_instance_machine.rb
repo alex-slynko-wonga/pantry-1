@@ -57,7 +57,7 @@ module Wonga
         end
 
         event :out_of_band_cleanup do
-          transition all - [:terminating, :terminated]  => :terminating, if: :instance_unprotected
+          transition all - [:terminating, :terminated] => :terminating, if: :instance_unprotected
           transition terminated: :terminated
         end
 

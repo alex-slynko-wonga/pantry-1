@@ -19,6 +19,7 @@ development:
     ec2_instance_stop_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_stop_command
     ec2_instance_boot_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
     ec2_instance_resize_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
+    billing_bucket: "some-bucketname"
     vpc_id: "vpc-00110011"
     security_group_windows: "sg-00110011"
     security_group_linux: "sg-00110010"
@@ -40,8 +41,10 @@ development:
       'm1.large': 840
   pantry:
     domain: "example.com"
-    default_ou: "OU=Computers,DC=wonga,DC=aws"
+    default_ou: "OU=Computers,DC=example,DC=com"
     api_key: "00110011-0011-0011-0011-001100110011"
+    issue_tracker: "https://issues.example.com"
+    pantry_email: "pantry@example.com"
     security_groups_prefix: ExampleVPC-SecurityGroup
     webapp:
       ssl_enabled: false
@@ -65,13 +68,13 @@ test:
     ldap_group: "CN=Group,OU=Users,DC=example,DC=com"
   aws:
     queue_prefix: pantry_example_com
-    jenkins_slave_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-jenkins_slave_delete
+    chef_env_create_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-chef_env_create
+    ec2_instance_boot_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
     ec2_instance_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
+    ec2_instance_resize_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
     ec2_instance_start_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_start_command
     ec2_instance_stop_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-ec2_stop_command
-    ec2_instance_boot_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
-    ec2_instance_resize_topic_arn: arn:aws:sns:eu-west-1:001100110011:test_arn
-    chef_env_create_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-chef_env_create
+    jenkins_slave_delete_topic_arn: arn:aws:sns:eu-west-1:001100110011:pantry_example_com-jenkins_slave_delete
     billing_bucket: "some-bucketname"
     vpc_id: "vpc-00110011"
     security_group_windows: "sg-00110011"
@@ -94,8 +97,10 @@ test:
       'm1.large': 840
   pantry:
     domain: "example.com"
-    default_ou: "OU=Computers,DC=wonga,DC=aws"
+    default_ou: "OU=Computers,DC=example,DC=com"
     api_key: "00110011-0011-0011-0011-001100110011"
+    issue_tracker: "https://issues.example.com"
+    pantry_email: "pantry@example.com"
     security_groups_prefix: ExampleVPC-SecurityGroup
     webapp:
       ssl_enabled: false

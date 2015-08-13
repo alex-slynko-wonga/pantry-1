@@ -15,7 +15,7 @@ RSpec.describe JenkinsServerHelper, type: :helper do
     end
 
     context "when user can't create slave" do
-      let(:policy) { instance_double(JenkinsSlavePolicy, create?: false)  }
+      let(:policy) { instance_double(JenkinsSlavePolicy, create?: false) }
 
       it 'renders nothing' do
         expect(helper.link_to_new_slave(JenkinsServer.new)).to be_nil

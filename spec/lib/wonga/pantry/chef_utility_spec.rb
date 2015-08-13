@@ -22,7 +22,7 @@ RSpec.describe Wonga::Pantry::ChefUtility do
 
     it 'includes users in message' do
       user = FactoryGirl.build_stubbed :user
-      team.users  = [user]
+      team.users = [user]
 
       allow(sns_publisher).to receive(:publish_message) do |message|
         expect(message[:users]).to eq([user.username])

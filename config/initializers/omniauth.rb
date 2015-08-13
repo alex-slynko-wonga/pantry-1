@@ -23,5 +23,5 @@ OmniAuth.config.logger = Rails.logger # user Rails logger instead of STDOUT
 
 LDAP_CONFIG = {
   host: CONFIG['omniauth']['host'], port: CONFIG['omniauth']['port'], base: CONFIG['omniauth']['base'],
-  auth: { method: CONFIG['omniauth']['auth_method'].to_sym, username: CONFIG['omniauth']['bind_dn'], password:  CONFIG['omniauth']['password'] }
+  auth: { method: CONFIG['omniauth']['auth_method'].to_sym, username: CONFIG['omniauth']['bind_dn'], password: CONFIG['omniauth']['password'] }
 }

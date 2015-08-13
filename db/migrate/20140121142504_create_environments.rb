@@ -10,7 +10,7 @@ class CreateEnvironments < ActiveRecord::Migration
     end
 
     Ec2Instance.pluck(:chef_environment, :team_id).uniq.each do |environment, team_id|
-      Environment.create(name: environment.gsub('-', ' ').humanize, chef_environment: environment, team_id: team_id)
+      Environment.create(name: environment.tr('-', ' ').humanize, chef_environment: environment, team_id: team_id)
     end
 
     add_column :ec2_instances, :environment_id, :integer

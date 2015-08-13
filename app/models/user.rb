@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
     if attributes['email']
       attributes['email'].downcase
     elsif username
-      "#{username}@example.com".downcase
+      "#{username}@#{CONFIG['pantry']['domain']}".downcase
     end
   end
 

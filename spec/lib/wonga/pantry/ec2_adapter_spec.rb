@@ -117,7 +117,7 @@ RSpec.describe Wonga::Pantry::Ec2Adapter do
       images = client.new_stub_for(:describe_images)
       allow(client).to receive(:describe_images).and_return(images)
       images[:images_set] = [{ platform: platform, block_device_mapping: block_devices }]
-      images[:image_index] = { 'ami' => { platform: platform, block_device_mapping: block_devices  } }
+      images[:image_index] = { 'ami' => { platform: platform, block_device_mapping: block_devices } }
     end
 
     include_examples 'valid volumes'

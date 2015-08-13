@@ -5,8 +5,6 @@
 #
 # Generated December 09, 2013
 #
-# This configuration file is custom generated for Wonga Test -UK Installments
-
 
 # Here are the settings that are common to all environments
 common: &default_settings
@@ -42,7 +40,7 @@ common: &default_settings
   #       - Ajax Service
   #       - All Services
   #
-  app_name: Pantry
+  app_name: <%= @config["newrelic"]["license_key"] || 'Pantry' %>
 
   # When "true", the agent collects performance data about your
   # application and reports this data to the New Relic service at

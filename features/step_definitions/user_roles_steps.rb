@@ -12,5 +12,5 @@ Then(/^"(.*?)" should be a (\w+_?\w*)$/) do |name, role|
 end
 
 When(/^I set "(.*?)" role$/) do |role|
-  select role.underscore.gsub(' ', '_'), from: 'Role'
+  select role.underscore.tr(' ', '_'), from: 'Role'
 end

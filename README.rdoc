@@ -6,8 +6,6 @@
 4. Use rake to check if all tests are passing. Tests in master should pass - if not check your setup.
 5. You can use guard for TDD
 
-See the wonga wiki for more details.
-
 New Relic:
 
 set 'developer_mode: true' to run new relic in development mode, info are shown here http://localhost:3000/newrelic

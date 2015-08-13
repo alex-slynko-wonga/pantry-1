@@ -237,7 +237,7 @@ When(/^instance load is "(.*?)"$/) do |load|
   metrics = AWS::CloudWatch.new.client.stub_for(:list_metrics)
   metrics[:metrics] = [{ metric_name: 'CPUUtilization', namespace: 'Test' }]
   statistics = AWS::CloudWatch.new.client.stub_for :get_metric_statistics
-  statistics[:datapoints] =  [{ timestamp: Time.current, unit: 'Percent', average: load.to_d }]
+  statistics[:datapoints] = [{ timestamp: Time.current, unit: 'Percent', average: load.to_d }]
 end
 
 When(/^I click on instance size$/) do

@@ -12,7 +12,7 @@
       .navbar
         .navbar-inner
           %ul.nav
-            %li= image_tag 'wonga-logo.png', class: 'wonga-logo'
+            %li= image_tag 'pantry-logo.png', class: 'pantry-logo'
             = navbar_link_to('Home', root_url)
             = navbar_link_to('Teams', teams_url)
             = navbar_link_to('Instances', ec2_instances_url)
@@ -58,5 +58,5 @@
         = yield
 
       .div.main-footer
-        %p.text-centered= link_to('Pantry Dashboard', 'https://issues.example.com/secure/RapidBoard.jspa?rapidView=379', target: 'blank')
-        %p.text-centered= %(#{mail_to('pantry@example.com', 'Email us')} on pantry@example.com).html_safe
+        %p.text-centered= link_to('Pantry Issue Tracker', CONFIG['pantry']['issue_tracker'], target: 'blank')
+        %p.text-centered= %(#{mail_to(CONFIG['pantry']['pantry_email'], 'Email us')} on #{CONFIG['pantry']['pantry_email']}).html_safe

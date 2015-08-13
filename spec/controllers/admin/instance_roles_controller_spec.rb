@@ -40,7 +40,7 @@ RSpec.describe Admin::InstanceRolesController, type: :controller do
     end
 
     describe "PUT 'update'" do
-      let(:params) { { id: instance_role.id, instance_role: { name: 'some new instance role', security_group_ids: ['ssg-1111111'] }, format: :json } }
+      let(:params) { { id: instance_role.id, instance_role: { name: 'some new instance role', security_group_ids: ['sg-1111111'] }, format: :json } }
 
       it 'updates the instance role' do
         post 'update', params

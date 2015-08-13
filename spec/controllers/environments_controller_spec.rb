@@ -93,7 +93,7 @@ RSpec.describe EnvironmentsController, type: :controller do
 
       it 'should not hide environment in non-terminated machine found' do
         environment.ec2_instances = [instance]
-        put 'hide', id:  environment.id, environments: { hidden: true }
+        put 'hide', id: environment.id, environments: { hidden: true }
         expect(flash[:error]).to match('Environment can not be hidden due to non-terminated instances')
         expect(environment.hidden).not_to eq(true)
         expect(response).to be_redirect
@@ -103,7 +103,7 @@ RSpec.describe EnvironmentsController, type: :controller do
 
   describe "PUT 'update_instances'" do
     let(:user) { instance_double(User, teams: [environment.team], role: 'developer') }
-    let(:ec2_resource)    { instance_double('Wonga::Pantry::Ec2Resource') }
+    let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource') }
     before(:each) do
       allow(Wonga::Pantry::Ec2Resource).to receive(:new).and_return(ec2_resource)
       allow(ec2_resource).to receive(:stop)

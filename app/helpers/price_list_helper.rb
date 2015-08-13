@@ -1,5 +1,5 @@
 module PriceListHelper
-  def flavor_with_size_input(name = :flavor, form, price_list, ec2_adapter)
+  def flavor_with_size_input(form, price_list, ec2_adapter, name = :flavor)
     if price_list
       price_data = price_list.map do |size, prices|
         [

@@ -1,7 +1,7 @@
 require 'json'
 
 RSpec.describe Aws::Ec2InstancesController, type: :controller do
-  let(:ec2_resource)    { instance_double('Wonga::Pantry::Ec2Resource') }
+  let(:ec2_resource) { instance_double('Wonga::Pantry::Ec2Resource') }
   let(:user) { FactoryGirl.create(:user, team: team) }
   let(:ec2_instance) { FactoryGirl.create(:ec2_instance, :running, team: team) }
   let(:instance_price) { instance_double(Wonga::Pantry::PricingList, retrieve_price_list: nil) }

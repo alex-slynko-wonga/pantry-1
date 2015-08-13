@@ -7,7 +7,6 @@ RSpec.describe ApplicationPolicy do
         @allow = allow
       end
 
-      # rubocop:disable Style/TrivialAccessors
       def test
         @allow
       end
@@ -15,7 +14,6 @@ RSpec.describe ApplicationPolicy do
       def testy?
         @allow
       end
-      # rubocop:enable Style/TrivialAccessors
     end
 
     subject { JsonPolicy.new(true) }

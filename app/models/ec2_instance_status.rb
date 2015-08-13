@@ -2,7 +2,7 @@ Ec2InstanceStatus = Struct.new(:cpu_utilization, :status_check_failed) do
   def self.find(instance_id)
     metrics = AWS::CloudWatch.new.metrics.with_dimensions(name: 'InstanceId', value: instance_id).to_a
     utilization = load_statistics(metrics.detect { |metric| metric.metric_name == 'CPUUtilization' })
-    status_check_failed  = load_statistics(metrics.detect { |metric| metric.metric_name == 'StatusCheckFailed' })
+    status_check_failed = load_statistics(metrics.detect { |metric| metric.metric_name == 'StatusCheckFailed' })
     new(utilization, status_check_failed)
   end
 

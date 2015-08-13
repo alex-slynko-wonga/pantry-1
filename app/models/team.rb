@@ -18,6 +18,6 @@ class Team < ActiveRecord::Base
   scope :inactive, -> { where(disabled: true).order(:name) }
 
   def jenkins_host_name
-    name.parameterize.gsub('_', '-').gsub('--', '-')[0..62]
+    name.parameterize.tr('_', '-').tr('--', '-')[0..62]
   end
 end
