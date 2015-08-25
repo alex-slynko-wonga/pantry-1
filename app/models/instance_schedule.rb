@@ -1,6 +1,7 @@
 class InstanceSchedule < ActiveRecord::Base
   belongs_to :ec2_instance, inverse_of: :instance_schedule
   belongs_to :schedule
+  has_many :scheduled_events, through: :ec2_instance, dependent: :destroy
 
   accepts_nested_attributes_for :ec2_instance
   after_validation :set_event, on: :create
