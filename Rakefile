@@ -34,6 +34,9 @@ if Rails.env.test? || Rails.env.development?
     files = args[:output_files].split(' ') if args[:output_files]
     Brakeman.run app_path: '.', output_files: files, print_report: true
   end
+
+  require 'dawn/tasks'
+  task default: 'dawn:run'
 end
 
 Wonga::Pantry::Application.load_tasks

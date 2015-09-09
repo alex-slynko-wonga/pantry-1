@@ -185,7 +185,7 @@ When(/^the instance is terminated/) do
 end
 
 Then(/^I should not be able to add a fifth security group$/) do
-  expect { check("#{CONFIG['pantry']['security_groups_prefix']}PHPServer-001122334455") }.to raise_error # because it is grayed out (fifth check box)
+  expect(find(:checkbox, "#{CONFIG['pantry']['security_groups_prefix']}PHPServer-001122334455", disabled: true)).to be_present
 end
 
 Then(/^instance destroying process should start$/) do

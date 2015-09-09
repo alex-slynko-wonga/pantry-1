@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2.1'
-gem 'mysql2'
+gem 'rails', '~> 4.2.3'
+gem 'mysql2', '~> 0.3.18'
 gem 'omniauth-ldap', github: 'intridea/omniauth-ldap'
 
-gem 'syslogger'
 gem 'haml-rails'
 gem 'aws-sdk', '~> 1.25'
 

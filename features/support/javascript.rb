@@ -1,3 +1,1 @@
-Before('@javascript') do
-  page.driver.block_unknown_urls
-end
+Capybara::Webkit.configure(&:block_unknown_urls)
