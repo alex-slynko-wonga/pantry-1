@@ -1,13 +1,16 @@
 == Welcome to Pantry
 
-1. Copy and modify config/*.yml.example to config/*.yml
-2. Install QT for tests https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
-3. Use rake db:setup to prepare database
-4. Use rake to check if all tests are passing. Tests in master should pass - if not check your setup.
-5. You can use guard for TDD
+Creating SNS topics, SQS queues and Subscriptions is required for sending commands and receiving events to command handler daemons and event handler daemons respectively.
+A suitable database is required eg. MySQL InnoDB
+A Vagrantfile is provided in the Pantry chef cookbook repo.
+
+1. Copy and modify config/*.yml.example to config/*.yml and modify appropriately
+2. bundle install
+3. Install QT for tests https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
+4. Use rake db:setup to prepare database
+5. Use rake to check if all tests are passing. Tests in master should pass - if not check your setup.
+6. You can use guard for TDD
 
 New Relic:
-
-set 'developer_mode: true' to run new relic in development mode, info are shown here http://localhost:3000/newrelic
-
-DO NOT USE 'developer_mode: true' for production
+set 'developer_mode: true' in config/newrelic.yml to run new relic in development mode, info are shown here http://localhost:3000/newrelic
+DO NOT USE 'developer_mode: true' for production :)
