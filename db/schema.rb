@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319130506) do
+ActiveRecord::Schema.define(version: 20151009114001) do
 
   create_table "admin_maintenance_windows", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20150319130506) do
     t.string   "message",     limit: 255
     t.datetime "start_at"
     t.datetime "end_at"
-    t.boolean  "enabled",     limit: 1
+    t.boolean  "enabled"
     t.integer  "user_id",     limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20150319130506) do
     t.string   "name",               limit: 255, null: false
     t.string   "platform",           limit: 255, null: false
     t.string   "ami_id",             limit: 255, null: false
-    t.boolean  "hidden",             limit: 1
+    t.boolean  "hidden"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "bootstrap_username", limit: 255
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 20150319130506) do
     t.integer  "ec2_instance_id", limit: 4
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
-    t.boolean  "estimated",       limit: 1
+    t.boolean  "estimated"
   end
 
   add_index "ec2_instance_costs", ["bill_date", "ec2_instance_id"], name: "index_ec2_instance_costs_on_bill_date_and_ec2_instance_id", using: :btree
@@ -67,25 +67,25 @@ ActiveRecord::Schema.define(version: 20150319130506) do
   create_table "ec2_instances", force: :cascade do |t|
     t.string   "name",                 limit: 255
     t.string   "instance_id",          limit: 255
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.integer  "team_id",              limit: 4
     t.integer  "user_id",              limit: 4
     t.string   "ami",                  limit: 255
     t.string   "flavor",               limit: 255
-    t.boolean  "bootstrapped",         limit: 1
-    t.boolean  "joined",               limit: 1
+    t.boolean  "bootstrapped"
+    t.boolean  "joined"
     t.string   "subnet_id",            limit: 255
     t.string   "security_group_ids",   limit: 255
     t.string   "domain",               limit: 255
-    t.string   "run_list",             limit: 255
+    t.text     "run_list",             limit: 65535
     t.string   "platform",             limit: 255
     t.integer  "volume_size",          limit: 4
-    t.boolean  "terminated",           limit: 1
+    t.boolean  "terminated"
     t.string   "ip_address",           limit: 255
-    t.boolean  "dns",                  limit: 1
+    t.boolean  "dns"
     t.string   "state",                limit: 255
-    t.boolean  "protected",            limit: 1
+    t.boolean  "protected"
     t.integer  "environment_id",       limit: 4
     t.integer  "instance_role_id",     limit: 4
     t.string   "iam_instance_profile", limit: 255
@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20150319130506) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "environment_type", limit: 255
-    t.boolean  "hidden",           limit: 1
+    t.boolean  "hidden"
   end
 
   create_table "instance_roles", force: :cascade do |t|
@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(version: 20150319130506) do
     t.string   "chef_role",            limit: 255, null: false
     t.string   "run_list",             limit: 255
     t.string   "instance_size",        limit: 255, null: false
-    t.boolean  "enabled",              limit: 1,   null: false
+    t.boolean  "enabled",                          null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "iam_instance_profile", limit: 255
@@ -155,7 +155,7 @@ ActiveRecord::Schema.define(version: 20150319130506) do
     t.integer  "ec2_instance_id",   limit: 4
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
-    t.boolean  "removed",           limit: 1, default: false
+    t.boolean  "removed",                     default: false
   end
 
   add_index "jenkins_slaves", ["ec2_instance_id"], name: "index_jenkins_slaves_on_ec2_instance_id", using: :btree
@@ -176,7 +176,7 @@ ActiveRecord::Schema.define(version: 20150319130506) do
     t.time     "start_time",                              null: false
     t.time     "shutdown_time",                           null: false
     t.integer  "team_id",       limit: 4,                 null: false
-    t.boolean  "weekend_only",  limit: 1, default: false, null: false
+    t.boolean  "weekend_only",            default: false, null: false
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
   end
@@ -210,7 +210,7 @@ ActiveRecord::Schema.define(version: 20150319130506) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.string   "chef_environment", limit: 255
-    t.boolean  "disabled",         limit: 1
+    t.boolean  "disabled"
     t.string   "product",          limit: 255
     t.string   "region",           limit: 255
   end
